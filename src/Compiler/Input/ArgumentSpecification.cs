@@ -6,7 +6,7 @@ namespace Compiler.Input
 {
     struct ArgumentSpecification
     {
-        ArgumentSpecification(ArgumentDataType dataType, ArgumentRequirement required, ArgumentCardinality cardinality)
+        public ArgumentSpecification(ArgumentDataType dataType, ArgumentRequirement required, ArgumentCardinality cardinality)
         {
             this.dataType = dataType;
             this.required = required;
