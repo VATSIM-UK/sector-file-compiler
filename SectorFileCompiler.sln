@@ -16,6 +16,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompilerTest", "tests\Compi
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompilerCli", "CompilerCli\CompilerCli.csproj", "{85979C6F-5F4B-4E07-A427-A0B23C29767C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3BFA0B5E-E667-4D04-9610-D367F4EC0EA0} = {3BFA0B5E-E667-4D04-9610-D367F4EC0EA0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
