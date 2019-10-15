@@ -2,7 +2,7 @@
 {
     enum ArgumentCardinality
     {
-        Single=0,
-        Multiple=1,
+        Single,
+        Multiple,
     }
 }

@@ -6,7 +6,7 @@
      */
     enum ArgumentDataType
     {
-        String = 1,
-        Integer = 2
+        String,
+        Integer,
     }
 }

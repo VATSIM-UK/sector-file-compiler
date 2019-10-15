@@ -7,6 +7,6 @@
      */
     enum Argument
     {
-        ConfigFile=1,
+        ConfigFile,
     }
 }

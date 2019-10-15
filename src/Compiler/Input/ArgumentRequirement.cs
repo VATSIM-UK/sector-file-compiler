@@ -2,7 +2,7 @@
 {
     enum ArgumentRequirement
     {
-        Required=0,
-        Optional=1
+        Required,
+        Optional,
     }
 }
