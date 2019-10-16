@@ -1,12 +1,17 @@
 ﻿namespace Compiler.Input
 {
- 
-    /**
-     * Represents all the arguments that
-     * can be passed to the compiler.
-     */
-    enum Argument
+    struct Argument
     {
-        ConfigFile,
+        public Argument(ArgumentType type, dynamic value)
+        {
+            this.type = type;
+            this.value = value;
+        }
+
+        // The type of argument
+        public readonly ArgumentType type;
+
+        // The argument value
+        public readonly dynamic value;
     }
 }

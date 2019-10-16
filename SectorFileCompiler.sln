@@ -11,9 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompilerUi", "src\CompilerU
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompilerTest", "tests\CompilerTest\CompilerTest.csproj", "{B87EE1E0-AA56-47D9-887B-0F95F2ED3B94}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3BFA0B5E-E667-4D04-9610-D367F4EC0EA0} = {3BFA0B5E-E667-4D04-9610-D367F4EC0EA0}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompilerCli", "src\CompilerCli\CompilerCli.csproj", "{0EB9D1AF-0FD7-463B-8F96-F119B133381D}"
 	ProjectSection(ProjectDependencies) = postProject

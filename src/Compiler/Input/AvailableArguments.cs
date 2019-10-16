@@ -6,12 +6,12 @@ namespace Compiler.Input
 {
     class AvailableArguments
     {
-        public Dictionary<Argument, ArgumentSpecification> GetAvailableArguments()
+        public Dictionary<ArgumentType, ArgumentSpecification> GetAvailableArguments()
         {
-            Dictionary<Argument, ArgumentSpecification> arguments = new Dictionary<Argument, ArgumentSpecification>();
+            Dictionary<ArgumentType, ArgumentSpecification> arguments = new Dictionary<ArgumentType, ArgumentSpecification>();
 
             arguments.Add(
-                Argument.ConfigFile,
+                ArgumentType.ConfigFile,
                 new ArgumentSpecification(ArgumentDataType.String, ArgumentRequirement.Required, ArgumentCardinality.Single)
             );
 
