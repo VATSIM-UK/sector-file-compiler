@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Input
 {
-    class AvailableArguments
+    public class AvailableArguments
     {
         public Dictionary<ArgumentType, ArgumentSpecification> GetAvailableArguments()
         {

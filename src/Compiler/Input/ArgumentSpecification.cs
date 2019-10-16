@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Input
 {
-    struct ArgumentSpecification
+    public struct ArgumentSpecification
     {
         public ArgumentSpecification(ArgumentDataType dataType, ArgumentRequirement required, ArgumentCardinality cardinality)
         {

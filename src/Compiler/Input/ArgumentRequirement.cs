@@ -1,6 +1,6 @@
 ﻿namespace Compiler.Input
 {
-    enum ArgumentRequirement
+    public enum ArgumentRequirement
     {
         Required,
         Optional,

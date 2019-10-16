@@ -1,12 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Setting
+﻿namespace Compiler.Setting
 {
-    class CompilerSettings
+    public class CompilerSettings
     {
         // The place to find the configuration JSON file.
-        private string configFilePath { get; set; }
+        private string configFilePath;
+
+        public string ConfigFilePath
+        {
+            get
+            {
+                return this.configFilePath;
+            }
+
+            set
+            {
+                this.configFilePath = value;
+            }
+        }
     }
 }

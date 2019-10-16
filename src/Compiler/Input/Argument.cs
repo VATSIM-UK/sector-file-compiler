@@ -1,6 +1,6 @@
 ﻿namespace Compiler.Input
 {
-    struct Argument
+    public struct Argument
     {
         public Argument(ArgumentType type, dynamic value)
         {

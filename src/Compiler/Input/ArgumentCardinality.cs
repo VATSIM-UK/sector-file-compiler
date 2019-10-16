@@ -1,6 +1,6 @@
 ﻿namespace Compiler.Input
 {
-    enum ArgumentCardinality
+    public enum ArgumentCardinality
     {
         Single,
         Multiple,

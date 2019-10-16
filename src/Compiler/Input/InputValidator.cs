@@ -11,7 +11,10 @@ namespace Compiler.Input
         // Validation errors
         private List<string> validationErrors;
 
-        public InputValidator() { }
+        public InputValidator() 
+        {
+            this.validationErrors = new List<string>();
+        }
 
         // The validation method.
         public abstract bool Validate(dynamic argument);
