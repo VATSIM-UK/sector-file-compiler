@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompilerCli", "src\Compiler
 		{3BFA0B5E-E667-4D04-9610-D367F4EC0EA0} = {3BFA0B5E-E667-4D04-9610-D367F4EC0EA0}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompilerCliTest", "tests\CompilerCliTest\CompilerCliTest.csproj", "{006E8683-7493-438E-B1BE-A57B45B3DFB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{0EB9D1AF-0FD7-463B-8F96-F119B133381D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EB9D1AF-0FD7-463B-8F96-F119B133381D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EB9D1AF-0FD7-463B-8F96-F119B133381D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{006E8683-7493-438E-B1BE-A57B45B3DFB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{006E8683-7493-438E-B1BE-A57B45B3DFB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{006E8683-7493-438E-B1BE-A57B45B3DFB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{006E8683-7493-438E-B1BE-A57B45B3DFB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

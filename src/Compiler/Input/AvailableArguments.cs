@@ -1,21 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Compiler.Input
 {
+    /**
+     * Represents all the available arguments for the compiler.
+     */
     public class AvailableArguments
     {
-        public Dictionary<ArgumentType, ArgumentSpecification> GetAvailableArguments()
+
+        // The arguments
+        private readonly Dictionary<ArgumentType, ArgumentSpecification> arguments;
+
+        public Dictionary<ArgumentType, ArgumentSpecification> Arguments {
+            get 
+            {
+                return this.arguments;
+            }
+        }
+
+        public AvailableArguments()
         {
-            Dictionary<ArgumentType, ArgumentSpecification> arguments = new Dictionary<ArgumentType, ArgumentSpecification>();
+            this.arguments = new Dictionary<ArgumentType, ArgumentSpecification>()
+            {
+                { 
+                    ArgumentType.ConfigFile,
+                    new ArgumentSpecification(ArgumentDataType.String, ArgumentRequirement.Required, ArgumentCardinality.Single)
+                }
+            };
+        }
 
-            arguments.Add(
-                ArgumentType.ConfigFile,
-                new ArgumentSpecification(ArgumentDataType.String, ArgumentRequirement.Required, ArgumentCardinality.Single)
-            );
-
-            return arguments;
+        public ArgumentSpecification GetArgumentSpecification(ArgumentType type)
+        {
+            return this.arguments[type];
         }
     }
 }
