@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using Compiler.Argument;
+﻿using Compiler.Argument;
 using Compiler.Output;
 
 namespace Compiler
@@ -11,9 +7,11 @@ namespace Compiler
     {
         public static SectorFileCompiler Create(CompilerArguments arguments, IOutputInterface output)
         {
+            Logger logger = new Logger(output, arguments);
             return new SectorFileCompiler(
                 arguments,
-                new Logger(output, arguments)
+                new CompilerArgumentsValidator(logger),
+                logger
             );
         }
     }

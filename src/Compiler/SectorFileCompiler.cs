@@ -12,14 +12,25 @@ namespace Compiler
 
         private readonly Logger logger;
 
-        public SectorFileCompiler(CompilerArguments arguments, Logger logger)
+        private readonly CompilerArgumentsValidator validator;
+
+        public SectorFileCompiler(CompilerArguments arguments, CompilerArgumentsValidator validator, Logger logger)
         {
             this.arguments = arguments;
+            this.validator = validator;
             this.logger = logger;
         }
 
+        /**
+         * Run the compiler.
+         */
         public void Compile()
         {
+            if (!this.validator.Validate(arguments))
+            {
+                return;
+            }
+
             logger.Info(this.arguments.ToString());
         }
     }
