@@ -6,7 +6,7 @@ namespace CompilerCli.Input
 {
     public class ArgumentParser
     {
-        private static readonly Dictionary<string, InputParserInterface> availableArguments = new Dictionary<string, InputParserInterface>()
+        private static readonly Dictionary<string, IInputParserInterface> availableArguments = new Dictionary<string, IInputParserInterface>()
         {
             { "--config-file", new ConfigFileParser() },
             { "--verbosity", new VerbosityParser() },
@@ -30,7 +30,7 @@ namespace CompilerCli.Input
                 }
 
                 arguments = availableArguments[args[i]].Parse(args[i + 1], arguments);
-                i = i + 2;
+                i+= 2;
             }
 
             return arguments;

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Output
 {
-    public interface OutputInterface
+    public interface IOutputInterface
     {
         public void WriteLine(string line);
     }

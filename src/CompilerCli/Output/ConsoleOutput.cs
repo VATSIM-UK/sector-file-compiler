@@ -4,7 +4,7 @@ using Compiler.Output;
 
 namespace CompilerCli.Output
 {
-    public class ConsoleOutput : OutputInterface
+    public class ConsoleOutput : IOutputInterface
     {
         // The console
         private StreamWriter console;

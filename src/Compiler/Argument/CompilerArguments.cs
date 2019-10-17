@@ -1,23 +1,22 @@
 ﻿using Compiler.Output;
+using Compiler.Input;
 using System;
 
 namespace Compiler.Argument
 {
     public class CompilerArguments
     {
-        // The place to find the configuration JSON file.
-        private string configFilePath;
-
-        public string ConfigFilePath
+        // The config file itself
+        private IFileInterface configFile;
+        public IFileInterface ConfigFile
         {
-            get
-            {
-                return this.configFilePath;
-            }
-
             set
             {
-                this.configFilePath = value;
+                this.configFile = value;
+            }
+            get
+            {
+                return this.configFile;
             }
         }
 
@@ -28,7 +27,7 @@ namespace Compiler.Argument
         {
             get
             {
-                return this.verbosity == default(OutputVerbosity) ? OutputVerbosity.Debug : this.verbosity;
+                return this.verbosity == default ? OutputVerbosity.Debug : this.verbosity;
             }
             set
             {
@@ -39,7 +38,7 @@ namespace Compiler.Argument
         public override string ToString()
         {
             string output = "";
-            output += "Config File Path: " + this.ConfigFilePath + Environment.NewLine;
+            output += "Config File Path: " + this.ConfigFile.GetPath() + Environment.NewLine;
             output += "Output Verbosity: " + this.verbosity.ToString() + Environment.NewLine;
             return output;
         }
@@ -54,8 +53,9 @@ namespace Compiler.Argument
 
             CompilerArguments compare = (CompilerArguments)obj;
 
-            return this.configFilePath == compare.configFilePath
-                && this.verbosity == compare.verbosity;
+            return
+                ((this.configFile == null && compare.configFile == null) || this.configFile.Equals(compare.configFile)) &&
+                this.verbosity == compare.verbosity;
         }
     }
 }

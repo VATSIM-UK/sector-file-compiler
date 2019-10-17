@@ -1,5 +1,6 @@
 ﻿using System;
 using Compiler.Argument;
+using Compiler.Input;
 using CompilerCli.Input;
 using Xunit;
 
@@ -24,8 +25,10 @@ namespace CompilerCliTest.Input
         [Fact]
         public void TestItSetsArgumentsFromCommandLine()
         {
-            CompilerArguments expected = new CompilerArguments();
-            expected.ConfigFilePath = "test.json";
+            CompilerArguments expected = new CompilerArguments()
+            {
+                ConfigFile = new InputFile("test.json"),
+            };
 
             CompilerArguments actual = ArgumentParser.CreateFromCommandLine(new string[] { "--config-file", "test.json" });
             Assert.True(expected.Equals(actual));
@@ -34,8 +37,10 @@ namespace CompilerCliTest.Input
         [Fact]
         public void TestItIgnoresExtraArgument()
         {
-            CompilerArguments expected = new CompilerArguments();
-            expected.ConfigFilePath = "test.json";
+            CompilerArguments expected = new CompilerArguments()
+            {
+                ConfigFile = new InputFile("test.json"),
+            };
 
             CompilerArguments actual = ArgumentParser.CreateFromCommandLine(new string[] { "--config-file", "test.json", "lol" });
             Assert.True(expected.Equals(actual));

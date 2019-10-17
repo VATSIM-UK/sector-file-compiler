@@ -9,12 +9,12 @@ namespace CompilerTest.Output
     {
         private CompilerArguments arguments;
 
-        private Mock<OutputInterface> mockOutput;
+        private Mock<IOutputInterface> mockOutput;
 
         public LoggerTest()
         {
             this.arguments = new CompilerArguments();
-            this.mockOutput = new Mock<OutputInterface>();
+            this.mockOutput = new Mock<IOutputInterface>();
         }
 
         private Logger GetLogger()

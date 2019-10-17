@@ -7,13 +7,13 @@ namespace Compiler.Output
     /**
      * A class that handles logging output from the compiler.
      */
-    public class Logger
+    public class Logger: ILoggerInterface
     {
-        private OutputInterface outputStream;
+        private readonly IOutputInterface outputStream;
 
         private readonly CompilerArguments arguments;
 
-        public Logger(OutputInterface outputStream, CompilerArguments arguments)
+        public Logger(IOutputInterface outputStream, CompilerArguments arguments)
         {
             this.outputStream = outputStream;
             this.arguments = arguments;

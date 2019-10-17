@@ -9,7 +9,7 @@ namespace Compiler
 {
     public class SectorFileCompilerFactory
     {
-        public static SectorFileCompiler Create(CompilerArguments arguments, OutputInterface output)
+        public static SectorFileCompiler Create(CompilerArguments arguments, IOutputInterface output)
         {
             return new SectorFileCompiler(
                 arguments,

@@ -6,7 +6,7 @@ using Compiler.Output;
 
 namespace CompilerCli.Input
 {
-    public class VerbosityParser : InputParserInterface
+    public class VerbosityParser : IInputParserInterface
     {
         private static readonly Dictionary<string, OutputVerbosity> verbosityMap = new Dictionary<string, OutputVerbosity>()
         {

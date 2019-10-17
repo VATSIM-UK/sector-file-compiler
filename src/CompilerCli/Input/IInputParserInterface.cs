@@ -2,7 +2,7 @@
 
 namespace CompilerCli.Input
 {
-    interface InputParserInterface
+    interface IInputParserInterface
     {
         public CompilerArguments Parse(string argument, CompilerArguments compilerSettings);
     }
