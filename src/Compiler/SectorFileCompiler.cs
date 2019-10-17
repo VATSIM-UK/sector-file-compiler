@@ -1,4 +1,5 @@
-﻿using Compiler.Input;
+﻿using Compiler.Argument;
+using Compiler.Input;
 using Compiler.Output;
 using System.Collections.Generic;
 using System.IO;
@@ -7,9 +8,19 @@ namespace Compiler
 {
     public class SectorFileCompiler
     {
-        public void Compile(List<Argument> arguments, CompilerMessageOutput output)
+        private readonly CompilerArguments arguments;
+
+        private readonly Logger logger;
+
+        public SectorFileCompiler(CompilerArguments arguments, Logger logger)
         {
-            output.WriteLine("Success!");
+            this.arguments = arguments;
+            this.logger = logger;
+        }
+
+        public void Compile()
+        {
+            logger.Info(this.arguments.ToString());
         }
     }
 }

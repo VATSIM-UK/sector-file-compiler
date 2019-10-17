@@ -1,25 +1,43 @@
 ﻿using System;
+using System.Data;
 using System.IO;
 using Compiler;
-using Compiler.Input;
-using System.Collections.Generic;
-using Compiler.Output;
+using Compiler.Argument;
+using CompilerCli.Output;
+using CompilerCli.Input;
 
 namespace CompilerCli
 {
     class Cli
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            SectorFileCompiler compiler = new SectorFileCompiler();
-
-            StreamWriter output = new StreamWriter(Console.OpenStandardOutput());
-            output.AutoFlush = true;
+            // Setup the console output stream.
+            StreamWriter output = new StreamWriter(Console.OpenStandardOutput())
+            {
+                AutoFlush = true
+            };
             Console.SetOut(output);
 
-            compiler.Compile(new List<Argument>(), new CompilerMessageOutput(output));
+            // Parse the sectorfile
+            CompilerArguments arguments;
+            try
+            {
+                arguments = ArgumentParser.CreateFromCommandLine(args);
+            } catch (ArgumentException exception)
+            {
+                output.Write(exception.Message);
+                return 1;
+            }
+
+            SectorFileCompilerFactory.Create(
+                arguments,
+                new ConsoleOutput(output)
+            ).Compile();
+
             output.Write("Press any key to exit");
             Console.ReadKey();
+            return 0;
         }
     }
 }
