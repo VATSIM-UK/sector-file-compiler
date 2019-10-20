@@ -3,6 +3,7 @@ using Compiler.Input;
 using Compiler.Output;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Compiler
 {
@@ -29,6 +30,15 @@ namespace Compiler
             if (!this.validator.Validate(arguments))
             {
                 return;
+            }
+
+            dynamic test = JsonConvert.DeserializeObject(
+                this.arguments.ConfigFile.Contents()
+            );
+
+            foreach (var key in test)
+            {
+                bool testbool = true;
             }
 
             logger.Info(this.arguments.ToString());
