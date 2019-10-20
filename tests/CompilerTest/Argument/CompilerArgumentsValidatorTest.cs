@@ -37,9 +37,19 @@ namespace CompilerTest.Argument
         }
 
         [Fact]
+        public void TestItReturnsFalseOnInvalidJsonInConfigFile()
+        {
+            this.mockConfigFile.Setup(file => file.Exists()).Returns(true);
+            this.mockConfigFile.Setup(file => file.Contents()).Returns("{]");
+            this.mockOutputFile.Setup(file => file.IsWritable()).Returns(true);
+            Assert.False(this.validator.Validate(this.arguments));
+        }
+
+        [Fact]
         public void TestItReturnsFalseOnNonWritableOutputFile()
         {
             this.mockConfigFile.Setup(file => file.Exists()).Returns(true);
+            this.mockConfigFile.Setup(file => file.Contents()).Returns("{}");
             this.mockOutputFile.Setup(file => file.IsWritable()).Returns(false);
             Assert.False(this.validator.Validate(this.arguments));
         }
@@ -48,6 +58,7 @@ namespace CompilerTest.Argument
         public void TestItReturnsTrueOnValidArguments()
         {
             this.mockConfigFile.Setup(file => file.Exists()).Returns(true);
+            this.mockConfigFile.Setup(file => file.Contents()).Returns("{}");
             this.mockOutputFile.Setup(file => file.IsWritable()).Returns(true);
             Assert.True(this.validator.Validate(this.arguments));
         }

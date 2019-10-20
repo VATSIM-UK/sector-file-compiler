@@ -55,5 +55,10 @@ namespace Compiler.Input
                 }
             }
         }
+
+        public string Contents()
+        {
+            return File.ReadAllText(this.path);
+        }
     }
 }

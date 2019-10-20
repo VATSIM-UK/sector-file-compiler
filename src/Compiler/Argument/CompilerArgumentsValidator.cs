@@ -1,5 +1,5 @@
 ﻿using Compiler.Output;
-using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Compiler.Argument
 {
@@ -20,14 +20,27 @@ namespace Compiler.Argument
                 this.logger.Error("The configuration file could not be found: " + arguments.ConfigFile.GetPath());
             }
 
+            if (arguments.ConfigFile.Exists())
+            {
+                try
+                {
+                    JsonConvert.DeserializeObject(arguments.ConfigFile.Contents());
+                }
+                catch
+                {
+                    valid = false;
+                    this.logger.Error("The configuration file is not valid JSON");
+                }
+            }
+
             if (!arguments.OutFile.IsWritable())
             {
                 valid = false;
                 this.logger.Error("The output file is not writable: " + arguments.OutFile.GetPath());
             }
 
-
             return valid;
+
         }
     }
 }
