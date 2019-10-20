@@ -57,5 +57,19 @@ namespace Compiler.Argument
                 ((this.configFile == null && compare.configFile == null) || this.configFile.Equals(compare.configFile)) &&
                 this.verbosity == compare.verbosity;
         }
+
+        // The output file
+        private IFileInterface outFile;
+        public IFileInterface OutFile
+        {
+            set
+            {
+                this.outFile = value;
+            }
+            get
+            {
+                return this.outFile;
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace CompilerCli.Input
         private static readonly Dictionary<string, IInputParserInterface> availableArguments = new Dictionary<string, IInputParserInterface>()
         {
             { "--config-file", new ConfigFileParser() },
+            { "--out-file", new OutputFileParser() },
             { "--verbosity", new VerbosityParser() },
         };
 

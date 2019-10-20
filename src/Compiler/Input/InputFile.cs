@@ -34,5 +34,26 @@ namespace Compiler.Input
 
             return this.path == ((InputFile)obj).GetPath();
         }
+
+        public bool IsWritable()
+        {
+            if (this.Exists())
+            {
+                FileInfo info = new FileInfo(this.path);
+                return FileAttributes.ReadOnly != info.Attributes;
+            } else
+            {
+                try
+                {
+                    File.Create(this.path);
+                    File.Delete(this.path);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
     }
 }

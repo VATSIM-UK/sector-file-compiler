@@ -9,5 +9,7 @@ namespace Compiler.Input
         bool Exists();
 
         string GetPath();
+
+        bool IsWritable();
     }
 }
