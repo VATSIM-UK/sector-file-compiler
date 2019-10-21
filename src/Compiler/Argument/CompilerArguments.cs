@@ -61,8 +61,8 @@ namespace Compiler.Argument
         }
 
         // The output file
-        private StreamWriter outFile;
-        public StreamWriter OutFile
+        private TextWriter outFile;
+        public TextWriter OutFile
         {
             set
             {
