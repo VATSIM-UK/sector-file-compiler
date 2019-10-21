@@ -1,6 +1,7 @@
 ﻿using System;
 using Compiler.Argument;
 using Compiler.Input;
+using System.IO;
 
 namespace CompilerCli.Input
 {
@@ -8,7 +9,9 @@ namespace CompilerCli.Input
     {
         public CompilerArguments Parse(string argument, CompilerArguments compilerSettings)
         {
-            compilerSettings.OutFile = new InputFile(argument);
+            StreamWriter writer = new StreamWriter(argument, false);
+            writer.AutoFlush = true;
+            compilerSettings.OutFile = writer;
             return compilerSettings;
         }
     }

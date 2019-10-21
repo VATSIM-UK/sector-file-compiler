@@ -1,6 +1,8 @@
 ﻿using Compiler.Output;
 using Compiler.Input;
 using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Compiler.Argument
 {
@@ -59,8 +61,8 @@ namespace Compiler.Argument
         }
 
         // The output file
-        private IFileInterface outFile;
-        public IFileInterface OutFile
+        private StreamWriter outFile;
+        public StreamWriter OutFile
         {
             set
             {
@@ -71,5 +73,15 @@ namespace Compiler.Argument
                 return this.outFile;
             }
         }
+
+        // The order in which ESE sections should be output
+        public List<OutputSections> EseSections { get; set; } = new List<OutputSections>
+        {
+            OutputSections.ESE_PREAMBLE,
+            OutputSections.ESE_POSITIONS,
+            OutputSections.ESE_FREETEXT,
+            OutputSections.ESE_SIDSSTARS,
+            OutputSections.ESE_AIRSPACE,
+        };
     }
 }

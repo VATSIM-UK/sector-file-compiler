@@ -32,16 +32,19 @@ namespace Compiler
                 return;
             }
 
-            dynamic test = JsonConvert.DeserializeObject(
+            dynamic test = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(
                 this.arguments.ConfigFile.Contents()
             );
 
-            foreach (var key in test)
+            // Make the ESE
+            SectionFactory factory = new SectionFactory(new FileIndexer(this.arguments.ConfigFile.DirectoryLocation(), test, logger));
+
+            foreach (OutputSections section in this.arguments.EseSections)
             {
-                bool testbool = true;
+                factory.Create(section).WriteToFile(this.arguments.OutFile);
             }
 
-            logger.Info(this.arguments.ToString());
+            logger.Info("Great success");
         }
     }
 }

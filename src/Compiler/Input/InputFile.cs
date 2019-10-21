@@ -60,5 +60,10 @@ namespace Compiler.Input
         {
             return File.ReadAllText(this.path);
         }
+
+        public string DirectoryLocation()
+        {
+            return new FileInfo(this.path).Directory.FullName;
+        }
     }
 }
