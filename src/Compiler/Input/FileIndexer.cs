@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compiler.Input
 {
-    class FileIndexer
+    public class FileIndexer
     {
         private readonly Dictionary<string, List<string>> configFile;
 
