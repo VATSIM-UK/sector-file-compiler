@@ -11,5 +11,9 @@ namespace Compiler.Input
         string GetPath();
 
         bool IsWritable();
+
+        string Contents();
+
+        string DirectoryLocation();
     }
 }

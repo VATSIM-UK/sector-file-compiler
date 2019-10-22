@@ -3,6 +3,7 @@ using Compiler.Input;
 using Compiler.Output;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Compiler
 {
@@ -31,7 +32,19 @@ namespace Compiler
                 return;
             }
 
-            logger.Info(this.arguments.ToString());
+            dynamic test = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(
+                this.arguments.ConfigFile.Contents()
+            );
+
+            // Make the ESE
+            SectionFactory factory = new SectionFactory(new FileIndexer(this.arguments.ConfigFile.DirectoryLocation(), test, logger));
+
+            foreach (OutputSections section in this.arguments.EseSections)
+            {
+                factory.Create(section).WriteToFile(this.arguments.OutFile);
+            }
+
+            logger.Info("Great success");
         }
     }
 }
