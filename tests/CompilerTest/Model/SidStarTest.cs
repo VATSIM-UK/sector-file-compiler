@@ -11,19 +11,18 @@ namespace CompilerTest.Model
         public SidStarTest()
         {
             this.sidStar = new SidStar(
-                SidStar.TYPE_SID,
+                "SID",
                 "EGKK",
                 "26L",
                 "ADMAG2X",
-                new List<string>(new string[] { "FIX1", "FIX2", "FIX3" }),
-                "a lovely comment"
+                new List<string>(new string[] { "FIX1", "FIX2", "FIX3" })
             );
         }
 
         [Fact]
         public void TestItSetsType()
         {
-            Assert.Equal(SidStar.TYPE_SID, this.sidStar.SidOrStar);
+            Assert.Equal("SID", this.sidStar.Type);
         }
 
         [Fact]
@@ -48,13 +47,6 @@ namespace CompilerTest.Model
         public void TestItSetsRoute()
         {
             Assert.Equal(new List<string>(new string[] { "FIX1", "FIX2", "FIX3" }), this.sidStar.Route);
-        }
-
-        [Fact]
-        public void TestItFormatsOutput()
-        {
-            string expected = "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 FIX3; a lovely comment";
-            Assert.Equal(expected, this.sidStar.BuildOutput());
         }
     }
 }
