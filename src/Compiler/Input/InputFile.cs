@@ -45,7 +45,7 @@ namespace Compiler.Input
             {
                 try
                 {
-                    File.Create(this.path);
+                    File.Create(this.path).Dispose();
                     File.Delete(this.path);
                     return true;
                 }
