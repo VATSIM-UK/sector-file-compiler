@@ -28,6 +28,7 @@ namespace Compiler
             CompilerArgumentsValidator.Validate(this.events, this.arguments);
             if (this.events.HasFatalError())
             {
+                this.events.AddEvent(new CompilationFinishedEvent(false));
                 return;
             }
 
@@ -57,6 +58,8 @@ namespace Compiler
 
             // Make the SCT2
             //TODO
+
+            this.events.AddEvent(new CompilationFinishedEvent(true));
         }
     }
 }
