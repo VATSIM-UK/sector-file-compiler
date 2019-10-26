@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Compiler.Model;
 using Compiler.Event;
 using Newtonsoft.Json;
+using Compiler.Validate;
 
 namespace Compiler
 {
@@ -47,7 +48,15 @@ namespace Compiler
             );
 
             // Validate the output files
-            // TODO
+            if (this.arguments.ValidateOutput)
+            {
+                OutputValidator.Validate(sectorElements, this.events);
+                if (this.events.HasFatalError())
+                {
+                    this.events.AddEvent(new CompilationFinishedEvent(false));
+                    return;
+                }
+            }
 
             // Make the ESE
             SectionFactory factory = new SectionFactory(files);

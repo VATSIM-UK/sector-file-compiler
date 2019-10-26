@@ -8,19 +8,7 @@ namespace Compiler.Argument
 {
     public class CompilerArguments
     {
-        // The config file itself
-        private IFileInterface configFile;
-        public IFileInterface ConfigFile
-        {
-            set
-            {
-                this.configFile = value;
-            }
-            get
-            {
-                return this.configFile;
-            }
-        }
+        public IFileInterface ConfigFile { set; get; }
 
         public override string ToString()
         {
@@ -39,22 +27,10 @@ namespace Compiler.Argument
 
             CompilerArguments compare = (CompilerArguments)obj;
 
-            return ((this.configFile == null && compare.configFile == null) || this.configFile.Equals(compare.configFile));
+            return ((this.ConfigFile == null && compare.ConfigFile == null) || this.ConfigFile.Equals(compare.ConfigFile));
         }
 
-        // The output file
-        private TextWriter outFile;
-        public TextWriter OutFile
-        {
-            set
-            {
-                this.outFile = value;
-            }
-            get
-            {
-                return this.outFile;
-            }
-        }
+        public TextWriter OutFile { set; get; }
 
         // The order in which ESE sections should be output
         public List<OutputSections> EseSections { get; set; } = new List<OutputSections>
@@ -65,5 +41,9 @@ namespace Compiler.Argument
             OutputSections.ESE_SIDSSTARS,
             OutputSections.ESE_AIRSPACE,
         };
+
+        // Should we validate the file before output
+        public bool ValidateOutput { set; get; } = true;
+
     }
 }

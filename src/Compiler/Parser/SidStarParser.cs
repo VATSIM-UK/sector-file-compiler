@@ -18,7 +18,7 @@ namespace Compiler.Parser
         {
             for (int i = 0; i < lines.Count; i++)
             {
-                string[] parts = lines[0].Split(':');
+                string[] parts = lines[i].Split(':');
 
                 if (parts.Length != 5)
                 {
