@@ -10,7 +10,6 @@ namespace CompilerCli.Input
         {
             { "--config-file", new ConfigFileParser() },
             { "--out-file", new OutputFileParser() },
-            { "--verbosity", new VerbosityParser() },
         };
 
         public static CompilerArguments CreateFromCommandLine(string[] args)

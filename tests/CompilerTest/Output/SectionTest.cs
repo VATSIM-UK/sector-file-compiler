@@ -35,8 +35,8 @@ namespace CompilerTest.Output
 
             section.WriteToFile(this.mockOutput.Object);
 
-            this.mockOutput.Verify(foo => foo.Write("a"), Times.Once());
-            this.mockOutput.Verify(foo => foo.Write("b"), Times.Once());
+            this.mockOutput.Verify(foo => foo.WriteLine("a"), Times.Once());
+            this.mockOutput.Verify(foo => foo.WriteLine("b"), Times.Once());
             this.mockOutput.Verify(foo => foo.Write("\r\n"), Times.Once());
         }
 
@@ -51,8 +51,8 @@ namespace CompilerTest.Output
             section.WriteToFile(this.mockOutput.Object);
 
             this.mockOutput.Verify(foo => foo.Write("[FOO]\r\n"), Times.Once());
-            this.mockOutput.Verify(foo => foo.Write("a"), Times.Once());
-            this.mockOutput.Verify(foo => foo.Write("b"), Times.Once());
+            this.mockOutput.Verify(foo => foo.WriteLine("a"), Times.Once());
+            this.mockOutput.Verify(foo => foo.WriteLine("b"), Times.Once());
             this.mockOutput.Verify(foo => foo.Write("\r\n"), Times.Once());
         }
     }

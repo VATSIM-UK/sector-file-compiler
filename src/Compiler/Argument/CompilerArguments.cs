@@ -22,26 +22,10 @@ namespace Compiler.Argument
             }
         }
 
-        // The output verbosity for the compiler
-        private OutputVerbosity verbosity;
-
-        public OutputVerbosity Verbosity
-        {
-            get
-            {
-                return this.verbosity == default ? OutputVerbosity.Debug : this.verbosity;
-            }
-            set
-            {
-                this.verbosity = value;
-            }
-        }
-
         public override string ToString()
         {
             string output = "";
             output += "Config File Path: " + this.ConfigFile.GetPath() + Environment.NewLine;
-            output += "Output Verbosity: " + this.verbosity.ToString() + Environment.NewLine;
             return output;
         }
 
@@ -55,9 +39,7 @@ namespace Compiler.Argument
 
             CompilerArguments compare = (CompilerArguments)obj;
 
-            return
-                ((this.configFile == null && compare.configFile == null) || this.configFile.Equals(compare.configFile)) &&
-                this.verbosity == compare.verbosity;
+            return ((this.configFile == null && compare.configFile == null) || this.configFile.Equals(compare.configFile));
         }
 
         // The output file

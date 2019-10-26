@@ -25,7 +25,7 @@ namespace Compiler.Output
 
             foreach (IFileInterface file in this.inputFiles)
             {
-                output.Write(file.Contents());
+                output.WriteLine(file.Contents());
             }
 
             output.Write("\r\n");
