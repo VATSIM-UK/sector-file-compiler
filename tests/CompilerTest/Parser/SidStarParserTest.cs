@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Xunit;
 using Compiler.Parser;
 using Compiler.Error;
 using Compiler.Model;
+using Compiler.Event;
 
 namespace CompilerTest.Parser
 {
@@ -14,37 +13,27 @@ namespace CompilerTest.Parser
 
         private readonly SectorElementCollection collection;
 
-        private readonly ErrorLog log;
+        private readonly EventTracker log;
 
         public SidStarParserTest()
         {
-            this.log = new ErrorLog();
+            this.log = new EventTracker();
             this.parser = new SidStarParser(this.log);
             this.collection = new SectorElementCollection();
         }
 
         [Fact]
-        public void TestItRaisesAnErrorIfIncorrectNumberOfSegments()
+        public void TestItRaisesASyntaxErrorIfIncorrectNumberOfSegments()
         {
             this.parser.ParseElements("test.txt", new List<string>(new string[] { "abc:def:ghi" }), this.collection);
-
-            CompilerError error = this.log.GetLastError();
-            Assert.Equal(ErrorType.SyntaxError, error.type);
-            Assert.Equal(ErrorCode.SidStarSegments, error.code);
-            Assert.Equal("test.txt", error.fileName);
-            Assert.Equal(0, error.itemNumber);
+            Assert.IsType<SyntaxError>(this.log.GetLastEvent());
         }
 
         [Fact]
         public void TestItRaisesAnErrorIfUnknownType()
         {
             this.parser.ParseElements("test.txt", new List<string>(new string[] { "abc:def:ghi:jkl:mno" }), this.collection);
-
-            CompilerError error = this.log.GetLastError();
-            Assert.Equal(ErrorType.SyntaxError, error.type);
-            Assert.Equal(ErrorCode.SidStarType, error.code);
-            Assert.Equal("test.txt", error.fileName);
-            Assert.Equal(0, error.itemNumber);
+            Assert.IsType<SyntaxError>(this.log.GetLastEvent());
         }
 
         [Fact]
@@ -56,7 +45,7 @@ namespace CompilerTest.Parser
                 this.collection
             );
 
-            Assert.Equal(0, this.log.CountErrors());
+            Assert.Equal(0, this.log.CountEvents());
             SidStar result = this.collection.SidStars[0];
             Assert.Equal("SID", result.Type);
             Assert.Equal("EGKK", result.Airport);

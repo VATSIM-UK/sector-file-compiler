@@ -1,4 +1,5 @@
-﻿using Compiler.Output;
+﻿using Compiler.Error;
+using Compiler.Event;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -6,19 +7,13 @@ namespace Compiler.Argument
 {
     public class CompilerArgumentsValidator
     {
-        private readonly ILoggerInterface logger;
-        public CompilerArgumentsValidator(ILoggerInterface logger)
+        public static void Validate(IEventLogger events, CompilerArguments arguments)
         {
-            this.logger = logger;
-        }
-
-        public bool Validate(CompilerArguments arguments)
-        {
-            bool valid = true;
             if (!arguments.ConfigFile.Exists())
             {
-                valid = false;
-                this.logger.Error("The configuration file could not be found: " + arguments.ConfigFile.GetPath());
+                events.AddEvent(
+                    new CompilerArgumentError("The configuration file could not be found: " + arguments.ConfigFile.GetPath())
+                );
             }
 
             if (arguments.ConfigFile.Exists())
@@ -29,13 +24,9 @@ namespace Compiler.Argument
                 }
                 catch
                 {
-                    valid = false;
-                    this.logger.Error("The configuration file is not valid JSON");
+                    events.AddEvent(new CompilerArgumentError("The configuration file is not valid JSON"));
                 }
             }
-
-            return valid;
-
         }
     }
 }

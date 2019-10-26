@@ -1,5 +1,6 @@
 ﻿using Compiler.Argument;
 using Compiler.Output;
+using Compiler.Event;
 
 namespace Compiler
 {
@@ -7,11 +8,10 @@ namespace Compiler
     {
         public static SectorFileCompiler Create(CompilerArguments arguments, IOutputInterface output)
         {
-            Logger logger = new Logger(output, arguments);
+            EventTracker events = new EventTracker();
             return new SectorFileCompiler(
                 arguments,
-                new CompilerArgumentsValidator(logger),
-                logger
+                events
             );
         }
     }

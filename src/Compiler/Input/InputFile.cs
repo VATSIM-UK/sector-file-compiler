@@ -32,6 +32,8 @@ namespace Compiler.Input
                 return false;
             }
 
+            bool test = this.path == ((InputFile)obj).GetPath();
+
             return this.path == ((InputFile)obj).GetPath();
         }
 
@@ -64,6 +66,11 @@ namespace Compiler.Input
         public string DirectoryLocation()
         {
             return new FileInfo(this.path).Directory.FullName;
+        }
+
+        public List<string> GetAllLines()
+        {
+            return new List<string>(File.ReadAllLines(this.path));
         }
     }
 }

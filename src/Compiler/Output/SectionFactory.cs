@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
-using Compiler.Output;
+﻿using Compiler.Output;
 
 namespace Compiler.Input
 {
     class SectionFactory
     {
-
-        private readonly FileIndexer indexer;
+        private readonly FileIndex files;
 
         private readonly SectionHeaders headers;
 
-        public SectionFactory(FileIndexer indexer)
+        public SectionFactory(FileIndex files)
         {
-            this.indexer = indexer;
+            this.files = files;
             this.headers = new SectionHeaders();
         }
 
         public Section Create(OutputSections section)
         {
             return new Section(
-                this.indexer.CreateFileListForSection(section),
-                this.headers.headers[section]
+                this.files.GetFilesForSection(section),
+                SectionHeaders.headers[section]
             );
         }
     }

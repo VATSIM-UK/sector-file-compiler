@@ -7,7 +7,7 @@ namespace Compiler.Input
 {
     public class ConfigFileSectionsMapper
     {
-        public readonly Dictionary<OutputSections, string> sectionMap = new Dictionary<OutputSections, string>
+        public static readonly Dictionary<OutputSections, string> sectionMap = new Dictionary<OutputSections, string>
         {
             { OutputSections.ESE_PREAMBLE, "ese_preamble" },
             { OutputSections.ESE_POSITIONS,  "positions" },

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using Compiler.Model;
 
-namespace Compiler.Model
+namespace Compiler.Parser
 {
-    interface ISectorElementParser
+    public interface ISectorElementParser
     {
         public void ParseElements(string filename, List<string> lines, SectorElementCollection sectorElements);
     }

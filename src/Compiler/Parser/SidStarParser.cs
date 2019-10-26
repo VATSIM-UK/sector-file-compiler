@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using Compiler.Model;
 using Compiler.Error;
+using Compiler.Event;
 
 namespace Compiler.Parser
 {
     public class SidStarParser: ISectorElementParser
     {
-        private readonly ErrorLog errorLog;
+        private readonly IEventLogger errorLog;
 
-        public SidStarParser(ErrorLog errorLog)
+        public SidStarParser(IEventLogger errorLog)
         {
             this.errorLog = errorLog;
         }
@@ -21,17 +22,17 @@ namespace Compiler.Parser
 
                 if (parts.Length != 5)
                 {
-                    this.errorLog.AddError(
-                        new CompilerError(ErrorType.SyntaxError, ErrorCode.SidStarSegments, filename, i, "Incorrect number of SIDSTAR segements")
-                    );
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Incorrect number of SIDSTAR segments", filename, i)
+                    ); ;
                     continue;
                 }
 
                 if (parts[0] != "SID" && parts[0] != "STAR")
                 {
-                    this.errorLog.AddError(
-                        new CompilerError(ErrorType.SyntaxError, ErrorCode.SidStarType, filename, i, "Unknown SIDSTAR type " + parts[0])
-                    );
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Unknown SIDSTAR type " + parts[0], filename, i)
+                    ); ;
                     continue;
                 }
 
