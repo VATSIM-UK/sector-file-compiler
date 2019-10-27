@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Compiler.Argument;
 using Compiler.Input;
 
@@ -6,9 +7,14 @@ namespace CompilerCli.Input
 {
     public class ConfigFileParser : IInputParserInterface
     {
-        public CompilerArguments Parse(string argument, CompilerArguments compilerSettings)
+        public CompilerArguments Parse(List<string>values, CompilerArguments compilerSettings)
         {
-            compilerSettings.ConfigFile = new InputFile(argument);
+            if (values.Count != 1)
+            {
+                throw new ArgumentException("Config file path should have only one argument");
+            }
+
+            compilerSettings.ConfigFile = new InputFile(values[0]);
             return compilerSettings;
         }
     }

@@ -10,27 +10,41 @@ namespace CompilerCli.Input
         {
             { "--config-file", new ConfigFileParser() },
             { "--out-file", new OutputFileParser() },
+            { "--ignore-validation", new IgnoreValidationParser() },
+            { "--test-arg", new TestArgumentParser() },
         };
 
         public static CompilerArguments CreateFromCommandLine(string[] args)
         {
             CompilerArguments arguments = new CompilerArguments();
 
-            if (args.Length < 2)
-            {
-                return arguments;
-            }
-
             int i = 0;
-            while (i < args.Length - 1)
+            while (i < args.Length)
             {
                 if (!availableArguments.ContainsKey(args[i]))
                 {
                     throw new ArgumentException("Unknown argument: " + args[i]);
                 }
 
-                arguments = availableArguments[args[i]].Parse(args[i + 1], arguments);
-                i+= 2;
+                int nextArgument = i + 1;
+                List<string> values = new List<string>();
+                while (nextArgument < args.Length)
+                {
+                    if (args[nextArgument].StartsWith("--")) {
+                        if (!availableArguments.ContainsKey(args[nextArgument]))
+                        {
+                            throw new ArgumentException("Unknown argument: " + args[i]);
+                        }
+
+                        break;
+                    }
+
+                    values.Add(args[nextArgument]);
+                    nextArgument++;
+                }
+
+                arguments = availableArguments[args[i]].Parse(values, arguments);
+                i = nextArgument;
             }
 
             return arguments;

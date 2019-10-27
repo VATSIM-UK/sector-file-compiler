@@ -1,9 +1,10 @@
-﻿using Compiler.Argument;
+﻿using System.Collections.Generic;
+using Compiler.Argument;
 
 namespace CompilerCli.Input
 {
     interface IInputParserInterface
     {
-        public CompilerArguments Parse(string argument, CompilerArguments compilerSettings);
+        public CompilerArguments Parse(List<string> values, CompilerArguments compilerSettings);
     }
 }
