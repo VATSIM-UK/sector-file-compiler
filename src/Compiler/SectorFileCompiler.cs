@@ -24,13 +24,13 @@ namespace Compiler
         /**
          * Run the compiler.
          */
-        public void Compile()
+        public int Compile()
         {
             CompilerArgumentsValidator.Validate(this.events, this.arguments);
             if (this.events.HasFatalError())
             {
                 this.events.AddEvent(new CompilationFinishedEvent(false));
-                return;
+                return 1;
             }
 
             // Parse the config file and index all the files
@@ -54,7 +54,7 @@ namespace Compiler
                 if (this.events.HasFatalError())
                 {
                     this.events.AddEvent(new CompilationFinishedEvent(false));
-                    return;
+                    return 1;
                 }
             }
 
@@ -69,6 +69,7 @@ namespace Compiler
             //TODO
 
             this.events.AddEvent(new CompilationFinishedEvent(true));
+            return 0;
         }
     }
 }
