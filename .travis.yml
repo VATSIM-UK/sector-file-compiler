@@ -18,9 +18,11 @@ jobs:
     - os: osx 
       mono: latest
 
+before_install:
+  - sudo apt-get install nuget
+
 install:
   - dotnet restore
-  - nuget
   - nuget restore SectorFileCompiler.sln
   - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
 
