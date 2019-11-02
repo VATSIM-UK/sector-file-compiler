@@ -25,6 +25,8 @@ namespace Compiler
          */
         public int Compile()
         {
+            this.events.AddEvent(new ComplilationStartedEvent());
+
             CompilerArgumentsValidator.Validate(this.events, this.arguments);
             if (this.events.HasFatalError())
             {
