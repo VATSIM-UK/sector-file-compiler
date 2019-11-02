@@ -9,7 +9,7 @@ namespace Compiler.Transformer
         {
             TransformerChain chain = new TransformerChain();
 
-            if (arguments.StripComments && section != OutputSections.ESE_HEADER)
+            if (arguments.StripComments && section != OutputSections.ESE_HEADER && section != OutputSections.SCT_HEADER)
             {
                 chain.AddTransformer(new RemoveAllComments());
             }

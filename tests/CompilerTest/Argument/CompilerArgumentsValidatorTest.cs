@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Moq;
+using System.IO;
 using Compiler.Argument;
 using Compiler.Input;
 using Compiler.Event;
@@ -15,15 +16,20 @@ namespace CompilerTest.Argument
 
         private readonly Mock<IEventLogger> eventLogger;
 
+        private readonly Mock<TextWriter> mockOutputs;
+
         public CompilerArgumentsValidatorTest()
         {
             this.mockConfigFile = new Mock<IFileInterface>();
+            this.mockOutputs = new Mock<TextWriter>();
             this.eventLogger = new Mock<IEventLogger>();
             this.arguments = new CompilerArguments
             {
                 ConfigFile = mockConfigFile.Object
             };
             this.mockConfigFile.Setup(foo => foo.GetPath()).Returns("/foo/bar");
+            this.arguments.OutFileEse = this.mockOutputs.Object;
+            this.arguments.OutFileSct = this.mockOutputs.Object;
         }
 
         [Fact]
@@ -45,6 +51,34 @@ namespace CompilerTest.Argument
             CompilerArgumentsValidator.Validate(this.eventLogger.Object, this.arguments);
 
             string expectedMessage = "The configuration file is not valid JSON";
+            this.eventLogger.Verify(
+                foo => foo.AddEvent(It.Is<CompilerArgumentError>(arg => arg.GetMessage().Contains(expectedMessage)))
+            );
+        }
+
+        [Fact]
+        public void TestItSendsErrorEventOnEseOutputNotSet()
+        {
+            this.arguments.OutFileEse = null;
+            this.mockConfigFile.Setup(file => file.Exists()).Returns(true);
+            this.mockConfigFile.Setup(file => file.Contents()).Returns("{]");
+            CompilerArgumentsValidator.Validate(this.eventLogger.Object, this.arguments);
+
+            string expectedMessage = "ESE output file path must be specified";
+            this.eventLogger.Verify(
+                foo => foo.AddEvent(It.Is<CompilerArgumentError>(arg => arg.GetMessage().Contains(expectedMessage)))
+            );
+        }
+
+        [Fact]
+        public void TestItSendsErrorEventOnSctOutputNotSet()
+        {
+            this.arguments.OutFileSct = null;
+            this.mockConfigFile.Setup(file => file.Exists()).Returns(true);
+            this.mockConfigFile.Setup(file => file.Contents()).Returns("{]");
+            CompilerArgumentsValidator.Validate(this.eventLogger.Object, this.arguments);
+
+            string expectedMessage = "SCT output file path must be specified";
             this.eventLogger.Verify(
                 foo => foo.AddEvent(It.Is<CompilerArgumentError>(arg => arg.GetMessage().Contains(expectedMessage)))
             );

@@ -27,6 +27,16 @@ namespace Compiler.Argument
                     events.AddEvent(new CompilerArgumentError("The configuration file is not valid JSON"));
                 }
             }
+
+            if (arguments.OutFileEse == null)
+            {
+                events.AddEvent(new CompilerArgumentError("ESE output file path must be specified"));
+            }
+
+            if (arguments.OutFileSct == null)
+            {
+                events.AddEvent(new CompilerArgumentError("SCT output file path must be specified"));
+            }
         }
     }
 }
