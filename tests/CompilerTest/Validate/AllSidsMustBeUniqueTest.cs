@@ -9,13 +9,13 @@ namespace CompilerTest.Validate
 {
     public class AllSidsMustBeUniqueTest
     {
-        private SectorElementCollection sectorElements;
-        private Mock<IEventLogger> loggerMock;
-        private SidStar first;
-        private SidStar second;
-        private SidStar third;
-        private SidStar fourth;
-        private AllSidsMustBeUnique rule;
+        private readonly SectorElementCollection sectorElements;
+        private readonly Mock<IEventLogger> loggerMock;
+        private readonly SidStar first;
+        private readonly SidStar second;
+        private readonly SidStar third;
+        private readonly SidStar fourth;
+        private readonly AllSidsMustBeUnique rule;
 
         public AllSidsMustBeUniqueTest()
         {
