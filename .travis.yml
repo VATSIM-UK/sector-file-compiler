@@ -8,7 +8,6 @@ os:
 jobs:
   include:
     - dotnet: latest
-      mono: none
     - mono: latest
 
 
