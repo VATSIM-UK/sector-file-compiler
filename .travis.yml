@@ -18,14 +18,9 @@ jobs:
     - os: osx 
       mono: latest
 
-before_install:
-  - if [ $TRAVIS_OS_NAME != "osx" ]; then
-    sudo apt-get install nuget
-    fi
-
 install:
-  - nuget install xunit.runners -Version 2.4.1 -OutputDirectory testrunner
-  - nuget restore SectorFileCompiler.sln
+  - dotnet install xunit.runners -Version 2.4.1 -OutputDirectory testrunner
+  - dotnet restore SectorFileCompiler.sln
 
 script:
   - msbuild /p:Configuration=Release SectorFileCompiler.sln
