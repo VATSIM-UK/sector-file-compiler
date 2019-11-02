@@ -5,11 +5,6 @@ VisualStudioVersion = 16.0.29409.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compiler", "src\Compiler\Compiler.csproj", "{3BFA0B5E-E667-4D04-9610-D367F4EC0EA0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompilerUi", "src\CompilerUi\CompilerUi.csproj", "{5505C526-9B2C-48A0-9D2F-D77EB7C04342}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3BFA0B5E-E667-4D04-9610-D367F4EC0EA0} = {3BFA0B5E-E667-4D04-9610-D367F4EC0EA0}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompilerTest", "tests\CompilerTest\CompilerTest.csproj", "{B87EE1E0-AA56-47D9-887B-0F95F2ED3B94}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompilerCli", "src\CompilerCli\CompilerCli.csproj", "{0EB9D1AF-0FD7-463B-8F96-F119B133381D}"
@@ -18,6 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompilerCli", "src\Compiler
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompilerCliTest", "tests\CompilerCliTest\CompilerCliTest.csproj", "{006E8683-7493-438E-B1BE-A57B45B3DFB2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89202D10-4A79-4C11-B18F-465786FC86F3}"
+	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,6 @@ Global
 		{3BFA0B5E-E667-4D04-9610-D367F4EC0EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BFA0B5E-E667-4D04-9610-D367F4EC0EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BFA0B5E-E667-4D04-9610-D367F4EC0EA0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5505C526-9B2C-48A0-9D2F-D77EB7C04342}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5505C526-9B2C-48A0-9D2F-D77EB7C04342}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5505C526-9B2C-48A0-9D2F-D77EB7C04342}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5505C526-9B2C-48A0-9D2F-D77EB7C04342}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B87EE1E0-AA56-47D9-887B-0F95F2ED3B94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B87EE1E0-AA56-47D9-887B-0F95F2ED3B94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B87EE1E0-AA56-47D9-887B-0F95F2ED3B94}.Release|Any CPU.ActiveCfg = Release|Any CPU
