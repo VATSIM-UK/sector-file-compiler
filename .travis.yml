@@ -20,11 +20,10 @@ jobs:
 
 before_install:
   - sudo apt-get install nuget
-  - nuget help | head -1
 
 install:
-  - nuget restore SectorFileCompiler.sln
   - nuget install xunit.runners -Version 2.4.1 -OutputDirectory testrunner
+  - nuget restore SectorFileCompiler.sln
 
 script:
   - msbuild /p:Configuration=Release SectorFileCompiler.sln
