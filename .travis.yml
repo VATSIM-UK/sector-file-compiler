@@ -19,7 +19,7 @@ jobs:
       mono: latest
 
 install:
-  - dotnet install xunit.runners -Version 2.4.1 -OutputDirectory testrunner
+  - dotnet add xunit.runners -v 2.4.1 -o testrunner
   - dotnet restore SectorFileCompiler.sln
 
 script:
