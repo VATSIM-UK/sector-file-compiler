@@ -41,6 +41,18 @@ namespace CompilerTest.Transformer
         }
 
         [Fact]
+        public void TestItDoesntAddCommentStripperOnSctHeader()
+        {
+            this.arguments.StripComments = true;
+            List<Type> expected = new List<Type>(new Type[] { typeof(ReplaceTokens) });
+
+            Assert.Equal(
+                expected,
+                TransformerChainFactory.Create(arguments, OutputSections.SCT_HEADER).GetTransformerTypes()
+            );
+        }
+
+        [Fact]
         public void TestItAddsBlankLineStripper()
         {
             this.arguments.RemoveBlankLines = true;

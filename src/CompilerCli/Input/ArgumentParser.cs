@@ -9,7 +9,8 @@ namespace CompilerCli.Input
         private static readonly Dictionary<string, IInputParser> availableArguments = new Dictionary<string, IInputParser>()
         {
             { "--config-file", new ConfigFileParser() },
-            { "--out-file", new OutputFileParser() },
+            { "--out-file-ese", new EseOutputFileParser() },
+            { "--out-file-sct", new SctOutputFileParser() },
             { "--ignore-validation", new IgnoreValidationParser() },
             { "--strip-comments", new StripCommentsParser() },
             { "--strip-newlines", new StripNewlinesParser() },

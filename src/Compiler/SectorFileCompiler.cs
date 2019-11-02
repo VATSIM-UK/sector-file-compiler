@@ -63,11 +63,14 @@ namespace Compiler
             SectionFactory factory = new SectionFactory(files, this.arguments);
             foreach (OutputSections section in this.arguments.EseSections)
             {
-                factory.Create(section).WriteToFile(this.arguments.OutFile);
+                factory.Create(section).WriteToFile(this.arguments.OutFileEse);
             }
 
             // Make the SCT2
-            //TODO
+            foreach (OutputSections section in this.arguments.SctSections)
+            {
+                factory.Create(section).WriteToFile(this.arguments.OutFileSct);
+            }
 
             this.events.AddEvent(new CompilationFinishedEvent(true));
             return 0;

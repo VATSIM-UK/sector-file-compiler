@@ -6,23 +6,23 @@ using CompilerCli.Input;
 
 namespace CompilerCliTest.Input
 {
-    public class OutputFileParserTest
+    public class SctOutputFileParserTest
     {
         [Fact]
         public void TestItSetsOutputFile()
         {
             CompilerArguments arguments = new CompilerArguments();
-            OutputFileParser parser = new OutputFileParser();
+            SctOutputFileParser parser = new SctOutputFileParser();
 
-            arguments = parser.Parse(new List<string>(new string[] { "test.json" }), arguments);
-            Assert.NotNull(arguments.OutFile);
+            arguments = parser.Parse(new List<string>(new string[] { "test.sct" }), arguments);
+            Assert.NotNull(arguments.OutFileSct);
         }
 
         [Fact]
         public void TestItThrowsExceptionOnNoValues()
         {
             CompilerArguments arguments = new CompilerArguments();
-            OutputFileParser parser = new OutputFileParser();
+            SctOutputFileParser parser = new SctOutputFileParser();
 
             Assert.Throws<ArgumentException>(() => parser.Parse(new List<string>(new string[] { }), arguments));
         }
@@ -31,7 +31,7 @@ namespace CompilerCliTest.Input
         public void TestItThrowsExceptionOnTooManyValues()
         {
             CompilerArguments arguments = new CompilerArguments();
-            OutputFileParser parser = new OutputFileParser();
+            SctOutputFileParser parser = new SctOutputFileParser();
 
             Assert.Throws<ArgumentException>(() => parser.Parse(new List<string>(new string[] { "a", "b" }), arguments));
         }

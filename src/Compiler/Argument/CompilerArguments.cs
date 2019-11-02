@@ -37,7 +37,11 @@ namespace Compiler.Argument
             return base.GetHashCode();
         }
 
-        public TextWriter OutFile { set; get; }
+        // The output file for the ESE
+        public TextWriter OutFileEse { set; get; }
+
+        // The output file for the SCT
+        public TextWriter OutFileSct { set; get; }
 
         // The order in which ESE sections should be output
         public List<OutputSections> EseSections { get; set; } = new List<OutputSections>
@@ -48,6 +52,29 @@ namespace Compiler.Argument
             OutputSections.ESE_FREETEXT,
             OutputSections.ESE_SIDSSTARS,
             OutputSections.ESE_AIRSPACE,
+        };
+
+        // The order in which SCT sections should be output
+        public List<OutputSections> SctSections { get; set; } = new List<OutputSections>
+        {
+            OutputSections.SCT_HEADER,
+            OutputSections.SCT_COLOUR_DEFS,
+            OutputSections.SCT_INFO,
+            OutputSections.SCT_AIRPORT,
+            OutputSections.SCT_RUNWAY,
+            OutputSections.SCT_VOR,
+            OutputSections.SCT_NDB,
+            OutputSections.SCT_FIXES,
+            OutputSections.SCT_GEO,
+            OutputSections.SCT_LOW_AIRWAY,
+            OutputSections.SCT_HIGH_AIRWAY,
+            OutputSections.SCT_ARTCC,
+            OutputSections.SCT_ARTCC_HIGH,
+            OutputSections.SCT_ARTCC_LOW,
+            OutputSections.SCT_SID,
+            OutputSections.SCT_STAR,
+            OutputSections.SCT_LABELS,
+            OutputSections.SCT_REGIONS
         };
 
         // Should we validate the file before output

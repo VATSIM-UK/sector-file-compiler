@@ -1,10 +1,6 @@
 language: csharp
 solution: SectorFileCompiler.sln
 
-branches:
-  only:
-    - master
-
 jobs:
   include:
     - os: linux 

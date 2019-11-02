@@ -8,13 +8,11 @@ namespace Compiler.Input
     {
         private readonly FileIndex files;
         private readonly CompilerArguments arguments;
-        private readonly SectionHeaders headers;
 
         public SectionFactory(FileIndex files, CompilerArguments arguments)
         {
             this.files = files;
             this.arguments = arguments;
-            this.headers = new SectionHeaders();
         }
 
         public Section Create(OutputSections section)
