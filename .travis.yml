@@ -20,13 +20,13 @@ jobs:
 
 before_install:
   - sudo apt-get install nuget
+  - nuget help | head -1
 
 install:
-  - dotnet restore
   - nuget restore SectorFileCompiler.sln
-  - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
+  - nuget install xunit.runners -Version 2.4.1 -OutputDirectory testrunner
 
 script:
   - msbuild /p:Configuration=Release SectorFileCompiler.sln
-  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./tests/CompilerTest/bin/Release/CompilerTest.dll
-  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./tests/CompilerCliTest/bin/Release/CompilerCliTest.dll
+  - mono ./testrunner/xunit.runners.2.4.1/tools/xunit.console.clr4.exe ./tests/CompilerTest/bin/Release/CompilerTest.dll
+  - mono ./testrunner/xunit.runners.2.4.1/tools/xunit.console.clr4.exe ./tests/CompilerCliTest/bin/Release/CompilerCliTest.dll
