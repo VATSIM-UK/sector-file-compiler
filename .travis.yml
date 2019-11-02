@@ -1,6 +1,10 @@
 language: csharp
 solution: SectorFileCompiler.sln
 
+branches:
+  only:
+    - master
+
 os:
   - linux
   - osx
