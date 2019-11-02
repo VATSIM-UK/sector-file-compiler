@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Compiler.Input
-{
+{s
     public interface IFileInterface
     {
         bool Exists();

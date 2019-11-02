@@ -18,6 +18,6 @@ install:
   - dotnet restore SectorFileCompiler.sln --packages packages
 
 script:
-  - dotnet build /p:Configuration=Release SectorFileCompiler.sln --nologo --no-restore /warnaserror
+  - dotnet build /p:Configuration=Release SectorFileCompiler.sln --nologo --no-restore /warnaserror || travis_terminate 1;
   - dotnet test tests/CompilerTest/CompilerTest.csproj
   - dotnet test tests/CompilerCliTest/CompilerCliTest.csproj
