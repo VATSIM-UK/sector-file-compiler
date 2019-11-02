@@ -12,7 +12,6 @@ namespace Compiler
     public class SectorFileCompiler
     {
         private readonly CompilerArguments arguments;
-
         private readonly EventTracker events;
 
         public SectorFileCompiler(CompilerArguments arguments, EventTracker events)
@@ -59,7 +58,7 @@ namespace Compiler
             }
 
             // Make the ESE
-            SectionFactory factory = new SectionFactory(files);
+            SectionFactory factory = new SectionFactory(files, this.arguments);
             foreach (OutputSections section in this.arguments.EseSections)
             {
                 factory.Create(section).WriteToFile(this.arguments.OutFile);

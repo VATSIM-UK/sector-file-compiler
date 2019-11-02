@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Compiler.Transformer
 {
@@ -9,6 +10,17 @@ namespace Compiler.Transformer
         public void AddTransformer(ITransformer transformer)
         {
             this.transformers.Add(transformer);
+        }
+
+        public List<Type> GetTransformerTypes()
+        {
+            List<Type> types = new List<Type>();
+            foreach (ITransformer transformer in this.transformers)
+            {
+                types.Add(transformer.GetType());
+            }
+
+            return types;
         }
 
         public List<string> Transform(List<string> lines)

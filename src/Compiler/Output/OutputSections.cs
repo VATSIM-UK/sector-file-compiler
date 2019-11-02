@@ -2,6 +2,7 @@
 {
     public enum OutputSections
     {
+        ESE_HEADER,
         ESE_PREAMBLE,
         ESE_POSITIONS,
         ESE_FREETEXT,

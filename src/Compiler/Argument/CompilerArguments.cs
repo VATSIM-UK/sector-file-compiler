@@ -35,6 +35,7 @@ namespace Compiler.Argument
         // The order in which ESE sections should be output
         public List<OutputSections> EseSections { get; set; } = new List<OutputSections>
         {
+            OutputSections.ESE_HEADER,
             OutputSections.ESE_PREAMBLE,
             OutputSections.ESE_POSITIONS,
             OutputSections.ESE_FREETEXT,
@@ -45,5 +46,10 @@ namespace Compiler.Argument
         // Should we validate the file before output
         public bool ValidateOutput { set; get; } = true;
 
+        // Should we strip comments out of the final output
+        public bool StripComments { set; get; } = false;
+
+        // Should we strip blank lines out of the final output
+        public bool RemoveBlankLines { set; get; } = false;
     }
 }

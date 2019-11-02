@@ -32,8 +32,6 @@ namespace Compiler.Input
                 return false;
             }
 
-            bool test = this.path == ((InputFile)obj).GetPath();
-
             return this.path == ((InputFile)obj).GetPath();
         }
 
