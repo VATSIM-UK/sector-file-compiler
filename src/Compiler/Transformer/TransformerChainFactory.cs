@@ -19,6 +19,8 @@ namespace Compiler.Transformer
                 chain.AddTransformer(new RemoveBlankLines());
             }
 
+            chain.AddTransformer(new ReplaceTokens(SystemTokensFactory.GetSystemTokens(arguments)));
+
             return chain;
         }
     }

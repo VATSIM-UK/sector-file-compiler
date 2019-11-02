@@ -13,6 +13,7 @@ namespace CompilerCli.Input
             { "--ignore-validation", new IgnoreValidationParser() },
             { "--strip-comments", new StripCommentsParser() },
             { "--strip-newlines", new StripNewlinesParser() },
+            { "--build-version", new BuildVersionParser() },
             { "--test-arg", new TestArgumentParser() },
         };
 

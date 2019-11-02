@@ -51,5 +51,8 @@ namespace Compiler.Argument
 
         // Should we strip blank lines out of the final output
         public bool RemoveBlankLines { set; get; } = false;
+
+        // The build version to use
+        public string BuildVersion { set; get; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
     }
 }
