@@ -2,49 +2,75 @@
 using Compiler.Input;
 using Compiler.Output;
 using System.Collections.Generic;
-using System.IO;
+using Compiler.Model;
+using Compiler.Event;
 using Newtonsoft.Json;
+using Compiler.Validate;
 
 namespace Compiler
 {
     public class SectorFileCompiler
     {
         private readonly CompilerArguments arguments;
+        private readonly EventTracker events;
 
-        private readonly Logger logger;
-
-        private readonly CompilerArgumentsValidator validator;
-
-        public SectorFileCompiler(CompilerArguments arguments, CompilerArgumentsValidator validator, Logger logger)
+        public SectorFileCompiler(CompilerArguments arguments, EventTracker events)
         {
             this.arguments = arguments;
-            this.validator = validator;
-            this.logger = logger;
+            this.events = events;
         }
 
         /**
          * Run the compiler.
          */
-        public void Compile()
+        public int Compile()
         {
-            if (!this.validator.Validate(arguments))
+            this.events.AddEvent(new ComplilationStartedEvent());
+
+            CompilerArgumentsValidator.Validate(this.events, this.arguments);
+            if (this.events.HasFatalError())
             {
-                return;
+                this.events.AddEvent(new CompilationFinishedEvent(false));
+                return 1;
             }
 
-            dynamic test = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(
+            // Parse the config file and index all the files
+            dynamic configFile = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(
                 this.arguments.ConfigFile.Contents()
             );
 
-            // Make the ESE
-            SectionFactory factory = new SectionFactory(new FileIndexer(this.arguments.ConfigFile.DirectoryLocation(), test, logger));
+            FileIndex files = FileIndexFactory.CreateFileIndex(this.arguments.ConfigFile.DirectoryLocation(), configFile, events);
 
+            // Parse all the input files
+            SectorElementCollection sectorElements = SectorElementCollectionFactory.Create(
+                new Parser.SectionParserFactory(events),
+                files,
+                events
+            );
+
+            // Validate the output files
+            if (this.arguments.ValidateOutput)
+            {
+                OutputValidator.Validate(sectorElements, this.events);
+                if (this.events.HasFatalError())
+                {
+                    this.events.AddEvent(new CompilationFinishedEvent(false));
+                    return 1;
+                }
+            }
+
+            // Make the ESE
+            SectionFactory factory = new SectionFactory(files, this.arguments);
             foreach (OutputSections section in this.arguments.EseSections)
             {
                 factory.Create(section).WriteToFile(this.arguments.OutFile);
             }
 
-            logger.Info("Great success");
+            // Make the SCT2
+            //TODO
+
+            this.events.AddEvent(new CompilationFinishedEvent(true));
+            return 0;
         }
     }
 }

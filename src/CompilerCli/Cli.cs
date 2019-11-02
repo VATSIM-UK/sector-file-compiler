@@ -5,6 +5,8 @@ using Compiler;
 using Compiler.Argument;
 using CompilerCli.Output;
 using CompilerCli.Input;
+using Compiler.Event;
+using System.Collections.Generic;
 
 namespace CompilerCli
 {
@@ -32,7 +34,7 @@ namespace CompilerCli
 
             SectorFileCompilerFactory.Create(
                 arguments,
-                new ConsoleOutput(output)
+                new List<IEventObserver>() { new ConsoleOutput(output) }
             ).Compile();
 
             output.Write("Press any key to exit");

@@ -1,22 +1,21 @@
-﻿using System;
-using System.IO;
-using Compiler.Output;
+﻿using System.IO;
+using Compiler.Event;
 
 namespace CompilerCli.Output
 {
-    public class ConsoleOutput : IOutputInterface
+    public class ConsoleOutput : IEventObserver
     {
         // The console
-        private StreamWriter console;
+        private readonly TextWriter console;
 
-        public ConsoleOutput(StreamWriter console)
+        public ConsoleOutput(TextWriter console)
         {
             this.console = console;
         }
 
-        public void WriteLine(string line)
+        public void NewEvent(ICompilerEvent log)
         {
-            Console.WriteLine(line);
+            console.WriteLine(log.GetMessage());
         }
     }
 }

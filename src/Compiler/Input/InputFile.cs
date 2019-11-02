@@ -35,6 +35,11 @@ namespace Compiler.Input
             return this.path == ((InputFile)obj).GetPath();
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public bool IsWritable()
         {
             if (this.Exists())
@@ -45,7 +50,7 @@ namespace Compiler.Input
             {
                 try
                 {
-                    File.Create(this.path);
+                    File.Create(this.path).Dispose();
                     File.Delete(this.path);
                     return true;
                 }
@@ -64,6 +69,11 @@ namespace Compiler.Input
         public string DirectoryLocation()
         {
             return new FileInfo(this.path).Directory.FullName;
+        }
+
+        public List<string> GetAllLines()
+        {
+            return new List<string>(File.ReadAllLines(this.path));
         }
     }
 }

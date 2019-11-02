@@ -8,40 +8,14 @@ namespace Compiler.Argument
 {
     public class CompilerArguments
     {
-        // The config file itself
-        private IFileInterface configFile;
-        public IFileInterface ConfigFile
-        {
-            set
-            {
-                this.configFile = value;
-            }
-            get
-            {
-                return this.configFile;
-            }
-        }
+        public const string COMPILER_VERISON = "1.0.0";
 
-        // The output verbosity for the compiler
-        private OutputVerbosity verbosity;
-
-        public OutputVerbosity Verbosity
-        {
-            get
-            {
-                return this.verbosity == default ? OutputVerbosity.Debug : this.verbosity;
-            }
-            set
-            {
-                this.verbosity = value;
-            }
-        }
+        public IFileInterface ConfigFile { set; get; }
 
         public override string ToString()
         {
             string output = "";
             output += "Config File Path: " + this.ConfigFile.GetPath() + Environment.NewLine;
-            output += "Output Verbosity: " + this.verbosity.ToString() + Environment.NewLine;
             return output;
         }
 
@@ -55,33 +29,37 @@ namespace Compiler.Argument
 
             CompilerArguments compare = (CompilerArguments)obj;
 
-            return
-                ((this.configFile == null && compare.configFile == null) || this.configFile.Equals(compare.configFile)) &&
-                this.verbosity == compare.verbosity;
+            return ((this.ConfigFile == null && compare.ConfigFile == null) || this.ConfigFile.Equals(compare.ConfigFile));
         }
 
-        // The output file
-        private TextWriter outFile;
-        public TextWriter OutFile
+        public override int GetHashCode()
         {
-            set
-            {
-                this.outFile = value;
-            }
-            get
-            {
-                return this.outFile;
-            }
+            return base.GetHashCode();
         }
+
+        public TextWriter OutFile { set; get; }
 
         // The order in which ESE sections should be output
         public List<OutputSections> EseSections { get; set; } = new List<OutputSections>
         {
+            OutputSections.ESE_HEADER,
             OutputSections.ESE_PREAMBLE,
             OutputSections.ESE_POSITIONS,
             OutputSections.ESE_FREETEXT,
             OutputSections.ESE_SIDSSTARS,
             OutputSections.ESE_AIRSPACE,
         };
+
+        // Should we validate the file before output
+        public bool ValidateOutput { set; get; } = true;
+
+        // Should we strip comments out of the final output
+        public bool StripComments { set; get; } = false;
+
+        // Should we strip blank lines out of the final output
+        public bool RemoveBlankLines { set; get; } = false;
+
+        // The build version to use
+        public string BuildVersion { set; get; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
     }
 }

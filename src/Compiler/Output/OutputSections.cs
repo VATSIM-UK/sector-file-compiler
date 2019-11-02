@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Output
+﻿namespace Compiler.Output
 {
     public enum OutputSections
     {
+        ESE_HEADER,
         ESE_PREAMBLE,
         ESE_POSITIONS,
         ESE_FREETEXT,

@@ -1,18 +1,20 @@
 ﻿using System.Collections.Generic;
 using Compiler.Input;
 using System.IO;
+using Compiler.Transformer;
 
 namespace Compiler.Output
 {
     public class Section
     {
         private readonly List<IFileInterface> inputFiles;
-
+        private readonly TransformerChain transformers;
         private readonly string header;
 
-        public Section(List<IFileInterface> inputFiles, string header = null)
+        public Section(List<IFileInterface> inputFiles, TransformerChain transformers, string header = null)
         {
             this.inputFiles = inputFiles;
+            this.transformers = transformers;
             this.header = header;
         }
 
@@ -25,7 +27,9 @@ namespace Compiler.Output
 
             foreach (IFileInterface file in this.inputFiles)
             {
-                output.Write(file.Contents());
+                output.Write(
+                    OutputStringGenerator.GenerateOutput(this.transformers.Transform(file.GetAllLines()))
+                );
             }
 
             output.Write("\r\n");

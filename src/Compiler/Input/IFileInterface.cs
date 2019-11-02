@@ -15,5 +15,6 @@ namespace Compiler.Input
         string Contents();
 
         string DirectoryLocation();
+        List<string> GetAllLines();
     }
 }
