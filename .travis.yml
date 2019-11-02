@@ -18,6 +18,6 @@ install:
   - dotnet restore SectorFileCompiler.sln --packages packages
 
 script:
-  - msbuild /p:Configuration=Release SectorFileCompiler.sln
+  - dotnet build /p:Configuration=Release SectorFileCompiler.sln
   - mono ./packages/xunit.runners.*/tools/xunit.console.clr4.exe ./tests/CompilerTest/bin/Release/CompilerTest.dll
   - mono ./packages/xunit.runners.*/tools/xunit.console.clr4.exe ./tests/CompilerCliTest/bin/Release/CompilerCliTest.dll
