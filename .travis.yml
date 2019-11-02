@@ -11,14 +11,8 @@ os:
 
 jobs:
   include:
-    - dotnet: latest
+    - dotnet: 3.0.100
     - mono: latest
-
-addons:
-  snaps:
-  - name: dotnet-sdk
-    classic: true
-    channel: latest/beta
 
 
 install:
