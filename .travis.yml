@@ -19,7 +19,9 @@ jobs:
       mono: latest
 
 before_install:
-  - sudo apt-get install nuget
+  - if [ $TRAVIS_OS_NAME != "osx" ]; then
+    sudo apt-get install nuget
+    fi
 
 install:
   - nuget install xunit.runners -Version 2.4.1 -OutputDirectory testrunner
