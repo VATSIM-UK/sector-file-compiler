@@ -9,8 +9,10 @@ jobs:
   include:
     - os: linux 
       dotnet: 3.0.100
+      mono: none
     - os: osx
       dotnet: 3.0.100
+      mono: none
 
 install:
   - dotnet restore SectorFileCompiler.sln --packages packages
