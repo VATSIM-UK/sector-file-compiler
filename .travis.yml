@@ -19,5 +19,5 @@ install:
 
 script:
   - dotnet build /p:Configuration=Release SectorFileCompiler.sln
-  - dotnet test tests/CompilerTest
-  - dotnet test tests/CompilerCliTest
+  - dotnet test tests/CompilerTest/CompilerTest.csproj
+  - dotnet test tests/CompilerCliTest/CompilerCliTest.csproj
