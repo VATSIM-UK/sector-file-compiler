@@ -8,15 +8,11 @@ branches:
 jobs:
   include:
     - os: linux 
-      mono: none
+      mono: latest
       dotnet: 3.0.100
     - os: osx
-      mono: none
+      mono: latest
       dotnet: 3.0.100
-    - os: linux 
-      mono: latest
-    - os: osx 
-      mono: latest
 
 install:
   - dotnet restore SectorFileCompiler.sln
