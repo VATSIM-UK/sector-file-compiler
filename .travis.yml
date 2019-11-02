@@ -13,7 +13,7 @@ jobs:
       dotnet: 3.0.100
 
 install:
-  - dotnet restore SectorFileCompiler.sln
+  - dotnet restore SectorFileCompiler.sln --packages packages
 
 script:
   - xbuild /p:Configuration=Release SectorFileCompiler.sln
