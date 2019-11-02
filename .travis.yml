@@ -19,10 +19,9 @@ jobs:
       mono: latest
 
 install:
-  - dotnet add tests/CompilerTest/CompilerTest.csproj package xunit.runners -v 2.4.1 --package-directory testrunner
   - dotnet restore SectorFileCompiler.sln
 
 script:
   - msbuild /p:Configuration=Release SectorFileCompiler.sln
-  - mono ./testrunner/xunit.runners.2.4.1/tools/xunit.console.clr4.exe ./tests/CompilerTest/bin/Release/CompilerTest.dll
-  - mono ./testrunner/xunit.runners.2.4.1/tools/xunit.console.clr4.exe ./tests/CompilerCliTest/bin/Release/CompilerCliTest.dll
+  - mono ./packages/xunit.runners.*/tools/xunit.console.clr4.exe ./tests/CompilerTest/bin/Release/CompilerTest.dll
+  - mono ./packages/xunit.runners.*/tools/xunit.console.clr4.exe ./tests/CompilerCliTest/bin/Release/CompilerCliTest.dll
