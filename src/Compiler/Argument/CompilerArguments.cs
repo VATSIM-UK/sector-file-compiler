@@ -32,6 +32,11 @@ namespace Compiler.Argument
             return ((this.ConfigFile == null && compare.ConfigFile == null) || this.ConfigFile.Equals(compare.ConfigFile));
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public TextWriter OutFile { set; get; }
 
         // The order in which ESE sections should be output

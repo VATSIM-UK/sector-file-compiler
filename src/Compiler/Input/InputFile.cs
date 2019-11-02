@@ -35,6 +35,11 @@ namespace Compiler.Input
             return this.path == ((InputFile)obj).GetPath();
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public bool IsWritable()
         {
             if (this.Exists())
