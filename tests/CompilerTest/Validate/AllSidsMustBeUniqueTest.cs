@@ -16,6 +16,7 @@ namespace CompilerTest.Validate
         private SidStar first;
         private SidStar second;
         private SidStar third;
+        private SidStar fourth;
         private AllSidsMustBeUnique rule;
 
         public AllSidsMustBeUniqueTest()
@@ -25,6 +26,7 @@ namespace CompilerTest.Validate
             this.first = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>());
             this.second = new SidStar("STAR", "EGKK", "26L", "ADMAG2X", new List<string>());
             this.third = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>());
+            this.fourth = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>(new string[] { "a" }));
             this.rule = new AllSidsMustBeUnique();
         }
 
@@ -37,6 +39,15 @@ namespace CompilerTest.Validate
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ICompilerEvent>()), Times.Never);
 
+        }
+
+        [Fact]
+        public void TestItPassesOnDifferentRoutes()
+        {
+            this.sectorElements.AddSidStar(this.first);
+            this.sectorElements.AddSidStar(this.fourth);
+            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ICompilerEvent>()), Times.Never);
         }
 
         [Fact]

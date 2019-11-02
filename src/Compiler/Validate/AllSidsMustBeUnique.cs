@@ -26,7 +26,8 @@ namespace Compiler.Validate
 
         private string GetKey(SidStar sidStar)
         {
-            return sidStar.Type + ":" + sidStar.Airport + ":" + sidStar.Runway + ":" + sidStar.Identifier;
+            return sidStar.Type + ":" + sidStar.Airport + ":" + sidStar.Runway + ":" +
+                sidStar.Identifier + ":" + String.Join(" ", sidStar.Route);
         }
     }
 }
