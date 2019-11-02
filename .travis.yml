@@ -8,16 +8,14 @@ branches:
 jobs:
   include:
     - os: linux 
-      mono: latest
       dotnet: 3.0.100
     - os: osx
-      mono: latest
       dotnet: 3.0.100
 
 install:
   - dotnet restore SectorFileCompiler.sln
 
 script:
-  - msbuild /p:Configuration=Release SectorFileCompiler.sln
+  - xbuild /p:Configuration=Release SectorFileCompiler.sln
   - mono ./packages/xunit.runners.*/tools/xunit.console.clr4.exe ./tests/CompilerTest/bin/Release/CompilerTest.dll
   - mono ./packages/xunit.runners.*/tools/xunit.console.clr4.exe ./tests/CompilerCliTest/bin/Release/CompilerCliTest.dll
