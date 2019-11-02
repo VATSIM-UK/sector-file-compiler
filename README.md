@@ -23,30 +23,52 @@ The input for the compiler is determined through a configuration file in JSON fo
 
 #### SCT2
 `sct_header` - A comment block or copyright notice to go at the top of the SCT2 output.
+
 `sct_colour_defs` - A place at the top of the SCT2 to define colours
+
 `sct_info` - The \[INFO\] section of the SCT2.
+
 `sct_airport` - The \[AIPORT\] section of the SCT2.
+
 `sct_runway` - The \[RUNWAY\] section of the SCT2.
+
 `sct_vor` - The \[VOR\] section of the SCT2.
+
 `sct_ndb` - The \[NDB\] section of the SCT2.
+
 `sct_fixes` - The \[FIXES\] section of the SCT2.
+
 `sct_geo` - The \[GEO\] section of the SCT2.
+
 `sct_low_airway` - The \[LOW AIRWAY\] section of the SCT2.
+
 `sct_high_airway` - The \[HIGH AIRWAY\] section of the SCT2.
+
 `sct_artcc` - The \[ARTCC\] section of the SCT2.
+
 `sct_artcc_high` - The \[ARTCC HIGH\] section of the SCT2.
+
 `sct_artcc_low` - The \[ARTCC LOW\] section of the SCT2.
+
 `sct_sid` - The \[SID\] section of the SCT2.
+
 `sct_star` - The \[STAR\] section of the SCT2.
+
 `sct_labels` - The \[LABELS\] section of the SCT2.
+
 `sct_regions` - The \[REGIONS\] section of the SCT2.
 
 #### ESE (EuroScope Only)
 `ese_header` - A comment block or copyright notice to go at the top of the ESE output.
+
 `ese_preamble` - Any other information to appear at the top of the ESE.
+
 `positions` - The \[POSITIONS\] section of the ESE.
+
 `freetext` - The \[FREETEXT\] section of the ESE.
+
 `sidsstars` - EuroScope only. The \[SIDSSTARS\] section of the ESE.
+
 `airspace` - The \[AIRSPACE\] section of the ESE.
 
 ### Example compiler configuration
