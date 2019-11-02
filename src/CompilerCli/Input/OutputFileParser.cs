@@ -5,7 +5,7 @@ using System.IO;
 
 namespace CompilerCli.Input
 {
-    public class OutputFileParser : IInputParserInterface
+    public class OutputFileParser : IInputParser
     {
         public CompilerArguments Parse(List<string> values, CompilerArguments compilerSettings)
         {

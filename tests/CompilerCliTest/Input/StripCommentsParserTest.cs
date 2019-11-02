@@ -5,16 +5,16 @@ using CompilerCli.Input;
 
 namespace CompilerCliTest.Input
 {
-    public class IgnoreValidationParserTest
+    public class StripCommentsParserTest
     {
         [Fact]
         public void TestItSetsCompilerArgument()
         {
             CompilerArguments arguments = new CompilerArguments();
-            IgnoreValidationParser parser = new IgnoreValidationParser();
+            StripCommentsParser parser = new StripCommentsParser();
 
-            arguments = parser.Parse(new List<string>(new string[] { "test.json" }), arguments);
-            Assert.False(arguments.ValidateOutput);
+            arguments = parser.Parse(new List<string>(new string[] { }), arguments);
+            Assert.True(arguments.StripComments);
         }
     }
 }

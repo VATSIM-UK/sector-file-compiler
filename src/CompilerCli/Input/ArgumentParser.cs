@@ -6,11 +6,13 @@ namespace CompilerCli.Input
 {
     public class ArgumentParser
     {
-        private static readonly Dictionary<string, IInputParserInterface> availableArguments = new Dictionary<string, IInputParserInterface>()
+        private static readonly Dictionary<string, IInputParser> availableArguments = new Dictionary<string, IInputParser>()
         {
             { "--config-file", new ConfigFileParser() },
             { "--out-file", new OutputFileParser() },
             { "--ignore-validation", new IgnoreValidationParser() },
+            { "--strip-comments", new StripCommentsParser() },
+            { "--strip-newlines", new StripNewlinesParser() },
             { "--test-arg", new TestArgumentParser() },
         };
 

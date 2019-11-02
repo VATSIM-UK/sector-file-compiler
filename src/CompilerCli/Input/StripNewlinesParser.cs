@@ -3,10 +3,11 @@ using Compiler.Argument;
 
 namespace CompilerCli.Input
 {
-    class TestArgumentParser : IInputParser
+    public class StripNewlinesParser : IInputParser
     {
         public CompilerArguments Parse(List<string> values, CompilerArguments compilerSettings)
         {
+            compilerSettings.RemoveBlankLines = true;
             return compilerSettings;
         }
     }

@@ -3,7 +3,7 @@ using Compiler.Argument;
 
 namespace CompilerCli.Input
 {
-    interface IInputParserInterface
+    interface IInputParser
     {
         public CompilerArguments Parse(List<string> values, CompilerArguments compilerSettings);
     }

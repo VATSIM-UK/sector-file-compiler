@@ -5,7 +5,7 @@ using Compiler.Input;
 
 namespace CompilerCli.Input
 {
-    public class ConfigFileParser : IInputParserInterface
+    public class ConfigFileParser : IInputParser
     {
         public CompilerArguments Parse(List<string>values, CompilerArguments compilerSettings)
         {
