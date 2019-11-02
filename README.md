@@ -60,13 +60,17 @@ The input for the compiler is determined through a configuration file in JSON fo
 ### Required Flags
 
 `--config-file` - Takes a single argument. Path to the compiler configuration JSON file.
+
 `--out-file` - Takes a single argument. Where the output file should be generated.
 
 ### Optional Flags
 
 `--ignore-validation` - If set, any validation failures will not halt compilation.
+
 `--strip-comments` - If set, any comments in the input will be removed. This does not apply to files named in the header parts of the compiler configuration.
+
 `--strip-newlines` - If set, any lines that are empty (i.e. just newlines) in the input will be removed.
+
 `--build-version` - Takes a single argument. Specifies the version of the build to replace the `{VERSION}` token in the input.
 
 ### Token Replacements
