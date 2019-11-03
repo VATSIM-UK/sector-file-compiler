@@ -39,7 +39,7 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                sectorElements.AddColour(new Colour(parts[1], colourValue));
+                sectorElements.Add(new Colour(parts[1], colourValue));
             }
         }
     }

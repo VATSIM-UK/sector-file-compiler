@@ -32,8 +32,8 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItPassesIfNoDuplicates()
         {
-            this.sectorElements.AddSidStar(this.first);
-            this.sectorElements.AddSidStar(this.second);
+            this.sectorElements.Add(this.first);
+            this.sectorElements.Add(this.second);
             this.rule.Validate(sectorElements, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
@@ -43,8 +43,8 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItPassesOnDifferentRoutes()
         {
-            this.sectorElements.AddSidStar(this.first);
-            this.sectorElements.AddSidStar(this.fourth);
+            this.sectorElements.Add(this.first);
+            this.sectorElements.Add(this.fourth);
             this.rule.Validate(sectorElements, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -52,9 +52,9 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsIfThereAreDuplicates()
         {
-            this.sectorElements.AddSidStar(this.first);
-            this.sectorElements.AddSidStar(this.second);
-            this.sectorElements.AddSidStar(this.third);
+            this.sectorElements.Add(this.first);
+            this.sectorElements.Add(this.second);
+            this.sectorElements.Add(this.third);
             this.rule.Validate(sectorElements, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }

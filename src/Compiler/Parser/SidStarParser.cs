@@ -36,7 +36,7 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                sectorElements.AddSidStar(
+                sectorElements.Add(
                     new SidStar(parts[0], parts[1], parts[2], parts[3], new List<string>(parts[4].Split(' ')))
                 );
             }

@@ -8,12 +8,12 @@ namespace Compiler.Model
 
         public List<Colour> Colours { get; } = new List<Colour>();
 
-        public void AddSidStar(SidStar sidStar)
+        public void Add(SidStar sidStar)
         {
             this.SidStars.Add(sidStar);
         }
 
-        public void AddColour(Colour colour)
+        public void Add(Colour colour)
         {
             this.Colours.Add(colour);
         }
