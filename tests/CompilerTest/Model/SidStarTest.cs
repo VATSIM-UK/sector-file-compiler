@@ -48,5 +48,14 @@ namespace CompilerTest.Model
         {
             Assert.Equal(new List<string>(new string[] { "FIX1", "FIX2", "FIX3" }), this.sidStar.Route);
         }
+
+        [Fact]
+        public void TestItCompiles()
+        {
+            Assert.Equal(
+                "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 FIX3",
+                this.sidStar.Compile()
+            );
+        }
     }
 }

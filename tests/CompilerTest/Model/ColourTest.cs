@@ -23,5 +23,11 @@ namespace CompilerTest.Model
         {
             Assert.Equal(123, this.colour.Value);
         }
+
+        [Fact]
+        public void TestItCompiles()
+        {
+            Assert.Equal("#define colour1 123", this.colour.Compile());
+        }
     }
 }

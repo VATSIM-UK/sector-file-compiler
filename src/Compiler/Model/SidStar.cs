@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Compiler.Model
 {
-    public class SidStar
+    public class SidStar :ICompilable
     {
         public string Type { get; }
         public string Airport { get; }
@@ -24,6 +23,18 @@ namespace Compiler.Model
             this.Runway = runway;
             this.Identifier = identifier;
             this.Route = route;
+        }
+
+        public string Compile()
+        {
+            return string.Format(
+                "{0}:{1}:{2}:{3}:{4}",
+                this.Type,
+                this.Airport,
+                this.Runway,
+                this.Identifier,
+                string.Join(' ', this.Route)
+            );
         }
     }
 }
