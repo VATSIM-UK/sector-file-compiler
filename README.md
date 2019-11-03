@@ -123,5 +123,7 @@ The input for the compiler is determined through a configuration file in JSON fo
 There are a number of tokens that may be added to comments in the input files, which will be replaced in the output.
 
 `{YEAR}` - The year at the time of compilation.
+
 `{VERSION}` - A user generated version for the sector file, e.g. the AIRAC date. Defaults to current date and time.
+
 `{BUILD}` - The date on which the build occured.
