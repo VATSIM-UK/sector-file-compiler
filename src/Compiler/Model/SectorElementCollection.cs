@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Compiler.Model
 {
@@ -8,9 +6,16 @@ namespace Compiler.Model
     {
         public List<SidStar> SidStars { get; } = new List<SidStar>();
 
+        public List<Colour> Colours { get; } = new List<Colour>();
+
         public void AddSidStar(SidStar sidStar)
         {
             this.SidStars.Add(sidStar);
+        }
+
+        public void AddColour(Colour colour)
+        {
+            this.Colours.Add(colour);
         }
     }
 }

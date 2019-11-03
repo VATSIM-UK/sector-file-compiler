@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Compiler.Model;
+using Compiler.Error;
 using Compiler.Event;
 using Compiler.Validate;
 using Moq;
@@ -35,7 +36,7 @@ namespace CompilerTest.Validate
             this.sectorElements.AddSidStar(this.second);
             this.rule.Validate(sectorElements, this.loggerMock.Object);
 
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ICompilerEvent>()), Times.Never);
+            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
 
         }
 
@@ -45,7 +46,7 @@ namespace CompilerTest.Validate
             this.sectorElements.AddSidStar(this.first);
             this.sectorElements.AddSidStar(this.fourth);
             this.rule.Validate(sectorElements, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ICompilerEvent>()), Times.Never);
+            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
 
         [Fact]
@@ -55,7 +56,7 @@ namespace CompilerTest.Validate
             this.sectorElements.AddSidStar(this.second);
             this.sectorElements.AddSidStar(this.third);
             this.rule.Validate(sectorElements, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ICompilerEvent>()), Times.Once);
+            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
     }
 }
