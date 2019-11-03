@@ -6,9 +6,11 @@ namespace Compiler.Validate
 {
     public class OutputValidator
     {
-        private static List<IValidationRule> validationRules = new List<IValidationRule>
+        private static readonly List<IValidationRule> validationRules = new List<IValidationRule>
         {
             new AllSidsMustBeUnique(),
+            new AllColoursMustHaveAUniqueId(),
+            new AllColoursMustBeValid(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, IEventLogger events)
