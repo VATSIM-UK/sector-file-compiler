@@ -15,6 +15,8 @@ namespace Compiler.Parser
         {
             switch (section)
             {
+                case OutputSections.SCT_ARTCC_LOW:
+                    return new ColourParser(this.logger);
                 case OutputSections.ESE_SIDSSTARS:
                     return new SidStarParser(this.logger);
                 case OutputSections.ESE_PREAMBLE:
