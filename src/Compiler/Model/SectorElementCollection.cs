@@ -8,13 +8,17 @@ namespace Compiler.Model
 
         public List<Colour> Colours { get; } = new List<Colour>();
 
+        public List<ICompilable> Compilables { get; } = new List<ICompilable>();
+
         public void Add(SidStar sidStar)
         {
+            this.Compilables.Add(sidStar);
             this.SidStars.Add(sidStar);
         }
 
         public void Add(Colour colour)
         {
+            this.Compilables.Add(colour);
             this.Colours.Add(colour);
         }
     }
