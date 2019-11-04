@@ -14,7 +14,7 @@
         public string Compile()
         {
             return string.Format(
-                "#define {0} {1}",
+                "#define {0} {1}\r\n",
                 this.Name,
                 this.Value
             );

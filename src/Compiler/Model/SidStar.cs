@@ -28,7 +28,7 @@ namespace Compiler.Model
         public string Compile()
         {
             return string.Format(
-                "{0}:{1}:{2}:{3}:{4}",
+                "{0}:{1}:{2}:{3}:{4}\r\n",
                 this.Type,
                 this.Airport,
                 this.Runway,

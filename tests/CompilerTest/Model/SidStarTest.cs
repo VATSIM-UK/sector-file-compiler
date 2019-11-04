@@ -53,7 +53,7 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 FIX3",
+                "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 FIX3\r\n",
                 this.sidStar.Compile()
             );
         }
