@@ -6,6 +6,7 @@ using Compiler.Model;
 using Compiler.Event;
 using Newtonsoft.Json;
 using Compiler.Validate;
+using Compiler.Parser;
 
 namespace Compiler
 {
@@ -42,8 +43,9 @@ namespace Compiler
             FileIndex files = FileIndexFactory.CreateFileIndex(this.arguments.ConfigFile.DirectoryLocation(), configFile, events);
 
             // Parse all the input files
-            SectorElementCollection sectorElements = SectorElementCollectionFactory.Create(
-                new Parser.SectionParserFactory(events),
+            SectorElementCollection sectorElements = new SectorElementCollection();
+            SectorDataProcessor.Parse(
+                new SectionParserFactory(sectorElements, events),
                 files,
                 events
             );
@@ -60,16 +62,21 @@ namespace Compiler
             }
 
             // Make the ESE
-            SectionFactory factory = new SectionFactory(files, this.arguments);
             foreach (OutputSections section in this.arguments.EseSections)
             {
-                factory.Create(section).WriteToFile(this.arguments.OutFileEse);
+                foreach (ICompilable compilable in sectorElements.Compilables[section])
+                {
+                    this.arguments.OutFileEse.Write(compilable.Compile());
+                }
             }
 
             // Make the SCT2
             foreach (OutputSections section in this.arguments.SctSections)
             {
-                factory.Create(section).WriteToFile(this.arguments.OutFileSct);
+                foreach (ICompilable compilable in sectorElements.Compilables[section])
+                {
+                    this.arguments.OutFileSct.Write(compilable.Compile());
+                }
             }
 
             this.events.AddEvent(new CompilationFinishedEvent(true));
