@@ -16,5 +16,7 @@ namespace Compiler.Input
 
         string DirectoryLocation();
         List<string> GetAllLines();
+
+        string ParentFolder();
     }
 }

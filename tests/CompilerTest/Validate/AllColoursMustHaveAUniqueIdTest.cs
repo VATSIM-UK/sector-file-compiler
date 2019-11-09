@@ -20,17 +20,17 @@ namespace CompilerTest.Validate
         {
             this.sectorElements = new SectorElementCollection();
             this.loggerMock = new Mock<IEventLogger>();
-            this.first = new Colour("colour1", 123);
-            this.second = new Colour("colour2", 123);
-            this.third = new Colour("colour1", 123);
+            this.first = new Colour("colour1", 123, "test");
+            this.second = new Colour("colour2", 123, "test");
+            this.third = new Colour("colour1", 123, "test");
             this.rule = new AllColoursMustHaveAUniqueId();
         }
 
         [Fact]
         public void TestItPassesIfNoDuplicates()
         {
-            this.sectorElements.AddColour(this.first);
-            this.sectorElements.AddColour(this.second);
+            this.sectorElements.Add(this.first);
+            this.sectorElements.Add(this.second);
             this.rule.Validate(sectorElements, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
@@ -39,9 +39,9 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsIfThereAreDuplicates()
         {
-            this.sectorElements.AddColour(this.first);
-            this.sectorElements.AddColour(this.second);
-            this.sectorElements.AddColour(this.third);
+            this.sectorElements.Add(this.first);
+            this.sectorElements.Add(this.second);
+            this.sectorElements.Add(this.third);
             this.rule.Validate(sectorElements, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }

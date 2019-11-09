@@ -5,39 +5,50 @@ using Compiler.Event;
 
 namespace Compiler.Parser
 {
-    public class SidStarParser: ISectorElementParser
+    public class SidStarParser: AbstractSectorElementParser
     {
+        private readonly SectorElementCollection sectorElements;
         private readonly IEventLogger errorLog;
 
-        public SidStarParser(IEventLogger errorLog)
+        public SidStarParser(MetadataParser metadataParser, SectorElementCollection sectorElements, IEventLogger errorLog)
+            : base(metadataParser)
         {
+            this.sectorElements = sectorElements;
             this.errorLog = errorLog;
         }
 
-        public void ParseElements(string filename, List<string> lines, SectorElementCollection sectorElements)
+        public override void ParseData(SectorFormatData data)
         {
-            for (int i = 0; i < lines.Count; i++)
+            for (int i = 0; i < data.lines.Count; i++)
             {
-                string[] parts = lines[i].Split(':');
+                // Defer all metadata lines to the base
+                if (this.ParseMetadata(data.lines[i]))
+                {
+                    continue;
+                }
+
+                SectorFormatLine sectorData = this.ParseLine(data.lines[i]);
+
+                string[] parts = sectorData.data.Split(':');
 
                 if (parts.Length != 5)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Incorrect number of SIDSTAR segments", filename, i)
-                    ); ;
+                        new SyntaxError("Incorrect number of SIDSTAR segments", data.fileName, i)
+                    );
                     continue;
                 }
 
                 if (parts[0] != "SID" && parts[0] != "STAR")
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Unknown SIDSTAR type " + parts[0], filename, i)
+                        new SyntaxError("Unknown SIDSTAR type " + parts[0], data.fileName, i)
                     ); ;
                     continue;
                 }
 
-                sectorElements.AddSidStar(
-                    new SidStar(parts[0], parts[1], parts[2], parts[3], new List<string>(parts[4].Split(' ')))
+                this.sectorElements.Add(
+                    new SidStar(parts[0], parts[1], parts[2], parts[3], new List<string>(parts[4].Split(' ')), sectorData.comment)
                 );
             }
         }

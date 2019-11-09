@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Compiler.Parser
 {
@@ -18,7 +16,17 @@ namespace Compiler.Parser
         public static string ParseComment(string line)
         {
             Int32 commentPos = line.IndexOf(LineCommentParser.COMMENT_DELIMETER);
-            return commentPos == -1 ? "" : line.Substring(commentPos + 1).Trim();
+            return commentPos == -1 ? null : line.Substring(commentPos + 1).Trim();
+        }
+
+        /**
+        * Parses the comment line. Ignores the comment delimeter itself as we
+        * insert this again later on.
+        */
+        public static string ParseData(string line)
+        {
+            Int32 commentPos = line.IndexOf(LineCommentParser.COMMENT_DELIMETER);
+            return commentPos == -1 ? line.Trim() : line.Substring(0, commentPos).Trim();
         }
     }
 }

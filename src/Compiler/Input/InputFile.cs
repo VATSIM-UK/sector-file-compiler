@@ -75,5 +75,10 @@ namespace Compiler.Input
         {
             return new List<string>(File.ReadAllLines(this.path));
         }
+
+        public string ParentFolder()
+        {
+            return Directory.GetParent(this.GetPath()).Name;
+        }
     }
 }

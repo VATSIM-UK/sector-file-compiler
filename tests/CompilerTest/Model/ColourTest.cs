@@ -9,7 +9,7 @@ namespace CompilerTest.Model
 
         public ColourTest()
         {
-            this.colour = new Colour("colour1", 123);
+            this.colour = new Colour("colour1", 123, null);
         }
 
         [Fact]
@@ -22,6 +22,18 @@ namespace CompilerTest.Model
         public void TestItSetsValue()
         {
             Assert.Equal(123, this.colour.Value);
+        }
+
+        [Fact]
+        public void TestItCompiles()
+        {
+            Assert.Equal("#define colour1 123\r\n", this.colour.Compile());
+        }
+
+        [Fact]
+        public void TestItCompilesWithComment()
+        {
+            Assert.Equal("#define colour1 123 ;comment\r\n", (new Colour("colour1", 123, "comment").Compile()));
         }
     }
 }

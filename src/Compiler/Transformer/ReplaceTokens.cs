@@ -13,17 +13,14 @@ namespace Compiler.Transformer
             this.tokens = tokens;
         }
 
-        public List<string> Transform(List<string> lines)
+        public string Transform(string data)
         {
-            for (int i = 0; i < lines.Count; i++)
+            foreach (KeyValuePair<string, string> token in this.tokens)
             {
-                foreach(KeyValuePair<string, string> token in this.tokens)
-                {
-                    lines[i] = lines[i].Replace(token.Key, token.Value);
-                }
+                data = data.Replace(token.Key, token.Value);
             }
 
-            return lines;
+            return data;
         }
     }
 }

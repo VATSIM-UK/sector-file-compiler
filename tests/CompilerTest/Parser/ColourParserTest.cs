@@ -5,6 +5,7 @@ using Compiler.Parser;
 using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
+using Compiler.Output;
 
 namespace CompilerTest.Parser
 {
@@ -19,50 +20,89 @@ namespace CompilerTest.Parser
         public ColourParserTest()
         {
             this.log = new Mock<IEventLogger>();
-            this.parser = new ColourParser(this.log.Object);
             this.collection = new SectorElementCollection();
+            this.parser = new ColourParser(new MetadataParser(this.collection, OutputSections.SCT_COLOUR_DEFS), this.collection, this.log.Object);
         }
 
         [Fact]
         public void TestItRaisesASyntaxErrorIfIncorrectNumberOfSegments()
         {
-            this.parser.ParseElements("test.txt", new List<string>(new string[] { "#define abc" }), this.collection);
+            SectorFormatData data = new SectorFormatData(
+                "test",
+                "test",
+                new List<string>(new string[] { "#define abc" })
+            );
+            this.parser.ParseData(data);
+
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItRaisesASyntaxErrorIfNotStartedByDefine()
         {
-            this.parser.ParseElements("test.txt", new List<string>(new string[] { "#nodefine abc 123" }), this.collection);
+            SectorFormatData data = new SectorFormatData(
+                "test",
+                "test",
+                new List<string>(new string[] { "#nodefine abc 123" })
+            );
+            this.parser.ParseData(data);
+
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItRaisesASyntaxErrorIfColourIsFloat()
         {
-            this.parser.ParseElements("test.txt", new List<string>(new string[] { "#define abc 123.4" }), this.collection);
+            SectorFormatData data = new SectorFormatData(
+                "test",
+                "test",
+                new List<string>(new string[] { "#define abc 123.4" })
+            );
+            this.parser.ParseData(data);
+
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItRaisesASyntaxErrorIfColourIsString()
         {
-            this.parser.ParseElements("test.txt", new List<string>(new string[] { "#define abc 123abc" }), this.collection);
+            SectorFormatData data = new SectorFormatData(
+                "test",
+                "test",
+                new List<string>(new string[] { "#define abc 123abc" })
+            );
+            this.parser.ParseData(data);
+
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
+        [Fact]
+        public void TestItHandlesMetadata()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test",
+                "test",
+                new List<string>(new string[] { "" })
+            );
+
+            this.parser.ParseData(data);
+            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][0]);
         }
 
         [Fact]
         public void TestItAddsColourData()
         {
-            this.parser.ParseElements(
-                "test.txt",
-                new List<string>(new string[] { "#define abc 255" }),
-                this.collection
+            SectorFormatData data = new SectorFormatData(
+                "test",
+                "test",
+                new List<string>(new string[] { "#define abc 255 ;comment" })
             );
+            this.parser.ParseData(data);
 
             Colour result = this.collection.Colours[0];
             Assert.Equal("abc", result.Name);
             Assert.Equal(255, result.Value);
+            Assert.Equal(" ;comment", result.Comment);
         }
     }
 }

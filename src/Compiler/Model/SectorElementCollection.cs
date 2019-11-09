@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using Compiler.Output;
+using System.Collections.Generic;
 
 namespace Compiler.Model
 {
@@ -8,14 +10,44 @@ namespace Compiler.Model
 
         public List<Colour> Colours { get; } = new List<Colour>();
 
-        public void AddSidStar(SidStar sidStar)
+        public List<Airport> Airports { get; } = new List<Airport>();
+
+        public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
+
+        public SectorElementCollection()
         {
+            foreach (OutputSections section in Enum.GetValues(typeof(OutputSections)))
+            {
+                Compilables.Add(section, new List<ICompilable>());
+            }
+        }
+
+        public void Add(Airport airport)
+        {
+            this.Compilables[OutputSections.SCT_AIRPORT].Add(airport);
+            this.Airports.Add(airport);
+        }
+
+        public void Add(Colour colour)
+        {
+            this.Compilables[OutputSections.SCT_COLOUR_DEFS].Add(colour);
+            this.Colours.Add(colour);
+        }
+
+        public void Add(SidStar sidStar)
+        {
+            this.Compilables[OutputSections.ESE_SIDSSTARS].Add(sidStar);
             this.SidStars.Add(sidStar);
         }
 
-        public void AddColour(Colour colour)
+        public void Add(BlankLine blankLine, OutputSections section)
         {
-            this.Colours.Add(colour);
+            this.Compilables[section].Add(blankLine);
+        }
+
+        public void Add(CommentLine comment, OutputSections section)
+        {
+            this.Compilables[section].Add(comment);
         }
     }
 }

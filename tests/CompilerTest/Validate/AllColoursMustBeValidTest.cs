@@ -22,20 +22,20 @@ namespace CompilerTest.Validate
         {
             this.sectorElements = new SectorElementCollection();
             this.loggerMock = new Mock<IEventLogger>();
-            this.first = new Colour("colour1", -1);
-            this.second = new Colour("colour2", 0);
-            this.third = new Colour("colour3", 255);
-            this.fourth = new Colour("colour4", 16777215);
-            this.fifth = new Colour("colour5", 16777216);
+            this.first = new Colour("colour1", -1, "test");
+            this.second = new Colour("colour2", 0, "test");
+            this.third = new Colour("colour3", 255, "test");
+            this.fourth = new Colour("colour4", 16777215, "test");
+            this.fifth = new Colour("colour5", 16777216, "test");
             this.rule = new AllColoursMustBeValid();
         }
 
         [Fact]
         public void TestItPassesOnValidColours()
         {
-            this.sectorElements.AddColour(this.second);
-            this.sectorElements.AddColour(this.third);
-            this.sectorElements.AddColour(this.fourth);
+            this.sectorElements.Add(this.second);
+            this.sectorElements.Add(this.third);
+            this.sectorElements.Add(this.fourth);
             this.rule.Validate(this.sectorElements, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -43,7 +43,7 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsOnNegativeValues()
         {
-            this.sectorElements.AddColour(this.first);
+            this.sectorElements.Add(this.first);
             this.rule.Validate(this.sectorElements, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
@@ -51,7 +51,7 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsOnValuesOverMaximum()
         {
-            this.sectorElements.AddColour(this.fifth);
+            this.sectorElements.Add(this.fifth);
             this.rule.Validate(this.sectorElements, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }

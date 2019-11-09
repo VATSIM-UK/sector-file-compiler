@@ -17,9 +17,9 @@ namespace CompilerTest.Transformer
             chain.AddTransformer(transformer1.Object);
             chain.AddTransformer(transformer2.Object);
 
-            List<String> expectedStep1 = new List<string>(new string[] { "a", "b" });
-            List<String> expectedStep2 = new List<string>(new string[] { "c", "d" });
-            List<String> expectedFinal = new List<string>(new string[] { "e", "f" });
+            string expectedStep1 = new string("a");
+            string expectedStep2 = new string("b");
+            string expectedFinal = new string("c");
 
             transformer1.Setup(foo => foo.Transform(expectedStep1)).Returns(expectedStep2);
             transformer2.Setup(foo => foo.Transform(expectedStep2)).Returns(expectedFinal);
