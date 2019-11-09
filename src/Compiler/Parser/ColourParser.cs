@@ -29,7 +29,9 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                string[] parts = data.lines[i].Split(" ");
+                SectorFormatLine sectorData = this.ParseLine(data.lines[i]);
+
+                string[] parts = sectorData.data.Split(' ');
 
                 if (parts.Length != 3)
                 {
@@ -49,7 +51,7 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                sectorElements.Add(new Colour(parts[1], colourValue));
+                sectorElements.Add(new Colour(parts[1], colourValue, sectorData.comment));
             }
         }
     }

@@ -15,7 +15,8 @@ namespace CompilerTest.Model
                 "EGKK",
                 "26L",
                 "ADMAG2X",
-                new List<string>(new string[] { "FIX1", "FIX2", "FIX3" })
+                new List<string>(new string[] { "FIX1", "FIX2", "FIX3" }),
+                null
             );
         }
 
@@ -55,6 +56,24 @@ namespace CompilerTest.Model
             Assert.Equal(
                 "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 FIX3\r\n",
                 this.sidStar.Compile()
+            );
+        }
+
+        [Fact]
+        public void TestItCompilesWithComment()
+        {
+            SidStar sid = new SidStar(
+                "SID",
+                "EGKK",
+                "26L",
+                "ADMAG2X",
+                new List<string>(new string[] { "FIX1", "FIX2", "FIX3" }),
+                "comment"
+            );
+
+            Assert.Equal(
+                "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 FIX3 ;comment\r\n",
+                sid.Compile()
             );
         }
     }

@@ -17,7 +17,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsSids()
         {
-            SidStar sidStar = new SidStar("a", "b", "c", "d", new List<string>());
+            SidStar sidStar = new SidStar("a", "b", "c", "d", new List<string>(), "test");
             this.collection.Add(sidStar);
 
             Assert.Equal(sidStar, this.collection.SidStars[0]);
@@ -26,7 +26,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsSidsToCompilableSection()
         {
-            SidStar sidStar = new SidStar("a", "b", "c", "d", new List<string>());
+            SidStar sidStar = new SidStar("a", "b", "c", "d", new List<string>(), "test");
             this.collection.Add(sidStar);
 
             Assert.Equal(sidStar, this.collection.Compilables[OutputSections.ESE_SIDSSTARS][0]);
@@ -35,7 +35,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsColours()
         {
-            Colour colour = new Colour("test", 123);
+            Colour colour = new Colour("test", 123, "test");
             this.collection.Add(colour);
 
             Assert.Equal(colour, this.collection.Colours[0]);
@@ -44,7 +44,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsColoursToCompilableSection()
         {
-            Colour colour = new Colour("test", 123);
+            Colour colour = new Colour("test", 123, "test");
             this.collection.Add(colour);
 
             Assert.Equal(colour, this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][0]);

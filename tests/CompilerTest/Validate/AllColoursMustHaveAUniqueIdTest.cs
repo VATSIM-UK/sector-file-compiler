@@ -20,9 +20,9 @@ namespace CompilerTest.Validate
         {
             this.sectorElements = new SectorElementCollection();
             this.loggerMock = new Mock<IEventLogger>();
-            this.first = new Colour("colour1", 123);
-            this.second = new Colour("colour2", 123);
-            this.third = new Colour("colour1", 123);
+            this.first = new Colour("colour1", 123, "test");
+            this.second = new Colour("colour2", 123, "test");
+            this.third = new Colour("colour1", 123, "test");
             this.rule = new AllColoursMustHaveAUniqueId();
         }
 

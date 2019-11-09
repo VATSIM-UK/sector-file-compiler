@@ -65,7 +65,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatData data = new SectorFormatData(
                 "test",
-                new List<string>(new string[] { "SID:EGKK:26L:ADMAG2X:FIX1 FIX2" })
+                new List<string>(new string[] { "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 ;comment" })
             );
 
             this.parser.ParseData(data);
@@ -76,6 +76,7 @@ namespace CompilerTest.Parser
             Assert.Equal("26L", result.Runway);
             Assert.Equal("ADMAG2X", result.Identifier);
             Assert.Equal(new List<string>(new string[] { "FIX1", "FIX2" }), result.Route);
+            Assert.Equal(" ;comment", result.Comment);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Compiler.Compile;
 using Compiler.Output;
 using Compiler.Model;
-using Compiler.Transformer;
 using Compiler.Argument;
 using Xunit;
 using Moq;

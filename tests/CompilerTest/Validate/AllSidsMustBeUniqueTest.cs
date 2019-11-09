@@ -22,10 +22,10 @@ namespace CompilerTest.Validate
         {
             this.sectorElements = new SectorElementCollection();
             this.loggerMock = new Mock<IEventLogger>();
-            this.first = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>());
-            this.second = new SidStar("STAR", "EGKK", "26L", "ADMAG2X", new List<string>());
-            this.third = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>());
-            this.fourth = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>(new string[] { "a" }));
+            this.first = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>(), "test");
+            this.second = new SidStar("STAR", "EGKK", "26L", "ADMAG2X", new List<string>(), "test");
+            this.third = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>(), "test");
+            this.fourth = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>(new string[] { "a" }), "test");
             this.rule = new AllSidsMustBeUnique();
         }
 

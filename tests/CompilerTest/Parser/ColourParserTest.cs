@@ -89,13 +89,14 @@ namespace CompilerTest.Parser
         {
             SectorFormatData data = new SectorFormatData(
                 "test",
-                new List<string>(new string[] { "#define abc 255" })
+                new List<string>(new string[] { "#define abc 255 ;comment" })
             );
             this.parser.ParseData(data);
 
             Colour result = this.collection.Colours[0];
             Assert.Equal("abc", result.Name);
             Assert.Equal(255, result.Value);
+            Assert.Equal(" ;comment", result.Comment);
         }
     }
 }

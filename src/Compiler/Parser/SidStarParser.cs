@@ -27,7 +27,9 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                string[] parts = data.lines[i].Split(':');
+                SectorFormatLine sectorData = this.ParseLine(data.lines[i]);
+
+                string[] parts = sectorData.data.Split(':');
 
                 if (parts.Length != 5)
                 {
@@ -46,7 +48,7 @@ namespace Compiler.Parser
                 }
 
                 this.sectorElements.Add(
-                    new SidStar(parts[0], parts[1], parts[2], parts[3], new List<string>(parts[4].Split(' ')))
+                    new SidStar(parts[0], parts[1], parts[2], parts[3], new List<string>(parts[4].Split(' ')), sectorData.comment)
                 );
             }
         }

@@ -6,9 +6,9 @@ namespace CompilerTest.Parser
     public class LineCommentParserTest
     {
         [Fact]
-        public void TestItReturnsEmptyStringIfNoComment()
+        public void TestItReturnsNullIfNoComment()
         {
-            Assert.Equal("", LineCommentParser.ParseComment("aline withno comment  "));
+            Assert.Equal(null, LineCommentParser.ParseComment("aline withno comment  "));
         }
 
         [Fact]
@@ -21,6 +21,24 @@ namespace CompilerTest.Parser
         public void TestItStripsWhitespaceFromComment()
         {
             Assert.Equal("comment", LineCommentParser.ParseComment("aline witha ;   comment  "));
+        }
+
+        [Fact]
+        public void TestItReturnsNullIfNoData()
+        {
+            Assert.Equal("", LineCommentParser.ParseData(";comment "));
+        }
+
+        [Fact]
+        public void TestItParsesData()
+        {
+            Assert.Equal("abc", LineCommentParser.ParseData("abc;comment "));
+        }
+
+        [Fact]
+        public void TestItStripsWhitespaceFromData()
+        {
+            Assert.Equal("abc", LineCommentParser.ParseData("abc   ;comment "));
         }
     }
 }
