@@ -8,9 +8,11 @@ namespace Compiler.Validate
     {
         private static readonly List<IValidationRule> validationRules = new List<IValidationRule>
         {
-            new AllSidsMustBeUnique(),
-            new AllColoursMustHaveAUniqueId(),
+            new AllAirportsMustHaveUniqueCode(),
             new AllColoursMustBeValid(),
+            new AllColoursMustHaveAUniqueId(),
+            new AllSidsMustBeUnique(),
+            new AllSidsMustHaveAValidAirport(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, IEventLogger events)
