@@ -6,7 +6,7 @@ namespace Compiler.Input
 {
     public class InputLineReader
     {
-        public SectorFormatData ReadInputLines(InputFile file)
+        public SectorFormatData ReadInputLines(IFileInterface file)
         {
             if (!file.Exists())
             {
