@@ -16,24 +16,21 @@ namespace CompilerTest.Transformer
         }
 
         [Fact]
-        public void TestItDoesntRemoveNonBlankLines()
+        public void TestItDoesntTouchNonBlankLines()
         {
-            List<string> lines = new List<string>(new string[] { "a\r\n", "b\r\n", "c\r\n" });
-            Assert.Equal(lines, this.transformer.Transform(lines));
+            Assert.Equal("a\r\n", this.transformer.Transform("a\r\n"));
         }
 
         [Fact]
         public void TestItRemovesJustNewlines()
         {
-            List<string> lines = new List<string>(new string[] { "\r\n", "\r\n", "\r\n" });
-            Assert.Equal(new List<string>(), this.transformer.Transform(lines));
+            Assert.Equal("", this.transformer.Transform("\r\n\r\n"));
         }
 
         [Fact]
         public void TestItStripsSpacesToRemoveLines()
         {
-            List<string> lines = new List<string>(new string[] { " \r\n", "\r\n ", " \r\n " });
-            Assert.Equal(new List<string>(), this.transformer.Transform(lines));
+            Assert.Equal("", this.transformer.Transform(" \r\n \r\n "));
         }
     }
 }

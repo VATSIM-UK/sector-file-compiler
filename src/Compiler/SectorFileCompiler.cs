@@ -7,6 +7,7 @@ using Compiler.Event;
 using Newtonsoft.Json;
 using Compiler.Validate;
 using Compiler.Parser;
+using Compiler.Compile;
 
 namespace Compiler
 {
@@ -61,23 +62,8 @@ namespace Compiler
                 }
             }
 
-            // Make the ESE
-            foreach (OutputSections section in this.arguments.EseSections)
-            {
-                foreach (ICompilable compilable in sectorElements.Compilables[section])
-                {
-                    this.arguments.OutFileEse.Write(compilable.Compile());
-                }
-            }
-
-            // Make the SCT2
-            foreach (OutputSections section in this.arguments.SctSections)
-            {
-                foreach (ICompilable compilable in sectorElements.Compilables[section])
-                {
-                    this.arguments.OutFileSct.Write(compilable.Compile());
-                }
-            }
+            // Perform the compilation
+            CompilerEngineFactory.Create(arguments, sectorElements).Compile();
 
             this.events.AddEvent(new CompilationFinishedEvent(true));
             return 0;

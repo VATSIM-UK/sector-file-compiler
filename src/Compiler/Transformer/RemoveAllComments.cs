@@ -1,33 +1,18 @@
-﻿using System.Collections.Generic;
-
-namespace Compiler.Transformer
+﻿namespace Compiler.Transformer
 {
     public class RemoveAllComments : ITransformer
     {
         const char COMMENT_DELIMTER = ';';
 
-        public List<string> Transform(List<string> lines)
+        public string Transform(string data)
         {
-            List<string> linesToKeep = new List<string>();
-            foreach (string line in lines)
+            if (!data.Contains(RemoveAllComments.COMMENT_DELIMTER))
             {
-                if (!line.Contains(RemoveAllComments.COMMENT_DELIMTER))
-                {
-                    linesToKeep.Add(line);
-                    continue;
-                }
-
-                int commentPos = line.IndexOf(RemoveAllComments.COMMENT_DELIMTER);
-                string lineWithoutComment = line.Substring(0, commentPos);
-
-                if (lineWithoutComment.Trim() != "")
-                {
-                    linesToKeep.Add(lineWithoutComment.Trim());
-                    continue;
-                }
+                return data;
             }
 
-            return linesToKeep;
+            int commentPos = data.IndexOf(RemoveAllComments.COMMENT_DELIMTER);
+            return data.Substring(0, commentPos).Trim();
         }
     }
 }

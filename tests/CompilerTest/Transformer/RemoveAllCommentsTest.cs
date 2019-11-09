@@ -16,24 +16,21 @@ namespace CompilerTest.Transformer
         }
 
         [Fact]
-        public void TestItDoesntRemoveNormalLines()
+        public void TestItDoesntAlterNonCommentLines()
         {
-            List<string> lines = new List<string>(new string[] { "a", "b", "c" });
-            Assert.Equal(lines, this.transformer.Transform(lines));
+            Assert.Equal("abc", this.transformer.Transform("abc"));
         }
 
         [Fact]
-        public void TestItRemovesCommentsFromAndOfLines()
+        public void TestItRemovesCommentsFromEndOfLines()
         {
-            List<string> lines = new List<string>(new string[] { "a ;acomment", "b;bcomment", "c  ; comment " });
-            Assert.Equal(new List<string>(new string[] { "a", "b", "c" }), this.transformer.Transform(lines));
+            Assert.Equal("abc", this.transformer.Transform("abc; comment"));
         }
 
         [Fact]
         public void TestItRemovesCommentLinesEntirely()
         {
-            List<string> lines = new List<string>(new string[] { "a", ";bcomment", "c " });
-            Assert.Equal(new List<string>(new string[] { "a", "c " }), this.transformer.Transform(lines));
+            Assert.Equal("", this.transformer.Transform(" ; comment"));
         }
     }
 }

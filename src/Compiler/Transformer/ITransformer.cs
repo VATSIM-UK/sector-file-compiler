@@ -4,6 +4,6 @@ namespace Compiler.Transformer
 {
     public interface ITransformer
     {
-        public List<string> Transform(List<string> lines);
+        public string Transform(string data);
     }
 }

@@ -23,14 +23,14 @@ namespace Compiler.Transformer
             return types;
         }
 
-        public List<string> Transform(List<string> lines)
+        public string Transform(string data)
         {
             foreach (ITransformer transformer in transformers)
             {
-                lines = transformer.Transform(lines);
+                data = transformer.Transform(data);
             }
 
-            return lines;
+            return data;
         }
     }
 }

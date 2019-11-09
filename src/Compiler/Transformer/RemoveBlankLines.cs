@@ -7,10 +7,9 @@ namespace Compiler.Transformer
      */
     public class RemoveBlankLines : ITransformer
     {
-        public List<string> Transform(List<string> lines)
+        public string Transform(string data)
         {
-            lines.RemoveAll(line => line.Trim() == "");
-            return lines;
+            return data.Trim() == "" ? "" : data;
         }
     }
 }

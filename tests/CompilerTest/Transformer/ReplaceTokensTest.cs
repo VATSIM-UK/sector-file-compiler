@@ -18,9 +18,9 @@ namespace CompilerTest.Transformer
         [Fact]
         public void TestItReplacesTokensInLines()
         {
-            List<string> inputLines = new List<string>(new string[] { "A line with {TOKENA}", "A line with {TOKENB} in it"});
-            List<string> expectedLines = new List<string>(new string[] { "A line with VALUEA", "A line with VALUEB in it"});
-            Assert.Equal(expectedLines, this.transformer.Transform(inputLines));
+            string input = "A line with {TOKENA} and {TOKENB} in it";
+            string expected = "A line with VALUEA and VALUEB in it";
+            Assert.Equal(expected, this.transformer.Transform(input));
         }
     }
 }
