@@ -33,7 +33,7 @@ namespace Compiler.Parser
                     break;
             }
 
-            return null;
+            return new DefaultParser(this.GetMetadataParser(section));
         }
 
         private MetadataParser GetMetadataParser(OutputSections section)
