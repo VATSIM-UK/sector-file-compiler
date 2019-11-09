@@ -8,7 +8,7 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItReturnsNullIfNoComment()
         {
-            Assert.Equal(null, LineCommentParser.ParseComment("aline withno comment  "));
+            Assert.Null(LineCommentParser.ParseComment("aline withno comment  "));
         }
 
         [Fact]

@@ -29,6 +29,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatData data = new SectorFormatData(
                 "test",
+                "test",
                 new List<string>(new string[] { "#define abc" })
             );
             this.parser.ParseData(data);
@@ -40,6 +41,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesASyntaxErrorIfNotStartedByDefine()
         {
             SectorFormatData data = new SectorFormatData(
+                "test",
                 "test",
                 new List<string>(new string[] { "#nodefine abc 123" })
             );
@@ -53,6 +55,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatData data = new SectorFormatData(
                 "test",
+                "test",
                 new List<string>(new string[] { "#define abc 123.4" })
             );
             this.parser.ParseData(data);
@@ -64,6 +67,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesASyntaxErrorIfColourIsString()
         {
             SectorFormatData data = new SectorFormatData(
+                "test",
                 "test",
                 new List<string>(new string[] { "#define abc 123abc" })
             );
@@ -77,6 +81,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatData data = new SectorFormatData(
                 "test",
+                "test",
                 new List<string>(new string[] { "" })
             );
 
@@ -88,6 +93,7 @@ namespace CompilerTest.Parser
         public void TestItAddsColourData()
         {
             SectorFormatData data = new SectorFormatData(
+                "test",
                 "test",
                 new List<string>(new string[] { "#define abc 255 ;comment" })
             );

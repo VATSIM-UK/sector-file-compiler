@@ -29,6 +29,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatData data = new SectorFormatData(
                 "test",
+                "test",
                 new List<string>(new string[] { "abc:def:ghi" })
             );
 
@@ -40,6 +41,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesAnErrorIfUnknownType()
         {
             SectorFormatData data = new SectorFormatData(
+                "test",
                 "test",
                 new List<string>(new string[] { "abc:def:ghi:jkl:mno" })
             );
@@ -53,6 +55,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatData data = new SectorFormatData(
                 "test",
+                "test",
                 new List<string>(new string[] { "" })
             );
 
@@ -64,6 +67,7 @@ namespace CompilerTest.Parser
         public void TestItAddsSidStarData()
         {
             SectorFormatData data = new SectorFormatData(
+                "test",
                 "test",
                 new List<string>(new string[] { "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 ;comment" })
             );

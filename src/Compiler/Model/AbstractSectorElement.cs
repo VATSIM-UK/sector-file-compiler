@@ -12,7 +12,7 @@ namespace Compiler.Model
         {
             get
             {
-                return this.comment != null ? " ;" + this.comment : "";
+                return this.comment != null && this.comment != "" ? " ;" + this.comment : "";
             }
         }
 

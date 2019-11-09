@@ -12,19 +12,16 @@ namespace CompilerTest.Input
     {
         private readonly Mock<IFileInterface> mockInput;
 
-        private readonly InputLineReader reader;
-
         public InputLineReaderTest()
         {
             this.mockInput = new Mock<IFileInterface>();
-            this.reader = new InputLineReader();
         }
 
         [Fact]
         public void TestItThrowsExceptionOnNonExistentFile()
         {
             this.mockInput.Setup(foo => foo.Exists()).Returns(false);
-            Assert.Throws<ArgumentException>(() => this.reader.ReadInputLines(this.mockInput.Object));
+            Assert.Throws<ArgumentException>(() => InputLineReader.ReadInputLines(this.mockInput.Object));
         }
 
         [Fact]
@@ -33,13 +30,15 @@ namespace CompilerTest.Input
             List<string> expectedLines = new List<string>(new string[] { "abc", "def" });
             SectorFormatData expected = new SectorFormatData(
                 "foo.txt",
+                "bar",
                 expectedLines
             );
 
             this.mockInput.Setup(foo => foo.Exists()).Returns(true);
             this.mockInput.Setup(foo => foo.GetPath()).Returns("foo.txt");
+            this.mockInput.Setup(foo => foo.ParentFolder()).Returns("bar");
             this.mockInput.Setup(foo => foo.GetAllLines()).Returns(expectedLines);
-            Assert.Equal(expected, this.reader.ReadInputLines(this.mockInput.Object));
+            Assert.Equal(expected, InputLineReader.ReadInputLines(this.mockInput.Object));
         }
     }
 }

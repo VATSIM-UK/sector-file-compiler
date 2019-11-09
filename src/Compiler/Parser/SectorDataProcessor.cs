@@ -18,16 +18,11 @@ namespace Compiler.Parser
                     errors.AddEvent(
                         new UnconfiguredConfigSectionWarning(section.ToString())
                     );
-
-                    foreach (IFileInterface file in files.GetFilesForSection(section))
-                    {
-                        parser.ParseData(new SectorFormatData(file.GetPath(), file.GetAllLines()));
-                    }
                 }
 
                 foreach (IFileInterface file in files.GetFilesForSection(section))
                 {
-                    parser.ParseData(new SectorFormatData(file.GetPath(), file.GetAllLines()));
+                    parser.ParseData(InputLineReader.ReadInputLines(file));
                 }
             }
         }

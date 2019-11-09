@@ -10,8 +10,8 @@ namespace Compiler.Parser
         
         public static Coordinate Parse(string latitude, string longitude)
         {
-            string parsedLatitude = CoordinateParser.ParseCoordinate(true, latitude);
-            string parsedLongitude = CoordinateParser.ParseCoordinate(false, longitude);
+            string parsedLatitude = CoordinateParser.ParseCoordinate(true, latitude.Trim());
+            string parsedLongitude = CoordinateParser.ParseCoordinate(false, longitude.Trim());
 
             if (parsedLatitude == null || parsedLongitude == null)
             {
@@ -40,12 +40,11 @@ namespace Compiler.Parser
                 return null;
             }
 
-            int value = 0;
             if (
-                !int.TryParse(parts[0].Substring(1), out value) ||
-                !int.TryParse(parts[1], out value) ||
-                !int.TryParse(parts[2], out value) ||
-                !int.TryParse(parts[3], out value)
+                !int.TryParse(parts[0].Substring(1), out _) ||
+                !int.TryParse(parts[1], out _) ||
+                !int.TryParse(parts[2], out _) ||
+                !int.TryParse(parts[3], out _)
             ) {
                 return null;
             }

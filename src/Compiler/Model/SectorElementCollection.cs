@@ -10,6 +10,8 @@ namespace Compiler.Model
 
         public List<Colour> Colours { get; } = new List<Colour>();
 
+        public List<Airport> Airports { get; } = new List<Airport>();
+
         public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
 
         public SectorElementCollection()
@@ -20,16 +22,22 @@ namespace Compiler.Model
             }
         }
 
-        public void Add(SidStar sidStar)
+        public void Add(Airport airport)
         {
-            this.Compilables[OutputSections.ESE_SIDSSTARS].Add(sidStar);
-            this.SidStars.Add(sidStar);
+            this.Compilables[OutputSections.SCT_AIRPORT].Add(airport);
+            this.Airports.Add(airport);
         }
 
         public void Add(Colour colour)
         {
             this.Compilables[OutputSections.SCT_COLOUR_DEFS].Add(colour);
             this.Colours.Add(colour);
+        }
+
+        public void Add(SidStar sidStar)
+        {
+            this.Compilables[OutputSections.ESE_SIDSSTARS].Add(sidStar);
+            this.SidStars.Add(sidStar);
         }
 
         public void Add(BlankLine blankLine, OutputSections section)

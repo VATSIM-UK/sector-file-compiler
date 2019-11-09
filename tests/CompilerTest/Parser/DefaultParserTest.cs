@@ -22,6 +22,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatData data = new SectorFormatData(
                 "test.json",
+                "test",
                 new List<string>(new string[] { ";comment" })
             );
 
@@ -34,6 +35,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatData data = new SectorFormatData(
                 "test.json",
+                "test",
                 new List<string>(new string[] { "\r\n" })
             );
 

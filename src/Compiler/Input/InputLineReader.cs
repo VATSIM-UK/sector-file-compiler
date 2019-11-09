@@ -6,7 +6,7 @@ namespace Compiler.Input
 {
     public class InputLineReader
     {
-        public SectorFormatData ReadInputLines(IFileInterface file)
+        public static SectorFormatData ReadInputLines(IFileInterface file)
         {
             if (!file.Exists())
             {
@@ -15,6 +15,7 @@ namespace Compiler.Input
 
             return new SectorFormatData(
                 file.GetPath(),
+                file.ParentFolder(),
                 file.GetAllLines()
             );
         }

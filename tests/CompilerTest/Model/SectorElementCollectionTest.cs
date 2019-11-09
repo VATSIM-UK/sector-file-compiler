@@ -51,6 +51,24 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsAirports()
+        {
+            Airport airport = new Airport("a", "b", new Coordinate("abc", "def"), "123.456", "test");
+            this.collection.Add(airport);
+
+            Assert.Equal(airport, this.collection.Airports[0]);
+        }
+
+        [Fact]
+        public void TestItAddsAirportsToCompilableSection()
+        {
+            Airport airport = new Airport("a", "b", new Coordinate("abc", "def"), "123.456", "test");
+            this.collection.Add(airport);
+
+            Assert.Equal(airport, this.collection.Compilables[OutputSections.SCT_AIRPORT][0]);
+        }
+
+        [Fact]
         public void TestItAddsBlankLines()
         {
             BlankLine blank = new BlankLine();
