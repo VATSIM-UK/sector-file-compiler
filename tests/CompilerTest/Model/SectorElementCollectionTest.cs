@@ -69,6 +69,24 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsFixes()
+        {
+            Fix fix = new Fix("a", new Coordinate("abc", "def"), "test");
+            this.collection.Add(fix);
+
+            Assert.Equal(fix, this.collection.Fixes[0]);
+        }
+
+        [Fact]
+        public void TestItAddsFixesToCompilableSection()
+        {
+            Fix fix = new Fix("a", new Coordinate("abc", "def"), "test");
+            this.collection.Add(fix);
+
+            Assert.Equal(fix, this.collection.Compilables[OutputSections.SCT_FIXES][0]);
+        }
+
+        [Fact]
         public void TestItAddsBlankLines()
         {
             BlankLine blank = new BlankLine();

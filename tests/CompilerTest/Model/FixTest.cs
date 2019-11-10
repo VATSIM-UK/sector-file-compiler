@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Compiler.Model;
+﻿using Compiler.Model;
 using Xunit;
 
 namespace CompilerTest.Model
@@ -22,14 +19,15 @@ namespace CompilerTest.Model
         }
 
         [Fact]
-        public void TestItSetsCoordinate()
+        public void TestItSetsCoordinate() 
         {
             Assert.Equal(new Coordinate("abc", "def"), this.fix.Coordinate);
         }
 
+        [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("ADMAG abc def ;comment", this.fix.Compile());
+            Assert.Equal("ADMAG abc def ;comment\r\n", this.fix.Compile());
         }
     }
 }

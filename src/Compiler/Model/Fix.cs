@@ -18,7 +18,7 @@ namespace Compiler.Model
         public string Compile()
         {
             return String.Format(
-                "{0} {1}{2}",
+                "{0} {1}{2}\r\n",
                 this.Identifier,
                 this.Coordinate.ToString(),
                 this.Comment

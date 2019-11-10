@@ -25,6 +25,8 @@ namespace Compiler.Parser
                     return new SidStarParser(this.GetMetadataParser(section), this.sectorElements, this.logger);
                 case OutputSections.SCT_AIRPORT:
                     return new AirportParser(this.GetMetadataParser(section), this.sectorElements, this.logger);
+                case OutputSections.SCT_FIXES:
+                    return new FixParser(this.GetMetadataParser(section), this.sectorElements, this.logger);
                 case OutputSections.ESE_PREAMBLE:
                     break;
                 case OutputSections.ESE_POSITIONS:
