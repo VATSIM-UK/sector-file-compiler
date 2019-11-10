@@ -11,6 +11,7 @@ namespace Compiler.Validate
             new AllAirportsMustHaveUniqueCode(),
             new AllColoursMustBeValid(),
             new AllColoursMustHaveAUniqueId(),
+            new AllFixesMustBeUnique(),
             new AllSidsMustBeUnique(),
             new AllSidsMustHaveAValidAirport(),
         };
