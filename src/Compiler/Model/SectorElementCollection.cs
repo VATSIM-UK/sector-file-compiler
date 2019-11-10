@@ -12,6 +12,8 @@ namespace Compiler.Model
 
         public List<Airport> Airports { get; } = new List<Airport>();
 
+        public List<Fix> Fixes { get; } = new List<Fix>();
+
         public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
 
         public SectorElementCollection()
@@ -32,6 +34,12 @@ namespace Compiler.Model
         {
             this.Compilables[OutputSections.SCT_COLOUR_DEFS].Add(colour);
             this.Colours.Add(colour);
+        }
+
+        public void Add(Fix fix)
+        {
+            this.Compilables[OutputSections.SCT_FIXES].Add(fix);
+            this.Fixes.Add(fix);
         }
 
         public void Add(SidStar sidStar)
