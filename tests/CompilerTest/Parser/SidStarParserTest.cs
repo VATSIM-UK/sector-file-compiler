@@ -21,7 +21,8 @@ namespace CompilerTest.Parser
         {
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
-            this.parser = new SidStarParser(new MetadataParser(this.collection, OutputSections.ESE_SIDSSTARS), this.collection, this.log.Object);
+            this.parser = (SidStarParser)(new SectionParserFactory(this.collection, this.log.Object))
+                .GetParserForSection(OutputSections.ESE_SIDSSTARS);
         }
 
         [Fact]

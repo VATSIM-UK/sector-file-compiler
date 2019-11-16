@@ -7,12 +7,18 @@ namespace Compiler.Parser
 {
     public class SidStarParser: AbstractSectorElementParser
     {
+        private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
         private readonly IEventLogger errorLog;
 
-        public SidStarParser(MetadataParser metadataParser, SectorElementCollection sectorElements, IEventLogger errorLog)
-            : base(metadataParser)
+        public SidStarParser(
+            MetadataParser metadataParser,
+            ISectorLineParser sectorLineParser,
+            SectorElementCollection sectorElements,
+            IEventLogger errorLog
+        ) : base(metadataParser)
         {
+            this.sectorLineParser = sectorLineParser;
             this.sectorElements = sectorElements;
             this.errorLog = errorLog;
         }
@@ -27,11 +33,8 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                SectorFormatLine sectorData = this.ParseLine(data.lines[i]);
-
-                string[] parts = sectorData.data.Split(':');
-
-                if (parts.Length != 5)
+                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+                if (sectorData.dataSegments.Count != 5)
                 {
                     this.errorLog.AddEvent(
                         new SyntaxError("Incorrect number of SIDSTAR segments", data.fileName, i)
@@ -39,16 +42,23 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                if (parts[0] != "SID" && parts[0] != "STAR")
+                if (sectorData.dataSegments[0] != "SID" && sectorData.dataSegments[0] != "STAR")
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Unknown SIDSTAR type " + parts[0], data.fileName, i)
+                        new SyntaxError("Unknown SIDSTAR type " + sectorData.dataSegments[0], data.fileName, i)
                     ); ;
                     continue;
                 }
 
                 this.sectorElements.Add(
-                    new SidStar(parts[0], parts[1], parts[2], parts[3], new List<string>(parts[4].Split(' ')), sectorData.comment)
+                    new SidStar(
+                        sectorData.dataSegments[0],
+                        sectorData.dataSegments[1],
+                        sectorData.dataSegments[2],
+                        sectorData.dataSegments[3],
+                        new List<string>(sectorData.dataSegments[4].Split(' ')),
+                        sectorData.comment
+                    )
                 );
             }
         }

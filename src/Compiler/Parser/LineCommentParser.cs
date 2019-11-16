@@ -26,7 +26,7 @@ namespace Compiler.Parser
         public static string ParseData(string line)
         {
             Int32 commentPos = line.IndexOf(LineCommentParser.COMMENT_DELIMETER);
-            return commentPos == -1 ? line.Trim() : line.Substring(0, commentPos).Trim();
+            return commentPos == -1 ? line.TrimEnd() : line.Substring(0, commentPos).TrimEnd();
         }
     }
 }

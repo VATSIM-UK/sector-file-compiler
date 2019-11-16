@@ -20,13 +20,49 @@ namespace Compiler.Parser
             switch (section)
             {
                 case OutputSections.SCT_COLOUR_DEFS:
-                    return new ColourParser(this.GetMetadataParser(section), this.sectorElements, this.logger);
+                    return new ColourParser(
+                        this.GetMetadataParser(section),
+                        new StandardSctLineParser(),
+                        this.sectorElements,
+                        this.logger
+                    );
                 case OutputSections.ESE_SIDSSTARS:
-                    return new SidStarParser(this.GetMetadataParser(section), this.sectorElements, this.logger);
+                    return new SidStarParser(
+                        this.GetMetadataParser(section),
+                        new EseLineParser(),
+                        this.sectorElements,
+                        this.logger
+                    );
                 case OutputSections.SCT_AIRPORT:
-                    return new AirportParser(this.GetMetadataParser(section), this.sectorElements, this.logger);
+                    return new AirportParser(
+                        this.GetMetadataParser(section),
+                        new StandardSctLineParser(),
+                        this.sectorElements,
+                        this.logger
+                    );
                 case OutputSections.SCT_FIXES:
-                    return new FixParser(this.GetMetadataParser(section), this.sectorElements, this.logger);
+                    return new FixParser(
+                        this.GetMetadataParser(section),
+                        new StandardSctLineParser(),
+                        this.sectorElements,
+                        this.logger
+                    );
+                case OutputSections.SCT_VOR:
+                    return new VorParser(
+                        this.GetMetadataParser(section),
+                        new StandardSctLineParser(),
+                        new FrequencyParser(108, 117, 50),
+                        this.sectorElements,
+                        this.logger
+                    );
+                case OutputSections.SCT_NDB:
+                    return new NdbParser(
+                        this.GetMetadataParser(section),
+                        new StandardSctLineParser(),
+                        new FrequencyParser(108, 950, 500),
+                        this.sectorElements,
+                        this.logger
+                    );
                 case OutputSections.ESE_PREAMBLE:
                     break;
                 case OutputSections.ESE_POSITIONS:
