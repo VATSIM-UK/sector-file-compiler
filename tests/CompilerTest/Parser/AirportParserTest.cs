@@ -21,7 +21,8 @@ namespace CompilerTest.Parser
         {
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
-            this.parser = new AirportParser(new MetadataParser(this.collection, OutputSections.SCT_AIRPORT), this.collection, this.log.Object);
+            this.parser = (AirportParser) (new SectionParserFactory(this.collection, this.log.Object))
+                .GetParserForSection(OutputSections.SCT_AIRPORT);
         }
 
         [Fact]

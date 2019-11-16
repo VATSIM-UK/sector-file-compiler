@@ -87,6 +87,42 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsVors()
+        {
+            Vor vor = new Vor("a", "123.456", new Coordinate("abc", "def"), "test");
+            this.collection.Add(vor);
+
+            Assert.Equal(vor, this.collection.Vors[0]);
+        }
+
+        [Fact]
+        public void TestItAddsVorsToCompilableSection()
+        {
+            Vor vor = new Vor("a", "123.456", new Coordinate("abc", "def"), "test");
+            this.collection.Add(vor);
+
+            Assert.Equal(vor, this.collection.Compilables[OutputSections.SCT_VOR][0]);
+        }
+
+        [Fact]
+        public void TestItAddsNdbs()
+        {
+            Ndb ndb = new Ndb("a", "123.456", new Coordinate("abc", "def"), "test");
+            this.collection.Add(ndb);
+
+            Assert.Equal(ndb, this.collection.Ndbs[0]);
+        }
+
+        [Fact]
+        public void TestItAddsNdbsToCompilableSection()
+        {
+            Ndb ndb = new Ndb("a", "123.456", new Coordinate("abc", "def"), "test");
+            this.collection.Add(ndb);
+
+            Assert.Equal(ndb, this.collection.Compilables[OutputSections.SCT_NDB][0]);
+        }
+
+        [Fact]
         public void TestItAddsBlankLines()
         {
             BlankLine blank = new BlankLine();

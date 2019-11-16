@@ -1,27 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Error;
+using System.Linq;
 
 namespace Compiler.Parser
 {
-    public class FixParser : AbstractSectorElementParser
+    public class VorParser : AbstractSectorElementParser
     {
         private readonly SectorElementCollection elements;
         private readonly ISectorLineParser sectorLineParser;
+        private readonly IFrequencyParser frequencyParser;
         private readonly IEventLogger eventLogger;
 
-        public FixParser(
+        public VorParser(
             MetadataParser metadataParser,
             ISectorLineParser sectorLineParser,
+            IFrequencyParser frequencyParser,
             SectorElementCollection elements,
             IEventLogger eventLogger
         ) : base(metadataParser)
         {
             this.elements = elements;
             this.sectorLineParser = sectorLineParser;
+            this.frequencyParser = frequencyParser;
             this.eventLogger = eventLogger;
         }
 
@@ -36,17 +39,34 @@ namespace Compiler.Parser
                 }
 
                 SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
-
-                if (sectorData.dataSegments.Count != 3)
+                if (sectorData.dataSegments.Count != 4)
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Incorrect number of FIX segments", data.fileName, i)
+                        new SyntaxError("Incorrect number of VOR segments", data.fileName, i)
                     );
                     continue;
                 }
 
+                // Check the identifier
+                if (sectorData.dataSegments[0].Any(char.IsDigit) || sectorData.dataSegments[0].Length != 3)
+                {
+                    this.eventLogger.AddEvent(
+                        new SyntaxError("Invalid VOR identifier: " + sectorData.dataSegments[1], data.fileName, i)
+                    );
+                    return;
+                }
+
+                // Parse the frequency
+                if (this.frequencyParser.ParseFrequency(sectorData.dataSegments[1]) == null)
+                {
+                    this.eventLogger.AddEvent(
+                        new SyntaxError("Invalid VOR frequency: " + sectorData.dataSegments[1], data.fileName, i)
+                    );
+                    return;
+                }
+
                 // Parse the coordinate
-                Coordinate parsedCoordinate = CoordinateParser.Parse(sectorData.dataSegments[1], sectorData.dataSegments[2]);
+                Coordinate parsedCoordinate = CoordinateParser.Parse(sectorData.dataSegments[2], sectorData.dataSegments[3]);
                 if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
                 {
                     this.eventLogger.AddEvent(
@@ -55,7 +75,9 @@ namespace Compiler.Parser
                     return;
                 }
 
-                this.elements.Add(new Fix(sectorData.dataSegments[0], parsedCoordinate, sectorData.comment));
+                this.elements.Add(
+                    new Vor(sectorData.dataSegments[0], sectorData.dataSegments[1], parsedCoordinate, sectorData.comment)
+                );
             }
         }
     }

@@ -14,6 +14,10 @@ namespace Compiler.Model
 
         public List<Fix> Fixes { get; } = new List<Fix>();
 
+        public List<Vor> Vors { get; } = new List<Vor>();
+
+        public List<Ndb> Ndbs { get; } = new List<Ndb>();
+
         public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
 
         public SectorElementCollection()
@@ -42,10 +46,22 @@ namespace Compiler.Model
             this.Fixes.Add(fix);
         }
 
+        public void Add(Ndb ndb)
+        {
+            this.Compilables[OutputSections.SCT_NDB].Add(ndb);
+            this.Ndbs.Add(ndb);
+        }
+
         public void Add(SidStar sidStar)
         {
             this.Compilables[OutputSections.ESE_SIDSSTARS].Add(sidStar);
             this.SidStars.Add(sidStar);
+        }
+
+        public void Add(Vor vor)
+        {
+            this.Compilables[OutputSections.SCT_VOR].Add(vor);
+            this.Vors.Add(vor);
         }
 
         public void Add(BlankLine blankLine, OutputSections section)

@@ -17,17 +17,6 @@
             return metadataParser.ParseBlankLine(line) || metadataParser.ParseCommentLine(line);
         }
 
-        /*
-         * Split the line into actual data and comments
-         */
-        public SectorFormatLine ParseLine(string line)
-        {
-            return new SectorFormatLine(
-                LineCommentParser.ParseData(line),
-                LineCommentParser.ParseComment(line)
-            );
-        }
-
         /**
          * Parse data lines, from a given starting line.
          */

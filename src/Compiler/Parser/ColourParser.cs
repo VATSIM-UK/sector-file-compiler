@@ -7,14 +7,17 @@ namespace Compiler.Parser
 {
     public class ColourParser : AbstractSectorElementParser
     {
+        private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
         private readonly IEventLogger errorLog;
 
         public ColourParser(
             MetadataParser metadataParser,
+            ISectorLineParser sectorLineParser,
             SectorElementCollection sectorElements,
             IEventLogger errorLog
         ) :base(metadataParser) {
+            this.sectorLineParser = sectorLineParser;
             this.sectorElements = sectorElements;
             this.errorLog = errorLog;
         }
@@ -29,29 +32,27 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                SectorFormatLine sectorData = this.ParseLine(data.lines[i]);
+                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
 
-                string[] parts = sectorData.data.Split(' ');
-
-                if (parts.Length != 3)
+                if (sectorData.dataSegments.Count != 3)
                 {
                     this.errorLog.AddEvent(new SyntaxError("Invalid number of colour definition segments", data.fileName, i + 1));
                     continue;
                 }
 
-                if (parts[0] != "#define")
+                if (sectorData.dataSegments[0] != "#define")
                 {
                     this.errorLog.AddEvent(new SyntaxError("Colour definitions must begin with #define", data.fileName, i + 1));
                     continue;
                 }
 
-                if (!int.TryParse(parts[2], out int colourValue))
+                if (!int.TryParse(sectorData.dataSegments[2], out int colourValue))
                 {
                     this.errorLog.AddEvent(new SyntaxError("Colour values must be an integer", data.fileName, i + 1));
                     continue;
                 }
 
-                sectorElements.Add(new Colour(parts[1], colourValue, sectorData.comment));
+                sectorElements.Add(new Colour(sectorData.dataSegments[1], colourValue, sectorData.comment));
             }
         }
     }

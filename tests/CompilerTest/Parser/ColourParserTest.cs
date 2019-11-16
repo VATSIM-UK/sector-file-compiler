@@ -21,7 +21,8 @@ namespace CompilerTest.Parser
         {
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
-            this.parser = new ColourParser(new MetadataParser(this.collection, OutputSections.SCT_COLOUR_DEFS), this.collection, this.log.Object);
+            this.parser = (ColourParser)(new SectionParserFactory(this.collection, this.log.Object))
+                .GetParserForSection(OutputSections.SCT_COLOUR_DEFS);
         }
 
         [Fact]

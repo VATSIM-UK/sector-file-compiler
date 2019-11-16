@@ -60,6 +60,10 @@ namespace Compiler
                     this.events.AddEvent(new CompilationFinishedEvent(false));
                     return 1;
                 }
+            } 
+            else
+            {
+                this.events.AddEvent(new CompilationMessage("Skipping output validation"));
             }
 
             // Perform the compilation

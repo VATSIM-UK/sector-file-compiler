@@ -21,7 +21,8 @@ namespace CompilerTest.Parser
         {
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
-            this.parser = new FixParser(new MetadataParser(this.collection, OutputSections.SCT_FIXES), this.collection, this.log.Object);
+            this.parser = (FixParser)(new SectionParserFactory(this.collection, this.log.Object))
+                .GetParserForSection(OutputSections.SCT_FIXES);
         }
 
         [Fact]

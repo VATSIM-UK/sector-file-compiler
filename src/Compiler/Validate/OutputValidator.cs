@@ -14,6 +14,7 @@ namespace Compiler.Validate
             new AllFixesMustBeUnique(),
             new AllSidsMustBeUnique(),
             new AllSidsMustHaveAValidAirport(),
+            new AllSidsMustHaveAValidRoute(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, IEventLogger events)
