@@ -63,6 +63,31 @@ namespace Compiler.Parser
                         this.sectorElements,
                         this.logger
                     );
+                case OutputSections.SCT_ARTCC:
+                    return new ArtccParser(
+                        this.GetMetadataParser(section),
+                        new StandardSctLineParser(),
+                        ArtccType.REGULAR,
+                        this.sectorElements,
+                        this.logger
+                    );
+                case OutputSections.SCT_ARTCC_LOW:
+                    return new ArtccParser(
+                        this.GetMetadataParser(section),
+                        new StandardSctLineParser(),
+                        ArtccType.LOW,
+                        this.sectorElements,
+                        this.logger
+                    );
+
+                case OutputSections.SCT_ARTCC_HIGH:
+                    return new ArtccParser(
+                        this.GetMetadataParser(section),
+                        new StandardSctLineParser(),
+                        ArtccType.HIGH,
+                        this.sectorElements,
+                        this.logger
+                    );
                 case OutputSections.ESE_PREAMBLE:
                     break;
                 case OutputSections.ESE_POSITIONS:
