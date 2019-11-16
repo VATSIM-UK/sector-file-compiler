@@ -21,7 +21,7 @@ namespace Compiler.Model
                 "{0} {1}{2}\r\n",
                 this.Identifier,
                 this.Coordinate.ToString(),
-                this.Comment
+                this.CompileComment()
             );
         }
     }

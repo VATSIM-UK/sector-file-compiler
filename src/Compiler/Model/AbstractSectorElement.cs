@@ -6,19 +6,16 @@ namespace Compiler.Model
 {
     public abstract class AbstractSectorElement
     {
-        private readonly string comment;
-
-        public string Comment
-        {
-            get
-            {
-                return this.comment != null && this.comment != "" ? " ;" + this.comment : "";
-            }
-        }
+        public string Comment { get; }
 
         protected AbstractSectorElement(string comment)
         {
-            this.comment = comment;
+            this.Comment = comment;
+        }
+
+        protected string CompileComment()
+        {
+            return this.Comment != null && this.Comment != "" ? " ;" + this.Comment : "";
         }
     }
 }

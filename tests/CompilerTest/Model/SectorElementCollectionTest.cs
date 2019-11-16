@@ -69,6 +69,96 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsArtccs()
+        {
+            Artcc artcc = new Artcc(
+                "EGTT",
+                ArtccType.REGULAR,
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
+                "test"
+            );
+            this.collection.Add(artcc);
+
+            Assert.Equal(artcc, this.collection.Artccs[0]);
+        }
+
+        [Fact]
+        public void TestItAddsArtccsToCompilableSection()
+        {
+            Artcc artcc = new Artcc(
+                "EGTT",
+                ArtccType.REGULAR,
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
+                "test"
+            );
+            this.collection.Add(artcc);
+
+            Assert.Equal(artcc, this.collection.Compilables[OutputSections.SCT_ARTCC][0]);
+        }
+
+        [Fact]
+        public void TestItAddsLowArtccs()
+        {
+            Artcc artcc = new Artcc(
+                "EGTT",
+                ArtccType.LOW,
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
+                "test"
+            );
+            this.collection.Add(artcc);
+
+            Assert.Equal(artcc, this.collection.LowArtccs[0]);
+        }
+
+        [Fact]
+        public void TestItAddsLowArtccsToCompilableSection()
+        {
+            Artcc artcc = new Artcc(
+                "EGTT",
+                ArtccType.LOW,
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
+                "test"
+            );
+            this.collection.Add(artcc);
+
+            Assert.Equal(artcc, this.collection.Compilables[OutputSections.SCT_ARTCC_LOW][0]);
+        }
+
+        [Fact]
+        public void TestItAddsHighArtccs()
+        {
+            Artcc artcc = new Artcc(
+                "EGTT",
+                ArtccType.HIGH,
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
+                "test"
+            );
+            this.collection.Add(artcc);
+
+            Assert.Equal(artcc, this.collection.HighArtccs[0]);
+        }
+
+        [Fact]
+        public void TestItAddsHighArtccsToCompilableSection()
+        {
+            Artcc artcc = new Artcc(
+                "EGTT",
+                ArtccType.HIGH,
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
+                "test"
+            );
+            this.collection.Add(artcc);
+
+            Assert.Equal(artcc, this.collection.Compilables[OutputSections.SCT_ARTCC_HIGH][0]);
+        }
+
+        [Fact]
         public void TestItAddsFixes()
         {
             Fix fix = new Fix("a", new Coordinate("abc", "def"), "test");

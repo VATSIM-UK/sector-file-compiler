@@ -51,6 +51,12 @@ namespace Compiler
                 events
             );
 
+            if (this.events.HasFatalError())
+            {
+                this.events.AddEvent(new CompilationFinishedEvent(false));
+                return 1;
+            }
+
             // Validate the output files
             if (this.arguments.ValidateOutput)
             {

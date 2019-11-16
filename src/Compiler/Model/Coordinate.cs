@@ -11,6 +11,18 @@
             this.longitude = longitude;
         }
 
+        public override bool Equals(object obj)
+        {
+            return (obj is Coordinate) &&
+                (((Coordinate)obj).latitude == this.latitude) &&
+                (((Coordinate)obj).longitude == this.longitude);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public override string ToString()
         {
             return string.Format(

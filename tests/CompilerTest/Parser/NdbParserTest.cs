@@ -130,7 +130,7 @@ namespace CompilerTest.Parser
             Assert.Equal("CDF", result.Identifier);
             Assert.Equal("388.500", result.Frequency);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.Coordinate);
-            Assert.Equal(" ;comment", result.Comment);
+            Assert.Equal("comment", result.Comment);
         }
     }
 }

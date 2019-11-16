@@ -18,6 +18,10 @@ namespace Compiler.Model
 
         public List<Ndb> Ndbs { get; } = new List<Ndb>();
 
+        public List<Artcc> Artccs { get; } = new List<Artcc>();
+        public List<Artcc> LowArtccs { get; } = new List<Artcc>();
+        public List<Artcc> HighArtccs { get; } = new List<Artcc>();
+
         public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
 
         public SectorElementCollection()
@@ -32,6 +36,26 @@ namespace Compiler.Model
         {
             this.Compilables[OutputSections.SCT_AIRPORT].Add(airport);
             this.Airports.Add(airport);
+        }
+
+        public void Add(Artcc artcc)
+        {
+            switch (artcc.Type)
+            {
+                case ArtccType.REGULAR:
+                    this.Artccs.Add(artcc);
+                    this.Compilables[OutputSections.SCT_ARTCC].Add(artcc);
+                    break;
+                case ArtccType.LOW:
+                    this.LowArtccs.Add(artcc);
+                    this.Compilables[OutputSections.SCT_ARTCC_LOW].Add(artcc);
+                    break;
+                case ArtccType.HIGH:
+                    this.HighArtccs.Add(artcc);
+                    this.Compilables[OutputSections.SCT_ARTCC_HIGH].Add(artcc);
+                    break;
+
+            }
         }
 
         public void Add(Colour colour)

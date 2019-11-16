@@ -19,7 +19,7 @@ namespace Compiler.Model
 
         public string Compile()
         {
-            if (this.Comment == "")
+            if (this.Comment == "" || this.Comment == null)
             {
                 return String.Format(
                     "{0} {1} {2} E ;{3}\r\n",
@@ -35,7 +35,7 @@ namespace Compiler.Model
                 this.Icao,
                 this.Frequency,
                 this.LatLong.ToString(),
-                this.Comment,
+                this.CompileComment(),
                 this.Name
             );
         }

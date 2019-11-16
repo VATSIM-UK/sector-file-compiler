@@ -17,7 +17,7 @@
                 "#define {0} {1}{2}\r\n",
                 this.Name,
                 this.Value,
-                this.Comment
+                this.CompileComment()
             );
         }
     }

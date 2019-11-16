@@ -35,7 +35,7 @@ namespace Compiler.Model
                 this.Runway,
                 this.Identifier,
                 string.Join(' ', this.Route),
-                this.Comment
+                this.CompileComment()
             );
         }
     }
