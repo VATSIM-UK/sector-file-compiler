@@ -83,7 +83,7 @@ namespace CompilerTest.Parser
             SectorFormatData data = new SectorFormatData(
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "EGTT London FIR N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" })
+                new List<string>(new string[] { "EGTT London FIR   N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" })
             );
             this.parser.ParseData(data);
 
