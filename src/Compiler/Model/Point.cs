@@ -10,12 +10,12 @@ namespace Compiler.Model
         public const int TYPE_COORDINATE = 0;
         public const int TYPE_IDENTIFIER = 1;
 
-        public Coordinate coordinate { get; }
+        public Coordinate Coordinate { get; }
         public string Identifier { get; }
 
         public Point(Coordinate coordinate)
         {
-            this.coordinate = coordinate;
+            this.Coordinate = coordinate;
         }
 
         public Point(string Identifier)
@@ -23,7 +23,19 @@ namespace Compiler.Model
             this.Identifier = Identifier;
         }
 
-        public int GetType()
+        public override bool Equals(object obj)
+        {
+            return (obj is Point) &&
+                this.Identifier == ((Point) obj).Identifier &&
+                this.Coordinate.Equals(((Point)obj).Coordinate);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public int Type()
         {
             return this.Identifier == null ? Point.TYPE_COORDINATE : Point.TYPE_IDENTIFIER;
         }
@@ -32,7 +44,7 @@ namespace Compiler.Model
         {
             return this.Identifier != null
                 ? this.Identifier + " " + this.Identifier
-                : this.coordinate.ToString();
+                : this.Coordinate.ToString();
         }
     }
 }

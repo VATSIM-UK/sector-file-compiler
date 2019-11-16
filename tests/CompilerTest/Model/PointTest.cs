@@ -9,7 +9,7 @@ namespace CompilerTest.Model
         public void TestItHasTypeIdentifier()
         {
             Point point = new Point("TESTF");
-            Assert.Equal(Point.TYPE_IDENTIFIER, point.GetType());
+            Assert.Equal(Point.TYPE_IDENTIFIER, point.Type());
         }
 
         [Fact]
@@ -23,7 +23,7 @@ namespace CompilerTest.Model
         public void TestItHasTypeCoordinate()
         {
             Point point = new Point(new Coordinate("abc", "def"));
-            Assert.Equal(Point.TYPE_COORDINATE, point.GetType());
+            Assert.Equal(Point.TYPE_COORDINATE, point.Type());
         }
 
         [Fact]

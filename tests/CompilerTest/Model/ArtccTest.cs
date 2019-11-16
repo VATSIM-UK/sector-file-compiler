@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
+﻿using Xunit;
 using Compiler.Model;
 
 namespace CompilerTest.Model
@@ -15,8 +12,8 @@ namespace CompilerTest.Model
             this.artcc = new Artcc(
                 "EGTT",
                 ArtccType.HIGH,
-                new Coordinate("abc", "def"),
-                new Coordinate("ghi", "jkl"),
+                new Point("ABCDE"),
+                new Point("FGHIJ"),
                 "comment"
             );
         }
@@ -34,21 +31,21 @@ namespace CompilerTest.Model
         }
 
         [Fact]
-        public void TestItSetsStartCoordinate()
+        public void TestItSetsStartPoint()
         {
-            Assert.Equal(new Coordinate("abc", "def"), this.artcc.StartCoordinate);
+            Assert.Equal(new Point("ABCDE"), this.artcc.StartPoint);
         }
 
         [Fact]
         public void TestItSetsEndCoordinate()
         {
-            Assert.Equal(new Coordinate("ghi", "jkl"), this.artcc.EndCoordinate);
+            Assert.Equal(new Point("FGHIJ"), this.artcc.EndPoint);
         }
 
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("EGTT abc def ghi jkl ;comment\r\n", this.artcc.Compile());
+            Assert.Equal("EGTT ABCDE ABCDE FGHIJ FGHIJ ;comment\r\n", this.artcc.Compile());
         }
     }
 }

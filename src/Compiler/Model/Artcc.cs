@@ -9,30 +9,30 @@ namespace Compiler.Model
         public Artcc(
             string identifier,
             ArtccType type,
-            Coordinate startCoordinate,
-            Coordinate endCoordinate,
+            Point startPoint,
+            Point endPoint,
             string comment
         ) 
             : base(comment)
         {
             Identifier = identifier;
             Type = type;
-            StartCoordinate = startCoordinate;
-            EndCoordinate = endCoordinate;
+            StartPoint = startPoint;
+            EndPoint = endPoint;
         }
 
         public string Identifier { get; }
         public ArtccType Type { get; }
-        public Coordinate StartCoordinate { get; }
-        public Coordinate EndCoordinate { get; }
+        public Point StartPoint { get; }
+        public Point EndPoint { get; }
 
         public string Compile()
         {
             return String.Format(
                 "{0} {1} {2}{3}\r\n",
                 this.Identifier,
-                this.StartCoordinate.ToString(),
-                this.EndCoordinate.ToString(),
+                this.StartPoint.Compile(),
+                this.EndPoint.Compile(),
                 this.CompileComment()
             );
         }

@@ -74,8 +74,8 @@ namespace CompilerTest.Model
             Artcc artcc = new Artcc(
                 "EGTT",
                 ArtccType.REGULAR,
-                new Coordinate("abc", "def"),
-                new Coordinate("ghi", "jkl"),
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
                 "test"
             );
             this.collection.Add(artcc);
@@ -89,8 +89,8 @@ namespace CompilerTest.Model
             Artcc artcc = new Artcc(
                 "EGTT",
                 ArtccType.REGULAR,
-                new Coordinate("abc", "def"),
-                new Coordinate("ghi", "jkl"),
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
                 "test"
             );
             this.collection.Add(artcc);
@@ -104,8 +104,8 @@ namespace CompilerTest.Model
             Artcc artcc = new Artcc(
                 "EGTT",
                 ArtccType.LOW,
-                new Coordinate("abc", "def"),
-                new Coordinate("ghi", "jkl"),
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
                 "test"
             );
             this.collection.Add(artcc);
@@ -119,8 +119,8 @@ namespace CompilerTest.Model
             Artcc artcc = new Artcc(
                 "EGTT",
                 ArtccType.LOW,
-                new Coordinate("abc", "def"),
-                new Coordinate("ghi", "jkl"),
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
                 "test"
             );
             this.collection.Add(artcc);
@@ -134,8 +134,8 @@ namespace CompilerTest.Model
             Artcc artcc = new Artcc(
                 "EGTT",
                 ArtccType.HIGH,
-                new Coordinate("abc", "def"),
-                new Coordinate("ghi", "jkl"),
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
                 "test"
             );
             this.collection.Add(artcc);
@@ -149,8 +149,8 @@ namespace CompilerTest.Model
             Artcc artcc = new Artcc(
                 "EGTT",
                 ArtccType.HIGH,
-                new Coordinate("abc", "def"),
-                new Coordinate("ghi", "jkl"),
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
                 "test"
             );
             this.collection.Add(artcc);

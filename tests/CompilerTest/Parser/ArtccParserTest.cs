@@ -39,7 +39,7 @@ namespace CompilerTest.Parser
         }
 
         [Fact]
-        public void TestItRaisesSyntaxErrorInvalidEndCoordinate()
+        public void TestItRaisesSyntaxErrorInvalidEndPoint()
         {
             SectorFormatData data = new SectorFormatData(
                 "test",
@@ -52,7 +52,7 @@ namespace CompilerTest.Parser
         }
 
         [Fact]
-        public void TestItRaisesSyntaxErrorInvalidStartCoordinate()
+        public void TestItRaisesSyntaxErrorInvalidStartPoint()
         {
             SectorFormatData data = new SectorFormatData(
                 "test",
@@ -90,8 +90,26 @@ namespace CompilerTest.Parser
             Artcc result = this.collection.Artccs[0];
             Assert.Equal("EGTT London FIR", result.Identifier);
             Assert.Equal(ArtccType.REGULAR, result.Type);
-            Assert.Equal(new Coordinate("N050.57.00.001", "W001.21.24.490"), result.StartCoordinate);
-            Assert.Equal(new Coordinate("N050.57.00.002", "W001.21.24.490"), result.EndCoordinate);
+            Assert.Equal(new Point(new Coordinate("N050.57.00.001", "W001.21.24.490")), result.StartPoint);
+            Assert.Equal(new Point(new Coordinate("N050.57.00.002", "W001.21.24.490")), result.EndPoint);
+            Assert.Equal("comment", result.Comment);
+        }
+
+        [Fact]
+        public void TestItAddsFixDataWithIdentifiers()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test",
+                "EGHI",
+                new List<string>(new string[] { "EGTT London FIR   DIKAS DIKAS BHD BHD;comment" })
+            );
+            this.parser.ParseData(data);
+
+            Artcc result = this.collection.Artccs[0];
+            Assert.Equal("EGTT London FIR", result.Identifier);
+            Assert.Equal(ArtccType.REGULAR, result.Type);
+            Assert.Equal(new Point("DIKAS"), result.StartPoint);
+            Assert.Equal(new Point("BHD"), result.EndPoint);
             Assert.Equal("comment", result.Comment);
         }
     }

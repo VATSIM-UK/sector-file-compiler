@@ -49,23 +49,21 @@ namespace Compiler.Parser
 
                 int count = sectorData.dataSegments.Count;
 
-                // The coordinates are at the end, so work backwards
-
-                // Parse the coordinate, if not parsable, treat it as a fix.
-                Coordinate endCoordinate = CoordinateParser.Parse(sectorData.dataSegments[count - 2], sectorData.dataSegments[count - 1]);
-                if (endCoordinate.Equals(CoordinateParser.invalidCoordinate))
+                // The points are at the end, so work backwards
+                Point endPoint = PointParser.Parse(sectorData.dataSegments[count - 2], sectorData.dataSegments[count - 1]);
+                if (endPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid ARTCC end coordinate format: " + data.lines[i], data.fileName, i)
+                        new SyntaxError("Invalid ARTCC end point format: " + data.lines[i], data.fileName, i)
                     );
                     return;
                 }
 
-                Coordinate startCoordinate = CoordinateParser.Parse(sectorData.dataSegments[count - 4], sectorData.dataSegments[count - 3]);
-                if (startCoordinate.Equals(CoordinateParser.invalidCoordinate))
+                Point startPoint = PointParser.Parse(sectorData.dataSegments[count - 4], sectorData.dataSegments[count - 3]);
+                if (startPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid ARTCC start coordinate format: " + data.lines[i], data.fileName, i)
+                        new SyntaxError("Invalid ARTCC start point format: " + data.lines[i], data.fileName, i)
                     );
                     return;
                 }
@@ -75,8 +73,8 @@ namespace Compiler.Parser
                     new Artcc(
                         string.Join(" ", sectorData.dataSegments.GetRange(0, count - 4)),
                         this.artccType,
-                        startCoordinate,
-                        endCoordinate,
+                        startPoint,
+                        endPoint,
                         sectorData.comment
                     )
                 );
