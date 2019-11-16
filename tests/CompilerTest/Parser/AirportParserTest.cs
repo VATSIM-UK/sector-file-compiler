@@ -92,7 +92,7 @@ namespace CompilerTest.Parser
             Assert.Equal("EGHI", result.Icao);
             Assert.Equal("120.220", result.Frequency);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.LatLong);
-            Assert.Equal(" ;comment1, comment2, comment3", result.Comment);
+            Assert.Equal("comment1, comment2, comment3", result.Comment);
         }
 
         [Fact]
@@ -128,7 +128,7 @@ namespace CompilerTest.Parser
             Assert.Equal("EGHI", result.Icao);
             Assert.Equal("120.220", result.Frequency);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.LatLong);
-            Assert.Equal(" ;comment1, comment2, comment3", result.Comment);
+            Assert.Equal("comment1, comment2, comment3", result.Comment);
         }
     }
 }

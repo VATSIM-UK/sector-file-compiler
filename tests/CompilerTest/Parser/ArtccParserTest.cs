@@ -92,7 +92,7 @@ namespace CompilerTest.Parser
             Assert.Equal(ArtccType.REGULAR, result.Type);
             Assert.Equal(new Coordinate("N050.57.00.001", "W001.21.24.490"), result.StartCoordinate);
             Assert.Equal(new Coordinate("N050.57.00.002", "W001.21.24.490"), result.EndCoordinate);
-            Assert.Equal(" ;comment", result.Comment);
+            Assert.Equal("comment", result.Comment);
         }
     }
 }

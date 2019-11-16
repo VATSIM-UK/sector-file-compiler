@@ -33,7 +33,7 @@ namespace Compiler.Model
                 this.Identifier,
                 this.StartCoordinate.ToString(),
                 this.EndCoordinate.ToString(),
-                this.Comment
+                this.CompileComment()
             );
         }
     }

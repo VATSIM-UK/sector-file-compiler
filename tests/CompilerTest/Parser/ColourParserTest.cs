@@ -103,7 +103,7 @@ namespace CompilerTest.Parser
             Colour result = this.collection.Colours[0];
             Assert.Equal("abc", result.Name);
             Assert.Equal(255, result.Value);
-            Assert.Equal(" ;comment", result.Comment);
+            Assert.Equal("comment", result.Comment);
         }
     }
 }

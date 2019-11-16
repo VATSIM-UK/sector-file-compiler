@@ -24,7 +24,7 @@ namespace Compiler.Model
                 this.Identifier,
                 this.Frequency,
                 this.Coordinate.ToString(),
-                this.Comment
+                this.CompileComment()
             );
         }
     }

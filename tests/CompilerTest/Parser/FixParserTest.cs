@@ -90,7 +90,7 @@ namespace CompilerTest.Parser
             Fix result = this.collection.Fixes[0];
             Assert.Equal("ABCDE", result.Identifier);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.Coordinate);
-            Assert.Equal(" ;comment", result.Comment);
+            Assert.Equal("comment", result.Comment);
         }
     }
 }
