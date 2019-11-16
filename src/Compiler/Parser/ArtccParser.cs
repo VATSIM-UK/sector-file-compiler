@@ -63,7 +63,7 @@ namespace Compiler.Parser
                 if (startCoordinate.Equals(CoordinateParser.invalidCoordinate))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid ARTCC end coordinate format: " + data.lines[i], data.fileName, i)
+                        new SyntaxError("Invalid ARTCC start coordinate format: " + data.lines[i], data.fileName, i)
                     );
                     return;
                 }

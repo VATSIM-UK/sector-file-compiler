@@ -29,7 +29,7 @@ namespace Compiler.Model
         public string Compile()
         {
             return String.Format(
-                "{0} {1} {2}{3}",
+                "{0} {1} {2}{3}\r\n",
                 this.Identifier,
                 this.StartCoordinate.ToString(),
                 this.EndCoordinate.ToString(),

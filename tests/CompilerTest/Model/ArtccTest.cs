@@ -48,7 +48,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("EGTT abc def ghi jkl ;comment", this.artcc.Compile());
+            Assert.Equal("EGTT abc def ghi jkl ;comment\r\n", this.artcc.Compile());
         }
     }
 }
