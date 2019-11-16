@@ -50,6 +50,8 @@ namespace Compiler.Parser
                 int count = sectorData.dataSegments.Count;
 
                 // The coordinates are at the end, so work backwards
+
+                // Parse the coordinate, if not parsable, treat it as a fix.
                 Coordinate endCoordinate = CoordinateParser.Parse(sectorData.dataSegments[count - 2], sectorData.dataSegments[count - 1]);
                 if (endCoordinate.Equals(CoordinateParser.invalidCoordinate))
                 {
