@@ -11,7 +11,7 @@ namespace Compiler.Parser
             string comment = LineCommentParser.ParseComment(line);
             string data = LineCommentParser.ParseData(line);
 
-            List<string> dataSplit = new List<string>(data.Split(' '));
+            List<string> dataSplit = new List<string>(data.Split(null));
             dataSplit.RemoveAll(s => s == "");
 
             return new SectorFormatLine(

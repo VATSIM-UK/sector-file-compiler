@@ -27,6 +27,19 @@ namespace CompilerTest.Parser
         }
 
         [Fact]
+        public void TestItParsesLinesWithTabs()
+        {
+            SectorFormatLine expected = new SectorFormatLine(
+                "item1\titem2 item3 item4",
+                new List<string>(new string[] { "item1", "item2", "item3", "item4" }),
+                null
+            );
+            Assert.True(
+                expected.Equals(this.parser.ParseLine("item1\titem2 item3 item4"))
+            );
+        }
+
+        [Fact]
         public void TestItParsesLinesWithComments()
         {
             SectorFormatLine expected = new SectorFormatLine(
