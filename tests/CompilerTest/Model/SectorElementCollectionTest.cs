@@ -159,6 +159,66 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsLowAirways()
+        {
+            Airway airway = new Airway(
+                "UN864",
+                AirwayType.LOW,
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
+                "test"
+            );
+            this.collection.Add(airway);
+
+            Assert.Equal(airway, this.collection.LowAirways[0]);
+        }
+
+        [Fact]
+        public void TestItAddsLowAirwaysToCompilableSection()
+        {
+            Airway airway = new Airway(
+                "UN864",
+                AirwayType.LOW,
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
+                "test"
+            );
+            this.collection.Add(airway);
+
+            Assert.Equal(airway, this.collection.Compilables[OutputSections.SCT_LOW_AIRWAY][0]);
+        }
+
+        [Fact]
+        public void TestItAddsHighAirways()
+        {
+            Airway airway = new Airway(
+                "UN864",
+                AirwayType.HIGH,
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
+                "test"
+            );
+            this.collection.Add(airway);
+
+            Assert.Equal(airway, this.collection.HighAirways[0]);
+        }
+
+        [Fact]
+        public void TestItAddsHighAirwaysToCompilableSection()
+        {
+            Airway airway = new Airway(
+                "UN864",
+                AirwayType.HIGH,
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
+                "test"
+            );
+            this.collection.Add(airway);
+
+            Assert.Equal(airway, this.collection.Compilables[OutputSections.SCT_HIGH_AIRWAY][0]);
+        }
+
+        [Fact]
         public void TestItAddsFixes()
         {
             Fix fix = new Fix("a", new Coordinate("abc", "def"), "test");

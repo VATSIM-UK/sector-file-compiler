@@ -88,6 +88,22 @@ namespace Compiler.Parser
                         this.sectorElements,
                         this.logger
                     );
+                case OutputSections.SCT_LOW_AIRWAY:
+                    return new AirwayParser(
+                        this.GetMetadataParser(section),
+                        new StandardSctLineParser(),
+                        AirwayType.LOW,
+                        this.sectorElements,
+                        this.logger
+                    );
+                case OutputSections.SCT_HIGH_AIRWAY:
+                    return new AirwayParser(
+                        this.GetMetadataParser(section),
+                        new StandardSctLineParser(),
+                        AirwayType.HIGH,
+                        this.sectorElements,
+                        this.logger
+                    );
                 case OutputSections.ESE_PREAMBLE:
                     break;
                 case OutputSections.ESE_POSITIONS:
