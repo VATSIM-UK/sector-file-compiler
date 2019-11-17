@@ -39,7 +39,7 @@ namespace Compiler.Parser
                 }
 
                 SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
-                if (sectorData.dataSegments.Count < 5)
+                if (sectorData.dataSegments.Count < 4)
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Incorrect number of Airway segments", data.fileName, i)
