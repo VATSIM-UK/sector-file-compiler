@@ -39,7 +39,7 @@ namespace Compiler.Parser
                 }
 
                 SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
-                if (sectorData.dataSegments.Count < 4)
+                if (sectorData.dataSegments.Count != 4)
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Incorrect number of Airway segments", data.fullPath, i)
@@ -47,19 +47,8 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                int count = sectorData.dataSegments.Count;
-
-                // The points are at the end, so work backwards
-                Point endPoint = PointParser.Parse(sectorData.dataSegments[count - 2], sectorData.dataSegments[count - 1]);
-                if (endPoint.Equals(PointParser.invalidPoint))
-                {
-                    this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid Airway end point format: " + data.lines[i], data.fullPath, i)
-                    );
-                    return;
-                }
-
-                Point startPoint = PointParser.Parse(sectorData.dataSegments[count - 4], sectorData.dataSegments[count - 3]);
+                // Parse the airway segment point
+                Point startPoint = PointParser.Parse(sectorData.dataSegments[0], sectorData.dataSegments[1]);
                 if (startPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
@@ -68,10 +57,21 @@ namespace Compiler.Parser
                     return;
                 }
 
+
+                // Parse the segment endpoint
+                Point endPoint = PointParser.Parse(sectorData.dataSegments[2], sectorData.dataSegments[3]);
+                if (endPoint.Equals(PointParser.invalidPoint))
+                {
+                    this.eventLogger.AddEvent(
+                        new SyntaxError("Invalid Airway end point format: " + data.lines[i], data.fullPath, i)
+                    );
+                    return;
+                }
+
                 // Add it
                 this.elements.Add(
                     new Airway(
-                        string.Join(" ", sectorData.dataSegments.GetRange(0, count - 4)),
+                        data.fileName,
                         this.airwayType,
                         startPoint,
                         endPoint,

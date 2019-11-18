@@ -32,7 +32,21 @@ namespace CompilerTest.Parser
                 "UN864.txt",
                 "UN864",
                 "EGHI",
-                new List<string>(new string[] { "UN864 North" })
+                new List<string>(new string[] { "BHD BHD DIKAS" })
+            );
+            this.parser.ParseData(data);
+
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
+        [Fact]
+        public void TestItRaisesSyntaxErrorTooManySegments()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "UN864.txt",
+                "UN864",
+                "EGHI",
+                new List<string>(new string[] { "BHD BHD DIKAS DIKAS EXMOR" })
             );
             this.parser.ParseData(data);
 
@@ -46,7 +60,7 @@ namespace CompilerTest.Parser
                 "UN864.txt",
                 "UN864",
                 "EGHI",
-                new List<string>(new string[] { "UN864 North N050.57.00.000 W001.21.24.490 N050.57.00.000 N001.21.24.490" })
+                new List<string>(new string[] { "N050.57.00.000 W001.21.24.490 N050.57.00.000 N001.21.24.490" })
             );
             this.parser.ParseData(data);
 
@@ -60,7 +74,7 @@ namespace CompilerTest.Parser
                 "UN864.txt",
                 "UN864",
                 "EGHI",
-                new List<string>(new string[] { "UN864 North N050.57.00.000 N001.21.24.490 N050.57.00.000 W001.21.24.490" })
+                new List<string>(new string[] { "N050.57.00.000 N001.21.24.490 N050.57.00.000 W001.21.24.490" })
             );
             this.parser.ParseData(data);
 
@@ -88,12 +102,12 @@ namespace CompilerTest.Parser
                 "UN864.txt",
                 "UN864",
                 "EGHI",
-                new List<string>(new string[] { "UN864 North   N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" })
+                new List<string>(new string[] { "N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" })
             );
             this.parser.ParseData(data);
 
             Airway result = this.collection.LowAirways[0];
-            Assert.Equal("UN864 North", result.Identifier);
+            Assert.Equal("UN864", result.Identifier);
             Assert.Equal(AirwayType.LOW, result.Type);
             Assert.Equal(new Point(new Coordinate("N050.57.00.001", "W001.21.24.490")), result.StartPoint);
             Assert.Equal(new Point(new Coordinate("N050.57.00.002", "W001.21.24.490")), result.EndPoint);
@@ -107,12 +121,12 @@ namespace CompilerTest.Parser
                 "UN864.txt",
                 "UN864",
                 "EGHI",
-                new List<string>(new string[] { "UN864 North   DIKAS DIKAS BHD BHD;comment" })
+                new List<string>(new string[] { "DIKAS DIKAS BHD BHD;comment" })
             );
             this.parser.ParseData(data);
 
             Airway result = this.collection.LowAirways[0];
-            Assert.Equal("UN864 North", result.Identifier);
+            Assert.Equal("UN864", result.Identifier);
             Assert.Equal(AirwayType.LOW, result.Type);
             Assert.Equal(new Point("DIKAS"), result.StartPoint);
             Assert.Equal(new Point("BHD"), result.EndPoint);
