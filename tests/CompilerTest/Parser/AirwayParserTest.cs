@@ -29,7 +29,8 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorNotEnoughSegments()
         {
             SectorFormatData data = new SectorFormatData(
-                "test",
+                "UN864.txt",
+                "UN864",
                 "EGHI",
                 new List<string>(new string[] { "UN864 North" })
             );
@@ -42,7 +43,8 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorInvalidEndPoint()
         {
             SectorFormatData data = new SectorFormatData(
-                "test",
+                "UN864.txt",
+                "UN864",
                 "EGHI",
                 new List<string>(new string[] { "UN864 North N050.57.00.000 W001.21.24.490 N050.57.00.000 N001.21.24.490" })
             );
@@ -55,7 +57,8 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorInvalidStartPoint()
         {
             SectorFormatData data = new SectorFormatData(
-                "test",
+                "UN864.txt",
+                "UN864",
                 "EGHI",
                 new List<string>(new string[] { "UN864 North N050.57.00.000 N001.21.24.490 N050.57.00.000 W001.21.24.490" })
             );
@@ -68,7 +71,8 @@ namespace CompilerTest.Parser
         public void TestItHandlesMetadata()
         {
             SectorFormatData data = new SectorFormatData(
-                "test",
+                "UN864.txt",
+                "UN864",
                 "test",
                 new List<string>(new string[] { "" })
             );
@@ -81,7 +85,8 @@ namespace CompilerTest.Parser
         public void TestItAddsAirwayData()
         {
             SectorFormatData data = new SectorFormatData(
-                "test",
+                "UN864.txt",
+                "UN864",
                 "EGHI",
                 new List<string>(new string[] { "UN864 North   N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" })
             );
@@ -99,7 +104,8 @@ namespace CompilerTest.Parser
         public void TestItAddsAirwayDataWithIdentifiers()
         {
             SectorFormatData data = new SectorFormatData(
-                "test",
+                "UN864.txt",
+                "UN864",
                 "EGHI",
                 new List<string>(new string[] { "UN864 North   DIKAS DIKAS BHD BHD;comment" })
             );

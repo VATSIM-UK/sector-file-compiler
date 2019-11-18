@@ -29,6 +29,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorTooManySections()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "BHD 112.050 N050.57.00.000 W001.21.24.490 MORE" })
@@ -42,6 +43,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorTooFewSections()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "BHD 112.050 N050.57.00.000" })
@@ -55,6 +57,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorIdentifierContainsNumbers()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "BH1 112.050 N050.57.00.000 W001.21.24.490" })
@@ -68,6 +71,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorIdentifierTooLong()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "BHDD 112.050 N050.57.00.000 W001.21.24.490" })
@@ -81,6 +85,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorInvalidFrequency()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "BHD abc.050 N050.57.00.000 W001.21.24.490" })
@@ -94,6 +99,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorInvalidCoordinates()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "BHD 112.050 NA50.57.00.000 W001.21.24.490" })
@@ -107,6 +113,7 @@ namespace CompilerTest.Parser
         public void TestItHandlesMetadata()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "test",
                 new List<string>(new string[] { "" })
@@ -120,6 +127,7 @@ namespace CompilerTest.Parser
         public void TestItAddsVorData()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "BHD 112.050 N050.57.00.000 W001.21.24.490;comment" })

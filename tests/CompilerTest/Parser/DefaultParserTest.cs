@@ -21,7 +21,8 @@ namespace CompilerTest.Parser
         public void TestItParsesComments()
         {
             SectorFormatData data = new SectorFormatData(
-                "test.json",
+                "test.txt",
+                "test",
                 "test",
                 new List<string>(new string[] { ";comment" })
             );
@@ -34,7 +35,8 @@ namespace CompilerTest.Parser
         public void TestItParsesBlankLines()
         {
             SectorFormatData data = new SectorFormatData(
-                "test.json",
+                "test.txt",
+                "test",
                 "test",
                 new List<string>(new string[] { "\r\n" })
             );

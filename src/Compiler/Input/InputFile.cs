@@ -80,5 +80,10 @@ namespace Compiler.Input
         {
             return Directory.GetParent(this.GetPath()).Name;
         }
+
+        public string GetNameWithoutExtension()
+        {
+            return Path.GetFileNameWithoutExtension(this.GetPath());
+        }
     }
 }

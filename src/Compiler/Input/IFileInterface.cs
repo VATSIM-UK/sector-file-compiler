@@ -10,6 +10,8 @@ namespace Compiler.Input
 
         string GetPath();
 
+        string GetNameWithoutExtension();
+
         bool IsWritable();
 
         string Contents();
