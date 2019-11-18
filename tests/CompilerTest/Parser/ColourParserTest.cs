@@ -29,6 +29,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesASyntaxErrorIfIncorrectNumberOfSegments()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "test",
                 new List<string>(new string[] { "#define abc" })
@@ -42,6 +43,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesASyntaxErrorIfNotStartedByDefine()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "test",
                 new List<string>(new string[] { "#nodefine abc 123" })
@@ -55,6 +57,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesASyntaxErrorIfColourIsFloat()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "test",
                 new List<string>(new string[] { "#define abc 123.4" })
@@ -68,6 +71,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesASyntaxErrorIfColourIsString()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "test",
                 new List<string>(new string[] { "#define abc 123abc" })
@@ -81,6 +85,7 @@ namespace CompilerTest.Parser
         public void TestItHandlesMetadata()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "test",
                 new List<string>(new string[] { "" })
@@ -94,6 +99,7 @@ namespace CompilerTest.Parser
         public void TestItAddsColourData()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "test",
                 new List<string>(new string[] { "#define abc 255 ;comment" })

@@ -26,7 +26,7 @@ namespace Compiler.Parser
                 return PointParser.invalidPoint;
             }
 
-            if (point1.Length > 5 || point2.Length > 5)
+            if (point1.Length > 6 || point2.Length > 6)
             {
                 return PointParser.invalidPoint;
             }

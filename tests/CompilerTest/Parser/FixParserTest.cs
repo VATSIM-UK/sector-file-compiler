@@ -29,6 +29,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorTooManySections()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "ABCDE N050.57.00.000 W001.21.24.490 MORE" })
@@ -42,6 +43,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorTooFewSections()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "ABCDE N050.57.00.000W001.21.24.490" })
@@ -55,6 +57,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorInvalidCoordinates()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "ABCDE N050.57.00.000 N001.21.24.490" })
@@ -68,6 +71,7 @@ namespace CompilerTest.Parser
         public void TestItHandlesMetadata()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "test",
                 new List<string>(new string[] { "" })
@@ -81,6 +85,7 @@ namespace CompilerTest.Parser
         public void TestItAddsFixData()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "ABCDE N050.57.00.000 W001.21.24.490;comment" })

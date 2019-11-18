@@ -29,6 +29,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorTooManyLines()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3",  "Another line!" })
@@ -42,6 +43,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorTooFewLines()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2" })
@@ -55,6 +57,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorInvalidCoordinateFormat()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "Southampton; comment1", "N050.57.00.000W001.21.24.490 ;comment2", "120.220 ;comment3" })
@@ -68,6 +71,7 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorInvalidCoordinates()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "Southampton; comment1", "NAA050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3" })
@@ -81,6 +85,7 @@ namespace CompilerTest.Parser
         public void TestItAddsAirportData()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3" })
@@ -99,6 +104,7 @@ namespace CompilerTest.Parser
         public void TestItAddsAirportDataNoLineComments()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "Southampton", "N050.57.00.000 W001.21.24.490", "120.220" })
@@ -117,6 +123,7 @@ namespace CompilerTest.Parser
         public void TestItAddsAirportDataWithMetadataBetweenLines()
         {
             SectorFormatData data = new SectorFormatData(
+                "test.txt",
                 "test",
                 "EGHI",
                 new List<string>(new string[] { ";comment1", "Southampton; comment1", ";comment2", "N050.57.00.000 W001.21.24.490 ;comment2", ";comment3", "120.220 ;comment3", ";comment4" })

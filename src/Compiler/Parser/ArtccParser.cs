@@ -42,7 +42,7 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments.Count < 5)
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Incorrect number of ARTCC segments", data.fileName, i)
+                        new SyntaxError("Incorrect number of ARTCC segments", data.fullPath, i)
                     );
                     continue;
                 }
@@ -54,7 +54,7 @@ namespace Compiler.Parser
                 if (endPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid ARTCC end point format: " + data.lines[i], data.fileName, i)
+                        new SyntaxError("Invalid ARTCC end point format: " + data.lines[i], data.fullPath, i)
                     );
                     return;
                 }
@@ -63,7 +63,7 @@ namespace Compiler.Parser
                 if (startPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid ARTCC start point format: " + data.lines[i], data.fileName, i)
+                        new SyntaxError("Invalid ARTCC start point format: " + data.lines[i], data.fullPath, i)
                     );
                     return;
                 }

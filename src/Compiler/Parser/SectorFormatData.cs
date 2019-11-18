@@ -7,12 +7,15 @@ namespace Compiler.Parser
      */
     public struct SectorFormatData
     {
-        public SectorFormatData(string fileName, string parentDirectory, List<string> lines)
+        public SectorFormatData(string fullPath, string fileName, string parentDirectory, List<string> lines)
         {
+            this.fullPath = fullPath;
             this.fileName = fileName;
             this.parentDirectory = parentDirectory;
             this.lines = lines;
         }
+
+        public readonly string fullPath;
 
         public readonly string fileName;
 

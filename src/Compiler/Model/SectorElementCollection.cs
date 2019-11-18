@@ -21,6 +21,8 @@ namespace Compiler.Model
         public List<Artcc> Artccs { get; } = new List<Artcc>();
         public List<Artcc> LowArtccs { get; } = new List<Artcc>();
         public List<Artcc> HighArtccs { get; } = new List<Artcc>();
+        public List<Airway> LowAirways { get; } = new List<Airway>();
+        public List<Airway> HighAirways { get; } = new List<Airway>();
 
         public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
 
@@ -36,6 +38,21 @@ namespace Compiler.Model
         {
             this.Compilables[OutputSections.SCT_AIRPORT].Add(airport);
             this.Airports.Add(airport);
+        }
+
+        public void Add(Airway airway)
+        {
+            switch (airway.Type)
+            {
+                case AirwayType.LOW:
+                    this.LowAirways.Add(airway);
+                    this.Compilables[OutputSections.SCT_LOW_AIRWAY].Add(airway);
+                    break;
+                case AirwayType.HIGH:
+                    this.HighAirways.Add(airway);
+                    this.Compilables[OutputSections.SCT_HIGH_AIRWAY].Add(airway);
+                    break;
+            }
         }
 
         public void Add(Artcc artcc)

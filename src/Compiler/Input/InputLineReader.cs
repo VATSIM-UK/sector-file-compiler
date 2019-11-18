@@ -15,6 +15,7 @@ namespace Compiler.Input
 
             return new SectorFormatData(
                 file.GetPath(),
+                file.GetNameWithoutExtension(),
                 file.ParentFolder(),
                 file.GetAllLines()
             );

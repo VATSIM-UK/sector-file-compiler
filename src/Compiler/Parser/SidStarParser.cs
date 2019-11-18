@@ -37,7 +37,7 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments.Count != 5)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Incorrect number of SIDSTAR segments", data.fileName, i)
+                        new SyntaxError("Incorrect number of SIDSTAR segments", data.fullPath, i)
                     );
                     continue;
                 }
@@ -45,7 +45,7 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments[0] != "SID" && sectorData.dataSegments[0] != "STAR")
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Unknown SIDSTAR type " + sectorData.dataSegments[0], data.fileName, i)
+                        new SyntaxError("Unknown SIDSTAR type " + sectorData.dataSegments[0], data.fullPath, i)
                     ); ;
                     continue;
                 }

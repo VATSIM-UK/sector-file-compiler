@@ -19,7 +19,7 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItReturnsInvalidOnIdentifierTooLong()
         {
-            Point point = PointParser.Parse("ABCDEF", "ABCDEF");
+            Point point = PointParser.Parse("ABCDEFG", "ABCDEFG");
             Assert.Equal(PointParser.invalidPoint, point);
         }
 

@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Error;
-using System.Linq;
 
 namespace Compiler.Parser
 {
-    public class VorParser : AbstractSectorElementParser
+    public class AirwayParser : AbstractSectorElementParser
     {
-        private readonly SectorElementCollection elements;
         private readonly ISectorLineParser sectorLineParser;
-        private readonly IFrequencyParser frequencyParser;
+        private readonly AirwayType airwayType;
+        private readonly SectorElementCollection elements;
         private readonly IEventLogger eventLogger;
 
-        public VorParser(
+        public AirwayParser(
             MetadataParser metadataParser,
             ISectorLineParser sectorLineParser,
-            IFrequencyParser frequencyParser,
+            AirwayType airwayType,
             SectorElementCollection elements,
             IEventLogger eventLogger
         ) : base(metadataParser)
         {
-            this.elements = elements;
             this.sectorLineParser = sectorLineParser;
-            this.frequencyParser = frequencyParser;
+            this.airwayType = airwayType;
+            this.elements = elements;
             this.eventLogger = eventLogger;
         }
 
@@ -42,41 +42,41 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments.Count != 4)
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Incorrect number of VOR segments", data.fullPath, i)
+                        new SyntaxError("Incorrect number of Airway segments", data.fullPath, i)
                     );
                     continue;
                 }
 
-                // Check the identifier
-                if (sectorData.dataSegments[0].Any(char.IsDigit) || sectorData.dataSegments[0].Length != 3)
+                // Parse the airway segment point
+                Point startPoint = PointParser.Parse(sectorData.dataSegments[0], sectorData.dataSegments[1]);
+                if (startPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid VOR identifier: " + sectorData.dataSegments[1], data.fullPath, i)
+                        new SyntaxError("Invalid Airway start point format: " + data.lines[i], data.fullPath, i)
                     );
                     return;
                 }
 
-                // Parse the frequency
-                if (this.frequencyParser.ParseFrequency(sectorData.dataSegments[1]) == null)
+
+                // Parse the segment endpoint
+                Point endPoint = PointParser.Parse(sectorData.dataSegments[2], sectorData.dataSegments[3]);
+                if (endPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid VOR frequency: " + sectorData.dataSegments[1], data.fullPath, i)
+                        new SyntaxError("Invalid Airway end point format: " + data.lines[i], data.fullPath, i)
                     );
                     return;
                 }
 
-                // Parse the coordinate
-                Coordinate parsedCoordinate = CoordinateParser.Parse(sectorData.dataSegments[2], sectorData.dataSegments[3]);
-                if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
-                {
-                    this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid coordinate format: " + data.lines[i], data.fullPath, i)
-                    );
-                    return;
-                }
-
+                // Add it
                 this.elements.Add(
-                    new Vor(sectorData.dataSegments[0], sectorData.dataSegments[1], parsedCoordinate, sectorData.comment)
+                    new Airway(
+                        data.fileName,
+                        this.airwayType,
+                        startPoint,
+                        endPoint,
+                        sectorData.comment
+                    )
                 );
             }
         }

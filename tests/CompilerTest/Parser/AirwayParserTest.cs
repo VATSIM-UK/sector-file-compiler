@@ -9,30 +9,44 @@ using Compiler.Output;
 
 namespace CompilerTest.Parser
 {
-    public class ArtccParserTest
+    public class AirwayParserTest
     {
-        private readonly ArtccParser parser;
+        private readonly AirwayParser parser;
 
         private readonly SectorElementCollection collection;
 
         private readonly Mock<IEventLogger> log;
 
-        public ArtccParserTest()
+        public AirwayParserTest()
         {
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
-            this.parser = (ArtccParser)(new SectionParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.SCT_ARTCC);
+            this.parser = (AirwayParser)(new SectionParserFactory(this.collection, this.log.Object))
+                .GetParserForSection(OutputSections.SCT_LOW_AIRWAY);
         }
 
         [Fact]
         public void TestItRaisesSyntaxErrorNotEnoughSegments()
         {
             SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
+                "UN864.txt",
+                "UN864",
                 "EGHI",
-                new List<string>(new string[] { "EGTT London FIR" })
+                new List<string>(new string[] { "BHD BHD DIKAS" })
+            );
+            this.parser.ParseData(data);
+
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
+        [Fact]
+        public void TestItRaisesSyntaxErrorTooManySegments()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "UN864.txt",
+                "UN864",
+                "EGHI",
+                new List<string>(new string[] { "BHD BHD DIKAS DIKAS EXMOR" })
             );
             this.parser.ParseData(data);
 
@@ -43,10 +57,10 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorInvalidEndPoint()
         {
             SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
+                "UN864.txt",
+                "UN864",
                 "EGHI",
-                new List<string>(new string[] { "EGTT London FIR N050.57.00.000 W001.21.24.490 N050.57.00.000 N001.21.24.490" })
+                new List<string>(new string[] { "N050.57.00.000 W001.21.24.490 N050.57.00.000 N001.21.24.490" })
             );
             this.parser.ParseData(data);
 
@@ -57,10 +71,10 @@ namespace CompilerTest.Parser
         public void TestItRaisesSyntaxErrorInvalidStartPoint()
         {
             SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
+                "UN864.txt",
+                "UN864",
                 "EGHI",
-                new List<string>(new string[] { "EGTT London FIR N050.57.00.000 N001.21.24.490 N050.57.00.000 W001.21.24.490" })
+                new List<string>(new string[] { "N050.57.00.000 N001.21.24.490 N050.57.00.000 W001.21.24.490" })
             );
             this.parser.ParseData(data);
 
@@ -71,30 +85,30 @@ namespace CompilerTest.Parser
         public void TestItHandlesMetadata()
         {
             SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
+                "UN864.txt",
+                "UN864",
                 "test",
                 new List<string>(new string[] { "" })
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_ARTCC][0]);
+            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_LOW_AIRWAY][0]);
         }
 
         [Fact]
         public void TestItAddsAirwayData()
         {
             SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
+                "UN864.txt",
+                "UN864",
                 "EGHI",
-                new List<string>(new string[] { "EGTT London FIR   N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" })
+                new List<string>(new string[] { "N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" })
             );
             this.parser.ParseData(data);
 
-            Artcc result = this.collection.Artccs[0];
-            Assert.Equal("EGTT London FIR", result.Identifier);
-            Assert.Equal(ArtccType.REGULAR, result.Type);
+            Airway result = this.collection.LowAirways[0];
+            Assert.Equal("UN864", result.Identifier);
+            Assert.Equal(AirwayType.LOW, result.Type);
             Assert.Equal(new Point(new Coordinate("N050.57.00.001", "W001.21.24.490")), result.StartPoint);
             Assert.Equal(new Point(new Coordinate("N050.57.00.002", "W001.21.24.490")), result.EndPoint);
             Assert.Equal("comment", result.Comment);
@@ -104,16 +118,16 @@ namespace CompilerTest.Parser
         public void TestItAddsAirwayDataWithIdentifiers()
         {
             SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
+                "UN864.txt",
+                "UN864",
                 "EGHI",
-                new List<string>(new string[] { "EGTT London FIR   DIKAS DIKAS BHD BHD;comment" })
+                new List<string>(new string[] { "DIKAS DIKAS BHD BHD;comment" })
             );
             this.parser.ParseData(data);
 
-            Artcc result = this.collection.Artccs[0];
-            Assert.Equal("EGTT London FIR", result.Identifier);
-            Assert.Equal(ArtccType.REGULAR, result.Type);
+            Airway result = this.collection.LowAirways[0];
+            Assert.Equal("UN864", result.Identifier);
+            Assert.Equal(AirwayType.LOW, result.Type);
             Assert.Equal(new Point("DIKAS"), result.StartPoint);
             Assert.Equal(new Point("BHD"), result.EndPoint);
             Assert.Equal("comment", result.Comment);

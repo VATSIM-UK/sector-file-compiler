@@ -36,19 +36,19 @@ namespace Compiler.Parser
 
                 if (sectorData.dataSegments.Count != 3)
                 {
-                    this.errorLog.AddEvent(new SyntaxError("Invalid number of colour definition segments", data.fileName, i + 1));
+                    this.errorLog.AddEvent(new SyntaxError("Invalid number of colour definition segments", data.fullPath, i + 1));
                     continue;
                 }
 
                 if (sectorData.dataSegments[0] != "#define")
                 {
-                    this.errorLog.AddEvent(new SyntaxError("Colour definitions must begin with #define", data.fileName, i + 1));
+                    this.errorLog.AddEvent(new SyntaxError("Colour definitions must begin with #define", data.fullPath, i + 1));
                     continue;
                 }
 
                 if (!int.TryParse(sectorData.dataSegments[2], out int colourValue))
                 {
-                    this.errorLog.AddEvent(new SyntaxError("Colour values must be an integer", data.fileName, i + 1));
+                    this.errorLog.AddEvent(new SyntaxError("Colour values must be an integer", data.fullPath, i + 1));
                     continue;
                 }
 
