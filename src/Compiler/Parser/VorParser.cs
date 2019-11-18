@@ -42,7 +42,7 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments.Count != 4)
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Incorrect number of VOR segments", data.fileName, i)
+                        new SyntaxError("Incorrect number of VOR segments", data.fullPath, i)
                     );
                     continue;
                 }
@@ -51,7 +51,7 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments[0].Any(char.IsDigit) || sectorData.dataSegments[0].Length != 3)
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid VOR identifier: " + sectorData.dataSegments[1], data.fileName, i)
+                        new SyntaxError("Invalid VOR identifier: " + sectorData.dataSegments[1], data.fullPath, i)
                     );
                     return;
                 }
@@ -60,7 +60,7 @@ namespace Compiler.Parser
                 if (this.frequencyParser.ParseFrequency(sectorData.dataSegments[1]) == null)
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid VOR frequency: " + sectorData.dataSegments[1], data.fileName, i)
+                        new SyntaxError("Invalid VOR frequency: " + sectorData.dataSegments[1], data.fullPath, i)
                     );
                     return;
                 }
@@ -70,7 +70,7 @@ namespace Compiler.Parser
                 if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid coordinate format: " + data.lines[i], data.fileName, i)
+                        new SyntaxError("Invalid coordinate format: " + data.lines[i], data.fullPath, i)
                     );
                     return;
                 }

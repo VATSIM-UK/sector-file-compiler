@@ -40,7 +40,7 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments.Count != 3)
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Incorrect number of FIX segments", data.fileName, i)
+                        new SyntaxError("Incorrect number of FIX segments", data.fullPath, i)
                     );
                     continue;
                 }
@@ -50,7 +50,7 @@ namespace Compiler.Parser
                 if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid coordinate format: " + data.lines[i], data.fileName, i)
+                        new SyntaxError("Invalid coordinate format: " + data.lines[i], data.fullPath, i)
                     );
                     return;
                 }

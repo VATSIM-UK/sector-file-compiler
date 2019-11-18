@@ -56,7 +56,7 @@ namespace Compiler.Parser
                 }
 
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid number of airport lines", data.fileName, 0)
+                    new SyntaxError("Invalid number of airport lines", data.fullPath, 0)
                 );
                 return;
             }
@@ -65,7 +65,7 @@ namespace Compiler.Parser
             if (linesParsed != 3)
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid number of airport lines", data.fileName, 0)
+                    new SyntaxError("Invalid number of airport lines", data.fullPath, 0)
                 );
                 return;
             }
@@ -74,7 +74,7 @@ namespace Compiler.Parser
             if (coordinateLine.dataSegments.Count != 2)
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid coordinate format: " + data.lines[1], data.fileName, 0)
+                    new SyntaxError("Invalid coordinate format: " + data.lines[1], data.fullPath, 0)
                 );
                 return;
             }
@@ -83,7 +83,7 @@ namespace Compiler.Parser
             if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid coordinate format: " + data.lines[1], data.fileName, 0)
+                    new SyntaxError("Invalid coordinate format: " + data.lines[1], data.fullPath, 0)
                 );
                 return;
             }
