@@ -36,7 +36,7 @@ namespace Compiler.Model
 
 
             pointsString = String.Format(
-                "{0}{1}\r\n",
+                "{0}",
                 this.CompilePointsLine(this.Points[0], this.Points[1])
             );
 
