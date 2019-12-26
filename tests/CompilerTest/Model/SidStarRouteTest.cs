@@ -4,57 +4,64 @@ using Compiler.Model;
 
 namespace CompilerTest.Model
 {
-    public class SidStarTest
+    public class SidStarRouteTest
     {
-        private readonly SidStar sidStar;
+        private readonly SidStarRoute sidStar;
 
-        public SidStarTest()
+        private List<Point> points;
+
+        public SidStarRouteTest()
         {
-            this.sidStar = new SidStar(
-                "SID",
-                "EGKK",
-                "26L",
-                "ADMAG2X",
-                new List<string>(new string[] { "FIX1", "FIX2", "FIX3" }),
+            this.points = new List<Point>();
+            this.sidStar = new SidStarRoute(
+                "EGKK - ADMAG2X",
+                this.points,
                 null
             );
         }
 
         [Fact]
-        public void TestItSetsType()
-        {
-            Assert.Equal("SID", this.sidStar.Type);
-        }
-
-        [Fact]
-        public void TestItSetsAirfield()
-        {
-            Assert.Equal("EGKK", this.sidStar.Airport);
-        }
-
-        [Fact]
-        public void TestItSetsRunway()
-        {
-            Assert.Equal("26L", this.sidStar.Runway);
-        }
-
-        [Fact]
         public void TestItSetsIdentifier()
         {
-            Assert.Equal("ADMAG2X", this.sidStar.Identifier);
+            Assert.Equal("EGKK - ADMAG2X", this.sidStar.Identifier);
         }
 
         [Fact]
-        public void TestItSetsRoute()
+        public void TestItSetsPoints()
         {
-            Assert.Equal(new List<string>(new string[] { "FIX1", "FIX2", "FIX3" }), this.sidStar.Route);
+            this.points.Add(new Point("LAM"));
+            this.points.Add(new Point("BIG"));
+            Assert.Equal(this.points, this.sidStar.Points);
         }
 
         [Fact]
         public void TestItCompiles()
         {
+            this.points.Add(new Point("LAM"));
+            this.points.Add(new Point("BIG"));
+            this.points.Add(new Point("OCK"));
+
+            string expected = "EGKK - ADMAG2X".PadRight(27);
+            expected += "LAM LAM BIG BIG\r\n";
+            expected = "".PadLeft(27) + "BIG BIG OCK OCK\r\n";
+
             Assert.Equal(
-                "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 FIX3\r\n",
+                expected,
+                this.sidStar.Compile()
+            );
+        }
+
+        [Fact]
+        public void TestItCompilesTwoFixes()
+        {
+            this.points.Add(new Point("LAM"));
+            this.points.Add(new Point("BIG"));
+
+            string expected = "EGKK - ADMAG2X".PadRight(27);
+            expected += "LAM LAM BIG BIG\r\n";
+
+            Assert.Equal(
+                expected,
                 this.sidStar.Compile()
             );
         }
@@ -62,13 +69,16 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompilesWithComment()
         {
-            SidStar sid = new SidStar(
-                "SID",
-                "EGKK",
-                "26L",
-                "ADMAG2X",
-                new List<string>(new string[] { "FIX1", "FIX2", "FIX3" }),
-                "comment"
+            this.points.Add(new Point("LAM"));
+            this.points.Add(new Point("BIG"));
+
+            string expected = "EGKK - ADMAG2X".PadRight(27);
+            expected += "LAM LAM BIG BIG\r\n";
+
+            SidStarRoute sid = new SidStarRoute(
+                "EGKK - ADMAG2X",
+                this.points,
+                "Test"
             );
 
             Assert.Equal(
