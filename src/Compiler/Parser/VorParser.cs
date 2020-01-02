@@ -48,8 +48,10 @@ namespace Compiler.Parser
                 }
 
                 // Check the identifier
-                if (sectorData.dataSegments[0].Any(char.IsDigit) || sectorData.dataSegments[0].Length != 3)
-                {
+                if (
+                    sectorData.dataSegments[0].Any(char.IsDigit) ||
+                    (sectorData.dataSegments[0].Length != 2 && sectorData.dataSegments[0].Length != 3)
+                ) {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid VOR identifier: " + sectorData.dataSegments[1], data.fullPath, i)
                     );
