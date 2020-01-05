@@ -8,8 +8,6 @@ namespace CompilerTest.Model
     {
         private readonly RouteSegment segment;
 
-        private List<Point> points;
-
         public RouteSegmentTest()
         {
             this.segment = new RouteSegment(
