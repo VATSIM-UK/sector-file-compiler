@@ -4,58 +4,32 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class SidStarRoute : AbstractSectorElement, ICompilable
+    public class SidStarRoute : ICompilable
     {
         public SidStarRoute(
+            string type,
             string identifier,
-            List<Point> points,
-            string comment
-        )
-            : base(comment)
-        {
+            List<RouteSegment> segments
+        ) {
+            Type = type;
             Identifier = identifier;
-            Points = points;
+            Segments = segments;
         }
 
+        public string Type { get; }
         public string Identifier { get; }
-        public List<Point> Points { get; }
+        public List<RouteSegment> Segments { get; }
 
         public string Compile()
         {
-            return String.Format(
-                "{0}{1}{2}",
-                this.Identifier.PadRight(27, ' '),
-                this.CompilePointsString(),
-                this.CompileComment()
-            );
-        }
+            string output = this.Identifier.PadRight(27, ' ') + this.Segments[0].Compile();
 
-        private string CompilePointsString()
-        {
-            string pointsString;
-
-
-            pointsString = String.Format(
-                "{0}",
-                this.CompilePointsLine(this.Points[0], this.Points[1])
-            );
-
-            for (int i = 1; i < this.Points.Count - 1; i++)
+            for (int i = 1; i < this.Segments.Count; i++)
             {
-                pointsString += String.Format(
-                    "{0}{1}\r\n",
-                    "".PadRight(27),
-                    this.CompilePointsLine(this.Points[i], this.Points[i + 1])
-                );
+                output += "".PadRight(27) + this.Segments[i].Compile();
             }
 
-            return pointsString;
-
-        }
-
-        private string CompilePointsLine(Point start, Point end)
-        {
-            return start.Compile() + " " + end.Compile();
+            return output;
         }
     }
 }
