@@ -82,6 +82,20 @@ namespace CompilerTest.Parser
         }
 
         [Fact]
+        public void TestItRaisesSyntaxErrorIdentifierTooShort()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "EGHI",
+                new List<string>(new string[] { "B 112.050 N050.57.00.000 W001.21.24.490" })
+            );
+            this.parser.ParseData(data);
+
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
+        [Fact]
         public void TestItRaisesSyntaxErrorInvalidFrequency()
         {
             SectorFormatData data = new SectorFormatData(
@@ -136,6 +150,24 @@ namespace CompilerTest.Parser
 
             Vor result = this.collection.Vors[0];
             Assert.Equal("BHD", result.Identifier);
+            Assert.Equal("112.050", result.Frequency);
+            Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.Coordinate);
+            Assert.Equal("comment", result.Comment);
+        }
+
+        [Fact]
+        public void TestItAddsVorDataTwoLetterIdentifier()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "EGHI",
+                new List<string>(new string[] { "BH 112.050 N050.57.00.000 W001.21.24.490;comment" })
+            );
+            this.parser.ParseData(data);
+
+            Vor result = this.collection.Vors[0];
+            Assert.Equal("BH", result.Identifier);
             Assert.Equal("112.050", result.Frequency);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.Coordinate);
             Assert.Equal("comment", result.Comment);
