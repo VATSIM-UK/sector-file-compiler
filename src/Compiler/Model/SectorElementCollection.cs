@@ -23,6 +23,8 @@ namespace Compiler.Model
         public List<Artcc> HighArtccs { get; } = new List<Artcc>();
         public List<Airway> LowAirways { get; } = new List<Airway>();
         public List<Airway> HighAirways { get; } = new List<Airway>();
+        public List<SidStarRoute> SidRoutes { get; } = new List<SidStarRoute>();
+        public List<SidStarRoute> StarRoutes { get; } = new List<SidStarRoute>();
 
         public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
 
@@ -97,6 +99,21 @@ namespace Compiler.Model
         {
             this.Compilables[OutputSections.ESE_SIDSSTARS].Add(sidStar);
             this.SidStars.Add(sidStar);
+        }
+
+        public void Add(SidStarRoute sidStar)
+        {
+            switch (sidStar.Type)
+            {
+                case SidStarType.SID:
+                    this.SidRoutes.Add(sidStar);
+                    this.Compilables[OutputSections.SCT_SID].Add(sidStar);
+                    break;
+                case SidStarType.STAR:
+                    this.StarRoutes.Add(sidStar);
+                    this.Compilables[OutputSections.SCT_STAR].Add(sidStar);
+                    break;
+            }
         }
 
         public void Add(Vor vor)

@@ -14,7 +14,7 @@ namespace CompilerTest.Model
         {
             this.segments = new List<RouteSegment>();
             this.sidStar = new SidStarRoute(
-                "SID",
+                SidStarType.SID,
                 "EGKK - ADMAG2X",
                 this.segments
             );

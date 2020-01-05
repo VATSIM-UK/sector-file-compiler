@@ -7,7 +7,7 @@ namespace Compiler.Model
     public class SidStarRoute : ICompilable
     {
         public SidStarRoute(
-            string type,
+            SidStarType type,
             string identifier,
             List<RouteSegment> segments
         ) {
@@ -16,7 +16,7 @@ namespace Compiler.Model
             Segments = segments;
         }
 
-        public string Type { get; }
+        public SidStarType Type { get; }
         public string Identifier { get; }
         public List<RouteSegment> Segments { get; }
 
