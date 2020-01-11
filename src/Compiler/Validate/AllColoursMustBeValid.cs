@@ -1,6 +1,7 @@
 ﻿using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
+using Compiler.Argument;
 
 namespace Compiler.Validate
 {
@@ -10,7 +11,7 @@ namespace Compiler.Validate
         const int GREEN_BITMASK = 65280;
         const int BLUE_BITMASK = 16711680;
 
-        public void Validate(SectorElementCollection sectorElements, IEventLogger events)
+        public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
             foreach (Colour colour in sectorElements.Colours)
             {

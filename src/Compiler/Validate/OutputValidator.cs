@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Compiler.Model;
 using Compiler.Event;
+using Compiler.Argument;
 
 namespace Compiler.Validate
 {
@@ -22,11 +23,11 @@ namespace Compiler.Validate
             new AllSctStarsMustHaveJoinedRoute(),
         };
 
-        public static void Validate(SectorElementCollection sectorElements, IEventLogger events)
+        public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
             foreach (IValidationRule rule in OutputValidator.validationRules)
             {
-                rule.Validate(sectorElements, events);
+                rule.Validate(sectorElements, args, events);
             }
         }
     }

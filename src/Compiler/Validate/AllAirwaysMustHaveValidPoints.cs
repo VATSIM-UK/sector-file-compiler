@@ -4,33 +4,33 @@ using System.Text;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
+using Compiler.Argument;
 
 namespace Compiler.Validate
 {
-    public class AllArtccsMustHaveValidPoints : IValidationRule
+    public class AllAirwaysMustHaveValidPoints : IValidationRule
     {
-        public void Validate(SectorElementCollection sectorElements, IEventLogger events)
+        public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            this.TestArtccCategory(sectorElements.Artccs, sectorElements, events);
-            this.TestArtccCategory(sectorElements.LowArtccs, sectorElements, events);
-            this.TestArtccCategory(sectorElements.HighArtccs, sectorElements, events);
+            this.TestAirwayCategory(sectorElements.LowAirways, sectorElements, events);
+            this.TestAirwayCategory(sectorElements.HighAirways, sectorElements, events);
         }
 
-        private void TestArtccCategory(
-            List<Artcc> artccs,
+        private void TestAirwayCategory(
+            List<Airway> airways,
             SectorElementCollection sectorElements,
             IEventLogger events
         ) {
-            foreach (Artcc artcc in artccs)
+            foreach (Airway airway in airways)
             {
-                if (artcc.StartPoint.Type() == Point.TYPE_IDENTIFIER)
+                if (airway.StartPoint.Type() == Point.TYPE_IDENTIFIER)
                 {
-                    if (this.InvalidPoint(artcc.StartPoint.Identifier, sectorElements))
+                    if (this.InvalidPoint(airway.StartPoint.Identifier, sectorElements))
                     {
                         string message = String.Format(
-                            "Invalid end point {0} on ARTCC segment for {1}",
-                            artcc.StartPoint.Identifier,
-                            artcc.Identifier
+                            "Invalid end point {0} on Airway segment for {1}",
+                            airway.StartPoint.Identifier,
+                            airway.Identifier
                         );
                         events.AddEvent(
                             new ValidationRuleFailure(message)
@@ -38,14 +38,14 @@ namespace Compiler.Validate
                     }
                 }
 
-                if (artcc.EndPoint.Type() == Point.TYPE_IDENTIFIER)
+                if (airway.EndPoint.Type() == Point.TYPE_IDENTIFIER)
                 {
-                    if (this.InvalidPoint(artcc.EndPoint.Identifier, sectorElements))
+                    if (this.InvalidPoint(airway.EndPoint.Identifier, sectorElements))
                     {
                         string message = String.Format(
-                            "Invalid start point {0} on ARTCC segment for {1}",
-                            artcc.EndPoint.Identifier,
-                            artcc.Identifier
+                            "Invalid start point {0} on Airway segment for {1}",
+                            airway.EndPoint.Identifier,
+                            airway.Identifier
                         );
                         events.AddEvent(
                             new ValidationRuleFailure(message)

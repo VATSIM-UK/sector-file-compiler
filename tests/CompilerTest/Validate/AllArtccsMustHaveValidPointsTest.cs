@@ -4,6 +4,7 @@ using Compiler.Error;
 using Compiler.Event;
 using Compiler.Validate;
 using Moq;
+using Compiler.Argument;
 
 namespace CompilerTest.Validate
 {
@@ -12,6 +13,7 @@ namespace CompilerTest.Validate
         private readonly SectorElementCollection sectorElements;
         private readonly Mock<IEventLogger> loggerMock;
         private readonly AllArtccsMustHaveValidPoints rule;
+        private readonly CompilerArguments args;
 
         public AllArtccsMustHaveValidPointsTest()
         {
@@ -24,6 +26,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(new Airport("testairport", "testairport", new Coordinate("abc", "def"), "123.456", "test"));
 
             this.rule = new AllArtccsMustHaveValidPoints();
+            this.args = new CompilerArguments();
         }
 
         private Artcc GetArtcc(ArtccType type, string startPointIdentifier, string endPointIdentifier)
@@ -35,7 +38,7 @@ namespace CompilerTest.Validate
         public void TestItPassesOnValidPointRegular()
         {
             this.sectorElements.Add(this.GetArtcc(ArtccType.REGULAR, "testfix", "testvor"));
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -44,7 +47,7 @@ namespace CompilerTest.Validate
         public void TestItFailsOnInvalidStartPointRegular()
         {
             this.sectorElements.Add(this.GetArtcc(ArtccType.REGULAR, "nottestfix", "testvor"));
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
@@ -53,7 +56,7 @@ namespace CompilerTest.Validate
         public void TestItFailsOnInvalidEndPointRegular()
         {
             this.sectorElements.Add(this.GetArtcc(ArtccType.REGULAR, "testfix", "nottestvor"));
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
@@ -62,7 +65,7 @@ namespace CompilerTest.Validate
         public void TestItPassesOnValidPointLow()
         {
             this.sectorElements.Add(this.GetArtcc(ArtccType.LOW, "testfix", "testvor"));
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -71,7 +74,7 @@ namespace CompilerTest.Validate
         public void TestItFailsOnInvalidStartPointLow()
         {
             this.sectorElements.Add(this.GetArtcc(ArtccType.LOW, "nottestfix", "testvor"));
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
@@ -80,7 +83,7 @@ namespace CompilerTest.Validate
         public void TestItFailsOnInvalidEndPointLow()
         {
             this.sectorElements.Add(this.GetArtcc(ArtccType.LOW, "testfix", "nottestvor"));
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
@@ -89,7 +92,7 @@ namespace CompilerTest.Validate
         public void TestItPassesOnValidPointHigh()
         {
             this.sectorElements.Add(this.GetArtcc(ArtccType.HIGH, "testfix", "testvor"));
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -98,7 +101,7 @@ namespace CompilerTest.Validate
         public void TestItFailsOnInvalidStartPointHigh()
         {
             this.sectorElements.Add(this.GetArtcc(ArtccType.HIGH, "nottestfix", "testvor"));
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
@@ -107,7 +110,7 @@ namespace CompilerTest.Validate
         public void TestItFailsOnInvalidEndPointHigh()
         {
             this.sectorElements.Add(this.GetArtcc(ArtccType.HIGH, "testfix", "nottestvor"));
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }

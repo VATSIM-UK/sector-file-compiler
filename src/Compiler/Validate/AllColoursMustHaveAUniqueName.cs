@@ -2,12 +2,14 @@
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
+using Compiler.Output;
+using Compiler.Argument;
 
 namespace Compiler.Validate
 {
     public class AllColoursMustHaveAUniqueId : IValidationRule
     {
-        public void Validate(SectorElementCollection sectorElements, IEventLogger events)
+        public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
             List<string> coloursProcessed = new List<string>();
             foreach (Colour colour in sectorElements.Colours)

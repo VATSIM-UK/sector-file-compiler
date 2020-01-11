@@ -5,6 +5,7 @@ using Compiler.Error;
 using Compiler.Event;
 using Compiler.Validate;
 using Moq;
+using Compiler.Argument;
 
 namespace CompilerTest.Validate
 {
@@ -13,6 +14,7 @@ namespace CompilerTest.Validate
         private readonly SectorElementCollection sectorElements;
         private readonly Mock<IEventLogger> loggerMock;
         private readonly AllSctSidsMustHaveAValidRoute rule;
+        private readonly CompilerArguments args;
 
         public AllSctSidsMustHaveAValidRouteTest()
         {
@@ -23,6 +25,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(new Ndb("testndb", "123.456", new Coordinate("abc", "def"), "test"));
             this.sectorElements.Add(new Airport("testairport", "testairport", new Coordinate("abc", "def"), "123.456", "test"));
             this.rule = new AllSctSidsMustHaveAValidRoute();
+            this.args = new CompilerArguments();
         }
 
         [Fact]
@@ -44,7 +47,7 @@ namespace CompilerTest.Validate
             );
 
             this.sectorElements.Add(route);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -70,7 +73,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(route);
             this.sectorElements.Fixes.Clear();
 
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(2));
         }
@@ -96,7 +99,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(route);
             this.sectorElements.Vors.Clear();
 
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(2));
         }
@@ -122,7 +125,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(route);
             this.sectorElements.Ndbs.Clear();
 
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(2));
         }
@@ -148,7 +151,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(route);
             this.sectorElements.Airports.Clear();
 
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(2));
         }

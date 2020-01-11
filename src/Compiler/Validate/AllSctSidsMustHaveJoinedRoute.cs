@@ -4,6 +4,7 @@ using System.Text;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
+using Compiler.Argument;
 
 namespace Compiler.Validate
 {
@@ -16,14 +17,10 @@ namespace Compiler.Validate
             null
         );
 
-        public void Validate(SectorElementCollection sectorElements, IEventLogger events)
+        public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
             foreach (SidStarRoute sid in sectorElements.SidRoutes)
             {
-                if (sid.Identifier == "EGAA Aldergrove SMAA")
-                {
-                    bool test = true;
-                }
                 if (!CheckRoute(sid.Segments))
                 {
                     string message = String.Format(
@@ -52,8 +49,6 @@ namespace Compiler.Validate
             {
                 if (!segments[i - 1].End.Equals(segments[i].Start))
                 {
-                    string seg1 = segments[i - 1].Compile();
-                    string seg2 = segments[i].Compile();
                     return false;
                 }
             }

@@ -5,6 +5,7 @@ using Compiler.Error;
 using Compiler.Event;
 using Compiler.Validate;
 using Moq;
+using Compiler.Argument;
 
 namespace CompilerTest.Validate
 {
@@ -13,12 +14,14 @@ namespace CompilerTest.Validate
         private readonly SectorElementCollection sectorElements;
         private readonly Mock<IEventLogger> loggerMock;
         private readonly AllSctStarsMustHaveJoinedRoute rule;
+        private readonly CompilerArguments args;
 
         public AllSctStarsMustHaveJoinedRouteTest()
         {
             this.sectorElements = new SectorElementCollection();
             this.loggerMock = new Mock<IEventLogger>();
             this.rule = new AllSctStarsMustHaveJoinedRoute();
+            this.args = new CompilerArguments();
         }
 
         [Fact]
@@ -39,7 +42,7 @@ namespace CompilerTest.Validate
             );
 
             this.sectorElements.Add(route);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -58,7 +61,7 @@ namespace CompilerTest.Validate
             );
 
             this.sectorElements.Add(route);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -82,7 +85,7 @@ namespace CompilerTest.Validate
             );
 
             this.sectorElements.Add(route);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -107,7 +110,7 @@ namespace CompilerTest.Validate
             );
 
             this.sectorElements.Add(route);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -129,7 +132,7 @@ namespace CompilerTest.Validate
                 segments
             );
             this.sectorElements.Add(route);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }

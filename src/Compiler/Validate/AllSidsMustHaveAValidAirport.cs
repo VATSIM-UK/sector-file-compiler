@@ -4,12 +4,13 @@ using System.Text;
 using Compiler.Event;
 using Compiler.Error;
 using Compiler.Model;
+using Compiler.Argument;
 
 namespace Compiler.Validate
 {
     public class AllSidsMustHaveAValidAirport : IValidationRule
     {
-        public void Validate(SectorElementCollection sectorElements, IEventLogger events)
+        public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
             foreach(SidStar sidStar in sectorElements.SidStars)
             {
