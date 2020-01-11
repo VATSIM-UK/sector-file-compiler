@@ -15,6 +15,7 @@ namespace CompilerCli.Input
             { "--strip-comments", new StripCommentsParser() },
             { "--strip-newlines", new StripNewlinesParser() },
             { "--build-version", new BuildVersionParser() },
+            { "--force-contiguous-routes", new BuildVersionParser() },
             { "--test-arg", new TestArgumentParser() },
         };
 
