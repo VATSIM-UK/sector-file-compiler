@@ -118,7 +118,7 @@ The input for the compiler is determined through a configuration file in JSON fo
 
 `--build-version` - Takes a single argument. Specifies the version of the build to replace the `{VERSION}` token in the input.
 
-`--force-contiguous-routes` - If set, forces SIDs and STARs in the SCT to have contiguous (fully joined up routes).
+`--force-contiguous-routes` - If set, forces SIDs and STARs in the SCT to have contiguous routes (no gaps).
 
 ### Token Replacements
 
