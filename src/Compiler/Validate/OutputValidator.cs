@@ -10,6 +10,7 @@ namespace Compiler.Validate
         private static readonly List<IValidationRule> validationRules = new List<IValidationRule>
         {
             new AllAirportsMustHaveUniqueCode(),
+            new AllAirwaysMustHaveValidPoints(),
             new AllArtccsMustHaveValidPoints(),
             new AllColoursMustBeValid(),
             new AllColoursMustHaveAUniqueId(),
