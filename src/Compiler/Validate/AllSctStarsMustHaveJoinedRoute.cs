@@ -9,6 +9,13 @@ namespace Compiler.Validate
 {
     public class AllSctStarsMustHaveJoinedRoute : IValidationRule
     {
+        // A coordinate that some routes have at the start, so we ignore it for validation
+        private readonly RouteSegment defaultStarter = new RouteSegment(
+            new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
+            new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
+            null
+        );
+
         public void Validate(SectorElementCollection sectorElements, IEventLogger events)
         {
             foreach (SidStarRoute sid in sectorElements.StarRoutes)
@@ -28,12 +35,14 @@ namespace Compiler.Validate
 
         private bool CheckRoute(List<RouteSegment> segments)
         {
-            if (segments.Count == 1)
-            {
+            if (
+                segments.Count == 1 || 
+                (segments.Count == 2 && segments[0] == this.defaultStarter)
+            ) {
                 return true;
             }
 
-            for (int i = 1; i < segments.Count; i++)
+            for (int i = 2; i < segments.Count; i++)
             {
                 if (!segments[i - 1].End.Equals(segments[i].Start)) {
                     return false;
