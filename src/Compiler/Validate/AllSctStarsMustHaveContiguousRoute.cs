@@ -8,7 +8,7 @@ using Compiler.Argument;
 
 namespace Compiler.Validate
 {
-    public class AllSctSidsMustHaveJoinedRoute : IValidationRule
+    public class AllSctStarsMustHaveContiguousRoute : IValidationRule
     {
         // A coordinate that some routes have at the start, so we ignore it for validation
         private readonly RouteSegment defaultStarter = new RouteSegment(
@@ -19,12 +19,17 @@ namespace Compiler.Validate
 
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            foreach (SidStarRoute sid in sectorElements.SidRoutes)
+            if (!args.EnforceContiguousRouteSegments)
+            {
+                return;
+            }
+
+            foreach (SidStarRoute sid in sectorElements.StarRoutes)
             {
                 if (!CheckRoute(sid.Segments))
                 {
                     string message = String.Format(
-                        "SID route is not continuous for {0}",
+                        "STAR route is not continuous for {0}",
                         sid.Identifier
                     );
                     events.AddEvent(
@@ -34,21 +39,18 @@ namespace Compiler.Validate
             }
         }
 
-        // Make sure the route is all lovely and joined
         private bool CheckRoute(List<RouteSegment> segments)
         {
             if (
-                segments.Count == 1 ||
+                segments.Count == 1 || 
                 (segments.Count == 2 && segments[0] == this.defaultStarter)
-            )
-            {
+            ) {
                 return true;
             }
 
             for (int i = 2; i < segments.Count; i++)
             {
-                if (!segments[i - 1].End.Equals(segments[i].Start))
-                {
+                if (!segments[i - 1].End.Equals(segments[i].Start)) {
                     return false;
                 }
             }
