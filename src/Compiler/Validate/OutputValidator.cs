@@ -18,6 +18,8 @@ namespace Compiler.Validate
             new AllSidsMustHaveAValidRoute(),
             new AllSctSidsMustHaveAValidRoute(),
             new AllSctStarsMustHaveAValidRoute(),
+            new AllSctSidsMustHaveJoinedRoute(),
+            new AllSctStarsMustHaveJoinedRoute(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, IEventLogger events)
