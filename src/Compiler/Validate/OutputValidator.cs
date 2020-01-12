@@ -22,6 +22,8 @@ namespace Compiler.Validate
             new AllSctStarsMustHaveAValidRoute(),
             new AllSctSidsMustHaveContiguousRoute(),
             new AllSctStarsMustHaveContiguousRoute(),
+            new AllSctSidsMustHaveValidColours(),
+            new AllSctStarsMustHaveValidColours()
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)

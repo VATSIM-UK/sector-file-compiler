@@ -7,10 +7,6 @@ namespace Compiler.Validate
 {
     public class AllColoursMustBeValid : IValidationRule
     {
-        const int RED_BITMASK = 255;
-        const int GREEN_BITMASK = 65280;
-        const int BLUE_BITMASK = 16711680;
-
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
             foreach (Colour colour in sectorElements.Colours)
