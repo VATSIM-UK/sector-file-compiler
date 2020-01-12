@@ -9,16 +9,19 @@ namespace Compiler.Model
         public RouteSegment(
             Point start,
             Point end,
-            string comment
+            string colour = null,
+            string comment = null
         )
             : base(comment)
         {
             Start = start;
             End = end;
+            Colour = colour;
         }
 
         public Point Start { get; }
         public Point End { get; }
+        public string Colour { get; }
 
         public override bool Equals(Object obj)
         {
@@ -29,7 +32,12 @@ namespace Compiler.Model
             }
 
             RouteSegment segment = (RouteSegment)obj;
-            return this.Start.Equals(segment.Start) && this.End.Equals(segment.End);
+            return this.Start.Equals(segment.Start) &&
+                this.End.Equals(segment.End) &&
+                (
+                    (this.Colour == null && segment.Colour == null) || 
+                    (this.Colour != null && segment.Colour != null && this.Colour.Equals(segment.Colour))
+                );
         }
 
         public override int GetHashCode()
@@ -40,9 +48,10 @@ namespace Compiler.Model
         public string Compile()
         {
             return String.Format(
-                "{0} {1}{2}\r\n",
+                "{0} {1}{2}{3}\r\n",
                 this.Start.Compile(),
                 this.End.Compile(),
+                this.Colour == null ? "" : " " + this.Colour,
                 this.CompileComment()
             );
         }

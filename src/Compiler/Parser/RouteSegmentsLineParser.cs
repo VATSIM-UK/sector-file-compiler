@@ -22,15 +22,16 @@ namespace Compiler.Parser
                 );
             }
 
+            // Pad the name section if it's just blank (we can tell alot from this)
             string nameSection = data.Substring(0, 26);
             if (Regex.Replace(nameSection, @"s", "") == "")
             {
-                nameSection = "";
+                nameSection = "".PadRight(26);
             }
 
 
             List<string> dataSplit = new List<string>(data.Substring(26).TrimStart().Split(null));
-            dataSplit.Insert(0, nameSection.Trim());
+            dataSplit.Insert(0, nameSection);
             dataSplit.RemoveAll(s => s == "");
 
             return new SectorFormatLine(

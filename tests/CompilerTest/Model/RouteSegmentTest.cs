@@ -13,6 +13,7 @@ namespace CompilerTest.Model
             this.segment = new RouteSegment(
                 new Point("BIG"),
                 new Point("LAM"),
+                null,
                 null
             );
         }
@@ -39,11 +40,27 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItCompilesWithColour()
+        {
+            RouteSegment segment = new RouteSegment(
+                new Point("BIG"),
+                new Point("LAM"),
+                "FooColour"
+            );
+
+            Assert.Equal(
+                "BIG BIG LAM LAM FooColour\r\n",
+                segment.Compile()
+            );
+        }
+
+        [Fact]
         public void TestItCompilesWithComment()
         {
             RouteSegment segment = new RouteSegment(
                 new Point("BIG"),
                 new Point("LAM"),
+                null,
                 "Foo"
             );
 

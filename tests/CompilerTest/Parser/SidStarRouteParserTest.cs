@@ -95,7 +95,7 @@ namespace CompilerTest.Parser
 
             List<RouteSegment> expectedSegments = new List<RouteSegment>
             {
-                new RouteSegment(new Point("abc"), new Point("def"), null)
+                new RouteSegment(new Point("abc"), new Point("def"), null, null)
             };
 
             SidStarRoute result = this.collection.SidRoutes[0];
@@ -122,8 +122,8 @@ namespace CompilerTest.Parser
 
             List<RouteSegment> expectedSegments = new List<RouteSegment>
             {
-                new RouteSegment(new Point("abc"), new Point("def"), null),
-                new RouteSegment(new Point("def"), new Point("ghi"), "comment")
+                new RouteSegment(new Point("abc"), new Point("def"), null, null),
+                new RouteSegment(new Point("def"), new Point("ghi"), null, "comment")
             };
 
             SidStarRoute result = this.collection.SidRoutes[0];
@@ -151,13 +151,51 @@ namespace CompilerTest.Parser
 
             List<RouteSegment> expectedSegments1 = new List<RouteSegment>
             {
-                new RouteSegment(new Point("abc"), new Point("def"), null),
-                new RouteSegment(new Point("def"), new Point("ghi"), "comment")
+                new RouteSegment(new Point("abc"), new Point("def"), null, null),
+                new RouteSegment(new Point("def"), new Point("ghi"), null, "comment")
             };
 
             List<RouteSegment> expectedSegments2 = new List<RouteSegment>
             {
-                new RouteSegment(new Point("jkl"), new Point("mno"), "comment"),
+                new RouteSegment(new Point("jkl"), new Point("mno"), null, "comment"),
+            };
+
+            SidStarRoute result = this.collection.SidRoutes[0];
+            Assert.Equal("Test", result.Identifier);
+            Assert.Equal(expectedSegments1, result.Segments);
+
+            SidStarRoute result2 = this.collection.SidRoutes[1];
+            Assert.Equal("Test 2", result2.Identifier);
+            Assert.Equal(expectedSegments2, result2.Segments);
+        }
+
+        [Fact]
+        public void TestItAddsMultipleElementsWithColour()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "test",
+                new List<string>(
+                    new string[] {
+                        "Test                       abc abc def def Red",
+                        "                           def def ghi ghi Yellow ;comment",
+                        "Test 2                     jkl jkl mno mno Blue;comment"
+                    }
+                )
+            );
+
+            this.parser.ParseData(data);
+
+            List<RouteSegment> expectedSegments1 = new List<RouteSegment>
+            {
+                new RouteSegment(new Point("abc"), new Point("def"), "Red", null),
+                new RouteSegment(new Point("def"), new Point("ghi"), "Yellow", "comment")
+            };
+
+            List<RouteSegment> expectedSegments2 = new List<RouteSegment>
+            {
+                new RouteSegment(new Point("jkl"), new Point("mno"), "Blue", "comment"),
             };
 
             SidStarRoute result = this.collection.SidRoutes[0];

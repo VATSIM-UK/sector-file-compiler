@@ -31,7 +31,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatLine expected = new SectorFormatLine(
                 "TEST - 1                  item1 item2 item3 item4",
-                new List<string>(new string[] { "TEST - 1", "item1", "item2", "item3", "item4" }),
+                new List<string>(new string[] { "TEST - 1                  ", "item1", "item2", "item3", "item4" }),
                 null
             );
             Assert.True(
@@ -44,7 +44,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatLine expected = new SectorFormatLine(
                 "                          item1 item2 item3 item4",
-                new List<string>(new string[] { "item1", "item2", "item3", "item4" }),
+                new List<string>(new string[] { "".PadRight(26), "item1", "item2", "item3", "item4" }),
                 null
             );
             Assert.True(
@@ -57,7 +57,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatLine expected = new SectorFormatLine(
                 "TEST - 1                      item1 item2 item3 item4",
-                new List<string>(new string[] { "TEST - 1", "item1", "item2", "item3", "item4" }),
+                new List<string>(new string[] { "TEST - 1                  ", "item1", "item2", "item3", "item4" }),
                 null
             );
             Assert.True(
@@ -70,7 +70,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatLine expected = new SectorFormatLine(
                 "TEST - 1                  item1\titem2 item3 item4",
-                new List<string>(new string[] { "TEST - 1", "item1", "item2", "item3", "item4" }),
+                new List<string>(new string[] { "TEST - 1                  ", "item1", "item2", "item3", "item4" }),
                 null
             );
             Assert.True(
@@ -83,7 +83,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatLine expected = new SectorFormatLine(
                 "TEST - 1                  item1\titem2 item3 item4",
-                new List<string>(new string[] { "TEST - 1", "item1", "item2", "item3", "item4" }),
+                new List<string>(new string[] { "TEST - 1                  ", "item1", "item2", "item3", "item4" }),
                 "comment"
             );
             Assert.True(
@@ -96,7 +96,7 @@ namespace CompilerTest.Parser
         {
             SectorFormatLine expected = new SectorFormatLine(
                 "TEST - 1                  item1   item2 item3 item4",
-                new List<string>(new string[] { "TEST - 1", "item1", "item2", "item3", "item4" }),
+                new List<string>(new string[] { "TEST - 1                  ", "item1", "item2", "item3", "item4" }),
                 null
             );
             Assert.True(
