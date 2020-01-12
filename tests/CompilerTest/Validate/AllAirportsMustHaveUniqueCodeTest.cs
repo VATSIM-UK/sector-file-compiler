@@ -4,6 +4,7 @@ using Compiler.Model;
 using Compiler.Validate;
 using Compiler.Event;
 using Compiler.Error;
+using Compiler.Argument;
 
 namespace CompilerTest.Validate
 {
@@ -15,6 +16,7 @@ namespace CompilerTest.Validate
         private readonly SectorElementCollection elements;
         private readonly AllAirportsMustHaveUniqueCode validator;
         private readonly Mock<IEventLogger> loggerMock;
+        private readonly CompilerArguments args;
 
         public AllAirportsMustHaveUniqueCodeTest()
         {
@@ -24,6 +26,7 @@ namespace CompilerTest.Validate
             this.airfield3 = new Airport("a", "EGKK", new Coordinate("a", "b"), "a", "c");
             this.loggerMock = new Mock<IEventLogger>();
             this.validator = new AllAirportsMustHaveUniqueCode();
+            this.args = new CompilerArguments();
         }
 
         [Fact]
@@ -32,7 +35,7 @@ namespace CompilerTest.Validate
             this.elements.Add(airfield1);
             this.elements.Add(airfield2);
 
-            this.validator.Validate(this.elements, this.loggerMock.Object);
+            this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
 
@@ -43,7 +46,7 @@ namespace CompilerTest.Validate
             this.elements.Add(airfield2);
             this.elements.Add(airfield3);
 
-            this.validator.Validate(this.elements, this.loggerMock.Object);
+            this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
     }

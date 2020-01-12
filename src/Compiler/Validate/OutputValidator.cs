@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Compiler.Model;
 using Compiler.Event;
+using Compiler.Argument;
 
 namespace Compiler.Validate
 {
@@ -9,6 +10,7 @@ namespace Compiler.Validate
         private static readonly List<IValidationRule> validationRules = new List<IValidationRule>
         {
             new AllAirportsMustHaveUniqueCode(),
+            new AllAirwaysMustHaveValidPoints(),
             new AllArtccsMustHaveValidPoints(),
             new AllColoursMustBeValid(),
             new AllColoursMustHaveAUniqueId(),
@@ -16,13 +18,19 @@ namespace Compiler.Validate
             new AllSidsMustBeUnique(),
             new AllSidsMustHaveAValidAirport(),
             new AllSidsMustHaveAValidRoute(),
+            new AllSctSidsMustHaveAValidRoute(),
+            new AllSctStarsMustHaveAValidRoute(),
+            new AllSctSidsMustHaveContiguousRoute(),
+            new AllSctStarsMustHaveContiguousRoute(),
+            new AllSctSidsMustHaveValidColours(),
+            new AllSctStarsMustHaveValidColours()
         };
 
-        public static void Validate(SectorElementCollection sectorElements, IEventLogger events)
+        public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
             foreach (IValidationRule rule in OutputValidator.validationRules)
             {
-                rule.Validate(sectorElements, events);
+                rule.Validate(sectorElements, args, events);
             }
         }
     }

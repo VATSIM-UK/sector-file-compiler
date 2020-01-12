@@ -104,6 +104,22 @@ namespace Compiler.Parser
                         this.sectorElements,
                         this.logger
                     );
+                case OutputSections.SCT_SID:
+                    return new SidStarRouteParser(
+                        this.GetMetadataParser(section),
+                        new RouteSegmentsLineParser(),
+                        this.sectorElements,
+                        this.logger,
+                        SidStarType.SID
+                    );
+                case OutputSections.SCT_STAR:
+                    return new SidStarRouteParser(
+                        this.GetMetadataParser(section),
+                        new RouteSegmentsLineParser(),
+                        this.sectorElements,
+                        this.logger,
+                        SidStarType.STAR
+                    );
                 case OutputSections.ESE_PREAMBLE:
                     break;
                 case OutputSections.ESE_POSITIONS:

@@ -8,44 +8,22 @@ using Compiler.Argument;
 
 namespace Compiler.Validate
 {
-    public class AllAirwaysMustHaveValidPoints : IValidationRule
+    public class AllSctSidsMustHaveAValidRoute : IValidationRule
     {
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            this.TestAirwayCategory(sectorElements.LowAirways, sectorElements, events);
-            this.TestAirwayCategory(sectorElements.HighAirways, sectorElements, events);
-        }
-
-        private void TestAirwayCategory(
-            List<Airway> airways,
-            SectorElementCollection sectorElements,
-            IEventLogger events
-        ) {
-            foreach (Airway airway in airways)
+            foreach (SidStarRoute sid in sectorElements.SidRoutes)
             {
-                if (airway.StartPoint.Type() == Point.TYPE_IDENTIFIER)
+                foreach (RouteSegment segment in sid.Segments)
                 {
-                    if (this.InvalidPoint(airway.StartPoint.Identifier, sectorElements))
-                    {
+                    if (
+                        CheckPoint(segment.Start, sectorElements) ||
+                        CheckPoint(segment.End, sectorElements)
+                    ) {
                         string message = String.Format(
-                            "Invalid end point {0} on Airway segment for {1}",
-                            airway.StartPoint.Identifier,
-                            airway.Identifier
-                        );
-                        events.AddEvent(
-                            new ValidationRuleFailure(message)
-                        );
-                    }
-                }
-
-                if (airway.EndPoint.Type() == Point.TYPE_IDENTIFIER)
-                {
-                    if (this.InvalidPoint(airway.EndPoint.Identifier, sectorElements))
-                    {
-                        string message = String.Format(
-                            "Invalid start point {0} on Airway segment for {1}",
-                            airway.EndPoint.Identifier,
-                            airway.Identifier
+                            "Invalid segment {0} on SID Route {1}",
+                            segment.Compile(),
+                            sid.Identifier
                         );
                         events.AddEvent(
                             new ValidationRuleFailure(message)
@@ -55,12 +33,18 @@ namespace Compiler.Validate
             }
         }
 
-        private bool InvalidPoint(string identifier, SectorElementCollection sectorElements)
+        private bool CheckPoint(Point point, SectorElementCollection sectorElements)
         {
-            return !this.FindFixByIdentifier(identifier, sectorElements) &&
-            !this.FindVorByIdentifier(identifier, sectorElements) &&
-            !this.FindNdbByIdentifier(identifier, sectorElements) &&
-            !this.FindAirportByIdentifier(identifier, sectorElements);
+            return !FindCoordinate(point) &&
+                !FindFixByIdentifier(point.Identifier, sectorElements) &&
+                !FindVorByIdentifier(point.Identifier, sectorElements) &&
+                !FindNdbByIdentifier(point.Identifier, sectorElements) &&
+                !FindAirportByIdentifier(point.Identifier, sectorElements);
+        }
+
+        private bool FindCoordinate(Point point)
+        {
+            return point.Type() == Point.TYPE_COORDINATE;
         }
 
         private bool FindVorByIdentifier(string identifier, SectorElementCollection sectorElements)

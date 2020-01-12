@@ -5,6 +5,7 @@ using Compiler.Model;
 using Compiler.Validate;
 using Compiler.Event;
 using Compiler.Error;
+using Compiler.Argument;
 
 namespace CompilerTest.Validate
 {
@@ -19,6 +20,7 @@ namespace CompilerTest.Validate
         private readonly SectorElementCollection elements;
         private readonly AllSidsMustHaveAValidAirport validator;
         private readonly Mock<IEventLogger> loggerMock;
+        private readonly CompilerArguments args;
 
         public AllSidsMustHaveAValidAirportTest()
         {
@@ -31,6 +33,7 @@ namespace CompilerTest.Validate
             this.sid3 = new SidStar("SID", "EGBB", "33", "WHI4D", new List<string>(), "test");
             this.loggerMock = new Mock<IEventLogger>();
             this.validator = new AllSidsMustHaveAValidAirport();
+            this.args = new CompilerArguments();
 
             this.elements.Add(airfield1);
             this.elements.Add(airfield2);
@@ -43,7 +46,7 @@ namespace CompilerTest.Validate
             this.elements.Add(sid1);
             this.elements.Add(sid2);
 
-            this.validator.Validate(this.elements, this.loggerMock.Object);
+            this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
 
@@ -54,7 +57,7 @@ namespace CompilerTest.Validate
             this.elements.Add(sid2);
             this.elements.Add(sid3);
 
-            this.validator.Validate(this.elements, this.loggerMock.Object);
+            this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
     }

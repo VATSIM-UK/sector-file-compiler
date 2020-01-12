@@ -5,6 +5,7 @@ using Compiler.Error;
 using Compiler.Event;
 using Compiler.Validate;
 using Moq;
+using Compiler.Argument;
 
 namespace CompilerTest.Validate
 {
@@ -17,6 +18,7 @@ namespace CompilerTest.Validate
         private readonly Fix third;
         private readonly Fix fourth;
         private readonly AllFixesMustBeUnique rule;
+        private readonly CompilerArguments args;
 
         public AllFixesMustBeUniqueTest()
         {
@@ -27,6 +29,7 @@ namespace CompilerTest.Validate
             this.third = new Fix("DIKAP", new Coordinate("abc", "def"), "test");
             this.fourth = new Fix("DIKAS", new Coordinate("abc", "def"), "test");
             this.rule = new AllFixesMustBeUnique();
+            this.args = new CompilerArguments();
         }
 
         [Fact]
@@ -34,7 +37,7 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.second);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -44,7 +47,7 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.third);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -54,7 +57,7 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.fourth);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
     }

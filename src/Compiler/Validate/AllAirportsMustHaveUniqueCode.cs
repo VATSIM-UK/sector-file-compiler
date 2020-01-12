@@ -4,12 +4,13 @@ using System.Text;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
+using Compiler.Argument;
 
 namespace Compiler.Validate
 {
     public class AllAirportsMustHaveUniqueCode : IValidationRule
     {
-        public void Validate(SectorElementCollection sectorElements, IEventLogger events)
+        public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
             List<string> existingAirports = new List<string>();
             foreach (Airport airport in sectorElements.Airports)

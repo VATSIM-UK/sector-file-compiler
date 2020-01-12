@@ -5,6 +5,7 @@ using Compiler.Error;
 using Compiler.Event;
 using Compiler.Validate;
 using Moq;
+using Compiler.Argument;
 
 namespace CompilerTest.Validate
 {
@@ -15,6 +16,7 @@ namespace CompilerTest.Validate
         private readonly SidStar first;
         private readonly SidStar second;
         private readonly AllSidsMustHaveAValidRoute rule;
+        private readonly CompilerArguments args;
 
         public AllSidsMustHaveAValidRouteTest()
         {
@@ -43,13 +45,14 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(new Airport("testairport", "testairport", new Coordinate("abc", "def"), "123.456", "test"));
 
             this.rule = new AllSidsMustHaveAValidRoute();
+            this.args = new CompilerArguments();
         }
 
         [Fact]
         public void TestItPassesOnValidRoute()
         {
             this.sectorElements.Add(this.first);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -58,7 +61,7 @@ namespace CompilerTest.Validate
         public void TestItFailsOnInvalidRoute()
         {
             this.sectorElements.Add(this.second);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }

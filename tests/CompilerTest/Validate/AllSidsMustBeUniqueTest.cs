@@ -5,6 +5,7 @@ using Compiler.Error;
 using Compiler.Event;
 using Compiler.Validate;
 using Moq;
+using Compiler.Argument;
 
 namespace CompilerTest.Validate
 {
@@ -17,6 +18,7 @@ namespace CompilerTest.Validate
         private readonly SidStar third;
         private readonly SidStar fourth;
         private readonly AllSidsMustBeUnique rule;
+        private readonly CompilerArguments args; 
 
         public AllSidsMustBeUniqueTest()
         {
@@ -27,6 +29,7 @@ namespace CompilerTest.Validate
             this.third = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>(), "test");
             this.fourth = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>(new string[] { "a" }), "test");
             this.rule = new AllSidsMustBeUnique();
+            this.args = new CompilerArguments();
         }
 
         [Fact]
@@ -34,7 +37,7 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.second);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
 
@@ -45,7 +48,7 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.fourth);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
 
@@ -55,7 +58,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.second);
             this.sectorElements.Add(this.third);
-            this.rule.Validate(sectorElements, this.loggerMock.Object);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
     }

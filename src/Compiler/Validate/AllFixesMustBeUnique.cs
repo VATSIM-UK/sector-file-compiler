@@ -4,12 +4,13 @@ using System.Text;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
+using Compiler.Argument;
 
 namespace Compiler.Validate
 {
     public class AllFixesMustBeUnique : IValidationRule
     {
-        public void Validate(SectorElementCollection sectorElements, IEventLogger events)
+        public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
             List<string> checkedFixes = new List<string>();
             foreach (Fix fix in sectorElements.Fixes)

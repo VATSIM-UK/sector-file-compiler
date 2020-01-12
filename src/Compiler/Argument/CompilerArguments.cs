@@ -86,6 +86,9 @@ namespace Compiler.Argument
         // Should we strip blank lines out of the final output
         public bool RemoveBlankLines { set; get; } = false;
 
+        // Should we force all route segments (in SCT SID/STAR) to be joined up
+        public bool EnforceContiguousRouteSegments { set; get; } = false;
+
         // The build version to use
         public string BuildVersion { set; get; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
     }

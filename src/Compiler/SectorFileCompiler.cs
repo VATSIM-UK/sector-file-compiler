@@ -60,7 +60,7 @@ namespace Compiler
             // Validate the output files
             if (this.arguments.ValidateOutput)
             {
-                OutputValidator.Validate(sectorElements, this.events);
+                OutputValidator.Validate(sectorElements, this.arguments, this.events);
                 if (this.events.HasFatalError())
                 {
                     this.events.AddEvent(new CompilationFinishedEvent(false));

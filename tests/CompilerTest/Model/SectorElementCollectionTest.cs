@@ -273,6 +273,62 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsSidRoutes()
+        {
+            List<RouteSegment> segments = new List<RouteSegment>()
+            {
+                new RouteSegment(new Point("BIG"), new Point("LAM"), null),
+                new RouteSegment(new Point("LAM"), new Point("BNN"), null),
+            };
+
+            SidStarRoute route = new SidStarRoute(SidStarType.SID, "TEST", segments);
+            this.collection.Add(route);
+            Assert.Equal(route, this.collection.SidRoutes[0]);
+        }
+
+        [Fact]
+        public void TestItAddsSidRoutesToCompilablesSection()
+        {
+            List<RouteSegment> segments = new List<RouteSegment>()
+            {
+                new RouteSegment(new Point("BIG"), new Point("LAM"), null),
+                new RouteSegment(new Point("LAM"), new Point("BNN"), null),
+            };
+
+            SidStarRoute route = new SidStarRoute(SidStarType.SID, "TEST", segments);
+            this.collection.Add(route);
+            Assert.Equal(route, this.collection.Compilables[OutputSections.SCT_SID][0]);
+        }
+
+        [Fact]
+        public void TestItAddsStarRoutes()
+        {
+            List<RouteSegment> segments = new List<RouteSegment>()
+            {
+                new RouteSegment(new Point("BIG"), new Point("LAM"), null),
+                new RouteSegment(new Point("LAM"), new Point("BNN"), null),
+            };
+
+            SidStarRoute route = new SidStarRoute(SidStarType.STAR, "TEST", segments);
+            this.collection.Add(route);
+            Assert.Equal(route, this.collection.StarRoutes[0]);
+        }
+
+        [Fact]
+        public void TestItAddsStarRoutesToCompilablesSection()
+        {
+            List<RouteSegment> segments = new List<RouteSegment>()
+            {
+                new RouteSegment(new Point("BIG"), new Point("LAM"), null),
+                new RouteSegment(new Point("LAM"), new Point("BNN"), null),
+            };
+
+            SidStarRoute route = new SidStarRoute(SidStarType.STAR, "TEST", segments);
+            this.collection.Add(route);
+            Assert.Equal(route, this.collection.Compilables[OutputSections.SCT_STAR][0]);
+        }
+
+        [Fact]
         public void TestItAddsBlankLines()
         {
             BlankLine blank = new BlankLine();
