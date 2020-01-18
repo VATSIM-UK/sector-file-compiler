@@ -27,6 +27,22 @@ namespace Compiler.Validate
                 IsValidFix(point.Identifier, sectorElements);
         }
 
+       /*
+        * Validate that a point is a valid point in some way shape or form.
+        * To be valid it must be:
+        * - A defined Fix
+        * - A defined NDB
+        * - A defined VOR
+        * - A defined Airport
+        */
+        public static bool ValidateEseSidStarPoint(string point, SectorElementCollection sectorElements)
+        {
+            return IsValidVor(point, sectorElements) ||
+                IsValidNdb(point, sectorElements) ||
+                IsValidAirport(point, sectorElements) ||
+                IsValidFix(point, sectorElements);
+        }
+
         public static bool IsValidCoordinate(Point point)
         {
             return point.Type() == Point.TYPE_COORDINATE;

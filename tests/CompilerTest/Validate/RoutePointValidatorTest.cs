@@ -104,5 +104,35 @@ namespace CompilerTest.Validate
             Point point = new Point("testairport");
             Assert.True(RoutePointValidator.ValidatePoint(point, this.sectorElements));
         }
+
+        [Fact]
+        public void TestItValidatesEseFalseIfAllStepsFail()
+        {
+            Assert.False(RoutePointValidator.ValidateEseSidStarPoint("what", this.sectorElements));
+        }
+
+        [Fact]
+        public void TestItValidatesEseTrueIfValidVor()
+        {
+            Assert.True(RoutePointValidator.ValidateEseSidStarPoint("testvor", this.sectorElements));
+        }
+
+        [Fact]
+        public void TestItValidatesEseTrueIfValidNdb()
+        {
+            Assert.True(RoutePointValidator.ValidateEseSidStarPoint("testndb", this.sectorElements));
+        }
+
+        [Fact]
+        public void TestItValidatesEseTrueIfValidFix()
+        {
+            Assert.True(RoutePointValidator.ValidateEseSidStarPoint("testfix", this.sectorElements));
+        }
+
+        [Fact]
+        public void TestItValidatesEseTrueIfValidAirport()
+        {
+            Assert.True(RoutePointValidator.ValidateEseSidStarPoint("testairport", this.sectorElements));
+        }
     }
 }
