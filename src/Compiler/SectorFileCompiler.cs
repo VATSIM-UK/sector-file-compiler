@@ -47,6 +47,8 @@ namespace Compiler
             SectorElementCollection sectorElements = new SectorElementCollection();
             SectorDataProcessor.Parse(
                 new SectionParserFactory(sectorElements, events),
+                sectorElements,
+                this.arguments,
                 files,
                 events
             );
