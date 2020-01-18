@@ -24,7 +24,8 @@ namespace Compiler.Validate
             new AllSctStarsMustHaveContiguousRoute(),
             new AllSctSidsMustHaveValidColours(),
             new AllSctStarsMustHaveValidColours(),
-            new AllGeoMustHaveValidColours()
+            new AllGeoMustHaveValidColours(),
+            new AllGeoMustHaveValidPoints()
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
