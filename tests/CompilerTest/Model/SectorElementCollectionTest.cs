@@ -239,7 +239,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsGeo()
         {
-            Geo geo = new Geo(new Coordinate("abc", "def"), new Coordinate("ghi", "jkl"), "red", null);
+            Geo geo = new Geo(new Point("abc"), new Point("def"), "red", null);
             this.collection.Add(geo);
 
             Assert.Equal(geo, this.collection.GeoElements[0]);
@@ -248,7 +248,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsGeoToCompilableSection()
         {
-            Geo geo = new Geo(new Coordinate("abc", "def"), new Coordinate("ghi", "jkl"), "red", null);
+            Geo geo = new Geo(new Point("abc"), new Point("def"), "red", null);
             this.collection.Add(geo);
 
             Assert.Equal(geo, this.collection.Compilables[OutputSections.SCT_GEO][0]);

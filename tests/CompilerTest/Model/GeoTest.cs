@@ -10,8 +10,8 @@ namespace CompilerTest.Model
         public GeoTest()
         {
             this.model = new Geo(
-                new Coordinate("abc", "def"),
-                new Coordinate("ghi", "jkl"),
+                new Point("abc"),
+                new Point("def"),
                 "Blue",
                 "comment"
             );
@@ -20,13 +20,13 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsStartPoint()
         {
-            Assert.Equal(new Coordinate("abc", "def"), this.model.StartPoint);
+            Assert.Equal(new Point("abc"), this.model.StartPoint);
         }
 
         [Fact]
         public void TestItSetsEndPoint()
         {
-            Assert.Equal(new Coordinate("ghi", "jkl"), this.model.EndPoint);
+            Assert.Equal(new Point("def"), this.model.EndPoint);
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("abc def ghi jkl Blue ;comment\r\n", this.model.Compile());
+            Assert.Equal("abc abc def def Blue ;comment\r\n", this.model.Compile());
         }
     }
 }
