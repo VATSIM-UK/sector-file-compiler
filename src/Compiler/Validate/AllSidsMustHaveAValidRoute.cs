@@ -16,12 +16,7 @@ namespace Compiler.Validate
             {
                 foreach (string waypoint in sidStar.Route)
                 {
-                    if (
-                        !RoutePointValidator.ValidateEseSidStarPoint(waypoint, sectorElements) &&
-                        !RoutePointValidator.ValidateEseSidStarPoint(waypoint, sectorElements) &&
-                        !RoutePointValidator.ValidateEseSidStarPoint(waypoint, sectorElements) &&
-                        !RoutePointValidator.ValidateEseSidStarPoint(waypoint, sectorElements)
-                    ) {
+                    if (!RoutePointValidator.ValidateEseSidStarPoint(waypoint, sectorElements)) {
                         string message = String.Format(
                             "Invalid waypoint {0} on SID/STAR {1}/{2}",
                             waypoint,
