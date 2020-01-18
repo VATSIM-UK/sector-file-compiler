@@ -17,10 +17,10 @@ namespace Compiler.Validate
                 foreach (string waypoint in sidStar.Route)
                 {
                     if (
-                        !FindFixByIdentifier(waypoint, sectorElements) &&
-                        !FindVorByIdentifier(waypoint, sectorElements) &&
-                        !FindNdbByIdentifier(waypoint, sectorElements) &&
-                        !FindAirportByIdentifier(waypoint, sectorElements)
+                        !RoutePointValidator.ValidateEseSidStarPoint(waypoint, sectorElements) &&
+                        !RoutePointValidator.ValidateEseSidStarPoint(waypoint, sectorElements) &&
+                        !RoutePointValidator.ValidateEseSidStarPoint(waypoint, sectorElements) &&
+                        !RoutePointValidator.ValidateEseSidStarPoint(waypoint, sectorElements)
                     ) {
                         string message = String.Format(
                             "Invalid waypoint {0} on SID/STAR {1}/{2}",
@@ -34,58 +34,6 @@ namespace Compiler.Validate
                     }
                 }
             }
-        }
-
-        private bool FindVorByIdentifier(string identifier, SectorElementCollection sectorElements)
-        {
-            foreach (Vor vor in sectorElements.Vors)
-            {
-                if (vor.Identifier == identifier)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private bool FindNdbByIdentifier(string identifier, SectorElementCollection sectorElements)
-        {
-            foreach (Ndb ndb in sectorElements.Ndbs)
-            {
-                if (ndb.Identifier == identifier)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private bool FindAirportByIdentifier(string identifier, SectorElementCollection sectorElements)
-        {
-            foreach (Airport airport in sectorElements.Airports)
-            {
-                if (airport.Icao == identifier)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private bool FindFixByIdentifier(string identifier, SectorElementCollection sectorElements)
-        {
-            foreach (Fix fix in sectorElements.Fixes)
-            {
-                if (fix.Identifier == identifier)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }
