@@ -26,6 +26,8 @@ namespace Compiler.Model
         public List<SidStarRoute> SidRoutes { get; } = new List<SidStarRoute>();
         public List<SidStarRoute> StarRoutes { get; } = new List<SidStarRoute>();
 
+        public List<Geo> GeoElements { get; } = new List<Geo>();
+
         public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
 
         public SectorElementCollection()
@@ -87,6 +89,12 @@ namespace Compiler.Model
         {
             this.Compilables[OutputSections.SCT_FIXES].Add(fix);
             this.Fixes.Add(fix);
+        }
+
+        public void Add(Geo geo)
+        {
+            this.Compilables[OutputSections.SCT_GEO].Add(geo);
+            this.GeoElements.Add(geo);
         }
 
         public void Add(Ndb ndb)

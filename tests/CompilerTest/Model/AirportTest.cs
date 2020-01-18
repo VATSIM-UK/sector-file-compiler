@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
 using Compiler.Model;
 
 namespace CompilerTest.Model

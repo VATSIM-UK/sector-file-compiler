@@ -120,6 +120,13 @@ namespace Compiler.Parser
                         this.logger,
                         SidStarType.STAR
                     );
+                case OutputSections.SCT_GEO:
+                    return new GeoParser(
+                        this.GetMetadataParser(section),
+                        new StandardSctLineParser(),
+                        this.sectorElements,
+                        this.logger
+                    );
                 case OutputSections.ESE_PREAMBLE:
                     break;
                 case OutputSections.ESE_POSITIONS:
