@@ -18,7 +18,7 @@ namespace Compiler.Validate
                         geo.Colour
                     );
                     events.AddEvent(new ValidationRuleFailure(errorMessage));
-                    break;
+                    continue;
                 }
             }
         }
