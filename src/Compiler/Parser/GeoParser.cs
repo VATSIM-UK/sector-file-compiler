@@ -38,6 +38,11 @@ namespace Compiler.Parser
                 }
 
                 SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+
+                /*
+                 * In some places in the UKSF, we define this random point to make sure drawing works properly.
+                 * If we see it, just insert it.
+                 */
                 if (sectorData.data.Contains(GeoParser.noDataString))
                 {
                     this.elements.Add(
