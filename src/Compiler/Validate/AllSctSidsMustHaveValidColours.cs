@@ -21,7 +21,6 @@ namespace Compiler.Validate
                             sid.Identifier
                         );
                         events.AddEvent(new ValidationRuleFailure(errorMessage));
-                        break;
                     }
                 }
             }

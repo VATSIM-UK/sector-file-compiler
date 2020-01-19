@@ -21,7 +21,6 @@ namespace Compiler.Validate
                             star.Identifier
                         );
                         events.AddEvent(new ValidationRuleFailure(errorMessage));
-                        break;
                     }
                 }
             }
