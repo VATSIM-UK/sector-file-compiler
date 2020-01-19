@@ -11,7 +11,7 @@ namespace Compiler.Validate
         {
             foreach (Geo geo in sectorElements.GeoElements)
             {
-                if (!this.ColourValid(sectorElements, geo.Colour))
+                if (!ColourValidator.ColourValid(sectorElements, geo.Colour))
                 {
                     string errorMessage = string.Format(
                         "Invalid colour value {0} in GEO segment",
@@ -21,25 +21,6 @@ namespace Compiler.Validate
                     continue;
                 }
             }
-        }
-
-        private bool ColourValid(SectorElementCollection sectorElements, string colour)
-        {
-            return (int.TryParse(colour, out int colourValue) && colourValue >= 0 && colourValue <= 16777215) ||
-                this.ColourIsDefined(sectorElements, colour);
-        }
-
-        private bool ColourIsDefined(SectorElementCollection sectorElements, string colourString)
-        {
-            foreach (Colour colour in sectorElements.Colours)
-            {
-                if (colourString == colour.Name)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

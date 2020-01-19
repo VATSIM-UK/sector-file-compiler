@@ -13,7 +13,7 @@ namespace Compiler.Validate
             {
                 foreach (RouteSegment segment in sid.Segments)
                 {
-                    if (segment.Colour != null && !this.ColourValid(sectorElements, segment.Colour))
+                    if (segment.Colour != null && !ColourValidator.ColourValid(sectorElements, segment.Colour))
                     {
                         string errorMessage = string.Format(
                             "Invalid colour value {0} in route segment for SID {1}",
@@ -25,25 +25,6 @@ namespace Compiler.Validate
                     }
                 }
             }
-        }
-
-        private bool ColourValid(SectorElementCollection sectorElements, string colour)
-        {
-            return (int.TryParse(colour, out int colourValue) && colourValue >= 0 && colourValue <= 16777215) ||
-                this.ColourIsDefined(sectorElements, colour);
-        }
-
-        private bool ColourIsDefined(SectorElementCollection sectorElements, string colourString)
-        {
-            foreach (Colour colour in sectorElements.Colours)
-            {
-                if (colourString == colour.Name)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

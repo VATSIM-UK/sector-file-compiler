@@ -14,7 +14,12 @@ namespace Compiler.Validate
 
         public static bool IsValidColourInteger(string colour)
         {
-            return (int.TryParse(colour, out int colourValue) && colourValue >= 0 && colourValue <= 16777215);
+            return int.TryParse(colour, out int colourValue) && ValidateColourInt(colourValue);
+        }
+
+        private static bool ValidateColourInt(int colourValue)
+        {
+            return colourValue >= 0 && colourValue <= 16777215;
         }
 
         public static bool ColourIsDefined(SectorElementCollection sectorElements, string colourString)

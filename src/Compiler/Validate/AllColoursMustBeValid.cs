@@ -11,18 +11,12 @@ namespace Compiler.Validate
         {
             foreach (Colour colour in sectorElements.Colours)
             {
-                if (!this.ColourValid(colour))
+                if (!ColourValidator.IsValidColourInteger(colour.Value.ToString()))
                 {
                     events.AddEvent(new ValidationRuleFailure("Invalid colour value " + colour.Value));
                     continue;
                 }
             }
-        }
-
-        private bool ColourValid(Colour colour)
-        {
-            return colour.Value >= 0 &&
-                colour.Value <= 16777215;
         }
     }
 }
