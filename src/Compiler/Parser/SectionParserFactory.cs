@@ -127,6 +127,13 @@ namespace Compiler.Parser
                         this.sectorElements,
                         this.logger
                     );
+                case OutputSections.SCT_LABELS:
+                    return new LabelParser(
+                        this.GetMetadataParser(section),
+                        new SctLabelLineParser(),
+                        this.sectorElements,
+                        this.logger
+                    );
                 case OutputSections.ESE_PREAMBLE:
                     break;
                 case OutputSections.ESE_POSITIONS:

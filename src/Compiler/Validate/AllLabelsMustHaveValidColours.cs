@@ -5,20 +5,20 @@ using Compiler.Argument;
 
 namespace Compiler.Validate
 {
-    public class AllGeoMustHaveValidColours : IValidationRule
+    public class AllLabelsMustHaveAValidColour : IValidationRule
     {
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            foreach (Geo geo in sectorElements.GeoElements)
+            foreach (Label label in sectorElements.Labels)
             {
-                if (!ColourValidator.ColourValid(sectorElements, geo.Colour))
+                if (!ColourValidator.ColourValid(sectorElements, label.Colour))
                 {
                     string errorMessage = string.Format(
-                        "Invalid colour value {0} in GEO segment",
-                        geo.Colour
+                        "Invalid colour value {0} in label {1}",
+                        label.Colour,
+                        label.Text
                     );
                     events.AddEvent(new ValidationRuleFailure(errorMessage));
-                    continue;
                 }
             }
         }

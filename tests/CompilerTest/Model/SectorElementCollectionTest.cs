@@ -255,6 +255,24 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsLabel()
+        {
+            Label lable = new Label("label1", new Coordinate("abc", "def"), "red", null);
+            this.collection.Add(lable);
+
+            Assert.Equal(lable, this.collection.Labels[0]);
+        }
+
+        [Fact]
+        public void TestItAddsLabelsToCompilableSection()
+        {
+            Label lable = new Label("label1", new Coordinate("abc", "def"), "red", null);
+            this.collection.Add(lable);
+
+            Assert.Equal(lable, this.collection.Compilables[OutputSections.SCT_LABELS][0]);
+        }
+
+        [Fact]
         public void TestItAddsVors()
         {
             Vor vor = new Vor("a", "123.456", new Coordinate("abc", "def"), "test");
