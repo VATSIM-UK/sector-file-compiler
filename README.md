@@ -120,6 +120,8 @@ The input for the compiler is determined through a configuration file in JSON fo
 
 `--force-contiguous-routes` - If set, forces SIDs and STARs in the SCT to have contiguous routes (no gaps).
 
+`--display-input-files` - If set, adds a comment line in the output at the point where a new input file was started.
+
 ### Token Replacements
 
 There are a number of tokens that may be added to comments in the input files, which will be replaced in the output.

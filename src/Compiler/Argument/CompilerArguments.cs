@@ -89,6 +89,9 @@ namespace Compiler.Argument
         // Should we force all route segments (in SCT SID/STAR) to be joined up
         public bool EnforceContiguousRouteSegments { set; get; } = false;
 
+        // Whether or not compilation should include a comment at the start of every input file
+        public bool DisplayInputFiles { set; get; } = false;
+
         // The build version to use
         public string BuildVersion { set; get; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
     }
