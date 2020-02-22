@@ -273,6 +273,32 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsRegions()
+        {
+            Region region = new Region(
+                "Red",
+                new List<Point>(),
+                null
+            );
+            this.collection.Add(region);
+
+            Assert.Equal(region, this.collection.Regions[0]);
+        }
+
+        [Fact]
+        public void TestItAddsRegionsToCompilableSection()
+        {
+            Region region = new Region(
+                "Red",
+                new List<Point>(),
+                null
+            );
+            this.collection.Add(region);
+
+            Assert.Equal(region, this.collection.Compilables[OutputSections.SCT_REGIONS][0]);
+        }
+
+        [Fact]
         public void TestItAddsVors()
         {
             Vor vor = new Vor("a", "123.456", new Coordinate("abc", "def"), "test");
