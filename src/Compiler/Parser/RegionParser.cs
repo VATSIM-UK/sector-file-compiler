@@ -90,7 +90,7 @@ namespace Compiler.Parser
                 if (!sectorData.data.StartsWith(" "))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("All continuous regions must start with a space" + data.lines[i], data.fullPath, i + 1)
+                        new SyntaxError("All continuous regions must start with a space " + data.lines[i], data.fullPath, i + 1)
                     );
                     return;
                 }

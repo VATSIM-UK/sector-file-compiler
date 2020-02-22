@@ -35,7 +35,7 @@ namespace Compiler.Model
 
             for (int i = 1; i < this.Points.Count; i++) 
             {
-                pointString += this.Points[i].Compile() + "\r\n";
+                pointString += " " + this.Points[i].Compile() + "\r\n";
             }
 
             return pointString;

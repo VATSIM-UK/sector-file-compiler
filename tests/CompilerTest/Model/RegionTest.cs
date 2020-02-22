@@ -38,7 +38,7 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "Red test1 test1\r\ntest2 test2\r\ntest3 test3\r\n",
+                "Red test1 test1\r\n test2 test2\r\n test3 test3\r\n",
                 this.region.Compile()
             );
         }
@@ -53,7 +53,7 @@ namespace CompilerTest.Model
             );
 
             Assert.Equal(
-                "Red test1 test1 ;comment\r\ntest2 test2\r\ntest3 test3\r\n",
+                "Red test1 test1 ;comment\r\n test2 test2\r\n test3 test3\r\n",
                 region.Compile()
             );
         }
