@@ -27,6 +27,8 @@ namespace Compiler.Validate
             new AllGeoMustHaveValidColours(),
             new AllGeoMustHaveValidPoints(),
             new AllLabelsMustHaveAValidColour(),
+            new AllRegionsMustHaveValidColours(),
+            new AllRegionsMustHaveValidPoints(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
