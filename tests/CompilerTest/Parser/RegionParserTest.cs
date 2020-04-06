@@ -65,7 +65,7 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment", " BHD BHD", " JSY JSY" })
+                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment", "BHD BHD", " JSY JSY" })
             );
             this.parser.ParseData(data);
 
@@ -138,21 +138,6 @@ namespace CompilerTest.Parser
                 "test",
                 "EGHI",
                 new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BHD ;comment", " BHD BHD"})
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Regions);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaErrorNonNewSegmentsDonStartWithSpace()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment", "BHD BHD"})
             );
             this.parser.ParseData(data);
 

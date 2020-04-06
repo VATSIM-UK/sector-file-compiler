@@ -120,15 +120,6 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                // Just a coordinate
-                if (!sectorData.data.StartsWith(" "))
-                {
-                    this.eventLogger.AddEvent(
-                        new SyntaxError("All continuous regions must start with a space " + data.lines[i], data.fullPath, i + 1)
-                    );
-                    return;
-                }
-
                 Point parsedPoint = PointParser.Parse(sectorData.dataSegments[0], sectorData.dataSegments[1]);
                 if (parsedPoint == PointParser.invalidPoint)
                 {
