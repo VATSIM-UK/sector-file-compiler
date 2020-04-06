@@ -36,7 +36,18 @@ namespace Compiler.Parser
                             section
                         );
                     }
-                    parser.ParseData(InputLineReader.ReadInputLines(file));
+
+                    SectorFormatData data = InputLineReader.ReadInputLines(file);
+
+                    if (data.Equals(InputLineReader.invalidData))
+                    {
+                        errors.AddEvent(
+                            new FileNotFoundError(file.GetPath())
+                        );
+                        continue;
+                    }
+
+                    parser.ParseData(InputLineReader.ReadInputLines(file)); 
                 }
             }
         }

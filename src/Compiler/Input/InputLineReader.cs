@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Compiler.Parser;
 
 
@@ -6,11 +7,18 @@ namespace Compiler.Input
 {
     public class InputLineReader
     {
+        public static readonly SectorFormatData invalidData = new SectorFormatData(
+            "",
+            "",
+            "",
+            new List<string>()
+        );
+
         public static SectorFormatData ReadInputLines(IFileInterface file)
         {
             if (!file.Exists())
             {
-                throw new ArgumentException("Input file not found " + file.GetPath());
+                return InputLineReader.invalidData;
             }
 
             return new SectorFormatData(
