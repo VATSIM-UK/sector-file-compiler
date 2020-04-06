@@ -30,8 +30,8 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItPassesOnValidColours()
         {
-            this.sectorElements.Add(new Region("colour1", new List<Point>(), "comment"));
-            this.sectorElements.Add(new Region("123", new List<Point>(), "comment"));
+            this.sectorElements.Add(new Region("Region1", "colour1", new List<Point>(), "comment"));
+            this.sectorElements.Add(new Region("Region2", "123", new List<Point>(), "comment"));
 
             this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
@@ -40,8 +40,8 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsOnInvalidColours()
         {
-            this.sectorElements.Add(new Region("colour2", new List<Point>(), "comment"));
-            this.sectorElements.Add(new Region("-123", new List<Point>(), "comment"));
+            this.sectorElements.Add(new Region("Region1", "colour2", new List<Point>(), "comment"));
+            this.sectorElements.Add(new Region("Region2", "-123", new List<Point>(), "comment"));
 
             this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(2));

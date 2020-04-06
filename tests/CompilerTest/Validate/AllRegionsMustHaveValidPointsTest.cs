@@ -39,8 +39,8 @@ namespace CompilerTest.Validate
             points2.Add(new Point("testvor"));
             points2.Add(new Point("testairport"));
 
-            Region region1 = new Region("Red", points1, "comment");
-            Region region2 = new Region("Red", points2, "comment");
+            Region region1 = new Region("Region1", "Red", points1, "comment");
+            Region region2 = new Region("Region2", "Red", points2, "comment");
 
             this.sectorElements.Add(region1);
             this.sectorElements.Add(region2);
@@ -60,8 +60,8 @@ namespace CompilerTest.Validate
             points2.Add(new Point("nottestvor"));
             points2.Add(new Point("nottestairport"));
 
-            Region region1 = new Region("Red", points1, "comment");
-            Region region2 = new Region("Red", points2, "comment");
+            Region region1 = new Region("Region1", "Red", points1, "comment");
+            Region region2 = new Region("Region2", "Red", points2, "comment");
 
             this.sectorElements.Add(region1);
             this.sectorElements.Add(region2);

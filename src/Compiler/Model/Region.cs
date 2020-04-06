@@ -5,19 +5,22 @@ namespace Compiler.Model
 {
     public class Region : AbstractSectorElement, ICompilable
     {
-        public Region(string colour, List<Point> points, string comment) : base(comment)
+        public Region(string name, string colour, List<Point> points, string comment) : base(comment)
         {
+            Name = name;
             Colour = colour;
             Points = points;
         }
 
+        public string Name { get; }
         public string Colour { get; }
         public List<Point> Points { get; }
 
         public string Compile()
         {
             return String.Format(
-                "{0} {1}",
+                "REGIONNAME {0}\r\n{1} {2}",
+                this.Name,
                 this.Colour,
                 this.CompilePointString()
             );

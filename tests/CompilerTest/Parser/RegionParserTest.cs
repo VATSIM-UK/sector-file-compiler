@@ -40,13 +40,13 @@ namespace CompilerTest.Parser
         }
 
         [Fact]
-        public void TestItAddsSingleLineRegionData()
+        public void TestItAddsSinglePointRegionData()
         {
             SectorFormatData data = new SectorFormatData(
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "Red BCN BCN ;comment" })
+                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment" })
             );
             this.parser.ParseData(data);
 
@@ -55,6 +55,7 @@ namespace CompilerTest.Parser
             Assert.Equal(new Point("BCN"), result.Points[0]);
             Assert.Equal("Red", result.Colour);
             Assert.Equal("comment", result.Comment);
+            Assert.Equal("TestRegion", result.Name);
         }
 
         [Fact]
@@ -64,7 +65,7 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "Red BCN BCN ;comment", " BHD BHD", " JSY JSY" })
+                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment", " BHD BHD", " JSY JSY" })
             );
             this.parser.ParseData(data);
 
@@ -75,6 +76,7 @@ namespace CompilerTest.Parser
             Assert.Equal(new Point("JSY"), result.Points[2]);
             Assert.Equal("Red", result.Colour);
             Assert.Equal("comment", result.Comment);
+            Assert.Equal("TestRegion", result.Name);
         }
 
         [Fact]
@@ -84,7 +86,13 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "Red BCN BCN ;comment", " BHD BHD", "White JSY JSY" })
+                new List<string>(new string[] { 
+                    "REGIONNAME TestRegion1",
+                    "Red BCN BCN ;comment",
+                     " BHD BHD",
+                    "REGIONNAME TestRegion2",
+                    "White JSY JSY"
+                })
             );
             this.parser.ParseData(data);
 
@@ -98,11 +106,13 @@ namespace CompilerTest.Parser
             Assert.Equal(new Point("BHD"), result1.Points[1]);
             Assert.Equal("Red", result1.Colour);
             Assert.Equal("comment", result1.Comment);
+            Assert.Equal("TestRegion1", result1.Name);
 
             Assert.Single(result2.Points);
             Assert.Equal(new Point("JSY"), result2.Points[0]);
             Assert.Equal("White", result2.Colour);
             Assert.Null(result2.Comment);
+            Assert.Equal("TestRegion2", result2.Name);
         }
 
         [Fact]
@@ -127,7 +137,7 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "Red BCN BHD ;comment", " BHD BHD"})
+                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BHD ;comment", " BHD BHD"})
             );
             this.parser.ParseData(data);
 
@@ -142,7 +152,7 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "Red BCN BCN ;comment", "BHD BHD"})
+                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment", "BHD BHD"})
             );
             this.parser.ParseData(data);
 
@@ -157,12 +167,57 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "Red BCN BCN ;comment", "BHD MID" })
+                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment", "BHD MID" })
             );
             this.parser.ParseData(data);
 
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.Regions);
+        }
+
+        [Fact]
+        public void TestItRaisesSyntaxErrorUnexpectedColour()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "EGHI",
+                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment", "Red BCN BCN ;comment" })
+            );
+            this.parser.ParseData(data);
+
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(this.collection.Regions);
+        }
+
+        [Fact]
+        public void TestItRaisesSyntaxErrorNoColour()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "EGHI",
+                new List<string>(new string[] { "REGIONNAME TestRegion", "BCN BCN ;comment" })
+            );
+            this.parser.ParseData(data);
+
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(this.collection.Regions);
+        }
+
+        [Fact]
+        public void TestItRaisesSyntaxErrorIncompleteRegionAtEndOfFile()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "EGHI",
+                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment", "REGIONNAME TestRegion2" })
+            );
+            this.parser.ParseData(data);
+
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Single(this.collection.Regions);
         }
     }
 }

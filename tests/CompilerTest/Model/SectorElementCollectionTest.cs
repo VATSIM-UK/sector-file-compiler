@@ -276,6 +276,7 @@ namespace CompilerTest.Model
         public void TestItAddsRegions()
         {
             Region region = new Region(
+                "RegionName",
                 "Red",
                 new List<Point>(),
                 null
@@ -289,6 +290,7 @@ namespace CompilerTest.Model
         public void TestItAddsRegionsToCompilableSection()
         {
             Region region = new Region(
+                "RegionName",
                 "Red",
                 new List<Point>(),
                 null

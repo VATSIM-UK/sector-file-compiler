@@ -16,10 +16,17 @@ namespace CompilerTest.Model
             this.points.Add(new Point("test2"));
             this.points.Add(new Point("test3"));
             this.region = new Region(
+                "Region1",
                 "Red",
                 this.points,
                 null
             );
+        }
+
+        [Fact]
+        public void TestItSetsName()
+        {
+            Assert.Equal("Region1", this.region.Name);
         }
 
         [Fact]
@@ -38,7 +45,7 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "Red test1 test1\r\n test2 test2\r\n test3 test3\r\n",
+                "REGIONNAME Region1\r\nRed test1 test1\r\n test2 test2\r\n test3 test3\r\n",
                 this.region.Compile()
             );
         }
@@ -47,13 +54,14 @@ namespace CompilerTest.Model
         public void TestItCompilesWithComment()
         {
             Region region = new Region(
+                "Region1",
                 "Red",
                 this.points,
                 "comment"
             );
 
             Assert.Equal(
-                "Red test1 test1 ;comment\r\n test2 test2\r\n test3 test3\r\n",
+                "REGIONNAME Region1\r\nRed test1 test1 ;comment\r\n test2 test2\r\n test3 test3\r\n",
                 region.Compile()
             );
         }
