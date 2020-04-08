@@ -28,6 +28,7 @@ namespace Compiler.Model
         public List<Geo> GeoElements { get; } = new List<Geo>();
         public List<Label> Labels { get; } = new List<Label>();
         public List<Region> Regions { get; } = new List<Region>();
+        public Info Info { get; private set; }
 
         public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
 
@@ -141,6 +142,12 @@ namespace Compiler.Model
         {
             this.Compilables[OutputSections.SCT_VOR].Add(vor);
             this.Vors.Add(vor);
+        }
+
+        public void Add(Info info)
+        {
+            this.Compilables[OutputSections.SCT_INFO].Insert(0, info);
+            this.Info = info;
         }
 
         public void Add(BlankLine blankLine, OutputSections section)

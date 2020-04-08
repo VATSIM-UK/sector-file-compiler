@@ -337,6 +337,42 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsInfo()
+        {
+            Info info = new Info(
+                "Super Cool Sector",
+                "LON_CTR",
+                "EGLL",
+                new Coordinate("123", "456"),
+                60,
+                40,
+                2,
+                1
+            );
+            this.collection.Add(info);
+
+            Assert.Equal(info, this.collection.Info);
+        }
+
+        [Fact]
+        public void TestItAddsInfoToCompilableSection()
+        {
+            Info info = new Info(
+                "Super Cool Sector",
+                "LON_CTR",
+                "EGLL",
+                new Coordinate("123", "456"),
+                60,
+                40,
+                2,
+                1
+            );
+            this.collection.Add(info);
+
+            Assert.Equal(info, this.collection.Compilables[OutputSections.SCT_INFO][0]);
+        }
+
+        [Fact]
         public void TestItAddsSidRoutes()
         {
             List<RouteSegment> segments = new List<RouteSegment>()
