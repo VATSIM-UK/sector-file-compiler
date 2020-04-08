@@ -62,7 +62,7 @@ namespace Compiler.Parser
                     return;
                 }
 
-                // Expecting a colour definition for thre region
+                // Expecting a colour definition for the region
                 if (expectingColourDefinition) {
                     if (sectorData.dataSegments.Count != 3)
                     {
@@ -98,7 +98,7 @@ namespace Compiler.Parser
                     // If it's not the first in the data stream, then it's a new declaration, save the previous
                     if (foundFirst)
                     {
-                        this.elements.Regions.Add(
+                        this.elements.Add(
                             new Region(
                                 regionName,
                                 colour,
