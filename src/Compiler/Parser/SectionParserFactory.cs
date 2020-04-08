@@ -134,6 +134,13 @@ namespace Compiler.Parser
                         this.sectorElements,
                         this.logger
                     );
+                case OutputSections.SCT_REGIONS:
+                    return new RegionParser(
+                        this.GetMetadataParser(section),
+                        new StandardSctLineParser(),
+                        this.sectorElements,
+                        this.logger
+                    );
                 case OutputSections.ESE_PREAMBLE:
                     break;
                 case OutputSections.ESE_POSITIONS:

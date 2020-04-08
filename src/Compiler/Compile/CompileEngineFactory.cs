@@ -5,7 +5,7 @@ using Compiler.Output;
 
 namespace Compiler.Compile
 {
-    public class CompilerEngineFactory
+    public class CompileEngineFactory
     {
         public static CompileEngine Create(CompilerArguments arguments, SectorElementCollection elements)
         {

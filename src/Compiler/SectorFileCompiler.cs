@@ -75,7 +75,7 @@ namespace Compiler
             }
 
             // Perform the compilation
-            CompilerEngineFactory.Create(arguments, sectorElements).Compile();
+            CompileEngineFactory.Create(arguments, sectorElements).Compile();
 
             this.events.AddEvent(new CompilationFinishedEvent(true));
             return 0;

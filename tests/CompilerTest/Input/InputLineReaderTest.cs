@@ -18,10 +18,10 @@ namespace CompilerTest.Input
         }
 
         [Fact]
-        public void TestItThrowsExceptionOnNonExistentFile()
+        public void TestItReturnsEmptyDataIfFileNotFound()
         {
             this.mockInput.Setup(foo => foo.Exists()).Returns(false);
-            Assert.Throws<ArgumentException>(() => InputLineReader.ReadInputLines(this.mockInput.Object));
+            Assert.Equal(InputLineReader.invalidData, InputLineReader.ReadInputLines(this.mockInput.Object));
         }
 
         [Fact]

@@ -27,6 +27,7 @@ namespace Compiler.Model
         public List<SidStarRoute> StarRoutes { get; } = new List<SidStarRoute>();
         public List<Geo> GeoElements { get; } = new List<Geo>();
         public List<Label> Labels { get; } = new List<Label>();
+        public List<Region> Regions { get; } = new List<Region>();
 
         public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
 
@@ -107,6 +108,12 @@ namespace Compiler.Model
         {
             this.Compilables[OutputSections.SCT_NDB].Add(ndb);
             this.Ndbs.Add(ndb);
+        }
+
+        public void Add(Region region)
+        {
+            this.Compilables[OutputSections.SCT_REGIONS].Add(region);
+            this.Regions.Add(region);
         }
 
         public void Add(SidStar sidStar)
