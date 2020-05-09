@@ -10,9 +10,6 @@ namespace CompilerTest.Validate
 {
     public class InfoMustHaveValidAirportTest
     {
-        private readonly Airport airfield1;
-        private readonly Airport airfield2;
-        private readonly Airport airfield3;
         private readonly SectorElementCollection elements;
         private readonly InfoMustHaveValidAirport validator;
         private readonly Mock<IEventLogger> loggerMock;
