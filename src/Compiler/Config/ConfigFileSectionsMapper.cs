@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Compiler.Output;
 
-namespace Compiler.Input
+namespace Compiler.Config
 {
     public class ConfigFileSectionsMapper
     {
-        public static readonly Dictionary<OutputSections, string> sectionMap = new Dictionary<OutputSections, string>
+        private static readonly Dictionary<OutputSections, string> sectionMap = new Dictionary<OutputSections, string>
         {
             { OutputSections.SCT_HEADER, "sct_header" },
             { OutputSections.SCT_COLOUR_DEFS, "sct_colour_defs" },
@@ -32,5 +32,27 @@ namespace Compiler.Input
             { OutputSections.ESE_SIDSSTARS, "sidsstars" },
             { OutputSections.ESE_AIRSPACE, "airspace" },
         };
+
+        public static readonly string invalidSection = "";
+
+        public static bool ConfigSectionValid(string section)
+        {
+            foreach (KeyValuePair<OutputSections, string> outputSection in sectionMap)
+            {
+                if (outputSection.Value == section)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static string GetConfigSectionForOutputSection(OutputSections section)
+        {
+            return sectionMap.ContainsKey(section)
+                ? sectionMap[section]
+                : ConfigFileSectionsMapper.invalidSection;
+        }
     }
 }

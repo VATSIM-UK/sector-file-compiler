@@ -10,12 +10,12 @@ namespace Compiler.Argument
     {
         public const string COMPILER_VERISON = "1.0.0";
 
-        public IFileInterface ConfigFile { set; get; }
+        public List<IFileInterface> ConfigFiles { get; } = new List<IFileInterface>();
 
         public override string ToString()
         {
             string output = "";
-            output += "Config File Path: " + this.ConfigFile.GetPath() + Environment.NewLine;
+            //output += "Config File Path: " + this.ConfigFile.GetPath() + Environment.NewLine;
             return output;
         }
 
@@ -29,7 +29,7 @@ namespace Compiler.Argument
 
             CompilerArguments compare = (CompilerArguments)obj;
 
-            return ((this.ConfigFile == null && compare.ConfigFile == null) || this.ConfigFile.Equals(compare.ConfigFile));
+            return ((this.ConfigFiles == null && compare.ConfigFiles == null) || this.ConfigFiles.Equals(compare.ConfigFiles));
         }
 
         public override int GetHashCode()
