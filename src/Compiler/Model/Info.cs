@@ -12,7 +12,7 @@ namespace Compiler.Model
             string airport,
             Coordinate coordinate,
             int milesPerDegreeLatitude,
-            int milesPerDegreeLongitude,
+            double milesPerDegreeLongitude,
             double magneticVariation,
             int scale
         ) : base("")
@@ -32,7 +32,7 @@ namespace Compiler.Model
         public string Airport { get; }
         public Coordinate Coordinate { get; }
         public int MilesPerDegreeLatitude { get; }
-        public int MilesPerDegreeLongitude { get; }
+        public double MilesPerDegreeLongitude { get; }
         public double MagneticVariation { get; }
         public int Scale { get; }
 
@@ -46,8 +46,8 @@ namespace Compiler.Model
                 this.Coordinate.latitude,
                 this.Coordinate.longitude,
                 this.MilesPerDegreeLatitude,
-                this.MilesPerDegreeLongitude,
-                this.MagneticVariation.ToString("1n"),
+                this.MilesPerDegreeLongitude.ToString("n2"),
+                this.MagneticVariation.ToString("n1"),
                 this.Scale
             );
         }

@@ -15,7 +15,7 @@ namespace CompilerTest.Model
                 "EGLL",
                 new Coordinate("123", "456"),
                 60,
-                40,
+                40.24,
                 2.1,
                 1
             );
@@ -54,7 +54,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsMilesPerDegreeLongitude()
         {
-            Assert.Equal(40, this.model.MilesPerDegreeLongitude);
+            Assert.Equal(40.24, this.model.MilesPerDegreeLongitude);
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "Super Cool Sector\r\nLON_CTR\r\nEGLL\r\n123\r\n456\r\n60\r\n40\r\n2.1\r\n1\r\n",
+                "Super Cool Sector\r\nLON_CTR\r\nEGLL\r\n123\r\n456\r\n60\r\n40.24\r\n2.1\r\n1\r\n",
                 this.model.Compile()
             );
         }
