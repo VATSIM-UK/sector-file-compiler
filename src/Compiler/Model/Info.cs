@@ -13,7 +13,7 @@ namespace Compiler.Model
             Coordinate coordinate,
             int milesPerDegreeLatitude,
             int milesPerDegreeLongitude,
-            int magneticVariation,
+            double magneticVariation,
             int scale
         ) : base("")
         {
@@ -33,7 +33,7 @@ namespace Compiler.Model
         public Coordinate Coordinate { get; }
         public int MilesPerDegreeLatitude { get; }
         public int MilesPerDegreeLongitude { get; }
-        public int MagneticVariation { get; }
+        public double MagneticVariation { get; }
         public int Scale { get; }
 
         public string Compile()
@@ -47,7 +47,7 @@ namespace Compiler.Model
                 this.Coordinate.longitude,
                 this.MilesPerDegreeLatitude,
                 this.MilesPerDegreeLongitude,
-                this.MagneticVariation,
+                this.MagneticVariation.ToString("1n"),
                 this.Scale
             );
         }
