@@ -54,7 +54,7 @@ namespace CompilerTest.Config
             var exception = Assert.Throws<ArgumentException>(
                 () => ConfigFileLoader.LoadConfigFile(mockInput.Object)
             );
-            Assert.StartsWith("Invalid format in foo/bar/baz.txt: ", exception.Message);
+            Assert.StartsWith("Invalid format in ", exception.Message);
         }
 
         [Fact]

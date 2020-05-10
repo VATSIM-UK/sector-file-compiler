@@ -28,7 +28,7 @@ namespace Compiler.Config
             {
                 string message = String.Format(
                     "Invalid format in {0}: {1}",
-                    file.GetPath(),
+                    Path.GetFullPath(file.GetPath()),
                     ConfigFileValidator.lastError
                 );
                 throw new ArgumentException(message);
