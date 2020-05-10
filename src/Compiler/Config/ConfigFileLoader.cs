@@ -40,7 +40,7 @@ namespace Compiler.Config
                 JArray fileArray = (JArray)item.Value;
                 for (int key = 0; key < fileArray.Count; key++)
                 {
-                    fileArray[key] = Path.GetFullPath(file.DirectoryLocation() + "\\" + fileArray[key]);
+                    fileArray[key] = Path.GetFullPath(file.DirectoryLocation() + Path.DirectorySeparatorChar + fileArray[key]);
                 }
             }
 

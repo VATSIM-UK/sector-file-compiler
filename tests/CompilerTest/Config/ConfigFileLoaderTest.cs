@@ -91,7 +91,7 @@ namespace CompilerTest.Config
             this.mockInput.Setup(foo => foo.GetPath()).Returns("foo/bar/baz.txt");
             this.mockInput.Setup(foo => foo.DirectoryLocation()).Returns("foo/bar");
 
-            Assert.Equal(expectedObject.ToString(), ConfigFileLoader.LoadConfigFile(this.mockInput.Object).ToString());
+            Assert.Equal(expectedObject, ConfigFileLoader.LoadConfigFile(this.mockInput.Object));
         }
     }
 }
