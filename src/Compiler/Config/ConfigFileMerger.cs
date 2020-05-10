@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Compiler.Config
 {
-    class ConfigFileMerger
+    public class ConfigFileMerger
     {
         public static Dictionary<string, List<string>> MergeConfigFiles(CompilerArguments args)
         {
