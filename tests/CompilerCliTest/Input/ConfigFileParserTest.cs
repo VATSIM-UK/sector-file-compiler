@@ -16,7 +16,7 @@ namespace CompilerCliTest.Input
             ConfigFileParser parser = new ConfigFileParser();
 
             arguments = parser.Parse(new List<string>(new string[] { "test.json" }), arguments);
-            Assert.Equal(new InputFile("test.json"), arguments.ConfigFile);
+            Assert.Equal(new InputFile("test.json"), arguments.ConfigFiles[0]);
         }
 
         [Fact]

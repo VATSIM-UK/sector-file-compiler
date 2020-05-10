@@ -8,6 +8,9 @@ using Newtonsoft.Json;
 using Compiler.Validate;
 using Compiler.Parser;
 using Compiler.Compile;
+using Compiler.Config;
+using Compiler.Error;
+using System;
 
 namespace Compiler
 {
@@ -37,11 +40,19 @@ namespace Compiler
             }
 
             // Parse the config file and index all the files
-            dynamic configFile = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(
-                this.arguments.ConfigFile.Contents()
-            );
+            Dictionary<string, List<string>> mergedConfig;
+            try
+            {
+                mergedConfig = ConfigFileMerger.MergeConfigFiles(this.arguments);
+            } catch (Exception e)
+            {
+                this.events.AddEvent(new ConfigFileValidationError(e.Message));
+                this.events.AddEvent(new CompilationFinishedEvent(false));
+                return 1;
+            }
 
-            FileIndex files = FileIndexFactory.CreateFileIndex(this.arguments.ConfigFile.DirectoryLocation(), configFile, events);
+            dynamic configFile = ConfigFileMerger.MergeConfigFiles(this.arguments);
+            FileIndex files = FileIndexFactory.CreateFileIndex(configFile, events);
 
             // Parse all the input files
             SectorElementCollection sectorElements = new SectorElementCollection();

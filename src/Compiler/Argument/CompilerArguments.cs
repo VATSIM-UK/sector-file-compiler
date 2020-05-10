@@ -10,12 +10,20 @@ namespace Compiler.Argument
     {
         public const string COMPILER_VERISON = "1.0.0";
 
-        public IFileInterface ConfigFile { set; get; }
+        public List<IFileInterface> ConfigFiles { get; } = new List<IFileInterface>();
 
         public override string ToString()
         {
+            if (ConfigFiles.Count == 0)
+            {
+                return "No configuration provided";
+            }
+
             string output = "";
-            output += "Config File Path: " + this.ConfigFile.GetPath() + Environment.NewLine;
+            foreach (IFileInterface file in ConfigFiles)
+            {
+                output += "Config File: " + Path.GetFullPath(file.GetPath()) + Environment.NewLine;
+            }
             return output;
         }
 
@@ -29,7 +37,28 @@ namespace Compiler.Argument
 
             CompilerArguments compare = (CompilerArguments)obj;
 
-            return ((this.ConfigFile == null && compare.ConfigFile == null) || this.ConfigFile.Equals(compare.ConfigFile));
+            // Both have nothing, so equal
+            if (this.ConfigFiles.Count == 0 && compare.ConfigFiles.Count == 0)
+            {
+                return true;
+            }
+
+            // Different length, so definitely not equal
+            if (this.ConfigFiles.Count != compare.ConfigFiles.Count)
+            {
+                return false ;
+            }
+
+            // Check every one is equal.
+            for (int i = 0; i < this.ConfigFiles.Count; i++)
+            {
+                if (!this.ConfigFiles[i].Equals(compare.ConfigFiles[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public override int GetHashCode()

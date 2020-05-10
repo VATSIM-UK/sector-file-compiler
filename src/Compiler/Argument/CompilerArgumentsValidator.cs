@@ -2,6 +2,7 @@
 using Compiler.Event;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Compiler.Input;
 
 namespace Compiler.Argument
 {
@@ -9,22 +10,20 @@ namespace Compiler.Argument
     {
         public static void Validate(IEventLogger events, CompilerArguments arguments)
         {
-            if (!arguments.ConfigFile.Exists())
+            if (arguments.ConfigFiles.Count == 0)
             {
                 events.AddEvent(
-                    new CompilerArgumentError("The configuration file could not be found: " + arguments.ConfigFile.GetPath())
+                    new CompilerArgumentError("No config files specificed")
                 );
             }
 
-            if (arguments.ConfigFile.Exists())
+            foreach (IFileInterface configFile in arguments.ConfigFiles)
             {
-                try
+                if (!configFile.Exists())
                 {
-                    JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(arguments.ConfigFile.Contents());
-                }
-                catch
-                {
-                    events.AddEvent(new CompilerArgumentError("The configuration file is not valid JSON"));
+                    events.AddEvent(
+                        new CompilerArgumentError("The configuration file could not be found: " + configFile.GetPath())
+                    );
                 }
             }
 

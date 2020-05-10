@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using Compiler.Output;
 using Compiler.Event;
 using Compiler.Error;
+using Compiler.Config;
 
 namespace Compiler.Input
 {
     public class FileIndexFactory
     {
         public static FileIndex CreateFileIndex(
-            string configFileFolder,
             Dictionary<string, List<string>> configFile,
             IEventLogger events
         ) {
             Dictionary<OutputSections, List<IFileInterface>> files = new Dictionary<OutputSections, List<IFileInterface>>();
             foreach (OutputSections section in Enum.GetValues(typeof(OutputSections)))
             {
-                if (!ConfigFileSectionsMapper.sectionMap.ContainsKey(section)) 
+                if (ConfigFileSectionsMapper.GetConfigSectionForOutputSection(section) == ConfigFileSectionsMapper.invalidSection) 
                 {
                     events.AddEvent(
                         new UnconfiguredConfigSectionWarning(
@@ -27,7 +27,7 @@ namespace Compiler.Input
                 }
 
                 List<IFileInterface> sectionFileList = new List<IFileInterface>();
-                if (!configFile.ContainsKey(ConfigFileSectionsMapper.sectionMap[section]))
+                if (!configFile.ContainsKey(ConfigFileSectionsMapper.GetConfigSectionForOutputSection(section)))
                 {
                     events.AddEvent(
                         new UnconfiguredConfigSectionWarning(
@@ -37,9 +37,9 @@ namespace Compiler.Input
                     continue;
                 }
 
-                foreach (string filePath in configFile[ConfigFileSectionsMapper.sectionMap[section]])
+                foreach (string filePath in configFile[ConfigFileSectionsMapper.GetConfigSectionForOutputSection(section)])
                 {
-                    sectionFileList.Add(new InputFile(configFileFolder + "\\" + filePath));
+                    sectionFileList.Add(new InputFile(filePath));
                 }
 
                 files[section] = sectionFileList;
