@@ -23,10 +23,8 @@ namespace CompilerTest.Argument
             this.mockConfigFile = new Mock<IFileInterface>();
             this.mockOutputs = new Mock<TextWriter>();
             this.eventLogger = new Mock<IEventLogger>();
-            this.arguments = new CompilerArguments
-            {
-                ConfigFile = mockConfigFile.Object
-            };
+            this.arguments = new CompilerArguments();
+            this.arguments.ConfigFiles.Add(mockConfigFile.Object);
             this.mockConfigFile.Setup(foo => foo.GetPath()).Returns("/foo/bar");
             this.arguments.OutFileEse = this.mockOutputs.Object;
             this.arguments.OutFileSct = this.mockOutputs.Object;
@@ -44,13 +42,13 @@ namespace CompilerTest.Argument
         }
 
         [Fact]
-        public void TestItSendsErrorEventOnInvalidJsonInConfigFile()
+        public void TestItSendsErrorEventOnConfigFileNotFound()
         {
-            this.mockConfigFile.Setup(file => file.Exists()).Returns(true);
-            this.mockConfigFile.Setup(file => file.Contents()).Returns("{]");
+            this.mockConfigFile.Setup(file => file.Exists()).Returns(false);
+            this.mockConfigFile.Setup(file => file.GetPath()).Returns("foo/bar/baz.txt");
             CompilerArgumentsValidator.Validate(this.eventLogger.Object, this.arguments);
 
-            string expectedMessage = "The configuration file is not valid JSON";
+            string expectedMessage = "The configuration file could not be found: foo/bar/baz.txt";
             this.eventLogger.Verify(
                 foo => foo.AddEvent(It.Is<CompilerArgumentError>(arg => arg.GetMessage().Contains(expectedMessage)))
             );

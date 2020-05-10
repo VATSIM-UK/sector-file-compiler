@@ -9,8 +9,6 @@ namespace CompilerTest.Input
 {
     public class FileIndexFactoryTest
     {
-        private const string configFileFolder = "foo\\bar";
-
         private readonly Dictionary<string, List<string>> configFile;
 
         private readonly Mock<IEventLogger> events;
@@ -28,14 +26,13 @@ namespace CompilerTest.Input
         public void TestItCreatesFileList()
         {
             FileIndex actual = FileIndexFactory.CreateFileIndex(
-                FileIndexFactoryTest.configFileFolder,
                 this.configFile,
                 this.events.Object
             );
 
             Assert.True(actual.Files.ContainsKey(OutputSections.ESE_POSITIONS));
-            Assert.Equal(new InputFile("foo\\bar\\file1.txt"), actual.GetFilesForSection(OutputSections.ESE_POSITIONS)[0]);
-            Assert.Equal(new InputFile("foo\\bar\\file2.txt"), actual.GetFilesForSection(OutputSections.ESE_POSITIONS)[1]);
+            Assert.Equal(new InputFile("file1.txt"), actual.GetFilesForSection(OutputSections.ESE_POSITIONS)[0]);
+            Assert.Equal(new InputFile("file2.txt"), actual.GetFilesForSection(OutputSections.ESE_POSITIONS)[1]);
         }
     }
 }

@@ -29,7 +29,27 @@ namespace Compiler.Argument
 
             CompilerArguments compare = (CompilerArguments)obj;
 
-            return ((this.ConfigFiles == null && compare.ConfigFiles == null) || this.ConfigFiles.Equals(compare.ConfigFiles));
+            // Both have nothing, so equal
+            if (this.ConfigFiles.Count == 0 && compare.ConfigFiles.Count == 0)
+            {
+                return true;
+            }
+
+            // Different length, so definitely not equal
+            if (this.ConfigFiles.Count != compare.ConfigFiles.Count)
+            {
+                return false ;
+            }
+
+            for (int i = 0; i < this.ConfigFiles.Count; i++)
+            {
+                if (!this.ConfigFiles[i].Equals(compare.ConfigFiles[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public override int GetHashCode()
