@@ -41,6 +41,7 @@ namespace Compiler.Argument
                 return false ;
             }
 
+            // Check every one is equal.
             for (int i = 0; i < this.ConfigFiles.Count; i++)
             {
                 if (!this.ConfigFiles[i].Equals(compare.ConfigFiles[i]))

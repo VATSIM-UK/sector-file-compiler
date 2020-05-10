@@ -5,9 +5,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Compiler.Config
 {
-    class ConfigFileValidator
+    public class ConfigFileValidator
     {
-        public static String lastError { get; private set; }
+        public static String lastError { get; private set; } = "No errors";
 
         public static bool ConfigFileValid(JObject config)
         {
@@ -15,13 +15,13 @@ namespace Compiler.Config
             {
                 if (item.Value.Type != JTokenType.Array)
                 {
-                    lastError = String.Format("Key %s is not an array", item.Key);
+                    lastError = String.Format("Key {0} is not an array", item.Key);
                     return false;
                 }
 
                 if (!ConfigFileSectionsMapper.ConfigSectionValid(item.Key.ToString()))
                 {
-                    lastError = String.Format("Key %s is not a valid config section", item.Key);
+                    lastError = String.Format("Key {0} is not a valid config section", item.Key);
                     return false;
                 }
 
@@ -29,7 +29,7 @@ namespace Compiler.Config
                 {
                     if (inputFile.Type != JTokenType.String)
                     {
-                        lastError = String.Format("Value %s is not a valid string", item.Value.ToString());
+                        lastError = String.Format("Value {0} is not a valid string", inputFile.ToString());
                         return false;
                     }
                 }
