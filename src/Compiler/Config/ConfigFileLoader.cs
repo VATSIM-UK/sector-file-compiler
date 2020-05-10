@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Compiler.Config
 {
-    class ConfigFileLoader
+    public class ConfigFileLoader
     {
         /**
          * Load config files and append roots as required.
@@ -19,8 +19,8 @@ namespace Compiler.Config
             try
             {
                 config = JObject.Parse(file.Contents());
-            } catch (Newtonsoft.Json.JsonReaderException) {
-                throw new Exception("Invalid JSON in" + file.GetPath());
+            } catch (Newtonsoft.Json.JsonReaderException e) {
+                throw new ArgumentException("Invalid JSON in " + file.GetPath() + ": " + e.Message);
             }
 
             // Validate the file
@@ -31,7 +31,7 @@ namespace Compiler.Config
                     file.GetPath(),
                     ConfigFileValidator.lastError
                 );
-                throw new Exception(message);
+                throw new ArgumentException(message);
             }
 
             // Transform it to create full paths
