@@ -20,13 +20,18 @@ namespace Compiler.Config
             {
                 config = JObject.Parse(file.Contents());
             } catch (Newtonsoft.Json.JsonReaderException) {
-                throw new Exception("Config file was invalid JSON" + file.GetPath());
+                throw new Exception("Invalid JSON in" + file.GetPath());
             }
 
             // Validate the file
             if (!ConfigFileValidator.ConfigFileValid(config))
             {
-                throw new Exception("Config file was invalid " + file.GetPath());
+                string message = String.Format(
+                    "Invalid format in {0}: {1}",
+                    file.GetPath(),
+                    ConfigFileValidator.lastError
+                );
+                throw new Exception(message);
             }
 
             // Transform it to create full paths
