@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using Compiler.Input;
+using System.IO;
 
 namespace Compiler.Config
 {
@@ -34,7 +35,7 @@ namespace Compiler.Config
                 JArray fileArray = (JArray)item.Value;
                 for (int key = 0; key < fileArray.Count; key++)
                 {
-                    fileArray[key] = file.DirectoryLocation() + "\\" + fileArray[key];
+                    fileArray[key] = Path.GetFullPath(file.DirectoryLocation() + "\\" + fileArray[key]);
                 }
             }
 
