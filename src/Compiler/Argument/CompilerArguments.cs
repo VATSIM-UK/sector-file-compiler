@@ -14,8 +14,16 @@ namespace Compiler.Argument
 
         public override string ToString()
         {
+            if (ConfigFiles.Count == 0)
+            {
+                return "No configuration provided";
+            }
+
             string output = "";
-            //output += "Config File Path: " + this.ConfigFile.GetPath() + Environment.NewLine;
+            foreach (IFileInterface file in ConfigFiles)
+            {
+                output += "Config File: " + Path.GetFullPath(file.GetPath()) + Environment.NewLine;
+            }
             return output;
         }
 
