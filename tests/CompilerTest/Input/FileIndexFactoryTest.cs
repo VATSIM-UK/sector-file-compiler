@@ -18,7 +18,7 @@ namespace CompilerTest.Input
             this.events = new Mock<IEventLogger>();
             this.configFile = new Dictionary<string, List<string>>
             {
-                ["positions"] = new List<string>(new string[] { "file1.txt", "file2.txt" })
+                ["ese_positions"] = new List<string>(new string[] { "file1.txt", "file2.txt" })
             };
         }
 
