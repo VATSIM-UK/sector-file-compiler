@@ -99,6 +99,9 @@ namespace Compiler.Parser
                     this.errorLog.AddEvent(
                         new SyntaxError("Invalid route segment, incorrect number of arguments", filename, startLine + i + 1)
                     );
+                    this.errorLog.AddEvent(
+                        new ParserSuggestion("Have you checked that the first coordinate is indented by at least 26 spaces?")
+                    );
                     return;
                 }
 
@@ -109,6 +112,9 @@ namespace Compiler.Parser
                 {
                     this.errorLog.AddEvent(
                         new SyntaxError("Invalid route segment", filename, startLine + i + 1)
+                    );
+                    this.errorLog.AddEvent(
+                        new ParserSuggestion("Have you checked that the first coordinate is indented by at least 26 spaces?")
                     );
                     return;
                 }
