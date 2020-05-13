@@ -63,13 +63,13 @@ The input for the compiler is determined through a configuration file in JSON fo
 
 `ese_preamble` - Any other information to appear at the top of the ESE.
 
-`positions` - The \[POSITIONS\] section of the ESE.
+`ese_positions` - The \[POSITIONS\] section of the ESE.
 
-`freetext` - The \[FREETEXT\] section of the ESE.
+`ese_freetext` - The \[FREETEXT\] section of the ESE.
 
-`sidsstars` - EuroScope only. The \[SIDSSTARS\] section of the ESE.
+`ese_sidsstars` - EuroScope only. The \[SIDSSTARS\] section of the ESE.
 
-`airspace` - The \[AIRSPACE\] section of the ESE.
+`ese_airspace` - The \[AIRSPACE\] section of the ESE.
 
 ### Example compiler configuration
 

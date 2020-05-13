@@ -27,10 +27,10 @@ namespace Compiler.Config
             { OutputSections.SCT_REGIONS, "sct_regions" },
             { OutputSections.ESE_HEADER, "ese_header" },
             { OutputSections.ESE_PREAMBLE, "ese_preamble" },
-            { OutputSections.ESE_POSITIONS,  "positions" },
-            { OutputSections.ESE_FREETEXT, "freetext" },
-            { OutputSections.ESE_SIDSSTARS, "sidsstars" },
-            { OutputSections.ESE_AIRSPACE, "airspace" },
+            { OutputSections.ESE_POSITIONS,  "ese_positions" },
+            { OutputSections.ESE_FREETEXT, "ese_freetext" },
+            { OutputSections.ESE_SIDSSTARS, "ese_sidsstars" },
+            { OutputSections.ESE_AIRSPACE, "ese_airspace" },
         };
 
         public static readonly string invalidSection = "";

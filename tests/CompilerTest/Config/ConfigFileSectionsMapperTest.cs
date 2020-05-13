@@ -42,10 +42,10 @@ namespace CompilerTest.Config
             [InlineData(OutputSections.SCT_REGIONS, "sct_regions")]
             [InlineData(OutputSections.ESE_HEADER, "ese_header")]
             [InlineData(OutputSections.ESE_PREAMBLE, "ese_preamble")]
-            [InlineData(OutputSections.ESE_POSITIONS,  "positions")]
-            [InlineData(OutputSections.ESE_FREETEXT, "freetext")]
-            [InlineData(OutputSections.ESE_SIDSSTARS, "sidsstars")]
-            [InlineData(OutputSections.ESE_AIRSPACE, "airspace")]
+            [InlineData(OutputSections.ESE_POSITIONS,  "ese_positions")]
+            [InlineData(OutputSections.ESE_FREETEXT, "ese_freetext")]
+            [InlineData(OutputSections.ESE_SIDSSTARS, "ese_sidsstars")]
+            [InlineData(OutputSections.ESE_AIRSPACE, "ese_airspace")]
         public void ItReturnsConfigSectionForOutputSection(OutputSections section, string expectedSection)
         {
             Assert.Equal(

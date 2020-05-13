@@ -153,7 +153,12 @@ namespace Compiler.Parser
                 case OutputSections.ESE_POSITIONS:
                     break;
                 case OutputSections.ESE_FREETEXT:
-                    break;
+                    return new FreetextParser(
+                        this.GetMetadataParser(section),
+                        new EseLineParser(),
+                        this.sectorElements,
+                        this.logger
+                    );
                 case OutputSections.ESE_AIRSPACE:
                     break;
             }
