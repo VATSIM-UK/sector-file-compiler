@@ -373,6 +373,24 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsFreetext()
+        {
+            Freetext freetext = new Freetext("a", "b", new Coordinate("abc", "def"), "test");
+            this.collection.Add(freetext);
+
+            Assert.Equal(freetext, this.collection.Freetext[0]);
+        }
+
+        [Fact]
+        public void TestItAddsFreetextToCompilableSection()
+        {
+            Freetext freetext = new Freetext("a", "b", new Coordinate("abc", "def"), "test");
+            this.collection.Add(freetext);
+
+            Assert.Equal(freetext, this.collection.Compilables[OutputSections.ESE_FREETEXT][0]);
+        }
+
+        [Fact]
         public void TestItAddsSidRoutes()
         {
             List<RouteSegment> segments = new List<RouteSegment>()
