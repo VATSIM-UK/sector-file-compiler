@@ -151,7 +151,13 @@ namespace Compiler.Parser
                 case OutputSections.ESE_PREAMBLE:
                     break;
                 case OutputSections.ESE_POSITIONS:
-                    break;
+                    return new EsePositionParser(
+                        this.GetMetadataParser(section),
+                        new EseLineParser(),
+                        new VatsimRtfFrequencyParser(108, 136, 25),
+                        this.sectorElements,
+                        this.logger
+                    );
                 case OutputSections.ESE_FREETEXT:
                     return new FreetextParser(
                         this.GetMetadataParser(section),
