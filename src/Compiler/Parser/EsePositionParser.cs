@@ -16,13 +16,18 @@ namespace Compiler.Parser
 
         private readonly List<string> allowedTypes = new List<string>()
         {
+            "OBS",
             "DEL",
             "GND",
             "APP",
             "TWR",
+            "CTR",
             "FSS",
-            "ATIS"
+            "ATIS",
+            "INFO"
         };
+
+        const string noData = "-";
 
         public EsePositionParser(
             MetadataParser metadataParser,
@@ -53,7 +58,7 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments.Count < 11)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Incorrect number of ESE position segments", data.fullPath, i)
+                        new SyntaxError("Incorrect number of ESE position segments", data.fullPath, i + 1)
                     );
                     this.errorLog.AddEvent(
                         new ParserSuggestion("Have you remembered to add the two non-used fields?")
@@ -64,7 +69,7 @@ namespace Compiler.Parser
                 if (this.frequencyParser.ParseFrequency(sectorData.dataSegments[2]) == null)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid RTF frequency " + sectorData.dataSegments[0], data.fullPath, i)
+                        new SyntaxError("Invalid RTF frequency " + sectorData.dataSegments[0], data.fullPath, i + 1)
                     );
                     continue;
                 }
@@ -72,16 +77,16 @@ namespace Compiler.Parser
                 if (!this.allowedTypes.Contains(sectorData.dataSegments[6]))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Unknown Position suffix " + sectorData.dataSegments[0], data.fullPath, i)
+                        new SyntaxError("Unknown Position suffix " + sectorData.dataSegments[0], data.fullPath, i + 1)
                     );
                     continue;
                 }
 
-                if (sectorData.dataSegments[9] != "")
+                if (sectorData.dataSegments[9] != EsePositionParser.noData && sectorData.dataSegments[9] != "")
                 {
                     if (!squawkRegex.IsMatch(sectorData.dataSegments[9])) {
                         this.errorLog.AddEvent(
-                            new SyntaxError("Invalid squawk range start " + sectorData.dataSegments[0], data.fullPath, i)
+                            new SyntaxError("Invalid squawk range start " + sectorData.dataSegments[0], data.fullPath, i + 1)
                         );
                         continue;
                     }
@@ -89,7 +94,7 @@ namespace Compiler.Parser
                     if (!squawkRegex.IsMatch(sectorData.dataSegments[10]))
                     {
                         this.errorLog.AddEvent(
-                            new SyntaxError("Invalid squawk range start " + sectorData.dataSegments[0], data.fullPath, i)
+                            new SyntaxError("Invalid squawk range end " + sectorData.dataSegments[0], data.fullPath, i + 1)
                         );
                         continue;
                     }
@@ -97,7 +102,7 @@ namespace Compiler.Parser
                     if (int.Parse(sectorData.dataSegments[10]) < int.Parse(sectorData.dataSegments[9]))
                     {
                         this.errorLog.AddEvent(
-                            new SyntaxError("Squawk range end is smaller than start " + sectorData.dataSegments[0], data.fullPath, i)
+                            new SyntaxError("Squawk range end is smaller than start " + sectorData.dataSegments[0], data.fullPath, i + 1)
                         );
                         continue;
                     }
@@ -110,7 +115,7 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments.Count - coordNumber > 8)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("A maxium of 4 visibility centers may be specified " + sectorData.dataSegments[0], data.fullPath, i)
+                        new SyntaxError("A maxium of 4 visibility centers may be specified " + sectorData.dataSegments[0], data.fullPath, i + 1)
                     );
                 }
 
@@ -118,25 +123,21 @@ namespace Compiler.Parser
                 List<Coordinate> parsedCoordinates = new List<Coordinate>();
                 while (coordNumber < sectorData.dataSegments.Count)
                 {
+                    // Theres only a latitude left, so unparseable - skip
+                    if (coordNumber + 1 == sectorData.dataSegments.Count)
+                    {
+                        this.errorLog.AddEvent(
+                            new SyntaxError("Missing visibility center longitude coordinate " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                        );
+                        coordinateError = true;
+                        break;
+                    }
+
                     // Ignore skipped centers
                     if (sectorData.dataSegments[coordNumber] == "" && sectorData.dataSegments[coordNumber + 1] == "")
                     {
                         coordNumber += 2;
                         continue;
-                    }
-
-                    // Theres only a latitude left, so unparseable
-                    if (coordNumber + 1 == sectorData.dataSegments.Count)
-                    {
-                        this.errorLog.AddEvent(
-                            new SyntaxError(
-                                "Missing longitude coordinate for visibility center " + sectorData.dataSegments[0],
-                                data.fullPath,
-                                i
-                            )
-                        );
-                        coordinateError = true;
-                        break;
                     }
 
                     Coordinate parsedCoordinate = CoordinateParser.Parse(
@@ -147,7 +148,7 @@ namespace Compiler.Parser
                     if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
                     {
                         this.errorLog.AddEvent(
-                            new SyntaxError("Invalid visibility center " + sectorData.dataSegments[0], data.fullPath, i)
+                            new SyntaxError("Invalid visibility center " + sectorData.dataSegments[0], data.fullPath, i + 1)
                         );
                         coordinateError = true;
                         break;
