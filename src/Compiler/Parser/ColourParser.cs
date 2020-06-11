@@ -46,7 +46,7 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                if (!int.TryParse(sectorData.dataSegments[2], out int colourValue))
+                if (!int.TryParse(sectorData.dataSegments[2].Trim(), out int colourValue))
                 {
                     this.errorLog.AddEvent(new SyntaxError("Colour values must be an integer", data.fullPath, i + 1));
                     continue;

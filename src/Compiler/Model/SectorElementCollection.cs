@@ -32,6 +32,8 @@ namespace Compiler.Model
         public List<Freetext> Freetext { get; } = new List<Freetext>();
         public Info Info { get; private set; }
 
+        public List<ControllerPosition> EsePositions { get; } = new List<ControllerPosition>();
+
         public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
 
         public SectorElementCollection()
@@ -156,6 +158,12 @@ namespace Compiler.Model
         {
             this.Compilables[OutputSections.ESE_FREETEXT].Add(freetext);
             this.Freetext.Add(freetext);
+        }
+
+        public void Add(ControllerPosition esePosition)
+        {
+            this.Compilables[OutputSections.ESE_POSITIONS].Add(esePosition);
+            this.EsePositions.Add(esePosition);
         }
 
         public void Add(BlankLine blankLine, OutputSections section)

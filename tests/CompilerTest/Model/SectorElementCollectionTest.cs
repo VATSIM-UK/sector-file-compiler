@@ -391,6 +391,48 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsEsePositions()
+        {
+            ControllerPosition esePosition = new ControllerPosition(
+                "EGBB_APP",
+                "Birmingham Radar",
+                "123.970",
+                "BBR",
+                "B",
+                "EGBB",
+                "APP",
+                "0401",
+                "0407",
+                new List<Coordinate>(),
+                "comment"
+            );
+            this.collection.Add(esePosition);
+
+            Assert.Equal(esePosition, this.collection.EsePositions[0]);
+        }
+
+        [Fact]
+        public void TestItAddsEsePositionsToCompilableSection()
+        {
+            ControllerPosition esePosition = new ControllerPosition(
+                "EGBB_APP",
+                "Birmingham Radar",
+                "123.970",
+                "BBR",
+                "B",
+                "EGBB",
+                "APP",
+                "0401",
+                "0407",
+                new List<Coordinate>(),
+                "comment"
+            );
+            this.collection.Add(esePosition);
+
+            Assert.Equal(esePosition, this.collection.Compilables[OutputSections.ESE_POSITIONS][0]);
+        }
+
+        [Fact]
         public void TestItAddsSidRoutes()
         {
             List<RouteSegment> segments = new List<RouteSegment>()
