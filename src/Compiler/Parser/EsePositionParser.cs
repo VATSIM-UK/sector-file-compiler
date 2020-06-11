@@ -117,6 +117,7 @@ namespace Compiler.Parser
                     this.errorLog.AddEvent(
                         new SyntaxError("A maxium of 4 visibility centers may be specified " + sectorData.dataSegments[0], data.fullPath, i + 1)
                     );
+                    continue;
                 }
 
                 bool coordinateError = false;

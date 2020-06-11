@@ -154,7 +154,7 @@ namespace Compiler.Parser
                     return new EsePositionParser(
                         this.GetMetadataParser(section),
                         new EseLineParser(),
-                        new VatsimRtfFrequencyParser(108, 136, 25),
+                        new VatsimRtfFrequencyParser(),
                         this.sectorElements,
                         this.logger
                     );

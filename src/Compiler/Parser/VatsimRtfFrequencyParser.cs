@@ -6,16 +6,9 @@ namespace Compiler.Parser
 {
     public class VatsimRtfFrequencyParser : IFrequencyParser
     {
-        private readonly int firstMinValue;
-        private readonly int firstMaxValue;
-        private readonly int secondDividend;
-
-        public VatsimRtfFrequencyParser(int firstMinValue, int firstMaxValue, int secondDividend)
-        {
-            this.firstMinValue = firstMinValue;
-            this.firstMaxValue = firstMaxValue;
-            this.secondDividend = secondDividend;
-        }
+        const int firstMinValue = 118;
+        const int firstMaxValue = 136;
+        const int secondDividend = 25;
 
         public string ParseFrequency(string frequency)
         {
