@@ -18,7 +18,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsCoordinate()
         {
-            Assert.Equal(new Coordinate("abc", "def"), this.model.Corodinate);
+            Assert.Equal(new Coordinate("abc", "def"), this.model.Coordinate);
         }
 
         [Fact]

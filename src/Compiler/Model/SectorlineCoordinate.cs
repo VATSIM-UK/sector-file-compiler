@@ -7,21 +7,21 @@ namespace Compiler.Model
     public class SectorlineCoordinate : AbstractSectorElement, ICompilable
     {
         public SectorlineCoordinate(
-            Coordinate corodinate,
+            Coordinate coordinate,
             string comment
         ) : base(comment) 
         {
-            Corodinate = corodinate;
+            Coordinate = coordinate;
         }
 
-        public Coordinate Corodinate { get; }
+        public Coordinate Coordinate { get; }
 
         public string Compile()
         {
             return String.Format(
                 "COORD:{0}:{1}{2}\r\n",
-                this.Corodinate.latitude,
-                this.Corodinate.longitude,
+                this.Coordinate.latitude,
+                this.Coordinate.longitude,
                 this.CompileComment()
             );
         }
