@@ -5,26 +5,22 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class SectorActiveAirports : AbstractSectorElement, ICompilable
+    public class SectorArrivalAirports : AbstractSectorElement, ICompilable
     {
-        public SectorActiveAirports(
-            bool departureAirport,
+        public SectorArrivalAirports(
             List<string> airports,
             string comment
         ) : base(comment) 
         {
-            DepartureAirport = departureAirport;
             Airports = airports;
         }
 
-        public bool DepartureAirport { get; }
         public List<string> Airports { get; }
 
         public string Compile()
         {
             return String.Format(
-                "{0}:{1}{2}\r\n",
-                this.DepartureAirport ? "DEPAPT" : "ARRAPT",
+                "ARRAPT:{0}{1}\r\n",
                 string.Join(":", this.Airports),
                 this.CompileComment()
             );
