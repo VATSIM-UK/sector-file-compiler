@@ -34,6 +34,12 @@ namespace Compiler.Model
 
         public List<ControllerPosition> EsePositions { get; } = new List<ControllerPosition>();
 
+        public List<Sectorline> SectorLines { get; } = new List<Sectorline>();
+
+        public List<CoordinationPoint> CoordinationPoints { get; } = new List<CoordinationPoint>();
+
+        public List<Sector> Sectors { get; } = new List<Sector>();
+
         public Dictionary<OutputSections, Dictionary<Subsections, List<ICompilable>>> Compilables { get; } = new Dictionary<OutputSections, Dictionary<Subsections, List<ICompilable>>>();
 
         public SectorElementCollection()
@@ -169,6 +175,25 @@ namespace Compiler.Model
         {
             this.Compilables[OutputSections.ESE_POSITIONS][Subsections.DEFAULT].Add(esePosition);
             this.EsePositions.Add(esePosition);
+        }
+
+        public void Add(Sectorline sectorline)
+        {
+            this.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE].Add(sectorline);
+            this.SectorLines.Add(sectorline);
+        }
+
+        public void Add(Sector sector)
+        {
+            this.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTOR].Add(sector);
+            this.Sectors.Add(sector);
+        }
+
+        public void Add(CoordinationPoint coordinationPoint)
+        {
+            this.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_COORDINATION]
+                .Add(coordinationPoint);
+            this.CoordinationPoints.Add(coordinationPoint);
         }
 
         public void Add(BlankLine blankLine, OutputSections section)
