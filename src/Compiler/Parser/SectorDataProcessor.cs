@@ -19,35 +19,39 @@ namespace Compiler.Parser
         ) {
             foreach (OutputSections section in Enum.GetValues(typeof(OutputSections)))
             {
-                AbstractSectorElementParser parser = sectionParsers.GetParserForSection(section);
-                if (parser == null)
+                foreach (Subsections subsection in SubsectionMapper.GetSubsectionsForSection(section))
                 {
-                    errors.AddEvent(
-                        new UnconfiguredConfigSectionWarning(section.ToString())
-                    );
-                }
-
-                foreach (IFileInterface file in files.GetFilesForSection(section))
-                {
-                    if (args.DisplayInputFiles)
-                    {
-                        elements.Add(
-                            new CommentLine("Start of input file " + file.GetPath()),
-                            section
-                        );
-                    }
-
-                    SectorFormatData data = InputLineReader.ReadInputLines(file);
-
-                    if (data.Equals(InputLineReader.invalidData))
+                    AbstractSectorElementParser parser = sectionParsers.GetParserForSection(section);
+                    if (parser == null)
                     {
                         errors.AddEvent(
-                            new FileNotFoundError(file.GetPath())
+                            new UnconfiguredConfigSectionWarning(section.ToString())
                         );
-                        continue;
                     }
 
-                    parser.ParseData(InputLineReader.ReadInputLines(file)); 
+                    foreach (IFileInterface file in files.GetFilesForSection(section))
+                    {
+                        if (args.DisplayInputFiles)
+                        {
+                            elements.Add(
+                                new CommentLine("Start of input file " + file.GetPath()),
+                                section,
+                                subsection
+                            );
+                        }
+
+                        SectorFormatData data = InputLineReader.ReadInputLines(file);
+
+                        if (data.Equals(InputLineReader.invalidData))
+                        {
+                            errors.AddEvent(
+                                new FileNotFoundError(file.GetPath())
+                            );
+                            continue;
+                        }
+
+                        parser.ParseData(InputLineReader.ReadInputLines(file));
+                    }
                 }
             }
         }

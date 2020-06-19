@@ -14,7 +14,7 @@ namespace CompilerTest.Parser
         public MetadataParserTest()
         {
             this.sectorElements = new SectorElementCollection();
-            this.parser = new MetadataParser(this.sectorElements, OutputSections.ESE_HEADER);
+            this.parser = new MetadataParser(this.sectorElements, OutputSections.ESE_HEADER, Subsections.DEFAULT);
         }
 
         [Fact]

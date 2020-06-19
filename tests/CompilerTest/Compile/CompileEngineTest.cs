@@ -19,7 +19,7 @@ namespace CompilerTest.Compile
             this.elements = new SectorElementCollection();
             this.mockOutput = new Mock<TextWriter>();
 
-            this.elements.Add(new CommentLine("test"), OutputSections.ESE_SIDSSTARS);
+            this.elements.Add(new CommentLine("test"), OutputSections.ESE_SIDSSTARS, Subsections.DEFAULT);
         }
 
         [Fact]

@@ -681,7 +681,7 @@ namespace CompilerTest.Model
         public void TestItAddsBlankLines()
         {
             BlankLine blank = new BlankLine();
-            this.collection.Add(blank, OutputSections.SCT_COLOUR_DEFS);
+            this.collection.Add(blank, OutputSections.SCT_COLOUR_DEFS, Subsections.DEFAULT);
 
             Assert.Equal(blank, this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][Subsections.DEFAULT][0]);
         }
@@ -690,7 +690,7 @@ namespace CompilerTest.Model
         public void TestItAddsCommentLines()
         {
             CommentLine comment = new CommentLine("test");
-            this.collection.Add(comment, OutputSections.SCT_COLOUR_DEFS);
+            this.collection.Add(comment, OutputSections.SCT_COLOUR_DEFS, Subsections.DEFAULT);
 
             Assert.Equal(comment, this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][Subsections.DEFAULT][0]);
         }

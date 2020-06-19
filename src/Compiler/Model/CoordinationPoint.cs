@@ -7,6 +7,10 @@ namespace Compiler.Model
 {
     public class CoordinationPoint : AbstractSectorElement, ICompilable
     {
+        public static readonly string POINT_TYPE_FIR = "FIR_COPX";
+        public static readonly string POINT_TYPE_INTERNAL = "COPX";
+        public static readonly string DATA_NOT_SPECIFIED = "*";
+
         public CoordinationPoint(
             bool isFirCopx,
             string departureAirportOrFixBefore,

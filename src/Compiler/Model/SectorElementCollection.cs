@@ -196,14 +196,14 @@ namespace Compiler.Model
             this.CoordinationPoints.Add(coordinationPoint);
         }
 
-        public void Add(BlankLine blankLine, OutputSections section)
+        public void Add(BlankLine blankLine, OutputSections section, Subsections subsection)
         {
-            this.Compilables[section][Subsections.DEFAULT].Add(blankLine);
+            this.Compilables[section][subsection].Add(blankLine);
         }
 
-        public void Add(CommentLine comment, OutputSections section)
+        public void Add(CommentLine comment, OutputSections section, Subsections subsection)
         {
-            this.Compilables[section][Subsections.DEFAULT].Add(comment);
+            this.Compilables[section][subsection].Add(comment);
         }
     }
 }
