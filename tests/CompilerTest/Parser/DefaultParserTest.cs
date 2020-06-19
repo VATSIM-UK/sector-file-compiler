@@ -28,7 +28,9 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<CommentLine>(this.sectorElements.Compilables[OutputSections.ESE_HEADER][0]);
+            Assert.IsType<CommentLine>(
+                this.sectorElements.Compilables[OutputSections.ESE_HEADER][Subsections.DEFAULT][0]
+            );
         }
 
         [Fact]
@@ -42,7 +44,9 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.sectorElements.Compilables[OutputSections.ESE_HEADER][0]);
+            Assert.IsType<BlankLine>(
+                this.sectorElements.Compilables[OutputSections.ESE_HEADER][Subsections.DEFAULT][0]
+            );
         }
     }
 }

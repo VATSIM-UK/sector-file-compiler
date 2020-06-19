@@ -92,7 +92,7 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_GEO][0]);
+            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_GEO][Subsections.DEFAULT][0]);
         }
 
         [Fact]

@@ -2,6 +2,7 @@
 using Compiler.Transformer;
 using Compiler.Output;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Compiler.Compile
 {
@@ -24,12 +25,19 @@ namespace Compiler.Compile
             this.outfile = outfile;
         }
 
+        /*
+         * Loop through all the subsections and the files in each
+         * and write them to the output file.
+         */
         public void Compile()
         {
             this.outfile.Write(SectionHeaderFactory.Create(section).Compile());
-            foreach (ICompilable compilable in this.elements.Compilables[this.section])
+            foreach (KeyValuePair<Subsections, List<ICompilable>> subsection in this.elements.Compilables[this.section])
             {
-                this.outfile.Write(this.transformers.Transform(compilable.Compile()));
+                foreach (ICompilable compilable in subsection.Value)
+                {
+                    this.outfile.Write(this.transformers.Transform(compilable.Compile()));
+                }
             }
             this.outfile.Write((new SectionFooter()).Compile());
         }

@@ -92,7 +92,9 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_LOW_AIRWAY][0]);
+            Assert.IsType<BlankLine>(
+                this.collection.Compilables[OutputSections.SCT_LOW_AIRWAY][Subsections.DEFAULT][0]
+            );
         }
 
         [Fact]

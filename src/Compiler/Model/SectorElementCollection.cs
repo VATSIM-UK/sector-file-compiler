@@ -34,19 +34,24 @@ namespace Compiler.Model
 
         public List<ControllerPosition> EsePositions { get; } = new List<ControllerPosition>();
 
-        public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
+        public Dictionary<OutputSections, Dictionary<Subsections, List<ICompilable>>> Compilables { get; } = new Dictionary<OutputSections, Dictionary<Subsections, List<ICompilable>>>();
 
         public SectorElementCollection()
         {
             foreach (OutputSections section in Enum.GetValues(typeof(OutputSections)))
             {
-                Compilables.Add(section, new List<ICompilable>());
+                Compilables.Add(section, new Dictionary<Subsections, List<ICompilable>>());
+
+                foreach (Subsections subsection in Enum.GetValues(typeof(Subsections)))
+                {
+                    Compilables[section].Add(subsection, new List<ICompilable>());
+                }
             }
         }
 
         public void Add(Airport airport)
         {
-            this.Compilables[OutputSections.SCT_AIRPORT].Add(airport);
+            this.Compilables[OutputSections.SCT_AIRPORT][Subsections.DEFAULT].Add(airport);
             this.Airports.Add(airport);
         }
 
@@ -56,11 +61,11 @@ namespace Compiler.Model
             {
                 case AirwayType.LOW:
                     this.LowAirways.Add(airway);
-                    this.Compilables[OutputSections.SCT_LOW_AIRWAY].Add(airway);
+                    this.Compilables[OutputSections.SCT_LOW_AIRWAY][Subsections.DEFAULT].Add(airway);
                     break;
                 case AirwayType.HIGH:
                     this.HighAirways.Add(airway);
-                    this.Compilables[OutputSections.SCT_HIGH_AIRWAY].Add(airway);
+                    this.Compilables[OutputSections.SCT_HIGH_AIRWAY][Subsections.DEFAULT].Add(airway);
                     break;
             }
         }
@@ -71,15 +76,15 @@ namespace Compiler.Model
             {
                 case ArtccType.REGULAR:
                     this.Artccs.Add(artcc);
-                    this.Compilables[OutputSections.SCT_ARTCC].Add(artcc);
+                    this.Compilables[OutputSections.SCT_ARTCC][Subsections.DEFAULT].Add(artcc);
                     break;
                 case ArtccType.LOW:
                     this.LowArtccs.Add(artcc);
-                    this.Compilables[OutputSections.SCT_ARTCC_LOW].Add(artcc);
+                    this.Compilables[OutputSections.SCT_ARTCC_LOW][Subsections.DEFAULT].Add(artcc);
                     break;
                 case ArtccType.HIGH:
                     this.HighArtccs.Add(artcc);
-                    this.Compilables[OutputSections.SCT_ARTCC_HIGH].Add(artcc);
+                    this.Compilables[OutputSections.SCT_ARTCC_HIGH][Subsections.DEFAULT].Add(artcc);
                     break;
 
             }
@@ -87,43 +92,43 @@ namespace Compiler.Model
 
         public void Add(Colour colour)
         {
-            this.Compilables[OutputSections.SCT_COLOUR_DEFS].Add(colour);
+            this.Compilables[OutputSections.SCT_COLOUR_DEFS][Subsections.DEFAULT].Add(colour);
             this.Colours.Add(colour);
         }
 
         public void Add(Fix fix)
         {
-            this.Compilables[OutputSections.SCT_FIXES].Add(fix);
+            this.Compilables[OutputSections.SCT_FIXES][Subsections.DEFAULT].Add(fix);
             this.Fixes.Add(fix);
         }
 
         public void Add(Geo geo)
         {
-            this.Compilables[OutputSections.SCT_GEO].Add(geo);
+            this.Compilables[OutputSections.SCT_GEO][Subsections.DEFAULT].Add(geo);
             this.GeoElements.Add(geo);
         }
 
         public void Add(Label label)
         {
-            this.Compilables[OutputSections.SCT_LABELS].Add(label);
+            this.Compilables[OutputSections.SCT_LABELS][Subsections.DEFAULT].Add(label);
             this.Labels.Add(label);
         }
 
         public void Add(Ndb ndb)
         {
-            this.Compilables[OutputSections.SCT_NDB].Add(ndb);
+            this.Compilables[OutputSections.SCT_NDB][Subsections.DEFAULT].Add(ndb);
             this.Ndbs.Add(ndb);
         }
 
         public void Add(Region region)
         {
-            this.Compilables[OutputSections.SCT_REGIONS].Add(region);
+            this.Compilables[OutputSections.SCT_REGIONS][Subsections.DEFAULT].Add(region);
             this.Regions.Add(region);
         }
 
         public void Add(SidStar sidStar)
         {
-            this.Compilables[OutputSections.ESE_SIDSSTARS].Add(sidStar);
+            this.Compilables[OutputSections.ESE_SIDSSTARS][Subsections.DEFAULT].Add(sidStar);
             this.SidStars.Add(sidStar);
         }
 
@@ -133,47 +138,47 @@ namespace Compiler.Model
             {
                 case SidStarType.SID:
                     this.SidRoutes.Add(sidStar);
-                    this.Compilables[OutputSections.SCT_SID].Add(sidStar);
+                    this.Compilables[OutputSections.SCT_SID][Subsections.DEFAULT].Add(sidStar);
                     break;
                 case SidStarType.STAR:
                     this.StarRoutes.Add(sidStar);
-                    this.Compilables[OutputSections.SCT_STAR].Add(sidStar);
+                    this.Compilables[OutputSections.SCT_STAR][Subsections.DEFAULT].Add(sidStar);
                     break;
             }
         }
 
         public void Add(Vor vor)
         {
-            this.Compilables[OutputSections.SCT_VOR].Add(vor);
+            this.Compilables[OutputSections.SCT_VOR][Subsections.DEFAULT].Add(vor);
             this.Vors.Add(vor);
         }
 
         public void Add(Info info)
         {
-            this.Compilables[OutputSections.SCT_INFO].Insert(0, info);
+            this.Compilables[OutputSections.SCT_INFO][Subsections.DEFAULT].Insert(0, info);
             this.Info = info;
         }
 
         public void Add(Freetext freetext)
         {
-            this.Compilables[OutputSections.ESE_FREETEXT].Add(freetext);
+            this.Compilables[OutputSections.ESE_FREETEXT][Subsections.DEFAULT].Add(freetext);
             this.Freetext.Add(freetext);
         }
 
         public void Add(ControllerPosition esePosition)
         {
-            this.Compilables[OutputSections.ESE_POSITIONS].Add(esePosition);
+            this.Compilables[OutputSections.ESE_POSITIONS][Subsections.DEFAULT].Add(esePosition);
             this.EsePositions.Add(esePosition);
         }
 
         public void Add(BlankLine blankLine, OutputSections section)
         {
-            this.Compilables[section].Add(blankLine);
+            this.Compilables[section][Subsections.DEFAULT].Add(blankLine);
         }
 
         public void Add(CommentLine comment, OutputSections section)
         {
-            this.Compilables[section].Add(comment);
+            this.Compilables[section][Subsections.DEFAULT].Add(comment);
         }
     }
 }
