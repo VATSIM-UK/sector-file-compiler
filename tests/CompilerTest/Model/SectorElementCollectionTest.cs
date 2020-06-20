@@ -536,6 +536,47 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsCircleSectorlines()
+        {
+            CircleSectorline sectorline = new CircleSectorline(
+                "Test Sectorline",
+                "EGGD",
+                5.5,
+                new List<SectorlineDisplayRule>
+                {
+                    new SectorlineDisplayRule("TEST1", "TEST1", "TEST2", "comment1"),
+                    new SectorlineDisplayRule("TEST2", "TEST2", "TEST1", "comment2")
+                },
+                "commentname"
+            );
+
+            this.collection.Add(sectorline);
+            Assert.Equal(sectorline, this.collection.CircleSectorLines[0]);
+        }
+
+        [Fact]
+        public void TestItAddsCircleSectorlinesToCompilablesSection()
+        {
+            CircleSectorline sectorline = new CircleSectorline(
+                "Test Sectorline",
+                "EGGD",
+                5.5,
+                new List<SectorlineDisplayRule>
+                {
+                    new SectorlineDisplayRule("TEST1", "TEST1", "TEST2", "comment1"),
+                    new SectorlineDisplayRule("TEST2", "TEST2", "TEST1", "comment2")
+                },
+                "commentname"
+            );
+
+            this.collection.Add(sectorline);
+            Assert.Equal(
+                sectorline,
+                this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE][0]
+            );
+        }
+
+        [Fact]
         public void TestItAddsSectors()
         {
             Sector sector = new Sector(

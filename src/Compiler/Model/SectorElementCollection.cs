@@ -36,6 +36,8 @@ namespace Compiler.Model
 
         public List<Sectorline> SectorLines { get; } = new List<Sectorline>();
 
+        public List<CircleSectorline> CircleSectorLines { get; } = new List<CircleSectorline>();
+
         public List<CoordinationPoint> CoordinationPoints { get; } = new List<CoordinationPoint>();
 
         public List<Sector> Sectors { get; } = new List<Sector>();
@@ -181,6 +183,12 @@ namespace Compiler.Model
         {
             this.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE].Add(sectorline);
             this.SectorLines.Add(sectorline);
+        }
+
+        public void Add(CircleSectorline sectorline)
+        {
+            this.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE].Add(sectorline);
+            this.CircleSectorLines.Add(sectorline);
         }
 
         public void Add(Sector sector)

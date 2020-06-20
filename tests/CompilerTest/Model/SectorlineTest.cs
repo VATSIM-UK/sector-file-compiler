@@ -30,6 +30,12 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItSetsName()
+        {
+            Assert.Equal("Test Sectorline", this.model.Name);
+        }
+
+        [Fact]
         public void TestItSetsDisplayRules()
         {
             Assert.Equal(this.displayRules, this.model.DisplayRules);
