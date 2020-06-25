@@ -25,5 +25,17 @@ namespace Compiler.Model
                 this.CompileComment()
             );
         }
+
+        public override bool Equals(object obj)
+        {
+            return (obj is SectorlineCoordinate) &&
+                (((SectorlineCoordinate)obj).Coordinate.Equals(this.Coordinate)) &&
+                (((SectorlineCoordinate)obj).Comment == this.Comment);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

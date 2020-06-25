@@ -32,5 +32,19 @@ namespace Compiler.Model
                 this.CompileComment()
             );
         }
+
+        public override bool Equals(object obj)
+        {
+            return (obj is SectorlineDisplayRule) &&
+                (((SectorlineDisplayRule)obj).ControlledSector == this.ControlledSector) &&
+                (((SectorlineDisplayRule)obj).ControlledSector == this.ControlledSector) &&
+                (((SectorlineDisplayRule)obj).CompareSectorSecond == this.CompareSectorSecond) &&
+                (((SectorlineDisplayRule)obj).Comment == this.Comment);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
