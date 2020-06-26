@@ -20,6 +20,12 @@ namespace Compiler.Output
             }
         };
 
+        public static bool IsValidSubsectionForSection(OutputSections section, Subsections subsection)
+        {
+            return SubsectionMapper.subsections.ContainsKey(section) &&
+                SubsectionMapper.subsections[section].Contains(subsection);
+        }
+
         public static List<Subsections> GetSubsectionsForSection(OutputSections section)
         {
             return subsections.ContainsKey(section)
