@@ -36,5 +36,15 @@ namespace CompilerTest.Model
                 this.model.Compile()
             );
         }
+
+        [Fact]
+        public void TestItCompilesNoData()
+        {
+            SectorBorder emptyModel = new SectorBorder();
+            Assert.Equal(
+                "",
+                emptyModel.Compile()
+            );
+        }
     }
 }

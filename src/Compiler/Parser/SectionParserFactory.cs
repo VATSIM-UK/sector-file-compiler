@@ -178,7 +178,12 @@ namespace Compiler.Parser
                                 this.logger
                             );
                         case Subsections.ESE_AIRSPACE_SECTOR:
-                            break;
+                            return new SectorParser(
+                                this.GetMetadataParser(section, subsection),
+                                new EseLineParser(),
+                                this.sectorElements,
+                                this.logger
+                            );
                         case Subsections.ESE_AIRSPACE_SECTORLINE:
                             return new SectorlineParser(
                                 this.GetMetadataParser(section, subsection),

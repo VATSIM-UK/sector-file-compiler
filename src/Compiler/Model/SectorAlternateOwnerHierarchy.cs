@@ -29,5 +29,33 @@ namespace Compiler.Model
                 this.CompileComment()
             );
         }
+
+        public override bool Equals(object obj)
+        {
+            if (
+                !(obj is SectorAlternateOwnerHierarchy) ||
+                ((SectorAlternateOwnerHierarchy)obj).Name != this.Name ||
+                ((SectorAlternateOwnerHierarchy)obj).Comment != this.Comment ||
+                ((SectorAlternateOwnerHierarchy)obj).Owners.Count != this.Owners.Count
+            )
+            {
+                return false;
+            }
+
+            for (int i = 0; i < this.Owners.Count; i++)
+            {
+                if (this.Owners[i] != ((SectorAlternateOwnerHierarchy)obj).Owners[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

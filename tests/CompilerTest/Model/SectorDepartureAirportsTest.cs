@@ -35,5 +35,15 @@ namespace CompilerTest.Model
                 this.model.Compile()
             );
         }
+
+        [Fact]
+        public void TestItCompilesNoData()
+        {
+            SectorDepartureAirports emptyModel = new SectorDepartureAirports();
+            Assert.Equal(
+                "",
+                emptyModel.Compile()
+            );
+        }
     }
 }

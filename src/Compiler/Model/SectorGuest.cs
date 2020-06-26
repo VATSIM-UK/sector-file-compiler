@@ -33,5 +33,19 @@ namespace Compiler.Model
                 this.CompileComment()
             );
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is SectorGuest &&
+                ((SectorGuest)obj).Comment == this.Comment &&
+                ((SectorGuest)obj).Sector == this.Sector &&
+                ((SectorGuest)obj).ArrivalAirport == this.ArrivalAirport &&
+                ((SectorGuest)obj).DepartureAirport == this.DepartureAirport;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
