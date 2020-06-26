@@ -29,5 +29,18 @@ namespace Compiler.Model
                 this.CompileComment()
             );
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is SectorActive &&
+                ((SectorActive)obj).Comment == this.Comment &&
+                ((SectorActive)obj).Airfield == this.Airfield &&
+                ((SectorActive)obj).Runway == this.Runway;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
