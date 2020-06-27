@@ -35,6 +35,7 @@ namespace Compiler.Validate
             new AllCoordinationPointsMustHaveValidFix(),
             new AllCoordinationPointsMustHaveValidToSector(),
             new AllCoordinationPointsMustHaveValidFromSector(),
+            new AllSectorlinesMustHaveUniqueName(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
