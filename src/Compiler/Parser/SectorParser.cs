@@ -245,12 +245,12 @@ namespace Compiler.Parser
                 throw new Exception("Invalid number of ACTIVE segements ");
             }
 
-            if (!AirportValidator.IcaoValid(line.dataSegments[1]))
+            if (!AirportValidator.ValidEuroscopeAirport(line.dataSegments[1]))
             {
                 throw new Exception("Invalid airport designator in ACTIVE segement ");
             }
 
-            if (!RunwayValidator.RunwayValid(line.dataSegments[2]))
+            if (!RunwayValidator.RunwayValidIncludingAdjacent(line.dataSegments[2]))
             {
                 throw new Exception("Invalid runway designator in ACTIVE segement ");
             }

@@ -13,5 +13,10 @@ namespace Compiler.Validate
         {
             return Regex.IsMatch(runway, RunwayValidator.RUNWAY_REGEX);
         }
+
+        public static bool RunwayValidIncludingAdjacent(string runway)
+        {
+            return runway == "00" || Regex.IsMatch(runway, RunwayValidator.RUNWAY_REGEX);
+        }
     }
 }
