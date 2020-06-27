@@ -422,14 +422,15 @@ namespace CompilerTest.Parser
                 "test",
                 "test",
                 new List<string>(new string[] {
-                    "CIRCLE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
-                    "DISPLAY:BBAPP:BBAPP:BBTWR ;comment1",
-                    "DISPLAY:BBTWR:BBAPP:BBTWR ;comment2",
                     "SECTORLINE:JJCTR - LS ;comment6",
                     "DISPLAY:London AC Worthing:JJCTR:London S6 ;comment7",
                     "DISPLAY:JJCTR:JJCTR:London AC Worthing ;comment8",
                     "COORD:N049.59.60.000:W002.29.35.000 ;comment9",
                     "COORD:N050.00.00.000:W001.47.00.000 ;comment10",
+                    "",
+                    "CIRCLE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
+                    "DISPLAY:BBAPP:BBAPP:BBTWR ;comment1",
+                    "DISPLAY:BBTWR:BBAPP:BBTWR ;comment2",
                 })
             );
 

@@ -92,6 +92,7 @@ namespace Compiler.Parser
                 // Defer all metadata lines to the base
                 if (this.ParseMetadata(data.lines[i]))
                 {
+                    i++;
                     continue;
                 }
 
@@ -173,6 +174,7 @@ namespace Compiler.Parser
                 // Defer all metadata lines to the base
                 if (this.ParseMetadata(data.lines[i]))
                 {
+                    i++;
                     continue;
                 }
 
@@ -195,7 +197,7 @@ namespace Compiler.Parser
                     }
                     else
                     {
-                        throw new Exception("Invalid line in SECTORLINE declaration");
+                        throw new Exception("Invalid declaration in SECTORLINE declaration");
                     }
                 } catch (Exception exception)
                 {
@@ -211,7 +213,7 @@ namespace Compiler.Parser
             if (displayRules.Count == 0)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("No display rules found for SECTORLINE ", data.fullPath, i + 1)
+                    new SyntaxError("No display rules found for SECTORLINE ", data.fullPath, startLine + 1)
                 );
                 throw new Exception();
             }
@@ -219,7 +221,7 @@ namespace Compiler.Parser
             if (coordinates.Count == 0)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("No coordinates found for SECTORLINE ", data.fullPath, i + 1)
+                    new SyntaxError("No coordinates found for SECTORLINE ", data.fullPath, startLine + 1)
                 );
                 throw new Exception();
             }
