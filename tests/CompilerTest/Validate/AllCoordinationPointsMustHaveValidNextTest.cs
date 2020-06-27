@@ -35,7 +35,7 @@ namespace CompilerTest.Validate
         [InlineData("testvor")]
         [InlineData("testndb")]
         [InlineData("testairport")]
-        public void TestItPassesOnValidRoute(string fix)
+        public void TestItPassesOnValidNext(string fix)
         {
             this.sectorElements.Add(
                 new CoordinationPoint(
@@ -78,7 +78,7 @@ namespace CompilerTest.Validate
         [InlineData("testvor", "nottestvor")]
         [InlineData("nottestndb", "*")]
         [InlineData("testairport", "nottestairport")]
-        public void TestItFailsOnInvalidRoute(string firstFix, string secondFix)
+        public void TestItFailsOnInvalidNext(string firstFix, string secondFix)
         {
             this.sectorElements.Add(
                 new CoordinationPoint(
