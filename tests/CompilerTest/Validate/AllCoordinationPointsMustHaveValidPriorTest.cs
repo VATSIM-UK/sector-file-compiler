@@ -32,6 +32,7 @@ namespace CompilerTest.Validate
 
         [Theory]
         [InlineData("testfix")]
+        [InlineData("*")]
         [InlineData("testvor")]
         [InlineData("testndb")]
         [InlineData("testairport")]
@@ -76,7 +77,7 @@ namespace CompilerTest.Validate
         [Theory]
         [InlineData("nottestfix","testfix")]
         [InlineData("testvor", "nottestvor")]
-        [InlineData("nottestndb", "testndb")]
+        [InlineData("nottestndb", "*")]
         [InlineData("testairport", "nottestairport")]
         public void TestItFailsOnInvalidRoute(string firstFix, string secondFix)
         {
