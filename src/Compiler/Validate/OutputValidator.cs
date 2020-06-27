@@ -32,6 +32,7 @@ namespace Compiler.Validate
             new InfoMustHaveValidAirport(),
             new AllCoordinationPointsMustHaveValidPrior(),
             new AllCoordinationPointsMustHaveValidNext(),
+            new AllCoordinationPointsMustHaveValidFix(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
