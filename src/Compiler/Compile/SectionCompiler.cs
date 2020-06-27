@@ -32,12 +32,9 @@ namespace Compiler.Compile
         public void Compile()
         {
             this.outfile.Write(SectionHeaderFactory.Create(section).Compile());
-            foreach (KeyValuePair<Subsections, List<ICompilable>> subsection in this.elements.Compilables[this.section])
+            foreach (ICompilable compilable in this.elements.Compilables[this.section])
             {
-                foreach (ICompilable compilable in subsection.Value)
-                {
-                    this.outfile.Write(this.transformers.Transform(compilable.Compile()));
-                }
+                this.outfile.Write(this.transformers.Transform(compilable.Compile()));
             }
             this.outfile.Write((new SectionFooter()).Compile());
         }

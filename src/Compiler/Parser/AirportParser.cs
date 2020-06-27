@@ -6,7 +6,7 @@ using Compiler.Model;
 
 namespace Compiler.Parser
 {
-    public class AirportParser : AbstractSectorElementParser
+    public class AirportParser : AbstractSectorElementParser, IFileParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection elements;
@@ -24,7 +24,7 @@ namespace Compiler.Parser
             this.eventLogger = eventLogger;
         }
 
-        public override void ParseData(SectorFormatData data)
+        public void ParseData(SectorFormatData data)
         {
             int linesParsed = 0;
             SectorFormatLine nameLine = new SectorFormatLine("", new List<string>(), "");

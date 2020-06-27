@@ -5,7 +5,7 @@ using Compiler.Event;
 
 namespace Compiler.Parser
 {
-    public class SidStarRouteParser: AbstractSectorElementParser
+    public class SidStarRouteParser: AbstractSectorElementParser, IFileParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
@@ -27,7 +27,7 @@ namespace Compiler.Parser
 
         public SidStarType Type { get; }
 
-        public override void ParseData(SectorFormatData data)
+        public void ParseData(SectorFormatData data)
         {
             List<SectorFormatLine> linesToProcess = new List<SectorFormatLine>();
             bool foundFirst = false;

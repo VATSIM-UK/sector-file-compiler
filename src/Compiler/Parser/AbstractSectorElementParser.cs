@@ -1,5 +1,9 @@
 ﻿namespace Compiler.Parser
 {
+    /*
+     * A class containing useful methods for parsing metadata out of
+     * data files.
+     */
     abstract public class AbstractSectorElementParser
     {
         private readonly MetadataParser metadataParser;
@@ -16,10 +20,5 @@
         {
             return metadataParser.ParseBlankLine(line) || metadataParser.ParseCommentLine(line);
         }
-
-        /**
-         * Parse data lines, from a given starting line.
-         */
-        abstract public void ParseData(SectorFormatData data);
     }
 }

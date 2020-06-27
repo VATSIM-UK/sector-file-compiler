@@ -7,7 +7,7 @@ using System;
 
 namespace Compiler.Parser
 {
-    public class SectorParser : AbstractSectorElementParser
+    public class SectorParser : AbstractEseAirspaceParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
@@ -25,177 +25,146 @@ namespace Compiler.Parser
             this.errorLog = errorLog;
         }
 
-        public override void ParseData(SectorFormatData data)
+        public int ParseData(SectorFormatData data, int i)
         {
-            for (int i = 0; i < data.lines.Count;)
+            // Check the declaration
+            SectorFormatLine declarationLine = this.sectorLineParser.ParseLine(data.lines[i]);
+            if (declarationLine.dataSegments[0] != "SECTOR")
+            {
+                this.errorLog.AddEvent(
+                    new SyntaxError("Invalid SECTOR declaration ", data.fullPath, i + 1)
+                );
+                throw new Exception();
+            }
+
+            // Check the minimum and maximum altitudes
+            if (!int.TryParse(declarationLine.dataSegments[2], out int minimumAltitude))
+            {
+                this.errorLog.AddEvent(
+                    new SyntaxError("SECTOR minimum altitude must be an integer ", data.fullPath, i + 1)
+                );
+                throw new Exception();
+            }
+
+            if (!int.TryParse(declarationLine.dataSegments[3], out int maximumAltitude))
+            {
+                this.errorLog.AddEvent(
+                    new SyntaxError("SECTOR maximum altitude must be an integer ", data.fullPath, i + 1)
+                );
+                throw new Exception();
+            }
+
+
+            int nextLine = i + 1;
+            SectorOwnerHierarchy ownerHierarchy = null;
+            List<SectorAlternateOwnerHierarchy> altOwners = new List<SectorAlternateOwnerHierarchy>();
+            SectorBorder border = new SectorBorder();
+            List<SectorActive> actives = new List<SectorActive>();
+            List<SectorGuest> guests = new List<SectorGuest>();
+            SectorDepartureAirports departureAirports = new SectorDepartureAirports();
+            SectorArrivalAirports arrivalAirports = new SectorArrivalAirports();
+            while (nextLine < data.lines.Count)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(data.lines[nextLine]))
                 {
-                    i++;
+                    nextLine++;
                     continue;
                 }
 
-                // Check the declaration
-                SectorFormatLine declarationLine = this.sectorLineParser.ParseLine(data.lines[i]);
-                if (declarationLine.dataSegments[0] != "SECTOR") {
-                    this.errorLog.AddEvent(
-                        new SyntaxError("Invalid SECTOR declaration ", data.fullPath, i + 1)
-                    );
-                    return;
+                SectorFormatLine lineToParse = this.sectorLineParser.ParseLine(data.lines[nextLine]);
+
+                if (IsNewDeclaration(lineToParse))
+                {
+                    break;
                 }
 
-                // Check the minimum and maximum altitudes
-                if (!int.TryParse(declarationLine.dataSegments[2], out int minimumAltitude))
+                /*
+                 * Parse each line one at a time, stopping if we reach a new declaration.
+                 */
+                try
                 {
-                    this.errorLog.AddEvent(
-                        new SyntaxError("SECTOR minimum altitude must be an integer ", data.fullPath, i + 1)
-                    );
-                    return;
-                }
-
-                if (!int.TryParse(declarationLine.dataSegments[3], out int maximumAltitude))
-                {
-                    this.errorLog.AddEvent(
-                        new SyntaxError("SECTOR maximum altitude must be an integer ", data.fullPath, i + 1)
-                    );
-                    return;
-                }
-
-
-                int nextLine = i + 1;
-                bool newDeclaration = false;
-                SectorOwnerHierarchy ownerHierarchy = null;
-                List<SectorAlternateOwnerHierarchy> altOwners = new List<SectorAlternateOwnerHierarchy>();
-                SectorBorder border = new SectorBorder();
-                List<SectorActive> actives = new List<SectorActive>();
-                List<SectorGuest> guests = new List<SectorGuest>();
-                SectorDepartureAirports departureAirports = new SectorDepartureAirports();
-                SectorArrivalAirports arrivalAirports = new SectorArrivalAirports();
-                while (nextLine < data.lines.Count)
-                {
-                    // Defer all metadata lines to the base
-                    if (this.ParseMetadata(data.lines[nextLine]))
+                    switch (lineToParse.dataSegments[0])
                     {
-                        nextLine++;
-                        continue;
+                        case "OWNER":
+                            ownerHierarchy = this.ParseOwnerHierarchy(lineToParse);
+                            break;
+                        case "ALTOWNER":
+                            altOwners.Add(this.ParseAlternateOwnerHierarchy(lineToParse));
+                            break;
+                        case "BORDER":
+                            if (border.BorderLines.Count != 0)
+                            {
+                                throw new Exception("Each SECTOR declaration may only have one BORDER ");
+                            }
+
+                            border = this.ParseBorder(lineToParse);
+                            break;
+                        case "ACTIVE":
+                            actives.Add(this.ParseActive(lineToParse));
+                            break;
+                        case "GUEST":
+                            guests.Add(this.ParseGuest(lineToParse));
+                            break;
+                        case "DEPAPT":
+                            if (departureAirports.Airports.Count != 0)
+                            {
+                                throw new Exception("Each SECTOR declaration may only have one DEPAPT definition ");
+                            }
+
+                            departureAirports = this.ParseDepartureAirport(lineToParse);
+                            break;
+                        case "ARRAPT":
+
+                            if (arrivalAirports.Airports.Count != 0)
+                            {
+                                throw new Exception("Each SECTOR declaration may only have one ARRAPT definition ");
+                            }
+
+                            arrivalAirports = this.ParseArrivalAirport(lineToParse);
+                            break;
+
                     }
-
-                    SectorFormatLine lineToParse = this.sectorLineParser.ParseLine(data.lines[nextLine]);
-
-                    /*
-                     * Parse each line one at a time, stopping if we reach a new declaration.
-                     */
-                    try
-                    {
-                        switch (lineToParse.dataSegments[0])
-                        {
-                            case "SECTOR":
-                                // New declaration incoming
-                                newDeclaration = true;
-                                break;
-                            case "OWNER":
-                                ownerHierarchy = this.ParseOwnerHierarchy(lineToParse);
-                                break;
-                            case "ALTOWNER":
-                                altOwners.Add(this.ParseAlternateOwnerHierarchy(lineToParse));
-                                break;
-                            case "BORDER":
-                                if (border.BorderLines.Count != 0)
-                                {
-                                    this.errorLog.AddEvent(
-                                        new SyntaxError("Each SECTOR declaration may only have one BORDER ", data.fullPath, i + 1)
-                                    );
-                                    return;
-                                }
-
-                                border = this.ParseBorder(lineToParse);
-                                break;
-                            case "ACTIVE":
-                                actives.Add(this.ParseActive(lineToParse));
-                                break;
-                            case "GUEST":
-                                guests.Add(this.ParseGuest(lineToParse));
-                                break;
-                            case "DEPAPT":
-                                if (departureAirports.Airports.Count != 0)
-                                {
-                                    this.errorLog.AddEvent(
-                                        new SyntaxError(
-                                            "Each SECTOR declaration may only have one DEPAPT definition ",
-                                            data.fullPath,
-                                            i + 1
-                                        )
-                                    );
-                                    return;
-                                }
-
-                                departureAirports = this.ParseDepartureAirport(lineToParse);
-                                break;
-                            case "ARRAPT":
-
-                                if (arrivalAirports.Airports.Count != 0)
-                                {
-                                    this.errorLog.AddEvent(
-                                        new SyntaxError(
-                                            "Each SECTOR declaration may only have one ARRAPT definition ",
-                                            data.fullPath,
-                                            i + 1
-                                        )
-                                    );
-                                    return;
-                                }
-
-                                arrivalAirports = this.ParseArrivalAirport(lineToParse);
-                                break;
-
-                        }
-                    } catch (Exception exception)
-                    {
-                        this.errorLog.AddEvent(
-                            new SyntaxError(exception.Message, data.fullPath, i + 1)
-                        );
-                        return;
-                    }
-
-                    // New declaration, break out.
-                    if (newDeclaration)
-                    {
-                        break;
-                    }
-
-                    nextLine++;
                 }
-
-                if (ownerHierarchy == null)
+                catch (Exception exception)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Every SECTOR must have an owner ", data.fullPath, i + 1)
+                        new SyntaxError(exception.Message, data.fullPath, i + 1)
                     );
-                    this.errorLog.AddEvent(
-                        new ParserSuggestion("Have you added an OWNER declaration?")
-                    );
-                    return;
+                    throw exception;
                 }
 
-                this.sectorElements.Add(
-                    new Sector(
-                        declarationLine.dataSegments[1],
-                        minimumAltitude,
-                        maximumAltitude,
-                        ownerHierarchy,
-                        altOwners,
-                        actives,
-                        guests,
-                        border,
-                        arrivalAirports,
-                        departureAirports,
-                        declarationLine.comment
-                    )
-                );
-
-                i = nextLine;
+                nextLine++;
             }
+
+            if (ownerHierarchy == null)
+            {
+                this.errorLog.AddEvent(
+                    new SyntaxError("Every SECTOR must have an owner ", data.fullPath, i + 1)
+                );
+                this.errorLog.AddEvent(
+                    new ParserSuggestion("Have you added an OWNER declaration?")
+                );
+                throw new Exception();
+            }
+
+            this.sectorElements.Add(
+                new Sector(
+                    declarationLine.dataSegments[1],
+                    minimumAltitude,
+                    maximumAltitude,
+                    ownerHierarchy,
+                    altOwners,
+                    actives,
+                    guests,
+                    border,
+                    arrivalAirports,
+                    departureAirports,
+                    declarationLine.comment
+                )
+            );
+
+            return nextLine - i;
         }
 
         /*

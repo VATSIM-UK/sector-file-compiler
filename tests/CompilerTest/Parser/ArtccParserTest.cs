@@ -78,7 +78,7 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_ARTCC][Subsections.DEFAULT][0]);
+            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_ARTCC][0]);
         }
 
         [Fact]

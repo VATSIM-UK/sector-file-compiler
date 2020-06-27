@@ -14,7 +14,7 @@ namespace CompilerTest.Parser
         public MetadataParserTest()
         {
             this.sectorElements = new SectorElementCollection();
-            this.parser = new MetadataParser(this.sectorElements, OutputSections.ESE_HEADER, Subsections.DEFAULT);
+            this.parser = new MetadataParser(this.sectorElements, OutputSections.ESE_HEADER);
         }
 
         [Fact]
@@ -23,7 +23,7 @@ namespace CompilerTest.Parser
             this.parser.ParseCommentLine(";comment");
             Assert.Equal(
                 "; comment\r\n",
-                this.sectorElements.Compilables[OutputSections.ESE_HEADER][Subsections.DEFAULT][0].Compile()
+                this.sectorElements.Compilables[OutputSections.ESE_HEADER][0].Compile()
             );
         }
 
@@ -45,7 +45,7 @@ namespace CompilerTest.Parser
             this.parser.ParseBlankLine("   ");
             Assert.Equal(
                 "\r\n",
-                this.sectorElements.Compilables[OutputSections.ESE_HEADER][Subsections.DEFAULT][0].Compile()
+                this.sectorElements.Compilables[OutputSections.ESE_HEADER][0].Compile()
             );
         }
 

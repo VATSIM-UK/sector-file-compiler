@@ -19,39 +19,35 @@ namespace Compiler.Parser
         ) {
             foreach (OutputSections section in Enum.GetValues(typeof(OutputSections)))
             {
-                foreach (Subsections subsection in SubsectionMapper.GetSubsectionsForSection(section))
+                IFileParser parser = sectionParsers.GetParserForSection(section);
+                if (parser == null)
                 {
-                    AbstractSectorElementParser parser = sectionParsers.GetParserForSection(section);
-                    if (parser == null)
+                    errors.AddEvent(
+                        new UnconfiguredConfigSectionWarning(section.ToString())
+                    );
+                }
+
+                foreach (IFileInterface file in files.GetFilesForSection(section))
+                {
+                    if (args.DisplayInputFiles)
                     {
-                        errors.AddEvent(
-                            new UnconfiguredConfigSectionWarning(section.ToString())
+                        elements.Add(
+                            new CommentLine("Start of input file " + file.GetPath()),
+                            section
                         );
                     }
 
-                    foreach (IFileInterface file in files.GetFilesForSection(section))
+                    SectorFormatData data = InputLineReader.ReadInputLines(file);
+
+                    if (data.Equals(InputLineReader.invalidData))
                     {
-                        if (args.DisplayInputFiles)
-                        {
-                            elements.Add(
-                                new CommentLine("Start of input file " + file.GetPath()),
-                                section,
-                                subsection
-                            );
-                        }
-
-                        SectorFormatData data = InputLineReader.ReadInputLines(file);
-
-                        if (data.Equals(InputLineReader.invalidData))
-                        {
-                            errors.AddEvent(
-                                new FileNotFoundError(file.GetPath())
-                            );
-                            continue;
-                        }
-
-                        parser.ParseData(InputLineReader.ReadInputLines(file));
+                        errors.AddEvent(
+                            new FileNotFoundError(file.GetPath())
+                        );
+                        continue;
                     }
+
+                    parser.ParseData(InputLineReader.ReadInputLines(file));
                 }
             }
         }

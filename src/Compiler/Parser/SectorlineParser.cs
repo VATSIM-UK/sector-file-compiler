@@ -6,7 +6,7 @@ using System;
 
 namespace Compiler.Parser
 {
-    public class SectorlineParser : AbstractSectorElementParser
+    public class SectorlineParser : AbstractEseAirspaceParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
@@ -24,39 +24,23 @@ namespace Compiler.Parser
             this.errorLog = errorLog;
         }
 
-        public override void ParseData(SectorFormatData data)
+        public int ParseData(SectorFormatData data, int startIndex)
         {
-            for (int i = 0; i < data.lines.Count;)
+            SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[startIndex]);
+            if (
+                sectorData.dataSegments[0] != "CIRCLE_SECTORLINE" &&
+                sectorData.dataSegments[0] != "SECTORLINE"
+            )
             {
-                // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
-                {
-                    continue;
-                }
-
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
-                if (
-                    sectorData.dataSegments[0] != "CIRCLE_SECTORLINE" &&
-                    sectorData.dataSegments[0] != "SECTORLINE"
-                ) {
-                    this.errorLog.AddEvent(
-                        new SyntaxError("Invalid SECTORLINE declaration", data.fullPath, i + 1)
-                    );
-                    return;
-                }
-
-                try
-                {
-                    i += sectorData.dataSegments[0] == "CIRCLE_SECTORLINE"
-                        ? ParseCircleSectorline(ref data, i)
-                        : ParseStandardSectorline(ref data, i);
-                } catch
-                {
-                    // Logging dealt with higher-up
-                    return;
-                }
-
+                this.errorLog.AddEvent(
+                    new SyntaxError("Invalid SECTORLINE declaration", data.fullPath, startIndex + 1)
+                );
+                throw new Exception();
             }
+
+            return sectorData.dataSegments[0] == "CIRCLE_SECTORLINE"
+                ? ParseCircleSectorline(ref data, startIndex)
+                : ParseStandardSectorline(ref data, startIndex);
         }
 
         private int ParseCircleSectorline(ref SectorFormatData data, int startLine)
@@ -113,7 +97,7 @@ namespace Compiler.Parser
 
                 SectorFormatLine displayData = this.sectorLineParser.ParseLine(data.lines[i]);
 
-                if (IsNewDeclarationLine(displayData))
+                if (IsNewDeclaration(displayData))
                 {
                     break;
                 }
@@ -196,9 +180,9 @@ namespace Compiler.Parser
 
                 try
                 {
-                    if (IsNewDeclarationLine(dataLine))
+                    if (IsNewDeclaration(dataLine))
                     {
-                        // Declaration of new SECTORLINE, so stop here
+                        // Declaration of new data object, so stop
                         break;
                     }
                     else if (IsCoordDeclaration(dataLine))
@@ -288,14 +272,6 @@ namespace Compiler.Parser
             return new SectorlineCoordinate(
                 parsedCoordinate,
                 data.comment
-            );
-        }
-
-        private bool IsNewDeclarationLine(SectorFormatLine data)
-        {
-            return data.dataSegments.Count > 0 && (
-                data.dataSegments[0] == "SECTORLINE" ||
-                data.dataSegments[0] == "CIRCLE_SECTORLINE"
             );
         }
 

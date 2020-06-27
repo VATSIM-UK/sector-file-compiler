@@ -11,7 +11,7 @@ namespace CompilerTest.Parser
 {
     public class CoordinationPointParserTest
     {
-        private readonly CoordinationPointParser parser;
+        private readonly AirspaceParser parser;
 
         private readonly SectorElementCollection collection;
 
@@ -21,8 +21,8 @@ namespace CompilerTest.Parser
         {
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
-            this.parser = (CoordinationPointParser)(new SectionParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.ESE_AIRSPACE, Subsections.ESE_AIRSPACE_COORDINATION);
+            this.parser = (AirspaceParser)(new SectionParserFactory(this.collection, this.log.Object))
+                .GetParserForSection(OutputSections.ESE_AIRSPACE);
         }
 
         [Fact]
@@ -135,7 +135,7 @@ namespace CompilerTest.Parser
 
             this.parser.ParseData(data);
             Assert.IsType<BlankLine>(
-                this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_COORDINATION][0]
+                this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]
             );
         }
 

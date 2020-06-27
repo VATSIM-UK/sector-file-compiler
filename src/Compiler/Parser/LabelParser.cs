@@ -5,7 +5,7 @@ using Compiler.Model;
 
 namespace Compiler.Parser
 {
-    public class LabelParser : AbstractSectorElementParser
+    public class LabelParser : AbstractSectorElementParser, IFileParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
@@ -22,7 +22,7 @@ namespace Compiler.Parser
             this.eventLogger = eventLogger;
         }
 
-        public override void ParseData(SectorFormatData data)
+        public void ParseData(SectorFormatData data)
         {
             for (int i = 0; i < data.lines.Count; i++)
             {

@@ -29,7 +29,7 @@ namespace CompilerTest.Model
             SidStar sidStar = new SidStar("a", "b", "c", "d", new List<string>(), "test");
             this.collection.Add(sidStar);
 
-            Assert.Equal(sidStar, this.collection.Compilables[OutputSections.ESE_SIDSSTARS][Subsections.DEFAULT][0]);
+            Assert.Equal(sidStar, this.collection.Compilables[OutputSections.ESE_SIDSSTARS][0]);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace CompilerTest.Model
             Colour colour = new Colour("test", 123, "test");
             this.collection.Add(colour);
 
-            Assert.Equal(colour, this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][Subsections.DEFAULT][0]);
+            Assert.Equal(colour, this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][0]);
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace CompilerTest.Model
             Airport airport = new Airport("a", "b", new Coordinate("abc", "def"), "123.456", "test");
             this.collection.Add(airport);
 
-            Assert.Equal(airport, this.collection.Compilables[OutputSections.SCT_AIRPORT][Subsections.DEFAULT][0]);
+            Assert.Equal(airport, this.collection.Compilables[OutputSections.SCT_AIRPORT][0]);
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace CompilerTest.Model
             );
             this.collection.Add(artcc);
 
-            Assert.Equal(artcc, this.collection.Compilables[OutputSections.SCT_ARTCC][Subsections.DEFAULT][0]);
+            Assert.Equal(artcc, this.collection.Compilables[OutputSections.SCT_ARTCC][0]);
         }
 
         [Fact]
@@ -125,7 +125,7 @@ namespace CompilerTest.Model
             );
             this.collection.Add(artcc);
 
-            Assert.Equal(artcc, this.collection.Compilables[OutputSections.SCT_ARTCC_LOW][Subsections.DEFAULT][0]);
+            Assert.Equal(artcc, this.collection.Compilables[OutputSections.SCT_ARTCC_LOW][0]);
         }
 
         [Fact]
@@ -155,7 +155,7 @@ namespace CompilerTest.Model
             );
             this.collection.Add(artcc);
 
-            Assert.Equal(artcc, this.collection.Compilables[OutputSections.SCT_ARTCC_HIGH][Subsections.DEFAULT][0]);
+            Assert.Equal(artcc, this.collection.Compilables[OutputSections.SCT_ARTCC_HIGH][0]);
         }
 
         [Fact]
@@ -185,7 +185,7 @@ namespace CompilerTest.Model
             );
             this.collection.Add(airway);
 
-            Assert.Equal(airway, this.collection.Compilables[OutputSections.SCT_LOW_AIRWAY][Subsections.DEFAULT][0]);
+            Assert.Equal(airway, this.collection.Compilables[OutputSections.SCT_LOW_AIRWAY][0]);
         }
 
         [Fact]
@@ -215,7 +215,7 @@ namespace CompilerTest.Model
             );
             this.collection.Add(airway);
 
-            Assert.Equal(airway, this.collection.Compilables[OutputSections.SCT_HIGH_AIRWAY][Subsections.DEFAULT][0]);
+            Assert.Equal(airway, this.collection.Compilables[OutputSections.SCT_HIGH_AIRWAY][0]);
         }
 
         [Fact]
@@ -233,7 +233,7 @@ namespace CompilerTest.Model
             Fix fix = new Fix("a", new Coordinate("abc", "def"), "test");
             this.collection.Add(fix);
 
-            Assert.Equal(fix, this.collection.Compilables[OutputSections.SCT_FIXES][Subsections.DEFAULT][0]);
+            Assert.Equal(fix, this.collection.Compilables[OutputSections.SCT_FIXES][0]);
         }
 
         [Fact]
@@ -251,7 +251,7 @@ namespace CompilerTest.Model
             Geo geo = new Geo(new Point("abc"), new Point("def"), "red", null);
             this.collection.Add(geo);
 
-            Assert.Equal(geo, this.collection.Compilables[OutputSections.SCT_GEO][Subsections.DEFAULT][0]);
+            Assert.Equal(geo, this.collection.Compilables[OutputSections.SCT_GEO][0]);
         }
 
         [Fact]
@@ -269,7 +269,7 @@ namespace CompilerTest.Model
             Label lable = new Label("label1", new Coordinate("abc", "def"), "red", null);
             this.collection.Add(lable);
 
-            Assert.Equal(lable, this.collection.Compilables[OutputSections.SCT_LABELS][Subsections.DEFAULT][0]);
+            Assert.Equal(lable, this.collection.Compilables[OutputSections.SCT_LABELS][0]);
         }
 
         [Fact]
@@ -297,7 +297,7 @@ namespace CompilerTest.Model
             );
             this.collection.Add(region);
 
-            Assert.Equal(region, this.collection.Compilables[OutputSections.SCT_REGIONS][Subsections.DEFAULT][0]);
+            Assert.Equal(region, this.collection.Compilables[OutputSections.SCT_REGIONS][0]);
         }
 
         [Fact]
@@ -315,7 +315,7 @@ namespace CompilerTest.Model
             Vor vor = new Vor("a", "123.456", new Coordinate("abc", "def"), "test");
             this.collection.Add(vor);
 
-            Assert.Equal(vor, this.collection.Compilables[OutputSections.SCT_VOR][Subsections.DEFAULT][0]);
+            Assert.Equal(vor, this.collection.Compilables[OutputSections.SCT_VOR][0]);
         }
 
         [Fact]
@@ -333,7 +333,7 @@ namespace CompilerTest.Model
             Ndb ndb = new Ndb("a", "123.456", new Coordinate("abc", "def"), "test");
             this.collection.Add(ndb);
 
-            Assert.Equal(ndb, this.collection.Compilables[OutputSections.SCT_NDB][Subsections.DEFAULT][0]);
+            Assert.Equal(ndb, this.collection.Compilables[OutputSections.SCT_NDB][0]);
         }
 
         [Fact]
@@ -369,7 +369,7 @@ namespace CompilerTest.Model
             );
             this.collection.Add(info);
 
-            Assert.Equal(info, this.collection.Compilables[OutputSections.SCT_INFO][Subsections.DEFAULT][0]);
+            Assert.Equal(info, this.collection.Compilables[OutputSections.SCT_INFO][0]);
         }
 
         [Fact]
@@ -387,7 +387,7 @@ namespace CompilerTest.Model
             Freetext freetext = new Freetext("a", "b", new Coordinate("abc", "def"), "test");
             this.collection.Add(freetext);
 
-            Assert.Equal(freetext, this.collection.Compilables[OutputSections.ESE_FREETEXT][Subsections.DEFAULT][0]);
+            Assert.Equal(freetext, this.collection.Compilables[OutputSections.ESE_FREETEXT][0]);
         }
 
         [Fact]
@@ -429,7 +429,7 @@ namespace CompilerTest.Model
             );
             this.collection.Add(esePosition);
 
-            Assert.Equal(esePosition, this.collection.Compilables[OutputSections.ESE_POSITIONS][Subsections.DEFAULT][0]);
+            Assert.Equal(esePosition, this.collection.Compilables[OutputSections.ESE_POSITIONS][0]);
         }
 
         [Fact]
@@ -457,7 +457,7 @@ namespace CompilerTest.Model
 
             SidStarRoute route = new SidStarRoute(SidStarType.SID, "TEST", segments);
             this.collection.Add(route);
-            Assert.Equal(route, this.collection.Compilables[OutputSections.SCT_SID][Subsections.DEFAULT][0]);
+            Assert.Equal(route, this.collection.Compilables[OutputSections.SCT_SID][0]);
         }
 
         [Fact]
@@ -485,7 +485,7 @@ namespace CompilerTest.Model
 
             SidStarRoute route = new SidStarRoute(SidStarType.STAR, "TEST", segments);
             this.collection.Add(route);
-            Assert.Equal(route, this.collection.Compilables[OutputSections.SCT_STAR][Subsections.DEFAULT][0]);
+            Assert.Equal(route, this.collection.Compilables[OutputSections.SCT_STAR][0]);
         }
 
         [Fact]
@@ -531,7 +531,7 @@ namespace CompilerTest.Model
             this.collection.Add(sectorline);
             Assert.Equal(
                 sectorline,
-                this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE][0]
+                this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]
             );
         }
 
@@ -572,7 +572,7 @@ namespace CompilerTest.Model
             this.collection.Add(sectorline);
             Assert.Equal(
                 sectorline,
-                this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE][0]
+                this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]
             );
         }
 
@@ -667,7 +667,7 @@ namespace CompilerTest.Model
             this.collection.Add(sector);
             Assert.Equal(
                 sector,
-                this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTOR][0]
+                this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]
             );
         }
 
@@ -714,7 +714,7 @@ namespace CompilerTest.Model
             this.collection.Add(coordinationPoint);
             Assert.Equal(
                 coordinationPoint,
-                this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_COORDINATION][0]
+                this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]
             );
         }
 
@@ -722,18 +722,18 @@ namespace CompilerTest.Model
         public void TestItAddsBlankLines()
         {
             BlankLine blank = new BlankLine();
-            this.collection.Add(blank, OutputSections.SCT_COLOUR_DEFS, Subsections.DEFAULT);
+            this.collection.Add(blank, OutputSections.SCT_COLOUR_DEFS);
 
-            Assert.Equal(blank, this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][Subsections.DEFAULT][0]);
+            Assert.Equal(blank, this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][0]);
         }
 
         [Fact]
         public void TestItAddsCommentLines()
         {
             CommentLine comment = new CommentLine("test");
-            this.collection.Add(comment, OutputSections.SCT_COLOUR_DEFS, Subsections.DEFAULT);
+            this.collection.Add(comment, OutputSections.SCT_COLOUR_DEFS);
 
-            Assert.Equal(comment, this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][Subsections.DEFAULT][0]);
+            Assert.Equal(comment, this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][0]);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace CompilerTest.Parser
 {
     public class SectorlineParserTest
     {
-        private readonly SectorlineParser parser;
+        private readonly AirspaceParser parser;
 
         private readonly SectorElementCollection collection;
 
@@ -21,8 +21,8 @@ namespace CompilerTest.Parser
         {
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
-            this.parser = (SectorlineParser)(new SectionParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.ESE_AIRSPACE, Subsections.ESE_AIRSPACE_SECTORLINE);
+            this.parser = (AirspaceParser)(new SectionParserFactory(this.collection, this.log.Object))
+                .GetParserForSection(OutputSections.ESE_AIRSPACE);
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace CompilerTest.Parser
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE]);
+            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace CompilerTest.Parser
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE]);
+            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace CompilerTest.Parser
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE]);
+            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace CompilerTest.Parser
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE]);
+            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
@@ -126,7 +126,7 @@ namespace CompilerTest.Parser
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE]);
+            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
@@ -145,7 +145,7 @@ namespace CompilerTest.Parser
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE]);
+            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
@@ -168,7 +168,7 @@ namespace CompilerTest.Parser
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE]);
+            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
@@ -191,7 +191,7 @@ namespace CompilerTest.Parser
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE]);
+            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
@@ -212,7 +212,7 @@ namespace CompilerTest.Parser
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE]);
+            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
@@ -233,7 +233,7 @@ namespace CompilerTest.Parser
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE]);
+            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
@@ -256,7 +256,7 @@ namespace CompilerTest.Parser
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE]);
+            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
@@ -279,7 +279,7 @@ namespace CompilerTest.Parser
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE]);
+            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
@@ -302,7 +302,7 @@ namespace CompilerTest.Parser
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE][Subsections.ESE_AIRSPACE_SECTORLINE]);
+            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]

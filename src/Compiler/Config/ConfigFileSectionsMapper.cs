@@ -33,13 +33,6 @@ namespace Compiler.Config
             { OutputSections.ESE_AIRSPACE, "ese_airspace" },
         };
 
-        private static readonly Dictionary<Subsections, string> subsectionMap = new Dictionary<Subsections, string>
-        {
-            { Subsections.ESE_AIRSPACE_SECTOR, "sector" },
-            { Subsections.ESE_AIRSPACE_SECTORLINE, "sectorline" },
-            { Subsections.ESE_AIRSPACE_COORDINATION, "coordination" },
-        };
-
         public static readonly string invalidSection = "";
 
         public static bool ConfigSectionValid(string section)
@@ -55,37 +48,11 @@ namespace Compiler.Config
             return false;
         }
 
-        public static bool ConfigSubsectionValid(string subsection)
-        {
-            foreach (KeyValuePair<Subsections, string> subsections in subsectionMap)
-            {
-                if (subsections.Value == subsection)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         public static string GetConfigSectionForOutputSection(OutputSections section)
         {
             return sectionMap.ContainsKey(section)
                 ? sectionMap[section]
                 : ConfigFileSectionsMapper.invalidSection;
-        }
-
-        public static Subsections GetSubsectionForConfigSubsection(string subsection)
-        {
-            foreach (KeyValuePair<Subsections, string> subsections in subsectionMap)
-            {
-                if (subsections.Value == subsection)
-                {
-                    return subsections.Key;
-                }
-            }
-
-            return Subsections.DEFAULT;
         }
     }
 }

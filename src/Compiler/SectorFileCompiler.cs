@@ -11,6 +11,7 @@ using Compiler.Compile;
 using Compiler.Config;
 using Compiler.Error;
 using System;
+using Newtonsoft.Json.Linq;
 
 namespace Compiler
 {
@@ -40,7 +41,7 @@ namespace Compiler
             }
 
             // Parse the config file and index all the files
-            Dictionary<string, List<string>> mergedConfig;
+            JObject mergedConfig;
             try
             {
                 mergedConfig = ConfigFileMerger.MergeConfigFiles(this.arguments);
@@ -51,16 +52,13 @@ namespace Compiler
                 return 1;
             }
 
-            dynamic configFile = ConfigFileMerger.MergeConfigFiles(this.arguments);
-            FileIndex files = FileIndexFactory.CreateFileIndex(configFile, events);
-
             // Parse all the input files
             SectorElementCollection sectorElements = new SectorElementCollection();
             SectorDataProcessor.Parse(
                 new SectionParserFactory(sectorElements, events),
                 sectorElements,
                 this.arguments,
-                files,
+                FileIndexFactory.CreateFileIndex(mergedConfig, events),
                 events
             );
 

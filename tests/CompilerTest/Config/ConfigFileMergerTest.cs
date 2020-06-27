@@ -1,13 +1,11 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 using Moq;
 using Compiler.Input;
 using Compiler.Argument;
 using Compiler.Config;
 using Newtonsoft.Json.Linq;
 using System.IO;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+using System;
 
 namespace CompilerTest.Config
 {
@@ -28,9 +26,11 @@ namespace CompilerTest.Config
         public void ItHandlesASingleConfigFile()
         {
             string config = @"{
-              sct_header: [
-                '../header.txt',
-              ],
+              sct_header: {
+                subsection_1: [
+                  '../header.txt',
+                ],
+              },
               sct_info: [
                 'info1.txt',
                 '../info2.txt',
@@ -39,14 +39,17 @@ namespace CompilerTest.Config
 
             // Populate the expected, we expect the relative paths to be resolved
             string expected = @"{
-              sct_header: [
-              ],
+              sct_header: {
+                subsection_1: [
+                ],
+              },
               sct_info: [
               ]
             }";
 
             JObject expectedObject = JObject.Parse(expected);
-            JArray headerArray = (JArray)expectedObject["sct_header"];
+            JObject header = (JObject)expectedObject["sct_header"];
+            JArray headerArray = (JArray)header["subsection_1"];
             headerArray.Add(Path.GetFullPath("foo/header.txt"));
 
             JArray infoArray = (JArray)expectedObject["sct_info"];
@@ -59,20 +62,18 @@ namespace CompilerTest.Config
             this.mockInput1.Setup(foo => foo.DirectoryLocation()).Returns("foo/bar");
 
             this.arguments.ConfigFiles.Add(this.mockInput1.Object);
-            Dictionary <string, List<string>> expectedOutput = 
-                JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(
-                    expectedObject.ToString()
-                );
-            Assert.Equal(expectedOutput, ConfigFileMerger.MergeConfigFiles(this.arguments));
+            Assert.Equal(expectedObject, ConfigFileMerger.MergeConfigFiles(this.arguments));
         }
 
         [Fact]
         public void ItHandlesMultipleConfigFiles()
         {
             string config = @"{
-              sct_header: [
-                '../header.txt',
-              ],
+              sct_header: {
+                subsection_1: [
+                  '../header.txt',
+                ],
+              },
               sct_info: [
                 'info1.txt',
                 '../info2.txt',
@@ -87,8 +88,10 @@ namespace CompilerTest.Config
 
             // Populate the expected, we expect the relative paths to be resolved
             string expected = @"{
-              sct_header: [
-              ],
+              sct_header: {
+                subsection_1: [
+                ],
+              },
               sct_info: [
               ],
               sct_artcc_high: [
@@ -96,7 +99,8 @@ namespace CompilerTest.Config
             }";
 
             JObject expectedObject = JObject.Parse(expected);
-            JArray headerArray = (JArray)expectedObject["sct_header"];
+            JObject header = (JObject)expectedObject["sct_header"];
+            JArray headerArray = (JArray)header["subsection_1"];
             headerArray.Add(Path.GetFullPath("foo/header.txt"));
 
             JArray infoArray = (JArray)expectedObject["sct_info"];
@@ -117,20 +121,19 @@ namespace CompilerTest.Config
 
             this.arguments.ConfigFiles.Add(this.mockInput1.Object);
             this.arguments.ConfigFiles.Add(this.mockInput2.Object);
-            Dictionary<string, List<string>> expectedOutput =
-                JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(
-                    expectedObject.ToString()
-                );
-            Assert.Equal(expectedOutput, ConfigFileMerger.MergeConfigFiles(this.arguments));
+            Assert.Equal(expectedObject, ConfigFileMerger.MergeConfigFiles(this.arguments));
         }
 
         [Fact]
-        public void ItRemovesDuplicateFiles()
+        public void ItHandlesUnmergablefiles()
         {
+            // Configs cant merge because of clashes between objects and arrays
             string config = @"{
-              sct_header: [
-                '../header.txt',
-              ],
+              sct_header: {
+                subsection_1: [
+                  '../header.txt',
+                ],
+              },
               sct_info: [
                 'info1.txt',
                 '../info2.txt',
@@ -138,6 +141,47 @@ namespace CompilerTest.Config
             }";
 
             string config2 = @"{
+              sct_header: [
+                'nope.txt',
+              ],
+            }";
+
+            this.mockInput1.Setup(foo => foo.Contents()).Returns(config);
+            this.mockInput1.Setup(foo => foo.GetPath()).Returns("foo/bar/baz.txt");
+            this.mockInput1.Setup(foo => foo.DirectoryLocation()).Returns("foo/bar");
+
+            this.mockInput2.Setup(foo => foo.Contents()).Returns(config2);
+            this.mockInput2.Setup(foo => foo.GetPath()).Returns("foo/bar/baz.txt");
+            this.mockInput2.Setup(foo => foo.DirectoryLocation()).Returns("foo/bar");
+
+            this.arguments.ConfigFiles.Add(this.mockInput1.Object);
+            this.arguments.ConfigFiles.Add(this.mockInput2.Object);
+
+            var ex = Assert.Throws<ArgumentException>(() => ConfigFileMerger.MergeConfigFiles(this.arguments));
+            Assert.Equal("Incompatible configs at key sct_header, cannot merge", ex.Message);
+        }
+
+        [Fact]
+        public void ItRemovesDuplicateFiles()
+        {
+            string config = @"{
+              sct_header: {
+                subsection_1: [
+                  '../header.txt',
+                ],
+              },
+              sct_info: [
+                'info1.txt',
+                '../info2.txt',
+              ]
+            }";
+
+            string config2 = @"{
+              sct_header: {
+                subsection_1: [
+                  '../header.txt',
+                ],
+              },
               sct_artcc_high: [
                 '../artcc.txt',
               ],
@@ -148,8 +192,10 @@ namespace CompilerTest.Config
 
             // Populate the expected, we expect the relative paths to be resolved
             string expected = @"{
-              sct_header: [
-              ],
+              sct_header: {
+                subsection_1: [
+                ],
+              },
               sct_info: [
               ],
               sct_artcc_high: [
@@ -157,7 +203,8 @@ namespace CompilerTest.Config
             }";
 
             JObject expectedObject = JObject.Parse(expected);
-            JArray headerArray = (JArray)expectedObject["sct_header"];
+            JObject header = (JObject)expectedObject["sct_header"];
+            JArray headerArray = (JArray)header["subsection_1"];
             headerArray.Add(Path.GetFullPath("foo/header.txt"));
 
             JArray infoArray = (JArray)expectedObject["sct_info"];
@@ -178,13 +225,7 @@ namespace CompilerTest.Config
 
             this.arguments.ConfigFiles.Add(this.mockInput1.Object);
             this.arguments.ConfigFiles.Add(this.mockInput2.Object);
-            Dictionary<string, List<string>> expectedOutput =
-                JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(
-                    expectedObject.ToString()
-                );
-
-            dynamic actual = ConfigFileMerger.MergeConfigFiles(this.arguments);
-            Assert.Equal(expectedOutput, ConfigFileMerger.MergeConfigFiles(this.arguments));
+            Assert.Equal(expectedObject, ConfigFileMerger.MergeConfigFiles(this.arguments));
         }
     }
 }

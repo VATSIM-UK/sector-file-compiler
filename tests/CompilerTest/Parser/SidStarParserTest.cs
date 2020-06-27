@@ -65,7 +65,7 @@ namespace CompilerTest.Parser
 
             this.parser.ParseData(data);
             Assert.IsType<BlankLine>(
-                this.collection.Compilables[OutputSections.ESE_SIDSSTARS][Subsections.DEFAULT][0]
+                this.collection.Compilables[OutputSections.ESE_SIDSSTARS][0]
             );
         }
 

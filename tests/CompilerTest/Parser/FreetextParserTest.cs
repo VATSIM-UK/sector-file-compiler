@@ -64,7 +64,7 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.ESE_FREETEXT][Subsections.DEFAULT][0]);
+            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.ESE_FREETEXT][0]);
         }
 
         [Fact]
