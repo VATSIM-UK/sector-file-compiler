@@ -29,7 +29,8 @@ namespace Compiler.Validate
             new AllLabelsMustHaveAValidColour(),
             new AllRegionsMustHaveValidColours(),
             new AllRegionsMustHaveValidPoints(),
-            new InfoMustHaveValidAirport()
+            new InfoMustHaveValidAirport(),
+            new AllCoordinationPointsMustHaveValidPrior(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
