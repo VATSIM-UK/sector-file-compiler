@@ -35,11 +35,11 @@ namespace Compiler.Model
 
         public override bool Equals(object obj)
         {
-            return (obj is SectorlineDisplayRule) &&
-                (((SectorlineDisplayRule)obj).ControlledSector == this.ControlledSector) &&
-                (((SectorlineDisplayRule)obj).ControlledSector == this.ControlledSector) &&
-                (((SectorlineDisplayRule)obj).CompareSectorSecond == this.CompareSectorSecond) &&
-                (((SectorlineDisplayRule)obj).Comment == this.Comment);
+            return (obj is SectorlineDisplayRule rule) &&
+                (rule.ControlledSector == this.ControlledSector) &&
+                (rule.ControlledSector == this.ControlledSector) &&
+                (rule.CompareSectorSecond == this.CompareSectorSecond) &&
+                (rule.Comment == this.Comment);
         }
 
         public override int GetHashCode()

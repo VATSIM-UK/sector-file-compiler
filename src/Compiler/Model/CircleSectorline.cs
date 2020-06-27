@@ -46,9 +46,7 @@ namespace Compiler.Model
             return String.Format(
                 "CIRCLE_SECTORLINE:{0}:{1}:{2}{3}\r\n{4}\r\n",
                 this.Name,
-                this.CentrePoint == null 
-                    ? this.CentreCoordinate.latitude + ":" + this.CentreCoordinate.longitude
-                    : this.CentrePoint,
+                this.CentrePoint ?? this.CentreCoordinate.latitude + ":" + this.CentreCoordinate.longitude,
                 this.Radius,
                 this.CompileComment(),
                 this.DisplayRules.Aggregate("", (ruleString, newRule) => ruleString + newRule.Compile())
