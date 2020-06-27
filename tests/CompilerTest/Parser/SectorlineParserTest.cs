@@ -130,25 +130,6 @@ namespace CompilerTest.Parser
         }
 
         [Fact]
-        public void TestItRaisesSyntaxErrorForNoDisplayRulesCircleSectorline()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "CIRCLE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.SectorLines);
-            Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
         public void TestItRaisesSyntaxErrorForInvalidDeclarationStandardSectorline()
         {
             SectorFormatData data = new SectorFormatData(
@@ -205,27 +186,6 @@ namespace CompilerTest.Parser
                     "SECTORLINE:JJCTR - S6 ;comment1",
                     "DISPLAY:London S6:JJCTR:London S6 ;comment2",
                     "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.SectorLines);
-            Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForNoDisplayRulesStandardSectorline()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTORLINE:JJCTR - S6 ;comment1",
-                    "COORD:N050.00.00.000:W002.40.34.000 ;comment4",
-                    "COORD:N049.59.60.000:W002.29.35.000 ;comment5",
                 })
             );
 
@@ -459,6 +419,55 @@ namespace CompilerTest.Parser
             {
                 new SectorlineDisplayRule("London AC Worthing", "JJCTR", "London S6", "comment7"),
                 new SectorlineDisplayRule("JJCTR", "JJCTR", "London AC Worthing", "comment8"),
+            };
+            Assert.Equal(displayRules2, result2.DisplayRules);
+
+            List<SectorlineCoordinate> coordinates2 = new List<SectorlineCoordinate>
+            {
+                new SectorlineCoordinate(new Coordinate("N049.59.60.000", "W002.29.35.000"), "comment9"),
+                new SectorlineCoordinate(new Coordinate("N050.00.00.000", "W001.47.00.000"), "comment10"),
+            };
+            Assert.Equal(coordinates2, result2.Coordinates);
+            Assert.Equal("comment6", result2.Comment);
+        }
+
+        [Fact]
+        public void TestItAddsMixedDataNoDisplayRules()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "test",
+                new List<string>(new string[] {
+                    "SECTORLINE:JJCTR - LS ;comment6",
+                    "COORD:N049.59.60.000:W002.29.35.000 ;comment9",
+                    "COORD:N050.00.00.000:W001.47.00.000 ;comment10",
+                    "",
+                    "CIRCLE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
+                })
+            );
+
+            this.parser.ParseData(data);
+
+            // First
+            CircleSectorline result1 = this.collection.CircleSectorLines[0];
+            Assert.Equal("BBTWR", result1.Name);
+            Assert.Equal("EGBB", result1.CentrePoint);
+            Assert.Equal(2.5, result1.Radius);
+
+            List<SectorlineDisplayRule> displayRules1 = new List<SectorlineDisplayRule>
+            {
+            };
+            Assert.Equal(displayRules1, result1.DisplayRules);
+            Assert.Equal("comment", result1.Comment);
+
+
+            // Second
+            Sectorline result2 = this.collection.SectorLines[0];
+            Assert.Equal("JJCTR - LS", result2.Name);
+
+            List<SectorlineDisplayRule> displayRules2 = new List<SectorlineDisplayRule>
+            {
             };
             Assert.Equal(displayRules2, result2.DisplayRules);
 

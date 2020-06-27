@@ -117,15 +117,6 @@ namespace Compiler.Parser
                 i++;
             }
 
-            if (displayRules.Count == 0)
-            {
-                this.errorLog.AddEvent(
-                    new SyntaxError("No display rules found for SECTORLINE ", data.fullPath, i + 1)
-                );
-                throw new Exception();
-            }
-
-
             // Add the right type of circle sectorline
             if (declarationLine.dataSegments.Count == 4)
             {
@@ -208,14 +199,6 @@ namespace Compiler.Parser
                 }
 
                 i++;
-            }
-
-            if (displayRules.Count == 0)
-            {
-                this.errorLog.AddEvent(
-                    new SyntaxError("No display rules found for SECTORLINE ", data.fullPath, startLine + 1)
-                );
-                throw new Exception();
             }
 
             if (coordinates.Count == 0)
