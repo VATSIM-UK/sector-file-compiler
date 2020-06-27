@@ -9,7 +9,7 @@ namespace Compiler.Config
 {
     public class ConfigFileValidator
     {
-        public static String lastError { get; private set; } = "No errors";
+        public static String LastError { get; private set; } = "No errors";
 
         public static bool ConfigFileValid(JObject config)
         {
@@ -18,11 +18,11 @@ namespace Compiler.Config
 
                 if (!ConfigFileSectionsMapper.ConfigSectionValid(item.Key.ToString()))
                 {
-                    lastError = String.Format("Key {0} is not a valid config section", item.Key);
+                    LastError = String.Format("Key {0} is not a valid config section", item.Key);
                     return false;
                 } else if (item.Value.Type != JTokenType.Array && item.Value.Type != JTokenType.Object)
                 {
-                    lastError = String.Format(
+                    LastError = String.Format(
                         "Key {0} must be an array or object, {1} detected",
                         item.Key,
                         item.Value.Type.ToString()
@@ -48,7 +48,7 @@ namespace Compiler.Config
         {
             if (config.Value.Type != JTokenType.Array)
             {
-                lastError = String.Format("Key {0} is not an array", config.Key);
+                LastError = String.Format("Key {0} is not an array", config.Key);
                 return false;
             }
 
@@ -56,7 +56,7 @@ namespace Compiler.Config
             {
                 if (inputFile.Type != JTokenType.String)
                 {
-                    lastError = String.Format("Value {0} is not a valid string", inputFile.ToString());
+                    LastError = String.Format("Value {0} is not a valid string", inputFile.ToString());
                     return false;
                 }
             }

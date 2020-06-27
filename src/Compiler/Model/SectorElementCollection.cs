@@ -48,10 +48,7 @@ namespace Compiler.Model
         {
             foreach (OutputSections section in Enum.GetValues(typeof(OutputSections)))
             {
-                foreach (OutputSections sections in Enum.GetValues(typeof(OutputSections)))
-                {
-                    Compilables[section] = new List<ICompilable>();
-                }
+                Compilables[section] = new List<ICompilable>();
             }
         }
 

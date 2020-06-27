@@ -17,7 +17,7 @@ namespace CompilerTest.Config
             }";
 
             Assert.False(ConfigFileValidator.ConfigFileValid(JObject.Parse(config)));
-            Assert.Equal("Key sct_header must be an array or object, String detected", ConfigFileValidator.lastError);
+            Assert.Equal("Key sct_header must be an array or object, String detected", ConfigFileValidator.LastError);
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace CompilerTest.Config
             }";
 
             Assert.False(ConfigFileValidator.ConfigFileValid(JObject.Parse(config)));
-            Assert.Equal("Key not_sct_info is not a valid config section", ConfigFileValidator.lastError);
+            Assert.Equal("Key not_sct_info is not a valid config section", ConfigFileValidator.LastError);
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace CompilerTest.Config
             }";
 
             Assert.False(ConfigFileValidator.ConfigFileValid(JObject.Parse(config)));
-            Assert.Equal("Value 123 is not a valid string", ConfigFileValidator.lastError);
+            Assert.Equal("Value 123 is not a valid string", ConfigFileValidator.LastError);
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace CompilerTest.Config
             }";
 
             Assert.False(ConfigFileValidator.ConfigFileValid(JObject.Parse(config)));
-            Assert.Equal("Key subsection_1 is not an array", ConfigFileValidator.lastError);
+            Assert.Equal("Key subsection_1 is not an array", ConfigFileValidator.LastError);
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace CompilerTest.Config
             }";
 
             Assert.False(ConfigFileValidator.ConfigFileValid(JObject.Parse(config)));
-            Assert.Equal("Value 1234 is not a valid string", ConfigFileValidator.lastError);
+            Assert.Equal("Value 1234 is not a valid string", ConfigFileValidator.LastError);
         }
 
         [Fact]

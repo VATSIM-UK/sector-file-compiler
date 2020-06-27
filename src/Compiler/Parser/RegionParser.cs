@@ -137,7 +137,7 @@ namespace Compiler.Parser
             {
                 this.eventLogger.AddEvent(
                     new SyntaxError(
-                        "Incomplete region at end of file: " + data.lines[data.lines.Count - 1],
+                        "Incomplete region at end of file: " + data.lines[^1],
                         data.fullPath,
                         data.lines.Count
                     )
