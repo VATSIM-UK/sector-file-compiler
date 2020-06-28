@@ -40,6 +40,7 @@ namespace Compiler.Validate
             new AllCircleSectorlinesMustHaveUniqueName(),
             new AllCircleSectorlinesMustHaveValidDisplaySectors(),
             new AllSectorlinesMustHaveUniqueName(),
+            new AllSectorsMustHaveValidOwner(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
