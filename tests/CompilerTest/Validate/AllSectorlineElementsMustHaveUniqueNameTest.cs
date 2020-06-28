@@ -9,17 +9,20 @@ using Compiler.Argument;
 
 namespace CompilerTest.Validate
 {
-    public class AllSectorlinesMustHaveUniqueNameTest
+    public class AllSectorlineElementsMustHaveUniqueNameTest
     {
         private readonly SectorElementCollection sectorElements;
         private readonly Mock<IEventLogger> loggerMock;
         private readonly Sectorline first;
         private readonly Sectorline second;
         private readonly Sectorline third;
-        private readonly AllSectorlinesMustHaveUniqueName rule;
+        private readonly CircleSectorline fourth;
+        private readonly CircleSectorline fifth;
+        private readonly CircleSectorline sixth;
+        private readonly AllSectorlineElementsMustHaveUniqueName rule;
         private readonly CompilerArguments args;
 
-        public AllSectorlinesMustHaveUniqueNameTest()
+        public AllSectorlineElementsMustHaveUniqueNameTest()
         {
             this.sectorElements = new SectorElementCollection();
             this.loggerMock = new Mock<IEventLogger>();
@@ -65,7 +68,28 @@ namespace CompilerTest.Validate
                 },
                 "commentname"
             );
-            this.rule = new AllSectorlinesMustHaveUniqueName();
+            this.fourth = new CircleSectorline(
+                "ONE",
+                "EGGD",
+                5.5,
+                new List<SectorlineDisplayRule>(),
+                "commentname"
+            );
+            this.fifth = new CircleSectorline(
+                "NOTONEORTWO",
+                "EGGD",
+                5.5,
+                new List<SectorlineDisplayRule>(),
+                "commentname"
+            );
+            this.sixth = new CircleSectorline(
+                "ONE",
+                "EGGD",
+                5.5,
+                new List<SectorlineDisplayRule>(),
+                "commentname"
+            );
+            this.rule = new AllSectorlineElementsMustHaveUniqueName();
             this.args = new CompilerArguments();
         }
 
@@ -74,17 +98,41 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.third);
+            this.sectorElements.Add(this.fifth);
             this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
 
         [Fact]
-        public void TestItFailsOnNameClash()
+        public void TestItFailsOnNameClashTwoSectorlines()
         {
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.second);
             this.sectorElements.Add(this.third);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
+
+            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+        }
+
+        [Fact]
+        public void TestItFailsOnNameClashTwoCircleSectorlines()
+        {
+            this.sectorElements.Add(this.fourth);
+            this.sectorElements.Add(this.fifth);
+            this.sectorElements.Add(this.sixth);
+            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
+
+            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+        }
+
+        [Fact]
+        public void TestItFailsOnNameClashMixed()
+        {
+            this.sectorElements.Add(this.second);
+            this.sectorElements.Add(this.third);
+            this.sectorElements.Add(this.fourth);
+            this.sectorElements.Add(this.fifth);
             this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
 
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);

@@ -9,12 +9,13 @@ using System.Linq;
 
 namespace Compiler.Validate
 {
-    public class AllCircleSectorlinesMustHaveUniqueName : IValidationRule
+    public class AllSectorlineElementsMustHaveUniqueName : IValidationRule
     {
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-
-            List<string> duplicates = sectorElements.CircleSectorLines.GroupBy(sectorline => sectorline.Name) 
+            var duplicates = sectorElements.SectorLines.Select(sectorline => sectorline.Name)
+                .Concat(sectorElements.CircleSectorLines.Select(sectorline => sectorline.Name))
+                .GroupBy(name => name)
                 .Where(group => group.Count() > 1)
                 .Select(group => group.Key)
                 .ToList();
@@ -22,7 +23,7 @@ namespace Compiler.Validate
             foreach (string duplicate in duplicates)
             {
                 string message = String.Format(
-                    "Duplicate CIRCLE_SECTORLINE for {0}",
+                    "Duplicate SECTORLINE or CIRCLE_SECTORLINE for {0}",
                     duplicate
                 );
                 events.AddEvent(new ValidationRuleFailure(message));
