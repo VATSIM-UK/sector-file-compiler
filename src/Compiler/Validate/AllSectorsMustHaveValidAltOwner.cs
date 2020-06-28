@@ -24,7 +24,7 @@ namespace Compiler.Validate
                         if (!positions.Contains(position))
                         {
                             string message = String.Format(
-                                "Invalid OWNER position {0} on sector {1}",
+                                "Invalid ALTOWNER position {0} on sector {1}",
                                 position,
                                 sector.Name
                             );
