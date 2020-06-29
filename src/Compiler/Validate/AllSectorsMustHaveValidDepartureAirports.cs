@@ -9,20 +9,20 @@ using System.Linq;
 
 namespace Compiler.Validate
 {
-    public class AllSectorsMustHaveValidGuestController : IValidationRule
+    public class AllSectorsMustHaveValidDepartureAirports : IValidationRule
     {
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            List<string> controllers = sectorElements.EsePositions.Select(position => position.Identifier).ToList();
+            List<string> airports = sectorElements.Airports.Select(airport => airport.Icao).ToList();
             foreach (Sector sector in sectorElements.Sectors)
             {
-                foreach (SectorGuest guest in sector.Guests)
+                foreach (string airport in sector.DepartureAirports.Airports)
                 {
-                    if (!controllers.Contains(guest.Controller))
+                    if (!airports.Contains(airport))
                     {
                         string message = String.Format(
-                            "Invalid GUEST position {0} on sector {1}",
-                            guest.Controller,
+                            "Invalid DEPAPT {0} on sector {1}",
+                            airport,
                             sector.Name
                         );
                         events.AddEvent(new ValidationRuleFailure(message));

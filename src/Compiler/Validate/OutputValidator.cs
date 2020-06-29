@@ -45,6 +45,7 @@ namespace Compiler.Validate
             new AllSectorsMustHaveValidActiveAirport(),
             new AllSectorsMustHaveValidGuestAirports(),
             new AllSectorsMustHaveValidGuestController(),
+            new AllSectorsMustHaveValidDepartureAirports(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
