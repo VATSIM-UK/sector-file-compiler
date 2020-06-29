@@ -42,6 +42,7 @@ namespace Compiler.Validate
             new AllSectorsMustHaveValidOwner(),
             new AllSectorsMustHaveValidAltOwner(),
             new AllSectorsMustHaveValidBorder(),
+            new AllSectorsMustHaveValidActiveAirport(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
