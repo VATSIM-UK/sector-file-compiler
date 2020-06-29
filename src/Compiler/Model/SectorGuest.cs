@@ -8,18 +8,18 @@ namespace Compiler.Model
     public class SectorGuest : AbstractSectorElement, ICompilable
     {
         public SectorGuest(
-            string sector,
+            string controller,
             string departureAirport,
             string arrivalAirport,
             string comment
         ) : base(comment) 
         {
-            Sector = sector;
+            Controller = controller;
             DepartureAirport = departureAirport;
             ArrivalAirport = arrivalAirport;
         }
 
-        public string Sector { get; }
+        public string Controller { get; }
         public string DepartureAirport { get; }
         public string ArrivalAirport { get; }
 
@@ -27,7 +27,7 @@ namespace Compiler.Model
         {
             return String.Format(
                 "GUEST:{0}:{1}:{2}{3}\r\n",
-                this.Sector,
+                this.Controller,
                 this.DepartureAirport,
                 this.ArrivalAirport,
                 this.CompileComment()
@@ -38,7 +38,7 @@ namespace Compiler.Model
         {
             return obj is SectorGuest &&
                 ((SectorGuest)obj).Comment == this.Comment &&
-                ((SectorGuest)obj).Sector == this.Sector &&
+                ((SectorGuest)obj).Controller == this.Controller &&
                 ((SectorGuest)obj).ArrivalAirport == this.ArrivalAirport &&
                 ((SectorGuest)obj).DepartureAirport == this.DepartureAirport;
         }

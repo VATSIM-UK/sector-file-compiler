@@ -19,9 +19,9 @@ namespace CompilerTest.Model
         }
 
         [Fact]
-        public void TestItSetsSector()
+        public void TestItSetsController()
         {
-            Assert.Equal("MWAL", this.model.Sector);
+            Assert.Equal("MWAL", this.model.Controller);
         }
 
         [Fact]
