@@ -6,7 +6,7 @@ using Compiler.Event;
 
 namespace Compiler.Parser
 {
-    public class EsePositionParser: AbstractSectorElementParser
+    public class EsePositionParser: AbstractSectorElementParser, IFileParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly IFrequencyParser frequencyParser;
@@ -44,7 +44,7 @@ namespace Compiler.Parser
             this.squawkRegex = new Regex(@"[0-7]{4}");
         }
 
-        public override void ParseData(SectorFormatData data)
+        public void ParseData(SectorFormatData data)
         {
             for (int i = 0; i < data.lines.Count; i++)
             {

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Compiler.Parser
 {
-    public class RegionParser : AbstractSectorElementParser
+    public class RegionParser : AbstractSectorElementParser, IFileParser
     {
         private readonly SectorElementCollection elements;
         private readonly ISectorLineParser sectorLineParser;
@@ -26,7 +26,7 @@ namespace Compiler.Parser
             this.eventLogger = eventLogger;
         }
 
-        public override void ParseData(SectorFormatData data)
+        public void ParseData(SectorFormatData data)
         {
             string colour = "";
             List<Point> points = new List<Point>();
@@ -137,7 +137,7 @@ namespace Compiler.Parser
             {
                 this.eventLogger.AddEvent(
                     new SyntaxError(
-                        "Incomplete region at end of file: " + data.lines[data.lines.Count - 1],
+                        "Incomplete region at end of file: " + data.lines[^1],
                         data.fullPath,
                         data.lines.Count
                     )

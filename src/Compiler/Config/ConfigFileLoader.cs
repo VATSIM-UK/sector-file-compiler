@@ -29,7 +29,7 @@ namespace Compiler.Config
                 string message = String.Format(
                     "Invalid format in {0}: {1}",
                     Path.GetFullPath(file.GetPath()),
-                    ConfigFileValidator.lastError
+                    ConfigFileValidator.LastError
                 );
                 throw new ArgumentException(message);
             }
@@ -37,14 +37,32 @@ namespace Compiler.Config
             // Transform it to create full paths
             foreach (var item in config)
             {
-                JArray fileArray = (JArray)item.Value;
-                for (int key = 0; key < fileArray.Count; key++)
+                if (item.Value.Type == JTokenType.Object)
                 {
-                    fileArray[key] = Path.GetFullPath(file.DirectoryLocation() + Path.DirectorySeparatorChar + fileArray[key]);
+                    NormaliseSubsections(file, (JObject)item.Value);
+                } else
+                {
+                    NormaliseFileArray(file, (JArray)item.Value);
                 }
             }
 
             return config;
+        }
+
+        private static void NormaliseFileArray(IFileInterface file, JArray fileArray)
+        {
+            for (int key = 0; key < fileArray.Count; key++)
+            {
+                fileArray[key] = Path.GetFullPath(file.DirectoryLocation() + Path.DirectorySeparatorChar + fileArray[key]);
+            }
+        }
+
+        private static void NormaliseSubsections(IFileInterface file, JObject config)
+        {
+            foreach (var item in config)
+            {
+                NormaliseFileArray(file, (JArray)item.Value);
+            }
         }
     }
 }

@@ -6,7 +6,8 @@ namespace Compiler.Parser
 {
     public class VatsimRtfFrequencyParser : IFrequencyParser
     {
-        const int firstMinValue = 118;
+        // This has to be much lower because some are defined on the VORs
+        const int firstMinValue = 108;
         const int firstMaxValue = 136;
         const int secondDividend = 25;
 

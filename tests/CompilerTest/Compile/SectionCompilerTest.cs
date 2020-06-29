@@ -34,9 +34,11 @@ namespace CompilerTest.Compile
         [Fact]
         public void TestItCompilesSections()
         {
-            List<SectionCompiler> sections = new List<SectionCompiler>();
-            sections.Add(this.compilerFactory.Create(OutputSections.ESE_SIDSSTARS));
-            sections.Add(this.compilerFactory.Create(OutputSections.ESE_AIRSPACE));
+            List<SectionCompiler> sections = new List<SectionCompiler>
+            {
+                this.compilerFactory.Create(OutputSections.ESE_SIDSSTARS),
+                this.compilerFactory.Create(OutputSections.ESE_AIRSPACE)
+            };
 
             CompileEngine engine = new CompileEngine(sections);
             engine.Compile();

@@ -19,7 +19,7 @@ namespace Compiler.Parser
         ) {
             foreach (OutputSections section in Enum.GetValues(typeof(OutputSections)))
             {
-                AbstractSectorElementParser parser = sectionParsers.GetParserForSection(section);
+                IFileParser parser = sectionParsers.GetParserForSection(section);
                 if (parser == null)
                 {
                     errors.AddEvent(
@@ -47,7 +47,7 @@ namespace Compiler.Parser
                         continue;
                     }
 
-                    parser.ParseData(InputLineReader.ReadInputLines(file)); 
+                    parser.ParseData(InputLineReader.ReadInputLines(file));
                 }
             }
         }

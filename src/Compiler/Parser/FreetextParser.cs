@@ -5,7 +5,7 @@ using Compiler.Event;
 
 namespace Compiler.Parser
 {
-    public class FreetextParser : AbstractSectorElementParser
+    public class FreetextParser : AbstractSectorElementParser, IFileParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
@@ -23,7 +23,7 @@ namespace Compiler.Parser
             this.errorLog = errorLog;
         }
 
-        public override void ParseData(SectorFormatData data)
+        public void ParseData(SectorFormatData data)
         {
             for (int i = 0; i < data.lines.Count; i++)
             {

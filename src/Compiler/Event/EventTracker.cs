@@ -24,7 +24,7 @@ namespace Compiler.Event
 
         public ICompilerEvent GetLastEvent()
         {
-            return this.events[this.events.Count - 1];
+            return this.events[^1];
         }
 
         public int CountEvents()

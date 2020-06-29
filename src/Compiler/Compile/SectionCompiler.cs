@@ -2,6 +2,7 @@
 using Compiler.Transformer;
 using Compiler.Output;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Compiler.Compile
 {
@@ -24,6 +25,10 @@ namespace Compiler.Compile
             this.outfile = outfile;
         }
 
+        /*
+         * Loop through all the subsections and the files in each
+         * and write them to the output file.
+         */
         public void Compile()
         {
             this.outfile.Write(SectionHeaderFactory.Create(section).Compile());

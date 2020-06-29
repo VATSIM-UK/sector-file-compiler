@@ -15,21 +15,15 @@ namespace Compiler.Parser
             this.logger = logger;
         }
 
-        public AbstractSectorElementParser GetParserForSection(OutputSections section)
-        {
+        public IFileParser GetParserForSection(
+            OutputSections section
+        ) {
             switch (section)
             {
                 case OutputSections.SCT_COLOUR_DEFS:
                     return new ColourParser(
                         this.GetMetadataParser(section),
                         new StandardSctLineParser(),
-                        this.sectorElements,
-                        this.logger
-                    );
-                case OutputSections.ESE_SIDSSTARS:
-                    return new SidStarParser(
-                        this.GetMetadataParser(section),
-                        new EseLineParser(),
                         this.sectorElements,
                         this.logger
                     );
@@ -165,8 +159,37 @@ namespace Compiler.Parser
                         this.sectorElements,
                         this.logger
                     );
+                case OutputSections.ESE_SIDSSTARS:
+                    return new SidStarParser(
+                        this.GetMetadataParser(section),
+                        new EseLineParser(),
+                        this.sectorElements,
+                        this.logger
+                    );
                 case OutputSections.ESE_AIRSPACE:
-                    break;
+                    return new AirspaceParser(
+                        this.GetMetadataParser(section),
+                        new SectorParser(
+                                this.GetMetadataParser(section),
+                                new EseLineParser(),
+                                this.sectorElements,
+                                this.logger
+                        ),
+                        new SectorlineParser(
+                                this.GetMetadataParser(section),
+                                new EseLineParser(),
+                                this.sectorElements,
+                                this.logger
+                        ),
+                        new CoordinationPointParser(
+                                this.GetMetadataParser(section),
+                                new EseLineParser(),
+                                this.sectorElements,
+                                this.logger
+                        ),
+                        new EseLineParser(),
+                        this.logger
+                    );
             }
 
             return new DefaultParser(this.GetMetadataParser(section));

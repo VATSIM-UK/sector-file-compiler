@@ -64,27 +64,37 @@ namespace CompilerTest.Config
               sct_header: [
                 '../header.txt',
               ],
-              sct_info: [
-                'info1.txt',
-                '../info2.txt',
-              ]
+              sct_info: {
+                subsection_1: [
+                  'info1.txt',
+                ],
+                subsection_2: [
+                  '../info2.txt',
+                ]
+              }
             }";
 
             // Populate the expected, we expect the relative paths to be resolved
             string expected = @"{
               sct_header: [
               ],
-              sct_info: [
-              ]
+              sct_info: {
+                subsection_1: [
+                ],
+                subsection_2: [
+                ]
+              }
             }";
 
             JObject expectedObject = JObject.Parse(expected);
             JArray headerArray = (JArray)expectedObject["sct_header"];
             headerArray.Add(Path.GetFullPath("foo/header.txt"));
 
-            JArray infoArray = (JArray)expectedObject["sct_info"];
-            infoArray.Add(Path.GetFullPath("foo/bar/info1.txt"));
-            infoArray.Add(Path.GetFullPath("foo/info2.txt"));
+            JObject infoObject = (JObject)expectedObject["sct_info"];
+            JArray infoSection1 = (JArray)infoObject["subsection_1"];
+            JArray infoSection2 = (JArray)infoObject["subsection_2"];
+            infoSection1.Add(Path.GetFullPath("foo/bar/info1.txt"));
+            infoSection2.Add(Path.GetFullPath("foo/info2.txt"));
 
 
             this.mockInput.Setup(foo => foo.Contents()).Returns(config);

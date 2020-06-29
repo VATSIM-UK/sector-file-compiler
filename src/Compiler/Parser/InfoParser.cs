@@ -7,7 +7,7 @@ using Compiler.Error;
 
 namespace Compiler.Parser
 {
-    public class InfoParser : AbstractSectorElementParser
+    public class InfoParser : AbstractSectorElementParser, IFileParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection elements;
@@ -25,7 +25,7 @@ namespace Compiler.Parser
             this.eventLogger = eventLogger;
         }
 
-        public override void ParseData(SectorFormatData data)
+        public void ParseData(SectorFormatData data)
         {
             string name = "";
             string controllerPosition = "";

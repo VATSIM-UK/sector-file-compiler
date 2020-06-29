@@ -17,7 +17,12 @@ To run the compiler, you need to use the CompilerCli executable.
 
 ## Input Configuration
 
-The input for the compiler is determined through a configuration file in JSON format. This file is used to specify which files should be compiled, which sections of the output they should appear in and the order in which they should appear. All file paths are relative to the config file.
+The input for the compiler is determined through a configuration file in JSON format.
+This file is used to specify which files should be compiled, which sections of the output they should appear in and the order in which they should appear.
+All file paths are relative to the config file.
+
+Each section may have an array of files or, alternatively, an object specifying arrays of files for logical subsections. For example,
+the VOR section could have subsections for VORs within each FIR.
 
 ### Compiler configuration sections
 
@@ -102,7 +107,8 @@ The input for the compiler is determined through a configuration file in JSON fo
 
 ### Required Flags
 
-`--config-file` - Takes a single argument. Path to the compiler configuration JSON file.
+`--config-file` - Takes a single argument. Path to a compiler configuration JSON file. If this argument is specified multiple
+times, then the compiler will attempt to merge the configs together.
 
 `--out-file-ese` - Takes a single argument. Where the output file for the EuroScope ESE should be generated.
 

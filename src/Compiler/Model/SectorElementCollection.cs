@@ -34,13 +34,21 @@ namespace Compiler.Model
 
         public List<ControllerPosition> EsePositions { get; } = new List<ControllerPosition>();
 
+        public List<Sectorline> SectorLines { get; } = new List<Sectorline>();
+
+        public List<CircleSectorline> CircleSectorLines { get; } = new List<CircleSectorline>();
+
+        public List<CoordinationPoint> CoordinationPoints { get; } = new List<CoordinationPoint>();
+
+        public List<Sector> Sectors { get; } = new List<Sector>();
+
         public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
 
         public SectorElementCollection()
         {
             foreach (OutputSections section in Enum.GetValues(typeof(OutputSections)))
             {
-                Compilables.Add(section, new List<ICompilable>());
+                Compilables[section] = new List<ICompilable>();
             }
         }
 
@@ -164,6 +172,30 @@ namespace Compiler.Model
         {
             this.Compilables[OutputSections.ESE_POSITIONS].Add(esePosition);
             this.EsePositions.Add(esePosition);
+        }
+
+        public void Add(Sectorline sectorline)
+        {
+            this.Compilables[OutputSections.ESE_AIRSPACE].Add(sectorline);
+            this.SectorLines.Add(sectorline);
+        }
+
+        public void Add(CircleSectorline sectorline)
+        {
+            this.Compilables[OutputSections.ESE_AIRSPACE].Add(sectorline);
+            this.CircleSectorLines.Add(sectorline);
+        }
+
+        public void Add(Sector sector)
+        {
+            this.Compilables[OutputSections.ESE_AIRSPACE].Add(sector);
+            this.Sectors.Add(sector);
+        }
+
+        public void Add(CoordinationPoint coordinationPoint)
+        {
+            this.Compilables[OutputSections.ESE_AIRSPACE].Add(coordinationPoint);
+            this.CoordinationPoints.Add(coordinationPoint);
         }
 
         public void Add(BlankLine blankLine, OutputSections section)

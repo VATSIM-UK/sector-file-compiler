@@ -4,22 +4,33 @@ using Xunit;
 using Moq;
 using Compiler.Output;
 using Compiler.Event;
+using Newtonsoft.Json.Linq;
 
 namespace CompilerTest.Input
 {
     public class FileIndexFactoryTest
     {
-        private readonly Dictionary<string, List<string>> configFile;
+        private readonly JObject configFile;
 
         private readonly Mock<IEventLogger> events;
 
         public FileIndexFactoryTest()
         {
             this.events = new Mock<IEventLogger>();
-            this.configFile = new Dictionary<string, List<string>>
-            {
-                ["ese_positions"] = new List<string>(new string[] { "file1.txt", "file2.txt" })
-            };
+            this.configFile = JObject.Parse(@"{
+              ese_positions: {
+                subsection_1: [
+                  'info1.txt',
+                  '../info2.txt',
+                ],
+                subsection_2: [
+                  'info3.txt',
+                ]
+              },
+              ese_airspace: [
+                'airspace1.txt',
+              ],
+            }");
         }
 
         [Fact]
@@ -31,8 +42,11 @@ namespace CompilerTest.Input
             );
 
             Assert.True(actual.Files.ContainsKey(OutputSections.ESE_POSITIONS));
-            Assert.Equal(new InputFile("file1.txt"), actual.GetFilesForSection(OutputSections.ESE_POSITIONS)[0]);
-            Assert.Equal(new InputFile("file2.txt"), actual.GetFilesForSection(OutputSections.ESE_POSITIONS)[1]);
+            Assert.True(actual.Files.ContainsKey(OutputSections.ESE_AIRSPACE));
+            Assert.Equal(new InputFile("info1.txt"), actual.GetFilesForSection(OutputSections.ESE_POSITIONS)[0]);
+            Assert.Equal(new InputFile("../info2.txt"), actual.GetFilesForSection(OutputSections.ESE_POSITIONS)[1]);
+            Assert.Equal(new InputFile("info3.txt"), actual.GetFilesForSection(OutputSections.ESE_POSITIONS)[2]);
+            Assert.Equal(new InputFile("airspace1.txt"), actual.GetFilesForSection(OutputSections.ESE_AIRSPACE)[0]);
         }
     }
 }

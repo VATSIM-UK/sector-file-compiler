@@ -31,7 +31,7 @@ namespace Compiler.Parser
                 );
             }
 
-            string label = data.Substring(1, secondQuote - 1);
+            string label = data[1..secondQuote];
             List<string> dataSplit = new List<string>(data.Substring(secondQuote + 1).Split(null));
             dataSplit.RemoveAll(s => s == "");
             dataSplit.Insert(0, label);

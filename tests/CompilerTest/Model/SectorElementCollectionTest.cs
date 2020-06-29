@@ -489,6 +489,236 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsSectorlines()
+        {
+            Sectorline sectorline = new Sectorline(
+                "Test Sectorline",
+                new List<SectorlineDisplayRule>
+                {
+                    new SectorlineDisplayRule("TEST1", "TEST1", "TEST2", "comment1"),
+                    new SectorlineDisplayRule("TEST2", "TEST2", "TEST1", "comment2")
+                },
+                new List<SectorlineCoordinate>
+                {
+                    new SectorlineCoordinate(new Coordinate("abc", "def"), "comment3"),
+                    new SectorlineCoordinate(new Coordinate("ghi", "jkl"), "comment4"),
+                },
+                "commentname"
+            );
+
+            this.collection.Add(sectorline);
+            Assert.Equal(sectorline, this.collection.SectorLines[0]);
+        }
+
+        [Fact]
+        public void TestItAddsSectorlinesToCompilablesSection()
+        {
+            Sectorline sectorline = new Sectorline(
+                "Test Sectorline",
+                new List<SectorlineDisplayRule>
+                {
+                    new SectorlineDisplayRule("TEST1", "TEST1", "TEST2", "comment1"),
+                    new SectorlineDisplayRule("TEST2", "TEST2", "TEST1", "comment2")
+                },
+                new List<SectorlineCoordinate>
+                {
+                    new SectorlineCoordinate(new Coordinate("abc", "def"), "comment3"),
+                    new SectorlineCoordinate(new Coordinate("ghi", "jkl"), "comment4"),
+                },
+                "commentname"
+            );
+
+            this.collection.Add(sectorline);
+            Assert.Equal(
+                sectorline,
+                this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]
+            );
+        }
+
+        [Fact]
+        public void TestItAddsCircleSectorlines()
+        {
+            CircleSectorline sectorline = new CircleSectorline(
+                "Test Sectorline",
+                "EGGD",
+                5.5,
+                new List<SectorlineDisplayRule>
+                {
+                    new SectorlineDisplayRule("TEST1", "TEST1", "TEST2", "comment1"),
+                    new SectorlineDisplayRule("TEST2", "TEST2", "TEST1", "comment2")
+                },
+                "commentname"
+            );
+
+            this.collection.Add(sectorline);
+            Assert.Equal(sectorline, this.collection.CircleSectorLines[0]);
+        }
+
+        [Fact]
+        public void TestItAddsCircleSectorlinesToCompilablesSection()
+        {
+            CircleSectorline sectorline = new CircleSectorline(
+                "Test Sectorline",
+                "EGGD",
+                5.5,
+                new List<SectorlineDisplayRule>
+                {
+                    new SectorlineDisplayRule("TEST1", "TEST1", "TEST2", "comment1"),
+                    new SectorlineDisplayRule("TEST2", "TEST2", "TEST1", "comment2")
+                },
+                "commentname"
+            );
+
+            this.collection.Add(sectorline);
+            Assert.Equal(
+                sectorline,
+                this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]
+            );
+        }
+
+        [Fact]
+        public void TestItAddsSectors()
+        {
+            Sector sector = new Sector(
+                "COOL",
+                5000,
+                66000,
+                new SectorOwnerHierarchy(
+                    new List<string>()
+                    {
+                        "LLN", "LLS"
+                    },
+                    ""
+                ),
+                new List<SectorAlternateOwnerHierarchy>()
+                {
+                    new SectorAlternateOwnerHierarchy("ALT1", new List<string>(){"LON1", "LON2"}, ""),
+                    new SectorAlternateOwnerHierarchy("ALT2", new List<string>(){"LON3", "LON4"}, ""),
+                },
+                new List<SectorActive>()
+                {
+                    new SectorActive("EGLL", "09R", ""),
+                    new SectorActive("EGWU", "05", ""),
+                },
+                new List<SectorGuest>()
+                {
+                    new SectorGuest("LLN", "EGLL", "EGWU", ""),
+                    new SectorGuest("LLS", "EGLL", "*", ""),
+                },
+                new SectorBorder(
+                new List<string>()
+                    {
+                        "LINE1",
+                        "LINE2",
+                    },
+                    ""
+                ),
+                new SectorArrivalAirports(new List<string>() { "EGSS", "EGGW" }, ""),
+                new SectorDepartureAirports(new List<string>() { "EGLL", "EGWU" }, ""),
+                "comment"
+            );
+
+            this.collection.Add(sector);
+            Assert.Equal(sector, this.collection.Sectors[0]);
+        }
+
+        [Fact]
+        public void TestItAddsSectorsToCompilablesSection()
+        {
+            Sector sector = new Sector(
+                "COOL",
+                5000,
+                66000,
+                new SectorOwnerHierarchy(
+                    new List<string>()
+                    {
+                        "LLN", "LLS"
+                    },
+                    ""
+                ),
+                new List<SectorAlternateOwnerHierarchy>()
+                {
+                    new SectorAlternateOwnerHierarchy("ALT1", new List<string>(){"LON1", "LON2"}, ""),
+                    new SectorAlternateOwnerHierarchy("ALT2", new List<string>(){"LON3", "LON4"}, ""),
+                },
+                new List<SectorActive>()
+                {
+                    new SectorActive("EGLL", "09R", ""),
+                    new SectorActive("EGWU", "05", ""),
+                },
+                new List<SectorGuest>()
+                {
+                    new SectorGuest("LLN", "EGLL", "EGWU", ""),
+                    new SectorGuest("LLS", "EGLL", "*", ""),
+                },
+                new SectorBorder(
+                new List<string>()
+                    {
+                        "LINE1",
+                        "LINE2",
+                    },
+                    ""
+                ),
+                new SectorArrivalAirports(new List<string>() { "EGSS", "EGGW" }, ""),
+                new SectorDepartureAirports(new List<string>() { "EGLL", "EGWU" }, ""),
+                "comment"
+            );
+
+            this.collection.Add(sector);
+            Assert.Equal(
+                sector,
+                this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]
+            );
+        }
+
+        [Fact]
+        public void TestItAddsCoordinationPoints()
+        {
+            CoordinationPoint coordinationPoint = new CoordinationPoint(
+                false,
+                "*",
+                "*",
+                "ABTUM",
+                "EGKK",
+                "26L",
+                "TCE",
+                "TCSW",
+                "*",
+                "14000",
+                "ABTUMDES",
+                "comment"
+            );
+
+            this.collection.Add(coordinationPoint);
+            Assert.Equal(coordinationPoint, this.collection.CoordinationPoints[0]);
+        }
+
+        [Fact]
+        public void TestItAddsCoordinationPointsToCompilablesSection()
+        {
+            CoordinationPoint coordinationPoint = new CoordinationPoint(
+                false,
+                "*",
+                "*",
+                "ABTUM",
+                "EGKK",
+                "26L",
+                "TCE",
+                "TCSW",
+                "*",
+                "14000",
+                "ABTUMDES",
+                "comment"
+            );
+
+            this.collection.Add(coordinationPoint);
+            Assert.Equal(
+                coordinationPoint,
+                this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]
+            );
+        }
+
+        [Fact]
         public void TestItAddsBlankLines()
         {
             BlankLine blank = new BlankLine();

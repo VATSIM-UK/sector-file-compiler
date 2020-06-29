@@ -5,7 +5,7 @@ using Compiler.Event;
 
 namespace Compiler.Parser
 {
-    public class SidStarRouteParser: AbstractSectorElementParser
+    public class SidStarRouteParser: AbstractSectorElementParser, IFileParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
@@ -27,7 +27,7 @@ namespace Compiler.Parser
 
         public SidStarType Type { get; }
 
-        public override void ParseData(SectorFormatData data)
+        public void ParseData(SectorFormatData data)
         {
             List<SectorFormatLine> linesToProcess = new List<SectorFormatLine>();
             bool foundFirst = false;
@@ -64,7 +64,7 @@ namespace Compiler.Parser
                 // We've reached the end of the segment, time to make the thing and start over!
                 if (sectorData.dataSegments[0].Trim() != "")
                 {
-                    this.processSidStar(linesToProcess, data.fullPath, newSegmentStartLine);
+                    this.ProcessSidStar(linesToProcess, data.fullPath, newSegmentStartLine);
                     linesToProcess.Clear();
                     newSegmentStartLine = i;
                     linesToProcess.Add(sectorData);
@@ -78,14 +78,14 @@ namespace Compiler.Parser
             // If we've got some lines left over, process them now
             if (linesToProcess.Count != 0)
             {
-                this.processSidStar(linesToProcess, data.fullPath, newSegmentStartLine);
+                this.ProcessSidStar(linesToProcess, data.fullPath, newSegmentStartLine);
             }
         }
 
         /**
          * Process an individual SID/STARs worth of lines
          */
-        private void processSidStar(List<SectorFormatLine> lines, string filename, int startLine)
+        private void ProcessSidStar(List<SectorFormatLine> lines, string filename, int startLine)
         {
             string sidStarName = lines[0].dataSegments[0].Trim();
             List<RouteSegment> segments = new List<RouteSegment>();

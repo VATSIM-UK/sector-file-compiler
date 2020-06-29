@@ -29,7 +29,24 @@ namespace Compiler.Validate
             new AllLabelsMustHaveAValidColour(),
             new AllRegionsMustHaveValidColours(),
             new AllRegionsMustHaveValidPoints(),
-            new InfoMustHaveValidAirport()
+            new InfoMustHaveValidAirport(),
+            new AllCoordinationPointsMustHaveValidPrior(),
+            new AllCoordinationPointsMustHaveValidNext(),
+            new AllCoordinationPointsMustHaveValidFix(),
+            new AllCoordinationPointsMustHaveValidToSector(),
+            new AllCoordinationPointsMustHaveValidFromSector(),
+            new AllSectorlineElementsMustHaveUniqueName(),
+            new AllSectorlinesMustHaveValidDisplaySectors(),
+            new AllCircleSectorlinesMustHaveValidDisplaySectors(),
+            new AllSectorlineElementsMustHaveUniqueName(),
+            new AllSectorsMustHaveValidOwner(),
+            new AllSectorsMustHaveValidAltOwner(),
+            new AllSectorsMustHaveValidBorder(),
+            new AllSectorsMustHaveValidActiveAirport(),
+            new AllSectorsMustHaveValidGuestAirports(),
+            new AllSectorsMustHaveValidGuestController(),
+            new AllSectorsMustHaveValidDepartureAirports(),
+            new AllSectorsMustHaveValidArrivalAirports(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)

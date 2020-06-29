@@ -7,7 +7,7 @@ using Compiler.Error;
 
 namespace Compiler.Parser
 {
-    public class AirwayParser : AbstractSectorElementParser
+    public class AirwayParser : AbstractSectorElementParser, IFileParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly AirwayType airwayType;
@@ -28,7 +28,7 @@ namespace Compiler.Parser
             this.eventLogger = eventLogger;
         }
 
-        public override void ParseData(SectorFormatData data)
+        public void ParseData(SectorFormatData data)
         {
             for (int i = 0; i < data.lines.Count; i++)
             {

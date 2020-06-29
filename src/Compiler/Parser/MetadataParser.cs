@@ -8,8 +8,10 @@ namespace Compiler.Parser
         private readonly SectorElementCollection sectorElements;
         private readonly OutputSections section;
 
-        public MetadataParser(SectorElementCollection sectorElements, OutputSections section)
-        {
+        public MetadataParser(
+            SectorElementCollection sectorElements,
+            OutputSections section
+        ) {
             this.sectorElements = sectorElements;
             this.section = section;
         }
@@ -22,7 +24,10 @@ namespace Compiler.Parser
                 return false;
             }
 
-            this.sectorElements.Add(new CommentLine(LineCommentParser.ParseComment(line)), this.section);
+            this.sectorElements.Add(
+                new CommentLine(LineCommentParser.ParseComment(line)),
+                this.section
+            );
             return true;
         }
 

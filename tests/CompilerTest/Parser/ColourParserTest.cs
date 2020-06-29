@@ -92,7 +92,9 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][0]);
+            Assert.IsType<BlankLine>(
+                this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][0]
+            );
         }
 
         [Fact]
