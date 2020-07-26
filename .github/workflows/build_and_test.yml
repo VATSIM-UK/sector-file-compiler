@@ -18,7 +18,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
       
-      - name: Resorce Nuget Packages
+      - name: Restore Nuget Packages
         run: dotnet restore SectorFileCompiler.sln --packages packages
 
       - name: Run Build
