@@ -8,7 +8,7 @@ on:
   pull_request:
 
 jobs:
-  Build_Test:
+  Build_Test_Coverage:
     strategy:
       matrix:
         platform: [ubuntu-latest, macos-latest, windows-latest]
@@ -24,36 +24,22 @@ jobs:
         run: dotnet build /p:Configuration=Debug SectorFileCompiler.sln --nologo --no-restore /warnaserror;
 
       - name: Run Compiler Tests
-        if: matrix.platform != 'windows-latest'
         run: dotnet test tests/CompilerTest/CompilerTest.csproj
 
       - name: Run Compiler CLI Tests
-        if: matrix.platform != 'windows-latest'
         run: dotnet test tests/CompilerCliTest/CompilerCliTest.csproj
 
-  Coverage:
-    needs: Build_Test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
       
-      - name: Restore Nuget Packages
-        run: dotnet restore SectorFileCompiler.sln --packages packages
-
-      - name: Run Build
-        run: dotnet build /p:Configuration=Debug SectorFileCompiler.sln --nologo --no-restore /warnaserror;
-
-      - name: Run Compiler Tests With Coverage
-        if: matrix.platform == 'windows-latest'
+      - name: Generate Compiler Coverage Report
+        if: matrix.platform == 'ubuntu-latest'
         run: dotnet test tests/CompilerTest/CompilerTest.csproj --results-directory './coverage' --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
-      - name: Run Compiler CLI Tests With Coverage
-        if: matrix.platform == 'windows-latest'
+      - name: Generate Compiler CLI Coverage Report
+        if: matrix.platform == 'ubuntu-latest'
         run: dotnet test tests/CompilerCliTest/CompilerCliTest.csproj --results-directory './coverage' --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
       - name: Upload Code Coverage Reports
-        if: matrix.platform == 'windows-latest'
+        if: matrix.platform == 'ubuntu-latest'
         run: |
           .\packages\reportgenerator\4.6.1\tools\netcoreapp3.0\ReportGenerator.exe "-reports:coverage/**/*.xml" "-targetdir:coverage/" "-reporttypes:Clover"
           bash <(curl -s https://codecov.io/bash) -f coverage/Clover.xml
