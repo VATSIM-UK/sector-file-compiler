@@ -31,4 +31,4 @@ jobs:
 
       - name: Run Coverage On Compiler Tests
         if: matrix.platform == 'windows-latest'
-        run: OpenCover.Console.exe -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:"test tests/CompilerTest/CompilerTest.csproj" -register:user
+        run: .\packages\OpenCover.4.7.922\OpenCover.Console.exe -target:"dotnet.exe" -targetargs:"test tests/CompilerTest/CompilerTest.csproj" -register:user
