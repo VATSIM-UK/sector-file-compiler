@@ -3,8 +3,7 @@ name: Build Test and Coverage
 on:
   push:
     branches:
-      - '*'
-      - '**'
+      - 'main'
   pull_request:
 
 jobs:
