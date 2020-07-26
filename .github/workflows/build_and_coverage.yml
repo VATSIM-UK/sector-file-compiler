@@ -32,7 +32,7 @@ jobs:
         run: dotnet test tests/CompilerCliTest/CompilerCliTest.csproj
 
   Coverage:
-    needs: Build
+    needs: Build_Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
