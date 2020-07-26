@@ -21,7 +21,7 @@ jobs:
         run: dotnet restore SectorFileCompiler.sln --packages packages
 
       - name: Run Build
-        run: dotnet build /p:Configuration=Release SectorFileCompiler.sln --nologo --no-restore /warnaserror;
+        run: dotnet build /p:Configuration=Debug SectorFileCompiler.sln --nologo --no-restore /warnaserror;
 
       - name: Run Compiler Tests
         run: dotnet test tests/CompilerTest/CompilerTest.csproj
