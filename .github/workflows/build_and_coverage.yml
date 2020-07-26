@@ -24,11 +24,9 @@ jobs:
         run: dotnet build /p:Configuration=Debug SectorFileCompiler.sln --nologo --no-restore /warnaserror;
       
       - name: Run Compiler Tests
-        if: matrix.platform == 'ubuntu-latest'
         run: dotnet test tests/CompilerTest/CompilerTest.csproj --results-directory './coverage' --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
       - name: Run Compiler CLI Tests
-        if: matrix.platform == 'ubuntu-latest'
         run: dotnet test tests/CompilerCliTest/CompilerCliTest.csproj --results-directory './coverage' --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
       - name: Upload Code Coverage Reports
