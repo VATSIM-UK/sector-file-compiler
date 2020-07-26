@@ -8,12 +8,11 @@ on:
   pull_request:
 
 jobs:
-  test:
+  Run:
     strategy:
       matrix:
         platform: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.platform }}
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -29,3 +28,13 @@ jobs:
 
       - name: Run Compiler CLI Tests
         run: dotnet test tests/CompilerCliTest/CompilerCliTest.csproj
+
+      - name: Upload Code Coverage Report
+        run: bash <(curl -s https://codecov.io/bash)
+  Coverage:
+    runs-on: windows-latest
+    needs: Run
+    steps:
+      - name: Run Coverage On Compiler Tests
+        run: OpenCover.Console.exe -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:"test tests/CompilerTest/CompilerTest.csproj" -register:user
+
