@@ -1,0 +1,36 @@
+name: Build Test and Coverage
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+
+jobs:
+  Build_Test_Coverage:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      
+      - name: Restore Nuget Packages
+        run: dotnet restore SectorFileCompiler.sln --packages packages
+
+      - name: Run Build
+        run: dotnet build /p:Configuration=Debug SectorFileCompiler.sln --nologo --no-restore /warnaserror;
+      
+      - name: Run Compiler Tests
+        run: dotnet test tests/CompilerTest/CompilerTest.csproj --results-directory './coverage' --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+
+      - name: Run Compiler CLI Tests
+        run: dotnet test tests/CompilerCliTest/CompilerCliTest.csproj --results-directory './coverage' --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+
+      - name: Upload Code Coverage Reports
+        if: matrix.platform == 'ubuntu-latest'
+        run: |
+          dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.6.1
+          reportgenerator "-reports:coverage/**/*.xml" "-targetdir:coverage/" "-reporttypes:Clover"
+          bash <(curl -s https://codecov.io/bash) -f coverage/Clover.xml
