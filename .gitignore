@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# CI things
+./compiler.coverage.xml
+./compilercli.coverage.xml
+
 # User-specific files
 *.suo
 *.user
