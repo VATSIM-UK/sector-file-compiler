@@ -23,26 +23,12 @@ jobs:
       - name: Run Build
         run: dotnet build /p:Configuration=Release SectorFileCompiler.sln --nologo --no-restore /warnaserror;
 
-  Test:
-    strategy:
-      matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.platform }}
-    needs: Build
-    steps:
       - name: Run Compiler Tests
         run: dotnet test tests/CompilerTest/CompilerTest.csproj
 
       - name: Run Compiler CLI Tests
         run: dotnet test tests/CompilerCliTest/CompilerCliTest.csproj
 
-  Coverage:
-    strategy:
-      matrix:
-        platform: [windows-latest]
-    runs-on: ${{ matrix.platform }}
-    needs: Build
-    steps:
       - name: Run Coverage On Compiler Tests
+        if: matrix.platform == 'windows-latest'
         run: OpenCover.Console.exe -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:"test tests/CompilerTest/CompilerTest.csproj" -register:user
-
