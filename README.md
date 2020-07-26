@@ -1,7 +1,8 @@
 # sector-file-compiler
 Compiler and validator for the [VATSIM UK Sector File](https://github.com/VATSIM-UK/uk-sector-file).
 
-[![Build Status](https://travis-ci.com/AndyTWF/sector-file-compiler.svg?branch=master)](https://travis-ci.com/AndyTWF/sector-file-compiler)
+![Build Test and Coverage](https://github.com/AndyTWF/sector-file-compiler/workflows/Build%20Test%20and%20Coverage/badge.svg?branch=main)
+[![codecov](https://codecov.io/gh/AndyTWF/sector-file-compiler/branch/main/graph/badge.svg)](https://codecov.io/gh/AndyTWF/sector-file-compiler)
 
 ## What Does It Do?
 
