@@ -28,7 +28,6 @@ jobs:
 
       - name: Run Compiler CLI Tests
         run: dotnet test tests/CompilerCliTest/CompilerCliTest.csproj
-
       
       - name: Generate Compiler Coverage Report
         if: matrix.platform == 'ubuntu-latest'
