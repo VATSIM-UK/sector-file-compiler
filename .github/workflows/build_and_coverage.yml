@@ -32,6 +32,6 @@ jobs:
       - name: Upload Code Coverage Reports
         if: matrix.platform == 'ubuntu-latest'
         run: |
-          dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.0.0-rc2
+          dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.6.1
           reportgenerator "-reports:coverage/**/*.xml" "-targetdir:coverage/" "-reporttypes:Clover"
           bash <(curl -s https://codecov.io/bash) -f coverage/Clover.xml
