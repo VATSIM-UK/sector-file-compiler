@@ -1,14 +1,13 @@
-name: Build and Test
+name: Build Test and Coverage
 
 on:
   push:
     branches:
-      - '*'
-      - '**'
+      - 'main'
   pull_request:
 
 jobs:
-  Build:
+  Build And Test:
     strategy:
       matrix:
         platform: [ubuntu-latest, macos-latest, windows-latest]
@@ -27,13 +26,26 @@ jobs:
         if: matrix.platform != 'windows-latest'
         run: dotnet test tests/CompilerTest/CompilerTest.csproj
 
-      - name: Run Compiler Tests With Coverage
-        if: matrix.platform == 'windows-latest'
-        run: dotnet test tests/CompilerTest/CompilerTest.csproj --results-directory './coverage' --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-
       - name: Run Compiler CLI Tests
         if: matrix.platform != 'windows-latest'
         run: dotnet test tests/CompilerCliTest/CompilerCliTest.csproj
+
+  Coverage:
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      
+      - name: Restore Nuget Packages
+        run: dotnet restore SectorFileCompiler.sln --packages packages
+
+      - name: Run Build
+        run: dotnet build /p:Configuration=Debug SectorFileCompiler.sln --nologo --no-restore /warnaserror;
+
+      - name: Run Compiler Tests With Coverage
+        if: matrix.platform == 'windows-latest'
+        run: dotnet test tests/CompilerTest/CompilerTest.csproj --results-directory './coverage' --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
       - name: Run Compiler CLI Tests With Coverage
         if: matrix.platform == 'windows-latest'
