@@ -8,12 +8,11 @@ on:
   pull_request:
 
 jobs:
-  tests:
-    name: Run
+  test:
     strategy:
       matrix:
         platform: [ubuntu-latest, macos-latest, windows-latest]
-
+    runs-on: ${{ matrix.platform }}
 
     steps:
       - name: Checkout Code
