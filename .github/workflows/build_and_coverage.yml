@@ -8,7 +8,7 @@ on:
   pull_request:
 
 jobs:
-  Build And Test:
+  Build_Test:
     strategy:
       matrix:
         platform: [ubuntu-latest, macos-latest, windows-latest]
