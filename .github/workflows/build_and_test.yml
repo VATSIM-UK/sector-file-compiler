@@ -29,7 +29,7 @@ jobs:
 
       - name: Run Compiler Tests With Coverage
         if: matrix.platform == 'windows-latest'
-        run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput='./compiler.coverage.xml' tests/CompilerTest/CompilerTest.csproj
+        run: dotnet test tests/CompilerTest/CompilerTest.csproj --results-directory './coverage' --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
       - name: Run Compiler CLI Tests
         if: matrix.platform != 'windows-latest'
@@ -37,4 +37,9 @@ jobs:
 
       - name: Run Compiler CLI Tests With Coverage
         if: matrix.platform == 'windows-latest'
-        run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput='./compilercli.coverage.xml' tests/CompilerCliTest/CompilerCliTest.csproj
+        run: dotnet test tests/CompilerCliTest/CompilerCliTest.csproj --results-directory './coverage' --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+
+      - name: Upload Code Coverage Reports
+        - if: matrix.platform == 'windows-latest'
+        - run: .\packages\reportgenerator\4.6.1\tools\netcoreapp3.0\ReportGenerator.exe "-reports:coverage/**/*.xml" "-targetdir:coverage/" "-reporttypes:Clover"
+        - run: bash <(curl -s https://codecov.io/bash) -f coverage/Clover.xml
