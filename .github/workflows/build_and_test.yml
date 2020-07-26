@@ -8,12 +8,12 @@ on:
   pull_request:
 
 jobs:
-  laravel-tests:
+  tests:
     name: Run
-    runs-on:
-      strategy:
-        matrix:
-          platform: [ubuntu-latest, macos-latest, windows-latest]
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest, windows-latest]
+
 
     steps:
       - name: Checkout Code
