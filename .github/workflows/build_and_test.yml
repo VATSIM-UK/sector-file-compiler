@@ -29,7 +29,7 @@ jobs:
 
       - name: Run Compiler Tests With Coverage
         if: matrix.platform == 'windows-latest'
-        run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover tests/CompilerTest/CompilerTest.csproj
+        run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput='./compiler.coverage.xml' tests/CompilerTest/CompilerTest.csproj
 
       - name: Run Compiler CLI Tests
         if: matrix.platform != 'windows-latest'
@@ -37,4 +37,4 @@ jobs:
 
       - name: Run Compiler CLI Tests With Coverage
         if: matrix.platform == 'windows-latest'
-        run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover tests/CompilerCliTest/CompilerCliTest.csproj
+        run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput='./compilercli.coverage.xml' tests/CompilerCliTest/CompilerCliTest.csproj
