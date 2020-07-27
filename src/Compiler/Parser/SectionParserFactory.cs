@@ -142,6 +142,13 @@ namespace Compiler.Parser
                         this.sectorElements,
                         this.logger
                     );
+                case OutputSections.SCT_RUNWAY:
+                    return new RunwayParser(
+                        this.GetMetadataParser(section),
+                        new EseLineParser(),
+                        this.sectorElements,
+                        this.logger
+                    );
                 case OutputSections.ESE_PREAMBLE:
                     break;
                 case OutputSections.ESE_POSITIONS:
