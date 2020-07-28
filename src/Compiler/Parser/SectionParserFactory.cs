@@ -145,7 +145,7 @@ namespace Compiler.Parser
                 case OutputSections.SCT_RUNWAY:
                     return new RunwayParser(
                         this.GetMetadataParser(section),
-                        new EseLineParser(),
+                        new StandardSctLineParser(),
                         this.sectorElements,
                         this.logger
                     );

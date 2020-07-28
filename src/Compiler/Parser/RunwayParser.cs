@@ -62,7 +62,7 @@ namespace Compiler.Parser
                 }
 
                 // Check the two headings
-                if (!int.TryParse(sectorData.dataSegments[2], out int firstHeading))
+                if (!this.HeadingIsValid(sectorData.dataSegments[2]))
                 {
                     this.errorLog.AddEvent(
                         new SyntaxError("Invalid runway heading " + sectorData.dataSegments[2], data.fullPath, i + 1)
@@ -70,7 +70,7 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                if (!int.TryParse(sectorData.dataSegments[3], out int reverseHeading))
+                if (!this.HeadingIsValid(sectorData.dataSegments[3]))
                 {
                     this.errorLog.AddEvent(
                         new SyntaxError("Invalid runway heading " + sectorData.dataSegments[3], data.fullPath, i + 1)
@@ -116,16 +116,23 @@ namespace Compiler.Parser
                 this.sectorElements.Add(
                     new Runway(
                         sectorData.dataSegments[0],
-                        firstHeading,
+                        int.Parse(sectorData.dataSegments[2]),
                         firstThreshold,
                         sectorData.dataSegments[1],
-                        reverseHeading,
+                        int.Parse(sectorData.dataSegments[3]),
                         reverseThreshold,
                         runwayDialogDescription,
                         sectorData.comment
                     )
                 );
             }
+        }
+
+        private bool HeadingIsValid(string heading)
+        {
+            return int.TryParse(heading, out int headingInt) &&
+                headingInt >= 0 &&
+                headingInt < 360;
         }
     }
 }
