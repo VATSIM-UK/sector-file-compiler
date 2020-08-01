@@ -46,6 +46,27 @@ namespace Compiler.Parser
             }
 
             if (
+                sectorData.dataSegments[1].Length != 4 &&
+                sectorData.dataSegments[2] != "*"
+            ) {
+                this.errorLog.AddEvent(
+                    new SyntaxError("Cannot specify a runway without a departure airport " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                );
+                throw new Exception();
+            }
+
+            if (
+                sectorData.dataSegments[4].Length != 4 &&
+                sectorData.dataSegments[5] != "*"
+            )
+                        {
+                this.errorLog.AddEvent(
+                    new SyntaxError("Cannot specify a runway without an arrival airport " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                );
+                throw new Exception();
+            }
+
+            if (
                 sectorData.dataSegments[8] != CoordinationPoint.DATA_NOT_SPECIFIED &&
                 sectorData.dataSegments[9] != CoordinationPoint.DATA_NOT_SPECIFIED
             ) {
