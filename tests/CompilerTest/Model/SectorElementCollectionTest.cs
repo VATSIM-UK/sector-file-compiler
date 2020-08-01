@@ -69,6 +69,42 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsRunways()
+        {
+            Runway runway = new Runway(
+                "09",
+                90,
+                new Coordinate("abc", "def"),
+                "27",
+                270,
+                new Coordinate("ghi", "jkl"),
+                "EGGD - Bristol",
+                "comment"
+            );
+            this.collection.Add(runway);
+
+            Assert.Equal(runway, this.collection.Runways[0]);
+        }
+
+        [Fact]
+        public void TestItAddsRunwaysToCompilableSection()
+        {
+            Runway runway = new Runway(
+                "09",
+                90,
+                new Coordinate("abc", "def"),
+                "27",
+                270,
+                new Coordinate("ghi", "jkl"),
+                "EGGD - Bristol",
+                "comment"
+            );
+            this.collection.Add(runway);
+
+            Assert.Equal(runway, this.collection.Compilables[OutputSections.SCT_RUNWAY][0]);
+        }
+
+        [Fact]
         public void TestItAddsArtccs()
         {
             Artcc artcc = new Artcc(

@@ -124,6 +124,62 @@ namespace CompilerTest.Parser
         }
 
         [Fact]
+        public void TestItRaisesASyntaxErrorIfArrivalAirportAnyButRunwaySpecified()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "test",
+                new List<string>(new string[] { "FIR_COPX:*:*:HEMEL:*:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment" })
+            );
+
+            this.parser.ParseData(data);
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
+        [Fact]
+        public void TestItRaisesASyntaxErrorIfNextFixButRunwaySpecified()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "test",
+                new List<string>(new string[] { "FIR_COPX:*:*:HEMEL:DIKAS:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment" })
+            );
+
+            this.parser.ParseData(data);
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
+        [Fact]
+        public void TestItRaisesASyntaxErrorIfDepartureAirportAnyButRunwaySpecified()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "test",
+                new List<string>(new string[] { "FIR_COPX:*:09R:HEMEL:EGKK:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment" })
+            );
+
+            this.parser.ParseData(data);
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
+        [Fact]
+        public void TestItRaisesASyntaxErrorIfNextFixGivenButRunwaySpecified()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "test",
+                new List<string>(new string[] { "FIR_COPX:IBROD:09R:HEMEL:EGKK:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment" })
+            );
+
+            this.parser.ParseData(data);
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
+        [Fact]
         public void TestItHandlesMetadata()
         {
             SectorFormatData data = new SectorFormatData(
