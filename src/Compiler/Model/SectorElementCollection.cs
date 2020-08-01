@@ -42,6 +42,8 @@ namespace Compiler.Model
 
         public List<Sector> Sectors { get; } = new List<Sector>();
 
+        public List<Runway> Runways { get; } = new List<Runway>();
+
         public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
 
         public SectorElementCollection()
@@ -133,6 +135,12 @@ namespace Compiler.Model
         {
             this.Compilables[OutputSections.ESE_SIDSSTARS].Add(sidStar);
             this.SidStars.Add(sidStar);
+        }
+
+        public void Add(Runway runway)
+        {
+            this.Compilables[OutputSections.SCT_RUNWAY].Add(runway);
+            this.Runways.Add(runway);
         }
 
         public void Add(SidStarRoute sidStar)
