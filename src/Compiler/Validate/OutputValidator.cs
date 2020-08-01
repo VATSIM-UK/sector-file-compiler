@@ -43,11 +43,14 @@ namespace Compiler.Validate
             new AllSectorsMustHaveValidAltOwner(),
             new AllSectorsMustHaveValidBorder(),
             new AllSectorsMustHaveValidActiveAirport(),
+            new AllSectorsMustHaveValidActiveRunway(),
             new AllSectorsMustHaveValidGuestAirports(),
             new AllSectorsMustHaveValidGuestController(),
             new AllSectorsMustHaveValidDepartureAirports(),
             new AllSectorsMustHaveValidArrivalAirports(),
             new AllRunwayDescriptionsMustReferenceAnAirport(),
+            new AllCoordinationPointsMustHaveValidDepartureRunways(),
+            new AllCoordinationPointsMustHaveValidArrivalRunways(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
