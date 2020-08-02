@@ -34,7 +34,14 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItPassesOnValidColoursIntegers()
         {
-            this.sectorElements.Add(new Geo(new Point("test"), new Point("test"), "0", "test"));
+            Geo geo = new Geo(
+                "TestGeo",
+                new List<GeoSegment>
+                {
+                    new GeoSegment(new Point("test"), new Point("test"), "0", "comment")
+                }
+            );
+            this.sectorElements.Add(geo);
             this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -42,7 +49,14 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItPassesOnValidDefinedColours()
         {
-            this.sectorElements.Add(new Geo(new Point("test"), new Point("test"), "colour1", "test"));
+            Geo geo = new Geo(
+                "TestGeo",
+                new List<GeoSegment>
+                {
+                    new GeoSegment(new Point("test"), new Point("test"), "colour1", "comment")
+                }
+            );
+            this.sectorElements.Add(geo);
             this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
@@ -50,7 +64,14 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsOnInvalidDefinedColours()
         {
-            this.sectorElements.Add(new Geo(new Point("test"), new Point("test"), "notcolour1", "test"));
+            Geo geo = new Geo(
+                "TestGeo",
+                new List<GeoSegment>
+                {
+                    new GeoSegment(new Point("test"), new Point("test"), "notcolour1", "comment")
+                }
+            );
+            this.sectorElements.Add(geo);
             this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
@@ -58,8 +79,22 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsOnInvalidDefinedColoursAfterLooping()
         {
-            this.sectorElements.Add(new Geo(new Point("test"), new Point("test"), "notcolour1", "test"));
-            this.sectorElements.Add(new Geo(new Point("test"), new Point("test"), "colour1", "test"));
+            Geo geo1 = new Geo(
+                "TestGeo",
+                new List<GeoSegment>
+                {
+                    new GeoSegment(new Point("test"), new Point("test"), "colour1", "comment")
+                }
+            );
+            Geo geo2 = new Geo(
+                "TestGeo",
+                new List<GeoSegment>
+                {
+                    new GeoSegment(new Point("test"), new Point("test"), "notcolour1", "comment")
+                }
+            );
+            this.sectorElements.Add(geo2);
+            this.sectorElements.Add(geo1);
             this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
@@ -67,7 +102,14 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsOnInvalidColourIntegers()
         {
-            this.sectorElements.Add(new Geo(new Point("test"), new Point("test"), "123456789", "test"));
+            Geo geo = new Geo(
+                "TestGeo",
+                new List<GeoSegment>
+                {
+                    new GeoSegment(new Point("test"), new Point("test"), "123456789", "comment")
+                }
+            );
+            this.sectorElements.Add(geo);
 
             this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);

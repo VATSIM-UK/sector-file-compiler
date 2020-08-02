@@ -18,18 +18,20 @@ namespace Compiler.Validate
         {
             foreach (Geo geo in sectorElements.GeoElements)
             {
-                if (
-                    !RoutePointValidator.ValidatePoint(geo.StartPoint, sectorElements) ||
-                    !RoutePointValidator.ValidatePoint(geo.EndPoint, sectorElements)
-                )
+                foreach (GeoSegment segment in geo.Segments)
                 {
-                    string message = String.Format(
-                        "Invalid waypoint {0} on GEO",
-                        geo.Compile()
-                    );
-                    events.AddEvent(
-                        new ValidationRuleFailure(message)
-                    );
+                    if (
+                        !RoutePointValidator.ValidatePoint(segment.FirstPoint, sectorElements) ||
+                        !RoutePointValidator.ValidatePoint(segment.SecondPoint, sectorElements)
+                    ) {
+                        string message = String.Format(
+                            "Invalid waypoint {0} on GEO",
+                            segment.Compile()
+                        );
+                        events.AddEvent(
+                            new ValidationRuleFailure(message)
+                        );
+                    }
                 }
             }
         }

@@ -11,14 +11,16 @@ namespace Compiler.Validate
         {
             foreach (Geo geo in sectorElements.GeoElements)
             {
-                if (!ColourValidator.ColourValid(sectorElements, geo.Colour))
+                foreach (GeoSegment segment in geo.Segments)
                 {
-                    string errorMessage = string.Format(
-                        "Invalid colour value {0} in GEO segment",
-                        geo.Colour
-                    );
-                    events.AddEvent(new ValidationRuleFailure(errorMessage));
-                    continue;
+                    if (!ColourValidator.ColourValid(sectorElements, segment.Colour))
+                    {
+                        string errorMessage = string.Format(
+                            "Invalid colour value {0} in GEO segment",
+                            segment.Colour
+                        );
+                        events.AddEvent(new ValidationRuleFailure(errorMessage));
+                    }
                 }
             }
         }

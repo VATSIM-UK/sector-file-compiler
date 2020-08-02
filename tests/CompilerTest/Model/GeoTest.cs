@@ -48,7 +48,7 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "TestGeo                    abc def ghi jkl red ;comment1\r\nmno pqr stu vwx blue ;comment2\r\n",
+                "TestGeo                     abc def ghi jkl red ;comment1\r\nmno pqr stu vwx blue ;comment2\r\n",
                 this.model.Compile()
             );
         }

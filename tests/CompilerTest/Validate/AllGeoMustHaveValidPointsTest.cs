@@ -31,8 +31,21 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItPassesOnValidPoints()
         {
-            Geo geo1 = new Geo(new Point("testfix"), new Point("testvor"), "test", "comment");
-            Geo geo2= new Geo(new Point("testndb"), new Point("testairport"), "test", "comment");
+            Geo geo1 = new Geo(
+                "TestGeo",
+                new List<GeoSegment>
+                {
+                    new GeoSegment(new Point("testndb"), new Point("testairport"), "test", "comment")
+                }
+            );
+
+            Geo geo2 = new Geo(
+                "TestGeo",
+                new List<GeoSegment>
+                {
+                    new GeoSegment(new Point("testfix"), new Point("testvor"), "test", "comment"),
+                }
+            );
 
             this.sectorElements.Add(geo1);
             this.sectorElements.Add(geo2);
@@ -44,8 +57,21 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsOnInvalidPoint()
         {
-            Geo geo1 = new Geo(new Point("nottestfix"), new Point("testvor"), "test", "comment");
-            Geo geo2 = new Geo(new Point("testndb"), new Point("nottestairport"), "test", "comment");
+            Geo geo1 = new Geo(
+                "TestGeo",
+                new List<GeoSegment>
+                {
+                    new GeoSegment(new Point("nottestfix"), new Point("testairport"), "test", "comment")
+                }
+            );
+
+            Geo geo2 = new Geo(
+                "TestGeo",
+                new List<GeoSegment>
+                {
+                    new GeoSegment(new Point("testndb"), new Point("nottestairport"), "test", "comment"),
+                }
+            );
 
             this.sectorElements.Add(geo1);
             this.sectorElements.Add(geo2);

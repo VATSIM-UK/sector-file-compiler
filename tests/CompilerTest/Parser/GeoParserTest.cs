@@ -32,11 +32,11 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "N050.57.00.000 W001.21.24.490 N050.57.00.000 W001.21.24.490 test test" })
+                new List<string>(new string[] { "TestGeo                     N050.57.00.000 W001.21.24.490 N050.57.00.000 W001.21.24.490 test test" })
             );
             this.parser.ParseData(data);
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Exactly(2));
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace CompilerTest.Parser
             );
             this.parser.ParseData(data);
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Exactly(2));
         }
 
         [Fact]
@@ -60,11 +60,11 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "N050.57.00.000 N050.57.00.001 N050.57.00.000 W001.21.24.490 test" })
+                new List<string>(new string[] { "TestGeo                     N050.57.00.000 N050.57.00.001 N050.57.00.000 W001.21.24.490 test" })
             );
             this.parser.ParseData(data);
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Exactly(2));
         }
 
         [Fact]
@@ -74,11 +74,11 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "N050.57.00.000 W001.21.24.490 N050.57.00.000 N050.57.00.001 test" })
+                new List<string>(new string[] { "TestGeo                     N050.57.00.000 W001.21.24.490 N050.57.00.000 N050.57.00.001 test" })
             );
             this.parser.ParseData(data);
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Exactly(2));
         }
 
         [Fact]
@@ -102,15 +102,27 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "N050.57.00.000 W001.21.24.490 BCN BCN test ;comment" })
+                new List<string>(new string[] { "TestGeo                     N050.57.00.000 W001.21.24.490 BCN BCN test ;comment" })
             );
             this.parser.ParseData(data);
 
             Geo result = this.collection.GeoElements[0];
-            Assert.Equal(new Point(new Coordinate("N050.57.00.000", "W001.21.24.490")), result.StartPoint);
-            Assert.Equal(new Point("BCN"), result.EndPoint);
-            Assert.Equal("test", result.Colour);
-            Assert.Equal("comment", result.Comment);
+            Assert.Equal(
+                new Point(new Coordinate("N050.57.00.000", "W001.21.24.490")),
+                result.Segments[0].FirstPoint
+            );
+            Assert.Equal(
+                new Point("BCN"),
+                result.Segments[0].SecondPoint
+            );
+            Assert.Equal(
+                "test",
+                result.Segments[0].Colour
+            );
+            Assert.Equal(
+                "comment",
+                result.Segments[0].Comment
+            );
         }
 
         [Fact]
@@ -120,15 +132,27 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "S999.00.00.000 E999.00.00.000 S999.00.00.000 E999.00.00.000" })
+                new List<string>(new string[] { "TestGeo                     S999.00.00.000 E999.00.00.000 S999.00.00.000 E999.00.00.000" })
             );
             this.parser.ParseData(data);
 
             Geo result = this.collection.GeoElements[0];
-            Assert.Equal(new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")), result.StartPoint);
-            Assert.Equal(new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")), result.EndPoint);
-            Assert.Equal("0", result.Colour);
-            Assert.Equal("Compiler inserted line", result.Comment);
+            Assert.Equal(
+                new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
+                result.Segments[0].FirstPoint
+            );
+            Assert.Equal(
+                new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
+                result.Segments[0].SecondPoint
+            );
+            Assert.Equal(
+                "",
+                result.Segments[0].Colour
+            );
+            Assert.Equal(
+                "Compiler inserted line",
+                result.Segments[0].Comment
+            );
         }
     }
 }
