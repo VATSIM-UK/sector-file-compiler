@@ -275,7 +275,14 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsGeo()
         {
-            Geo geo = new Geo(new Point("abc"), new Point("def"), "red", null);
+            Geo geo = new Geo(
+                "TestGeo",
+                new List<GeoSegment>
+                {
+                    new GeoSegment(new Point("abc"), new Point("def"), "red", null),
+                    new GeoSegment(new Point("ghi"), new Point("jkl"), "blue", null)
+                }
+            );
             this.collection.Add(geo);
 
             Assert.Equal(geo, this.collection.GeoElements[0]);
@@ -284,7 +291,14 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsGeoToCompilableSection()
         {
-            Geo geo = new Geo(new Point("abc"), new Point("def"), "red", null);
+            Geo geo = new Geo(
+                "TestGeo",
+                new List<GeoSegment>
+                {
+                    new GeoSegment(new Point("abc"), new Point("def"), "red", null),
+                    new GeoSegment(new Point("ghi"), new Point("jkl"), "blue", null)
+                }
+            );
             this.collection.Add(geo);
 
             Assert.Equal(geo, this.collection.Compilables[OutputSections.SCT_GEO][0]);

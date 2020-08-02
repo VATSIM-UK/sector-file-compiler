@@ -1,33 +1,24 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Compiler.Model
 {
-    public class Geo : AbstractSectorElement, ICompilable
+    public class Geo : ICompilable
     {
-        public Geo(
-            Point startPoint,
-            Point endPoint,
-            string colour,
-            string comment
-        ) : base(comment)
+        public Geo(string name, List<GeoSegment> segments)
         {
-            StartPoint = startPoint;
-            EndPoint = endPoint;
-            Colour = colour;
+            Name = name;
+            Segments = segments;
         }
-
-        public Point StartPoint { get; }
-        public Point EndPoint { get; }
-        public string Colour { get; }
+        public string Name { get; }
+        public List<GeoSegment> Segments { get; }
 
         public string Compile()
         {
             return string.Format(
-                "{0} {1} {2}{3}\r\n",
-                this.StartPoint.Compile(),
-                this.EndPoint.Compile(),
-                this.Colour,
-                this.CompileComment()
+                "{0} {1}",
+                this.Name.PadRight(27, ' '),
+                this.Segments.Aggregate("", (segmentString, segment) => segmentString + segment.Compile())
             );
         }
     }

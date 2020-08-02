@@ -29,6 +29,9 @@ namespace Compiler.Parser
 
         public void ParseData(SectorFormatData data)
         {
+            bool foundFirst = false;
+            string name = "";
+            List<GeoSegment> segments = new List<GeoSegment>();
             for (int i = 0; i < data.lines.Count; i++)
             {
                 // Defer all metadata lines to the base
@@ -38,6 +41,13 @@ namespace Compiler.Parser
                 }
 
                 SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+                // Find the name
+                if (!foundFirst)
+                {
+                    name = sectorData.dataSegments[0];
+                    sectorData.dataSegments.RemoveAt(0);
+                    foundFirst = true;
+                }
 
                 /*
                  * In some places in the UKSF, we define this random point to make sure drawing works properly.
@@ -45,11 +55,11 @@ namespace Compiler.Parser
                  */
                 if (sectorData.data.Contains(GeoParser.noDataString))
                 {
-                    this.elements.Add(
-                        new Geo(
+                    segments.Add(
+                        new GeoSegment(
                             new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
                             new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
-                            "0",
+                            "",
                             "Compiler inserted line"
                         )
                     );
@@ -60,7 +70,7 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments.Count != 5)
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Incorrect number of GEO segments", data.fullPath, i + 1)
+                        new SyntaxError("Incorrect number parts for GEO segment", data.fullPath, i + 1)
                     );
                     continue;
                 }
@@ -70,7 +80,7 @@ namespace Compiler.Parser
                 if (parsedStartPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid GEO point format: " + data.lines[i], data.fullPath, i + 1)
+                        new SyntaxError("Invalid GEO segment point format: " + data.lines[i], data.fullPath, i + 1)
                     );
                     continue;
                 }
@@ -80,16 +90,28 @@ namespace Compiler.Parser
                 if (parsedEndPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid GEO point format: " + data.lines[i], data.fullPath, i + 1)
+                        new SyntaxError("Invalid GEO segment point format: " + data.lines[i], data.fullPath, i + 1)
                     );
                     continue;
                 }
 
-                // Add element
-                this.elements.Add(
-                    new Geo(parsedStartPoint, parsedEndPoint, sectorData.dataSegments[4], sectorData.comment)
+                // Add segment
+                segments.Add(
+                    new GeoSegment(parsedStartPoint, parsedEndPoint, sectorData.dataSegments[4], sectorData.comment)
                 );
             }
+
+            // Check segment count
+            if (segments.Count == 0)
+            {
+                this.eventLogger.AddEvent(
+                    new SyntaxError("Expected GEO segements in file", data.fullPath, 0)
+                );
+                return;
+            }
+
+            // Add final geo element
+            this.elements.Add(new Geo(name, segments));
         }
     }
 }

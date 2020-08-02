@@ -1,44 +1,56 @@
 ﻿using Xunit;
 using Compiler.Model;
+using System.Collections.Generic;
 
 namespace CompilerTest.Model
 {
     public class GeoTest
     {
         private readonly Geo model;
+        private readonly List<GeoSegment> segments;
 
         public GeoTest()
         {
+            this.segments = new List<GeoSegment>
+            {
+                new GeoSegment(
+                    new Point(new Coordinate("abc", "def")),
+                    new Point(new Coordinate("ghi", "jkl")),
+                    "red",
+                    "comment1"
+                ),
+                new GeoSegment(
+                    new Point(new Coordinate("mno", "pqr")),
+                    new Point(new Coordinate("stu", "vwx")),
+                    "blue",
+                    "comment2"
+                ),
+            };
             this.model = new Geo(
-                new Point("abc"),
-                new Point("def"),
-                "Blue",
-                "comment"
+                "TestGeo",
+                segments
             );
         }
 
         [Fact]
-        public void TestItSetsStartPoint()
+        public void TestItSetsName()
         {
-            Assert.Equal(new Point("abc"), this.model.StartPoint);
+            Assert.Equal("TestGeo", this.model.Name);
         }
 
         [Fact]
-        public void TestItSetsEndPoint()
+        public void TestItSetsSegments()
         {
-            Assert.Equal(new Point("def"), this.model.EndPoint);
-        }
-
-        [Fact]
-        public void TestItSetsColour()
-        {
-            Assert.Equal("Blue", this.model.Colour);
+            Assert.Equal(this.segments, this.model.Segments);
         }
 
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("abc abc def def Blue ;comment\r\n", this.model.Compile());
+            Assert.Equal(
+                "TestGeo                     abc def ghi jkl red ;comment1\r\nmno pqr stu vwx blue ;comment2\r\n",
+                this.model.Compile()
+            );
         }
     }
 }
