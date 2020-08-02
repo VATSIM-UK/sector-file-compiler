@@ -10,8 +10,8 @@ namespace CompilerTest.Model
         public GeoSegmentTest()
         {
             this.segment = new GeoSegment(
-                new Coordinate("abc", "def"),
-                new Coordinate("ghi", "jkl"),
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
                 "red",
                 "comment"
             );
@@ -20,13 +20,13 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsFirstCoordinate()
         {
-            Assert.Equal(new Coordinate("abc", "def"), this.segment.FirstCoordinate);
+            Assert.Equal(new Point(new Coordinate("abc", "def")), this.segment.FirstPoint);
         }
 
         [Fact]
         public void TestItSetsSecondCoordinate()
         {
-            Assert.Equal(new Coordinate("ghi", "jkl"), this.segment.SecondCoordinate);
+            Assert.Equal(new Point(new Coordinate("ghi", "jkl")), this.segment.SecondPoint);
         }
 
         [Fact]
@@ -45,8 +45,8 @@ namespace CompilerTest.Model
         public void TestItCompilesWithNoComment()
         {
             GeoSegment segment = new GeoSegment(
-                new Coordinate("abc", "def"),
-                new Coordinate("ghi", "jkl"),
+                new Point(new Coordinate("abc", "def")),
+                new Point(new Coordinate("ghi", "jkl")),
                 "red",
                 ""
             );
