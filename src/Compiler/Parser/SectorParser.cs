@@ -129,7 +129,7 @@ namespace Compiler.Parser
                 catch (Exception exception)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError(exception.Message, data.fullPath, i + 1)
+                        new SyntaxError(exception.Message, data.fullPath, nextLine + 1)
                     );
                     throw exception;
                 }
