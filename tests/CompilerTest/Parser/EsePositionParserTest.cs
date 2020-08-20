@@ -166,6 +166,20 @@ namespace CompilerTest.Parser
         }
 
         [Fact]
+        public void TestItRaisesASyntaxErrorInvalidStartSquawkRangeExtraCharacters()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "test",
+                new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0371xxxx:0377:N051.32.26.870:W002.43.29.830 ;comment" })
+            );
+
+            this.parser.ParseData(data);
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
+        [Fact]
         public void TestItRaisesASyntaxErrorInvalidEndSquawkRange()
         {
             SectorFormatData data = new SectorFormatData(
@@ -173,6 +187,20 @@ namespace CompilerTest.Parser
                 "test",
                 "test",
                 new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0378:N051.32.26.870:W002.43.29.830 ;comment" })
+            );
+
+            this.parser.ParseData(data);
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
+        [Fact]
+        public void TestItRaisesASyntaxErrorInvalidEndSquawkRangeExtraCharacters()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "test",
+                new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377xxxxx:N051.32.26.870:W002.43.29.830 ;comment" })
             );
 
             this.parser.ParseData(data);

@@ -41,7 +41,7 @@ namespace Compiler.Parser
             this.frequencyParser = frequencyParser;
             this.sectorElements = sectorElements;
             this.errorLog = errorLog;
-            this.squawkRegex = new Regex(@"[0-7]{4}");
+            this.squawkRegex = new Regex(@"^[0-7]{4}$");
         }
 
         public void ParseData(SectorFormatData data)
