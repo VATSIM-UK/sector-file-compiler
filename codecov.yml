@@ -1,0 +1,6 @@
+comment: 
+  coverage:
+  status:
+    patch:
+      default:
+        enabled: no
