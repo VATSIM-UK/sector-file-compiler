@@ -31,6 +31,7 @@ namespace Compiler.Config
             { OutputSections.ESE_FREETEXT, "ese_freetext" },
             { OutputSections.ESE_SIDSSTARS, "ese_sidsstars" },
             { OutputSections.ESE_AIRSPACE, "ese_airspace" },
+            { OutputSections.RWY_ACTIVE_RUNWAYS, "rwy_active_runways" },
         };
 
         public static readonly string invalidSection = "";

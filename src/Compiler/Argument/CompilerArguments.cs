@@ -72,6 +72,9 @@ namespace Compiler.Argument
         // The output file for the SCT
         public TextWriter OutFileSct { set; get; }
 
+        // The output file for the RWY
+        public TextWriter OutFileRwy { set; get; }
+
         // The order in which ESE sections should be output
         public List<OutputSections> EseSections { get; set; } = new List<OutputSections>
         {
@@ -104,6 +107,12 @@ namespace Compiler.Argument
             OutputSections.SCT_STAR,
             OutputSections.SCT_LABELS,
             OutputSections.SCT_REGIONS
+        };
+
+        // The order in which RWY
+        public List<OutputSections> RwySections { get; set; } = new List<OutputSections>
+        {
+            OutputSections.RWY_ACTIVE_RUNWAYS,
         };
 
         // Should we validate the file before output

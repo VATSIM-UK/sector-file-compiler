@@ -34,6 +34,7 @@ namespace CompilerTest.Model
             Assert.Equal(1, this.activeRunway.Mode);
         }
 
+        [Fact]
         public void TestItCompiles()
         {
             Assert.Equal(

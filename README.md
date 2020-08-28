@@ -77,6 +77,9 @@ the VOR section could have subsections for VORs within each FIR.
 
 `ese_airspace` - The \[AIRSPACE\] section of the ESE.
 
+### RWY (EuroScope Only)
+`rwy_active_runways` - The default active runway setup (.rwy file)
+
 ### Example compiler configuration
 
 ```JSON
