@@ -37,16 +37,16 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments.Count != 4)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Incorrect number of Freetext segments", data.fullPath, i)
+                        new SyntaxError("Incorrect number of Freetext segments", data.fullPath, i + 1)
                     );
-                    continue;
+                    return;
                 }
 
                 Coordinate parsedCoordinate = CoordinateParser.Parse(sectorData.dataSegments[0], sectorData.dataSegments[1]);
                 if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid coordinate format: " + data.lines[i], data.fullPath, i)
+                        new SyntaxError("Invalid coordinate format: " + data.lines[i], data.fullPath, i + 1)
                     );
                     return;
                 }
