@@ -10,6 +10,7 @@ namespace CompilerTest.Validate
         [InlineData("01B")]
         [InlineData("37")]
         [InlineData("36c")]
+        [InlineData("36g")]
         [InlineData("")]
         public void TestValidationFailure(string input)
         {
@@ -22,6 +23,8 @@ namespace CompilerTest.Validate
         [InlineData("36C")]
         [InlineData("18")]
         [InlineData("09")]
+        [InlineData("09L")]
+        [InlineData("09G")]
         public void TestValidationSuccess(string input)
         {
             Assert.True(RunwayValidator.RunwayValid(input));
@@ -44,6 +47,8 @@ namespace CompilerTest.Validate
         [InlineData("36C")]
         [InlineData("18")]
         [InlineData("09")]
+        [InlineData("09L")]
+        [InlineData("09G")]
         public void TestValidationSuccessWithAdjacent(string input)
         {
             Assert.True(RunwayValidator.RunwayValidIncludingAdjacent(input));
