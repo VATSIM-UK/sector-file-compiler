@@ -2,6 +2,7 @@
 using Compiler.Model;
 using Compiler.Error;
 using Compiler.Event;
+using System.Linq;
 
 namespace Compiler.Parser
 {
@@ -45,24 +46,22 @@ namespace Compiler.Parser
                 // We haven't yet started a SID/STAR route, so make sure we have a new declaration
                 if (
                     !foundFirst &&
-                    sectorData.dataSegments.Count != 5 &&
-                    sectorData.dataSegments.Count != 6 &&
-                    sectorData.dataSegments[0].Trim() == ""
+                    (this.GetFirstPointIndex(sectorData) == -1 ||
+                    this.GetFirstPointIndex(sectorData) == 0)
                 )
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Incorrect number of SIDSTAR route segments, expected new route declaration", data.fullPath, i + 1)
+                        new SyntaxError("Invalid new SIDSTAR route declaration", data.fullPath, i + 1)
                     );
-                    continue;
-                } else if (!foundFirst)
-                {
+                    return;
+                } else if (!foundFirst) {
                     linesToProcess.Add(sectorData);
                     foundFirst = true;
                     continue;
                 }
 
                 // We've reached the end of the segment, time to make the thing and start over!
-                if (sectorData.dataSegments[0].Trim() != "")
+                if (this.GetFirstPointIndex(sectorData) != 0)
                 {
                     this.ProcessSidStar(linesToProcess, data.fullPath, newSegmentStartLine);
                     linesToProcess.Clear();
@@ -82,45 +81,62 @@ namespace Compiler.Parser
             }
         }
 
+        private int GetFirstPointIndex(SectorFormatLine sectorData)
+        {
+            bool foundSecondPoint = false;
+            for (int i = sectorData.dataSegments.Count - 2; i >= 0;)
+            {
+                // Work til we find the first valid point
+                if (!PointParser.Parse(sectorData.dataSegments[i], sectorData.dataSegments[i + 1]).Equals(PointParser.invalidPoint)) {
+                    
+                    // We've found the second valid point
+                    if (!foundSecondPoint)
+                    {
+                        foundSecondPoint = true;
+                        i -= 2;
+                        continue;
+                    }
+
+                    // Found the first valid point
+                    return i;
+                }
+
+                i--;
+            }
+
+            return -1;
+        }
+
         /**
          * Process an individual SID/STARs worth of lines
          */
         private void ProcessSidStar(List<SectorFormatLine> lines, string filename, int startLine)
         {
-            string sidStarName = lines[0].dataSegments[0].Trim();
+            // Get the name out and remove it from the array
+            int firstLineFirstCoordinateIndex = this.GetFirstPointIndex(lines[0]);
+            if (firstLineFirstCoordinateIndex == -1)
+            {
+                this.errorLog.AddEvent(
+                    new SyntaxError("Invalid SID/STAR route segment coordinates", filename, startLine + startLine + 1)
+                );
+                return;
+            }
+
+            string sidStarName = string.Join(" ", lines[0].dataSegments.GetRange(0, firstLineFirstCoordinateIndex));
+            lines[0].dataSegments.RemoveRange(0, firstLineFirstCoordinateIndex);
             List<RouteSegment> segments = new List<RouteSegment>();
 
-            Point startPoint;
-            Point endPoint;
+
             for(int i = 0; i < lines.Count; i++)
             {
-                if (lines[i].dataSegments.Count != 5 && lines[i].dataSegments.Count != 6)
-                {
-                    this.errorLog.AddEvent(
-                        new SyntaxError("Invalid route segment, incorrect number of arguments", filename, startLine + i + 1)
-                    );
-                    this.errorLog.AddEvent(
-                        new ParserSuggestion("Have you checked that the first coordinate is indented by at least 26 spaces?")
-                    );
-                    return;
-                }
-
-                startPoint = PointParser.Parse(lines[i].dataSegments[1], lines[i].dataSegments[2]);
-                endPoint = PointParser.Parse(lines[i].dataSegments[3], lines[i].dataSegments[4]);
-
-                if (startPoint == PointParser.invalidPoint || endPoint == PointParser.invalidPoint)
-                {
-                    this.errorLog.AddEvent(
-                        new SyntaxError("Invalid route segment", filename, startLine + i + 1)
-                    );
-                    this.errorLog.AddEvent(
-                        new ParserSuggestion("Have you checked that the first coordinate is indented by at least 26 spaces?")
-                    );
-                    return;
-                }
-
-                string colour = lines[i].dataSegments.Count == 6 ? lines[i].dataSegments[5] : null;
-                segments.Add(new RouteSegment(startPoint, endPoint, colour, lines[i].comment));
+                segments.Add(
+                    new RouteSegment(
+                        PointParser.Parse(lines[i].dataSegments[0], lines[i].dataSegments[1]),
+                        PointParser.Parse(lines[i].dataSegments[2], lines[i].dataSegments[3]),
+                        lines[i].dataSegments.Count == 5 ? lines[i].dataSegments[4] : null,
+                        lines[i].comment
+                    )
+                );
             }
 
             this.sectorElements.Add(

@@ -18,6 +18,8 @@ namespace CompilerTest.Model
                 "EGKK - ADMAG2X",
                 this.segments
             );
+            this.segments.Add(new RouteSegment(new Point("LAM"), new Point("BIG"), null));
+            this.segments.Add(new RouteSegment(new Point("BIG"), new Point("OCK"), null));
         }
 
         [Fact]
@@ -29,23 +31,36 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsSegments()
         {
-            this.segments.Add(new RouteSegment(new Point("LAM"), new Point("BIG"), null));
-            this.segments.Add(new RouteSegment(new Point("BIG"), new Point("OCK"), null));
             Assert.Equal(this.segments, this.sidStar.Segments);
         }
 
         [Fact]
-        public void TestItCompiles()
+        public void TestItCompilesWithPadding()
         {
-            this.segments.Add(new RouteSegment(new Point("LAM"), new Point("BIG"), null));
-            this.segments.Add(new RouteSegment(new Point("BIG"), new Point("OCK"), null));
-
             string expected = "EGKK - ADMAG2X             LAM LAM BIG BIG\r\n";
             expected += "                           BIG BIG OCK OCK\r\n";
 
             Assert.Equal(
                 expected,
                 this.sidStar.Compile()
+            );
+        }
+
+        [Fact]
+        public void TestItItMatchesPaddingOnLongerNames()
+        {
+            SidStarRoute longSidStar = new SidStarRoute(
+                SidStarType.SID,
+                "This is a long name which needs extra padding",
+                this.segments
+            );
+
+            string expected = "This is a long name which needs extra padding LAM LAM BIG BIG\r\n";
+            expected += "                                              BIG BIG OCK OCK\r\n";
+
+            Assert.Equal(
+                expected,
+                longSidStar.Compile()
             );
         }
     }

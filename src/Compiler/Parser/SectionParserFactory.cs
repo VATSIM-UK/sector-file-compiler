@@ -101,7 +101,7 @@ namespace Compiler.Parser
                 case OutputSections.SCT_SID:
                     return new SidStarRouteParser(
                         this.GetMetadataParser(section),
-                        new RouteSegmentsLineParser(),
+                        new StandardSctLineParser(),
                         this.sectorElements,
                         this.logger,
                         SidStarType.SID
@@ -109,7 +109,7 @@ namespace Compiler.Parser
                 case OutputSections.SCT_STAR:
                     return new SidStarRouteParser(
                         this.GetMetadataParser(section),
-                        new RouteSegmentsLineParser(),
+                        new StandardSctLineParser(),
                         this.sectorElements,
                         this.logger,
                         SidStarType.STAR

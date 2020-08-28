@@ -40,7 +40,7 @@ namespace CompilerTest.Parser
         }
 
         [Fact]
-        public void TestItRaisesASyntaxErrorIfFirstPointNotValid()
+        public void TestItRaisesASyntaxErrorIfDeclarationFirstPointNotValid()
         {
             SectorFormatData data = new SectorFormatData(
                 "test.txt",
@@ -54,13 +54,51 @@ namespace CompilerTest.Parser
         }
 
         [Fact]
-        public void TestItRaisesASyntaxErrorIfSecondPointNotValid()
+        public void TestItRaisesASyntaxErrorIfDeclarationSecondPointNotValid()
         {
             SectorFormatData data = new SectorFormatData(
                 "test.txt",
                 "test",
                 "test",
                 new List<string>(new string[] { "Test                       abc abc d e" })
+            );
+
+            this.parser.ParseData(data);
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
+        [Fact]
+        public void TestItRaisesASyntaxErrorIfSecondLineFirstPointNotValid()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "test",
+                new List<string>(
+                    new string[] {
+                        "Test                       abc abc def def",
+                        "                           abc b def def",
+                    }
+                )
+            );
+
+            this.parser.ParseData(data);
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
+        [Fact]
+        public void TestItRaisesASyntaxErrorIfSecondLineSecondPointNotValid()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "test",
+                new List<string>(
+                    new string[] {
+                        "Test                       abc abc def def",
+                        "                           abc abc d def",
+                    }
+                )
             );
 
             this.parser.ParseData(data);
