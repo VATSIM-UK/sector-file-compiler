@@ -1,5 +1,4 @@
-comment: 
-  coverage:
+coverage:
   status:
     patch:
       default:
