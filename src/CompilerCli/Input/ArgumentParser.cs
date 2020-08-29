@@ -11,6 +11,7 @@ namespace CompilerCli.Input
             { "--config-file", new ConfigFileParser() },
             { "--out-file-ese", new EseOutputFileParser() },
             { "--out-file-sct", new SctOutputFileParser() },
+            { "--out-file-rwy", new RwyOutputFileParser() },
             { "--ignore-validation", new IgnoreValidationParser() },
             { "--strip-comments", new StripCommentsParser() },
             { "--strip-newlines", new StripNewlinesParser() },
