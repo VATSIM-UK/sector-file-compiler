@@ -52,6 +52,7 @@ namespace CompilerTest.Validate
         [InlineData("EGLL", "09L")]
         [InlineData("EGLL", "*")]
         [InlineData("EGSS", "*")]
+        [InlineData("XXXX", "*")] // Airport doesnt exist, but any runway
         [InlineData("*", "09R")] // Should never happen
         [InlineData("*", "*")]
 
@@ -94,7 +95,6 @@ namespace CompilerTest.Validate
         }
 
         [Theory]
-        [InlineData("EGGW", "*")] // Airport doesnt exist
         [InlineData("EGLL", "27R")]
         [InlineData("EGLL", "27L")]
         [InlineData("EGKK", "08R")]

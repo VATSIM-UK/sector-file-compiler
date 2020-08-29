@@ -10,7 +10,7 @@ namespace Compiler.Validate
     {
         protected bool RunwayValid(SectorElementCollection sectorElements, string runwayIdentifier, string airportCode)
         {
-            if (airportCode == "*" || airportCode.Length != 4)
+            if (airportCode == "*" || airportCode.Length != 4 || runwayIdentifier == "*")
             {
                 return true;
             }
@@ -22,8 +22,7 @@ namespace Compiler.Validate
                 return false;
             }
 
-            return runwayIdentifier == "*" ||
-                sectorElements.Runways
+            return sectorElements.Runways
                 .Where(runway => runway.RunwayDialogDescription == airport[0].Icao + " " + airport[0].Name)
                 .Where(runway => runway.FirstIdentifier == runwayIdentifier || runway.ReverseIdentifier == runwayIdentifier)
                 .ToList()
