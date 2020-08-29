@@ -16,7 +16,6 @@ namespace Compiler.Validate
             foreach (CoordinationPoint point in sectorElements.CoordinationPoints)
             {
                 if (!RunwayValid(sectorElements, point.DepartureRunway, point.DepartureAirportOrFixBefore)) {
-                    RunwayValid(sectorElements, point.DepartureRunway, point.DepartureAirportOrFixBefore);
                     string message = String.Format(
                         "Invalid departure runway {0}/{1} for coordination point: {1}",
                         point.DepartureRunway,

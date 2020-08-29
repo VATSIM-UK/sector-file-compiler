@@ -13,7 +13,6 @@ namespace Compiler.Validate
     {
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            List<string> airports = sectorElements.Airports.Select(airport => airport.Icao).ToList();
             List<string> fixes = sectorElements.Fixes.Select(fix => fix.Identifier).ToList();
             List<string> vors = sectorElements.Vors.Select(vor => vor.Identifier).ToList();
             List<string> ndbs = sectorElements.Ndbs.Select(ndb => ndb.Identifier).ToList();
@@ -21,7 +20,7 @@ namespace Compiler.Validate
             {
                 if (
                     point.ArrivalAiportOrFixAfter != "*" &&
-                    !airports.Contains(point.ArrivalAiportOrFixAfter) &&
+                    !AirportValidator.IcaoValid(point.ArrivalAiportOrFixAfter) &&
                     !fixes.Contains(point.ArrivalAiportOrFixAfter) &&
                     !vors.Contains(point.ArrivalAiportOrFixAfter) &&
                     !ndbs.Contains(point.ArrivalAiportOrFixAfter)
