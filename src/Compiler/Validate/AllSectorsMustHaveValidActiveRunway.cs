@@ -20,7 +20,7 @@ namespace Compiler.Validate
                     if (!this.RunwayValid(sectorElements, active.Runway, active.Airfield))
                     {
                         string message = String.Format(
-                            "Invalid ACTIVE runway {0}/{1} on sector {1}",
+                            "Invalid ACTIVE runway {0}/{1} on sector {2}",
                             active.Airfield,
                             active.Runway,
                             sector.Name
