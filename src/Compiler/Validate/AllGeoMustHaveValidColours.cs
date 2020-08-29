@@ -16,8 +16,9 @@ namespace Compiler.Validate
                     if (!ColourValidator.ColourValid(sectorElements, segment.Colour))
                     {
                         string errorMessage = string.Format(
-                            "Invalid colour value {0} in GEO segment",
-                            segment.Colour
+                            "Invalid colour value {0} in GEO segment {1}",
+                            segment.Colour,
+                            segment.Compile()
                         );
                         events.AddEvent(new ValidationRuleFailure(errorMessage));
                     }
