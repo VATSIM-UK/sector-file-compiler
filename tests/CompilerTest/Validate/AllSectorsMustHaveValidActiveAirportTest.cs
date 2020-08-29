@@ -32,6 +32,7 @@ namespace CompilerTest.Validate
         [InlineData("EGLL", "EGCC", "EGKK")]
         [InlineData("EGCC", "EGCC", "EGKK")]
         [InlineData("EGKK", "EGLL", "EGKK")]
+        [InlineData("000A", "000A", "000A")]
         public void TestItPassesOnAllValid(string first, string second, string third)
         {
             this.elements.Add(
@@ -124,6 +125,7 @@ namespace CompilerTest.Validate
         [InlineData("WHAT", "EGCC", "EGKK", 1)]
         [InlineData("EGKK", "WHAT", "WHAT", 2)]
         [InlineData("WHAT", "WHAT", "WHAT", 2)]
+        [InlineData("000B", "000A", "000C", 2)]
         public void TestItFailsOnInvalid(string first, string second, string third, int timesCalled)
         {
             this.elements.Add(
