@@ -77,7 +77,7 @@ namespace Compiler.Parser
             }
 
             // Parse the coordinate
-            if (!AirportValidator.IcaoValid(icaoLine.dataSegments[0]))
+            if (!AirportValidator.IcaoValid(icaoLine.data))
             {
                 this.eventLogger.AddEvent(
                     new SyntaxError("Invalid airport ICAO: " + data.lines[1], data.fullPath, 0)
@@ -123,7 +123,7 @@ namespace Compiler.Parser
             this.elements.Add(
                 new Airport(
                     nameLine.data,
-                    data.parentDirectory,
+                    icaoLine.data,
                     parsedCoordinate,
                     frequencyLine.data,
                     String.Join(", ", validComments)

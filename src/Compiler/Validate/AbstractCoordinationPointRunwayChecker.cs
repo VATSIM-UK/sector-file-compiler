@@ -24,7 +24,7 @@ namespace Compiler.Validate
 
             return runwayIdentifier == "*" ||
                 sectorElements.Runways
-                .Where(runway => runway.RunwayDialogDescription == airport[0].Name)
+                .Where(runway => runway.RunwayDialogDescription == airport[0].Icao + " " + airport[0].Name)
                 .Where(runway => runway.FirstIdentifier == runwayIdentifier || runway.ReverseIdentifier == runwayIdentifier)
                 .ToList()
                 .Count() != 0;
