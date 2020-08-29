@@ -39,6 +39,9 @@ namespace CompilerTest.Validate
             this.elements.Add(
                 new Runway("27", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "EGLL anotherairport", "")
             );
+            this.elements.Add(
+                new Runway("00", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "000A Show adjacent departure airports", "")
+            );
 
             this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
             this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
