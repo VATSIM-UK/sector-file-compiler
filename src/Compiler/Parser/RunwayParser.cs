@@ -45,7 +45,7 @@ namespace Compiler.Parser
                 }
 
                 // Check the two identifiers
-                if (!RunwayValidator.RunwayValid(sectorData.dataSegments[0]))
+                if (!RunwayValidator.RunwayValidIncludingAdjacent(sectorData.dataSegments[0]))
                 {
                     this.errorLog.AddEvent(
                         new SyntaxError("Invalid runway designator " + sectorData.dataSegments[0], data.fullPath, i + 1)
@@ -53,7 +53,7 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                if (!RunwayValidator.RunwayValid(sectorData.dataSegments[1]))
+                if (!RunwayValidator.RunwayValidIncludingAdjacent(sectorData.dataSegments[1]))
                 {
                     this.errorLog.AddEvent(
                         new SyntaxError("Invalid runway designator " + sectorData.dataSegments[1], data.fullPath, i + 1)

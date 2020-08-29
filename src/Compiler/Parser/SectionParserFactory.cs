@@ -197,6 +197,13 @@ namespace Compiler.Parser
                         new EseLineParser(),
                         this.logger
                     );
+                case OutputSections.RWY_ACTIVE_RUNWAYS:
+                    return new ActiveRunwayParser(
+                        this.GetMetadataParser(section),
+                        new EseLineParser(),
+                        this.sectorElements,
+                        this.logger
+                    );
             }
 
             return new DefaultParser(this.GetMetadataParser(section));
