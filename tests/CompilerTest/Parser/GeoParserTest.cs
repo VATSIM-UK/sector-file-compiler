@@ -146,7 +146,7 @@ namespace CompilerTest.Parser
                 result.Segments[0].SecondPoint
             );
             Assert.Equal(
-                "",
+                "0",
                 result.Segments[0].Colour
             );
             Assert.Equal(

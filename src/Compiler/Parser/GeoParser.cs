@@ -59,7 +59,7 @@ namespace Compiler.Parser
                         new GeoSegment(
                             new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
                             new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
-                            "",
+                            "0",
                             "Compiler inserted line"
                         )
                     );
