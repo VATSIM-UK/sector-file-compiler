@@ -12,7 +12,8 @@ namespace CompilerTest.Model
             this.activeRunway = new ActiveRunway(
                 "33",
                 "EGBB",
-                1
+                1,
+                "comment"
             );
         }
 
@@ -38,7 +39,7 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "ACTIVE_RUNWAY:EGBB:33:1\r\n",
+                "ACTIVE_RUNWAY:EGBB:33:1 ;comment\r\n",
                 this.activeRunway.Compile()
             );
         }

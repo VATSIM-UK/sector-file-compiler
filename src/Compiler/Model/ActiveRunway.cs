@@ -4,7 +4,7 @@ namespace Compiler.Model
 {
     public class ActiveRunway : AbstractSectorElement, ICompilable
     {
-        public ActiveRunway(string identifier, string airfield, int mode) : base("")
+        public ActiveRunway(string identifier, string airfield, int mode, string comment) : base(comment)
         {
             Identifier = identifier;
             Airfield = airfield;
@@ -14,15 +14,15 @@ namespace Compiler.Model
         public string Identifier { get; }
         public string Airfield { get; }
         public int Mode { get; }
-        public bool ForDeparture { get; }
 
         public string Compile()
         {
             return String.Format(
-                "ACTIVE_RUNWAY:{0}:{1}:{2}\r\n",
+                "ACTIVE_RUNWAY:{0}:{1}:{2}{3}\r\n",
                 this.Airfield,
                 this.Identifier,
-                this.Mode
+                this.Mode,
+                this.CompileComment()
             );
         }
     }

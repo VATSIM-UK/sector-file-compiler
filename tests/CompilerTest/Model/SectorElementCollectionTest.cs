@@ -105,6 +105,34 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItAddsActiveRunways()
+        {
+            ActiveRunway runway = new ActiveRunway(
+                "33",
+                "EGBB",
+                1,
+                "comment"
+            );
+            this.collection.Add(runway);
+
+            Assert.Equal(runway, this.collection.ActiveRunways[0]);
+        }
+
+        [Fact]
+        public void TestItAddsActiveRunwaysToCompilableSection()
+        {
+            ActiveRunway runway = new ActiveRunway(
+                "33",
+                "EGBB",
+                1,
+                "comment"
+            );
+            this.collection.Add(runway);
+
+            Assert.Equal(runway, this.collection.Compilables[OutputSections.RWY_ACTIVE_RUNWAYS][0]);
+        }
+
+        [Fact]
         public void TestItAddsArtccs()
         {
             Artcc artcc = new Artcc(
