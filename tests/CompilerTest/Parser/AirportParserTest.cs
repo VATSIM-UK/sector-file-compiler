@@ -32,7 +32,7 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3",  "Another line!" })
+                new List<string>(new string[] { "EGHI","Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3",  "Another line!" })
             );
             this.parser.ParseData(data);
 
@@ -46,12 +46,27 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2" })
+                new List<string>(new string[] { "EGHI", "Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2" })
             );
             this.parser.ParseData(data);
 
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
+
+        [Fact]
+        public void TestItRaisesSyntaxErrorInvalidIcao()
+        {
+            SectorFormatData data = new SectorFormatData(
+                "test.txt",
+                "test",
+                "EGHI",
+                new List<string>(new string[] { "1233", "Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3" })
+            );
+            this.parser.ParseData(data);
+
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
 
         [Fact]
         public void TestItRaisesSyntaxErrorInvalidCoordinateFormat()
@@ -60,7 +75,7 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "Southampton; comment1", "N050.57.00.000W001.21.24.490 ;comment2", "120.220 ;comment3" })
+                new List<string>(new string[] { "EGHI", "Southampton; comment1", "N050.57.00.000W001.21.24.490 ;comment2", "120.220 ;comment3" })
             );
             this.parser.ParseData(data);
 
@@ -74,7 +89,7 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "Southampton; comment1", "NAA050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3" })
+                new List<string>(new string[] { "EGHI", "Southampton; comment1", "NAA050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3" })
             );
             this.parser.ParseData(data);
 
@@ -88,7 +103,7 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3" })
+                new List<string>(new string[] { "EGHI", "Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3" })
             );
             this.parser.ParseData(data);
 
@@ -107,7 +122,7 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { "Southampton", "N050.57.00.000 W001.21.24.490", "120.220" })
+                new List<string>(new string[] { "EGHI", "Southampton", "N050.57.00.000 W001.21.24.490", "120.220" })
             );
             this.parser.ParseData(data);
 
@@ -126,7 +141,7 @@ namespace CompilerTest.Parser
                 "test.txt",
                 "test",
                 "EGHI",
-                new List<string>(new string[] { ";comment1", "Southampton; comment1", ";comment2", "N050.57.00.000 W001.21.24.490 ;comment2", ";comment3", "120.220 ;comment3", ";comment4" })
+                new List<string>(new string[] { ";comment1", "EGHI", "Southampton; comment1", ";comment2", "N050.57.00.000 W001.21.24.490 ;comment2", ";comment3", "120.220 ;comment3", ";comment4" })
             );
             this.parser.ParseData(data);
 

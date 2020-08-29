@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Error;
 using Compiler.Model;
+using Compiler.Validate;
 
 namespace Compiler.Parser
 {
@@ -27,6 +28,7 @@ namespace Compiler.Parser
         public void ParseData(SectorFormatData data)
         {
             int linesParsed = 0;
+            SectorFormatLine icaoLine = new SectorFormatLine("", new List<string>(), "");
             SectorFormatLine nameLine = new SectorFormatLine("", new List<string>(), "");
             SectorFormatLine coordinateLine = new SectorFormatLine("", new List<string>(), "");
             SectorFormatLine frequencyLine = new SectorFormatLine("", new List<string>(), "");
@@ -42,14 +44,18 @@ namespace Compiler.Parser
                 SectorFormatLine parsedLine = this.sectorLineParser.ParseLine(data.lines[i]);
                 if (linesParsed == 0)
                 {
-                    nameLine = parsedLine;
+                    icaoLine = parsedLine;
                     linesParsed++;
                     continue;
                 } else if (linesParsed == 1) {
-                    coordinateLine = parsedLine;
+                    nameLine = parsedLine;
                     linesParsed++;
                     continue;
                 } else if (linesParsed == 2) {
+                    coordinateLine = parsedLine;
+                    linesParsed++;
+                    continue;
+                } else if (linesParsed == 3) {
                     frequencyLine = parsedLine;
                     linesParsed++;
                     continue;
@@ -62,10 +68,19 @@ namespace Compiler.Parser
             }
 
             // Check the syntax
-            if (linesParsed != 3)
+            if (linesParsed != 4)
             {
                 this.eventLogger.AddEvent(
                     new SyntaxError("Invalid number of airport lines", data.fullPath, 0)
+                );
+                return;
+            }
+
+            // Parse the coordinate
+            if (!AirportValidator.IcaoValid(icaoLine.dataSegments[0]))
+            {
+                this.eventLogger.AddEvent(
+                    new SyntaxError("Invalid airport ICAO: " + data.lines[1], data.fullPath, 0)
                 );
                 return;
             }
