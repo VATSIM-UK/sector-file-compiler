@@ -116,6 +116,8 @@ times, then the compiler will attempt to merge the configs together.
 
 `--out-file-ese` - Takes a single argument. Where the output file for the EuroScope ESE should be generated.
 
+`--out-file-rwy` - Takes a single argument. Where the output file for the EuroScope RWY should be generated.
+
 `--out-file-sct` - Takes a single argument. Where the output file for the SCT should be generated.
 
 ### Optional Flags
