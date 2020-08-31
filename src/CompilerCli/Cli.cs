@@ -31,14 +31,14 @@ namespace CompilerCli
                 return 1;
             }
 
-            SectorFileCompilerFactory.Create(
+            int returnCode = SectorFileCompilerFactory.Create(
                 arguments,
                 new List<IEventObserver>() { new ConsoleOutput(output) }
             ).Compile();
 
             output.Write("Press any key to exit");
             Console.ReadKey();
-            return 0;
+            return returnCode;
         }
     }
 }
