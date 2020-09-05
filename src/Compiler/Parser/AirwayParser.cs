@@ -40,7 +40,7 @@ namespace Compiler.Parser
                 }
 
                 SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
-                if (sectorData.dataSegments.Count != 4)
+                if (sectorData.dataSegments.Count != 5)
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Incorrect number of Airway segments", data.FullPath, data.CurrentLineNumber)
@@ -49,7 +49,7 @@ namespace Compiler.Parser
                 }
 
                 // Parse the airway segment point
-                Point startPoint = PointParser.Parse(sectorData.dataSegments[0], sectorData.dataSegments[1]);
+                Point startPoint = PointParser.Parse(sectorData.dataSegments[1], sectorData.dataSegments[2]);
                 if (startPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
@@ -60,7 +60,7 @@ namespace Compiler.Parser
 
 
                 // Parse the segment endpoint
-                Point endPoint = PointParser.Parse(sectorData.dataSegments[2], sectorData.dataSegments[3]);
+                Point endPoint = PointParser.Parse(sectorData.dataSegments[3], sectorData.dataSegments[4]);
                 if (endPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
@@ -72,7 +72,7 @@ namespace Compiler.Parser
                 // Add it
                 this.elements.Add(
                     new Airway(
-                        "Test",
+                        sectorData.dataSegments[0],
                         this.airwayType,
                         startPoint,
                         endPoint,

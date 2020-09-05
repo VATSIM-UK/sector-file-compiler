@@ -29,16 +29,16 @@ namespace CompilerTest.Parser
         public static IEnumerable<object[]> BadData => new List<object[]>
         {
             new object[] { new List<string>{
-                "BHD BHD DIKAS"
+                "BHD BHD DIKAS DIKAS"
             }}, // Too few segments
             new object[] { new List<string>{
-                "BHD BHD DIKAS DIKAS EXMOR"
+                "N864 BHD BHD DIKAS DIKAS EXMOR"
             }}, // Too many segments
             new object[] { new List<string>{
-                "N050.57.00.000 W001.21.24.490 N050.57.00.000 N001.21.24.490"
+                "N864 N050.57.00.000 W001.21.24.490 N050.57.00.000 N001.21.24.490"
             }}, // Invalid end point
             new object[] { new List<string>{
-                "N050.57.00.000 N001.21.24.490 N050.57.00.000 W001.21.24.490"
+                "N864 N050.57.00.000 N001.21.24.490 N050.57.00.000 W001.21.24.490"
             }}, // Invalid start point
         };
 
@@ -77,7 +77,7 @@ namespace CompilerTest.Parser
         {
             MockSectorDataFile data = new MockSectorDataFile(
                 "UN864.txt",
-                new List<string>(new string[] { "N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" })
+                new List<string>(new string[] { "UN864 N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" })
             );
             this.parser.ParseData(data);
 
@@ -94,7 +94,7 @@ namespace CompilerTest.Parser
         {
             MockSectorDataFile data = new MockSectorDataFile(
                 "UN864.txt",
-                new List<string>(new string[] { "DIKAS DIKAS BHD BHD;comment" })
+                new List<string>(new string[] { "UN864 DIKAS DIKAS BHD BHD;comment" })
             );
             this.parser.ParseData(data);
 
