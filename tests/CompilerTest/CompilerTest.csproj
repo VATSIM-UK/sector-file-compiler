@@ -29,4 +29,14 @@
     <ProjectReference Include="..\..\src\Compiler\Compiler.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="_TestData\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="_TestData\StreamTest.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

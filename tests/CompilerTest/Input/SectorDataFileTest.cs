@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Compiler.Input;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CompilerTest.Input
 {
@@ -12,13 +11,18 @@ namespace CompilerTest.Input
 
         public SectorDataFileTest()
         {
-            this.file = new SectorDataFile("../../../../../Data/StreamTest.txt");
+            this.file = new SectorDataFile(
+                "_TestData/StreamTest.txt"
+            );
         }
 
         [Fact]
         public void ItSetsFullPath()
         {
-            Assert.Equal("../../../../../Data/StreamTest.txt", this.file.FullPath);
+            Assert.Equal(
+                "_TestData/StreamTest.txt",
+                this.file.FullPath
+            );
         }
 
         [Fact]
