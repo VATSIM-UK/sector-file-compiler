@@ -11,7 +11,6 @@ namespace Compiler.Input
         public SectorDataFile(string fullPath)
         {
             this.FullPath = fullPath;
-            this.CurrentLine = 0;
         }
 
         public override IEnumerator<string> GetEnumerator()
@@ -21,8 +20,9 @@ namespace Compiler.Input
             {
                 while ((line = file.ReadLine()) != null)
                 {
-                    this.CurrentLine++;
-                    yield return line;
+                    this.CurrentLine = line;
+                    this.CurrentLineNumber++;
+                    yield return this.CurrentLine;
                 }
             }
         }

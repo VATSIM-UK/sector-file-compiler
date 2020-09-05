@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -25,70 +26,45 @@ namespace CompilerTest.Parser
                 .GetParserForSection(OutputSections.SCT_COLOUR_DEFS);
         }
 
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfIncorrectNumberOfSegments()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "#define abc" })
-            );
-            this.parser.ParseData(data);
+            new object[] { new List<string>{
+                "#define abc"
+            }}, // Too few segments
+            new object[] { new List<string>{
+                "#nodefine abc 123"
+            }}, // Not started with define
+            new object[] { new List<string>{
+                "#define abc 123.4"
+            }}, // Value is a float
+            new object[] { new List<string>{
+                "#define abc 123abc"
+            }}, // Value is a string
+        };
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfNotStartedByDefine()
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "#nodefine abc 123" })
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
             );
-            this.parser.ParseData(data);
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfColourIsFloat()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "#define abc 123.4" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfColourIsString()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "#define abc 123abc" })
-            );
-            this.parser.ParseData(data);
-
+            Assert.Empty(this.collection.Colours);
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "" })
+                new List<string>(new string[] {
+                    ""
+                })
             );
 
             this.parser.ParseData(data);
@@ -100,11 +76,11 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsColourData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "#define abc 255 ;comment" })
+                new List<string>(new string[] {
+                    "#define abc 255 ;comment"
+                })
             );
             this.parser.ParseData(data);
 

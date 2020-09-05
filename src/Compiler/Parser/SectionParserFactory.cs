@@ -15,7 +15,7 @@ namespace Compiler.Parser
             this.logger = logger;
         }
 
-        public IFileParser GetParserForSection(
+        public ISectorDataParser GetParserForSection(
             OutputSections section
         ) {
             switch (section)

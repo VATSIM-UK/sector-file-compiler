@@ -2,10 +2,11 @@
 using Compiler.Error;
 using Compiler.Event;
 using Compiler.Model;
+using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class LabelParser : AbstractSectorElementParser, IFileParser
+    public class LabelParser : AbstractSectorElementParser, ISectorDataParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
@@ -22,21 +23,23 @@ namespace Compiler.Parser
             this.eventLogger = eventLogger;
         }
 
-        public void ParseData(SectorFormatData data)
+        public void ParseData(AbstractSectorDataFile data)
         {
-            for (int i = 0; i < data.lines.Count; i++)
+            foreach (string line in data)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(line))
                 {
                     continue;
                 }
 
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
 
                 if (sectorData.dataSegments.Count != 4)
                 {
-                    this.eventLogger.AddEvent(new SyntaxError("Invalid number of label definition segments", data.fullPath, i + 1));
+                    this.eventLogger.AddEvent(
+                        new SyntaxError("Invalid number of label definition segments", data.FullPath, data.CurrentLineNumber)
+                    );
                     continue;
                 }
 
@@ -45,7 +48,7 @@ namespace Compiler.Parser
                 if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid label coordinate format: " + data.lines[i], data.fullPath, i + 1)
+                        new SyntaxError("Invalid label coordinate format: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                     );
                     continue;
                 }

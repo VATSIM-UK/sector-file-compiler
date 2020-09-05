@@ -1,7 +1,5 @@
-﻿using System;
-using Compiler.Input;
+﻿using Compiler.Input;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace CompilerTest.Input
 {
@@ -26,9 +24,15 @@ namespace CompilerTest.Input
         }
 
         [Fact]
-        public void CurrentLineStartsAtZero()
+        public void CurrentLineNumberStartsAtZero()
         {
-            Assert.Equal(0, this.file.CurrentLine);
+            Assert.Equal(0, this.file.CurrentLineNumber);
+        }
+
+        [Fact]
+        public void CurrentLineStartsAtEmpty()
+        {
+            Assert.Equal("", this.file.CurrentLine);
         }
 
         [Fact]
@@ -38,10 +42,11 @@ namespace CompilerTest.Input
             foreach (string line in this.file)
             {
                 Assert.Equal("Line " + expectedLine.ToString(), line);
-                Assert.Equal(expectedLine++, this.file.CurrentLine);
+                Assert.Equal("Line " + expectedLine.ToString(), this.file.CurrentLine);
+                Assert.Equal(expectedLine++, this.file.CurrentLineNumber);
             }
 
-            Assert.Equal(8, this.file.CurrentLine);
+            Assert.Equal(8, this.file.CurrentLineNumber);
         }
     }
 }

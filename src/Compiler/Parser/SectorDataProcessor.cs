@@ -19,7 +19,7 @@ namespace Compiler.Parser
         ) {
             foreach (OutputSections section in Enum.GetValues(typeof(OutputSections)))
             {
-                IFileParser parser = sectionParsers.GetParserForSection(section);
+                ISectorDataParser parser = sectionParsers.GetParserForSection(section);
                 if (parser == null)
                 {
                     errors.AddEvent(
@@ -37,17 +37,7 @@ namespace Compiler.Parser
                         );
                     }
 
-                    SectorFormatData data = InputLineReader.ReadInputLines(file);
-
-                    if (data.Equals(InputLineReader.invalidData))
-                    {
-                        errors.AddEvent(
-                            new FileNotFoundError(file.GetPath())
-                        );
-                        continue;
-                    }
-
-                    parser.ParseData(InputLineReader.ReadInputLines(file));
+                    parser.ParseData(new SectorDataFile(file.GetPath()));
                 }
             }
         }

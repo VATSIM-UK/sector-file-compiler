@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -25,55 +26,41 @@ namespace CompilerTest.Parser
                 .GetParserForSection(OutputSections.SCT_ARTCC);
         }
 
-        [Fact]
-        public void TestItRaisesSyntaxErrorNotEnoughSegments()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "EGTT London FIR" })
-            );
-            this.parser.ParseData(data);
+            new object[] { new List<string>{
+                "EGTT London FIR"
+            }}, // Too few segments
+            new object[] { new List<string>{
+                "EGTT London FIR N050.57.00.000 W001.21.24.490 N050.57.00.000 N001.21.24.490"
+            }}, // Invalid end point
+            new object[] { new List<string>{
+                "EGTT London FIR N050.57.00.000 N001.21.24.490 N050.57.00.000 W001.21.24.490"
+            }}, // Invalid start point
+        };
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorInvalidEndPoint()
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "EGTT London FIR N050.57.00.000 W001.21.24.490 N050.57.00.000 N001.21.24.490" })
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
             );
-            this.parser.ParseData(data);
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorInvalidStartPoint()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "EGTT London FIR N050.57.00.000 N001.21.24.490 N050.57.00.000 W001.21.24.490" })
-            );
-            this.parser.ParseData(data);
-
+            Assert.Empty(this.collection.Artccs);
+            Assert.Empty(this.collection.HighArtccs);
+            Assert.Empty(this.collection.LowArtccs);
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "" })
             );
 
@@ -84,10 +71,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsAirwayData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
                 new List<string>(new string[] { "EGTT London FIR   N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" })
             );
             this.parser.ParseData(data);
@@ -103,10 +88,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsAirwayDataWithIdentifiers()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
                 new List<string>(new string[] { "EGTT London FIR   DIKAS DIKAS BHD BHD;comment" })
             );
             this.parser.ParseData(data);

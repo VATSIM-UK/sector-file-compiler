@@ -2,12 +2,13 @@
 using Compiler.Model;
 using Compiler.Error;
 using Compiler.Event;
+using Compiler.Input;
 using Compiler.Validate;
 using System.Linq;
 
 namespace Compiler.Parser
 {
-    public class RunwayParser: AbstractSectorElementParser, IFileParser
+    public class RunwayParser: AbstractSectorElementParser, ISectorDataParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
@@ -25,21 +26,21 @@ namespace Compiler.Parser
             this.errorLog = errorLog;
         }
 
-        public void ParseData(SectorFormatData data)
+        public void ParseData(AbstractSectorDataFile data)
         {
-            for (int i = 0; i < data.lines.Count; i++)
+            foreach (string line in data)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(line))
                 {
                     continue;
                 }
 
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
                 if (sectorData.dataSegments.Count < 8)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Too few RUNWAY segments", data.fullPath, i + 1)
+                        new SyntaxError("Too few RUNWAY segments", data.FullPath, data.CurrentLineNumber)
                     );
                     continue;
                 }
@@ -48,7 +49,7 @@ namespace Compiler.Parser
                 if (!RunwayValidator.RunwayValidIncludingAdjacent(sectorData.dataSegments[0]))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid runway designator " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                        new SyntaxError("Invalid runway designator " + sectorData.dataSegments[0], data.FullPath, data.CurrentLineNumber)
                     );
                     continue;
                 }
@@ -56,7 +57,7 @@ namespace Compiler.Parser
                 if (!RunwayValidator.RunwayValidIncludingAdjacent(sectorData.dataSegments[1]))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid runway designator " + sectorData.dataSegments[1], data.fullPath, i + 1)
+                        new SyntaxError("Invalid runway designator " + sectorData.dataSegments[1], data.FullPath, data.CurrentLineNumber)
                     );
                     continue;
                 }
@@ -65,7 +66,7 @@ namespace Compiler.Parser
                 if (!this.HeadingIsValid(sectorData.dataSegments[2]))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid runway heading " + sectorData.dataSegments[2], data.fullPath, i + 1)
+                        new SyntaxError("Invalid runway heading " + sectorData.dataSegments[2], data.FullPath, data.CurrentLineNumber)
                     );
                     continue;
                 }
@@ -73,7 +74,7 @@ namespace Compiler.Parser
                 if (!this.HeadingIsValid(sectorData.dataSegments[3]))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid runway heading " + sectorData.dataSegments[3], data.fullPath, i + 1)
+                        new SyntaxError("Invalid runway heading " + sectorData.dataSegments[3], data.FullPath, data.CurrentLineNumber)
                     );
                     continue;
                 }
@@ -83,7 +84,7 @@ namespace Compiler.Parser
                 if (firstThreshold.Equals(CoordinateParser.invalidCoordinate))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid runway first threshold ", data.fullPath, i + 1)
+                        new SyntaxError("Invalid runway first threshold ", data.FullPath, data.CurrentLineNumber)
                     );
                     continue;
                 }
@@ -92,7 +93,7 @@ namespace Compiler.Parser
                 if (reverseThreshold.Equals(CoordinateParser.invalidCoordinate))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid runway reverse threshold ", data.fullPath, i + 1)
+                        new SyntaxError("Invalid runway reverse threshold ", data.FullPath, data.CurrentLineNumber)
                     );
                     continue;
                 }

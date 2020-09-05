@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -28,10 +29,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItRaisesASyntaxErrorIfIncorrectNumberOfSegments()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "abc:def:ghi" })
             );
 
@@ -42,10 +41,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItRaisesAnErrorIfInvalidCoordinate()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "abc:def:Title:Text" })
             );
 
@@ -56,10 +53,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "" })
             );
 
@@ -70,10 +65,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsFreetextData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "N054.28.46.319:W006.15.33.933:Title:Text ;comment" })
             );
 

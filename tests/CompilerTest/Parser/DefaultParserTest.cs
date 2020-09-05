@@ -3,6 +3,7 @@ using Xunit;
 using Compiler.Parser;
 using Compiler.Model;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -22,10 +23,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItParsesComments()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { ";comment" })
             );
 
@@ -38,10 +37,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItParsesBlankLines()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "\r\n" })
             );
 

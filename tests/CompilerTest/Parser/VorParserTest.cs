@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -25,111 +26,51 @@ namespace CompilerTest.Parser
                 .GetParserForSection(OutputSections.SCT_VOR);
         }
 
-        [Fact]
-        public void TestItRaisesSyntaxErrorTooManySections()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "BHD 112.050 N050.57.00.000 W001.21.24.490 MORE" })
-            );
-            this.parser.ParseData(data);
+            new object[] { new List<string>{
+                "BHD 112.050 N050.57.00.000 W001.21.24.490 MORE"
+            }}, // Too many sections
+            new object[] { new List<string>{
+                "BHD 112.050 N050.57.00.000"
+            }}, // Too few sections
+            new object[] { new List<string>{
+                "BH1 112.050 N050.57.00.000 W001.21.24.490"
+            }}, // Invalid identifier - contains numbers
+            new object[] { new List<string>{
+                "BHDD 112.050 N050.57.00.000 W001.21.24.490"
+            }}, // Invalid identifier - too long
+            new object[] { new List<string>{
+                "B 112.050 N050.57.00.000 W001.21.24.490"
+            }}, // Invalid identifier - too short
+            new object[] { new List<string>{
+                "BHD abc.500 N050.57.00.000 W001.21.24.490"
+            }}, // Invalid frequency
+            new object[] { new List<string>{
+                "BHD 112.050 NA50.57.00.000 W001.21.24.490"
+            }}, // Invalid coordinates
+        };
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorTooFewSections()
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "BHD 112.050 N050.57.00.000" })
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
             );
-            this.parser.ParseData(data);
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorIdentifierContainsNumbers()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "BH1 112.050 N050.57.00.000 W001.21.24.490" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorIdentifierTooLong()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "BHDD 112.050 N050.57.00.000 W001.21.24.490" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorIdentifierTooShort()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "B 112.050 N050.57.00.000 W001.21.24.490" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorInvalidFrequency()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "BHD abc.050 N050.57.00.000 W001.21.24.490" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorInvalidCoordinates()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "BHD 112.050 NA50.57.00.000 W001.21.24.490" })
-            );
-            this.parser.ParseData(data);
-
+            Assert.Empty(this.collection.Vors);
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "" })
             );
 
@@ -140,10 +81,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsVorData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
                 new List<string>(new string[] { "BHD 112.050 N050.57.00.000 W001.21.24.490;comment" })
             );
             this.parser.ParseData(data);
@@ -158,10 +97,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsVorDataTwoLetterIdentifier()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
                 new List<string>(new string[] { "BH 112.050 N050.57.00.000 W001.21.24.490;comment" })
             );
             this.parser.ParseData(data);

@@ -7,8 +7,11 @@ namespace Compiler.Input
 {
     abstract public class AbstractSectorDataFile: IEnumerable<string>
     {
-        // The current line that has been yielded from the generator
-        public int CurrentLine { get; protected set; }
+        // The number of the current line
+        public int CurrentLineNumber { get; protected set; } = 0;
+
+        // The last line yielded by the generator
+        public string CurrentLine { get; protected set; } = "";
 
         // The full path to the file
         public string FullPath { get; protected set; }

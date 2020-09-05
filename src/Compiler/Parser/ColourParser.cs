@@ -2,10 +2,11 @@
 using Compiler.Error;
 using Compiler.Event;
 using Compiler.Model;
+using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class ColourParser : AbstractSectorElementParser, IFileParser
+    public class ColourParser : AbstractSectorElementParser, ISectorDataParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
@@ -22,33 +23,39 @@ namespace Compiler.Parser
             this.errorLog = errorLog;
         }
 
-        public void ParseData(SectorFormatData data)
+        public void ParseData(AbstractSectorDataFile data)
         {
-            for (int i = 0; i < data.lines.Count; i++)
+            foreach (string line in data)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(line))
                 {
                     continue;
                 }
 
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
 
                 if (sectorData.dataSegments.Count != 3)
                 {
-                    this.errorLog.AddEvent(new SyntaxError("Invalid number of colour definition segments", data.fullPath, i + 1));
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Invalid number of colour definition segments", data.FullPath, data.CurrentLineNumber)
+                    );
                     continue;
                 }
 
                 if (sectorData.dataSegments[0] != "#define")
                 {
-                    this.errorLog.AddEvent(new SyntaxError("Colour definitions must begin with #define", data.fullPath, i + 1));
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Colour definitions must begin with #define", data.FullPath, data.CurrentLineNumber)
+                    );
                     continue;
                 }
 
                 if (!int.TryParse(sectorData.dataSegments[2].Trim(), out int colourValue))
                 {
-                    this.errorLog.AddEvent(new SyntaxError("Colour values must be an integer", data.fullPath, i + 1));
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Defined colour values must be an integer", data.FullPath, data.CurrentLineNumber)
+                    );
                     continue;
                 }
 

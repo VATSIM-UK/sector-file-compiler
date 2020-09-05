@@ -24,34 +24,38 @@ namespace Compiler.Parser
             this.errorLog = errorLog;
         }
 
-        public int ParseData(SectorFormatData data, int startIndex)
+
+        public void ParseData(List<(int, string)> lines, string filename)
         {
-            SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[startIndex]);
+            SectorFormatLine sectorData = this.sectorLineParser.ParseLine(lines[0].Item2);
             if (
                 sectorData.dataSegments[0] != "CIRCLE_SECTORLINE" &&
                 sectorData.dataSegments[0] != "SECTORLINE"
             )
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Invalid SECTORLINE declaration", data.fullPath, startIndex + 1)
+                    new SyntaxError("Invalid SECTORLINE declaration", filename, lines[0].Item1)
                 );
                 throw new Exception();
             }
 
-            return sectorData.dataSegments[0] == "CIRCLE_SECTORLINE"
-                ? ParseCircleSectorline(ref data, startIndex)
-                : ParseStandardSectorline(ref data, startIndex);
+            if (sectorData.dataSegments[0] == "CIRCLE_SECTORLINE")
+            {
+                ParseCircleSectorline(lines, filename);
+            } else {
+                ParseStandardSectorline(lines, filename);
+            }
         }
 
-        private int ParseCircleSectorline(ref SectorFormatData data, int startLine)
+        private void ParseCircleSectorline(List<(int, string)> lines, string filename)
         {
             // Deal with the declaration line
-            SectorFormatLine declarationLine = this.sectorLineParser.ParseLine(data.lines[startLine]);
+            SectorFormatLine declarationLine = this.sectorLineParser.ParseLine(lines[0].Item2);
 
             if (declarationLine.dataSegments.Count != 4 && declarationLine.dataSegments.Count != 5)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Incorrect number of segments for SECTORLINE declaration", data.fullPath, startLine + 1)
+                    new SyntaxError("Incorrect number of segments for SECTORLINE declaration", filename, lines[0].Item1)
                 );
                 throw new Exception();
             }
@@ -67,7 +71,7 @@ namespace Compiler.Parser
                 if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid CIRCLE_SECTORLINE coordinate", data.fullPath, startLine + 1)
+                        new SyntaxError("Invalid CIRCLE_SECTORLINE coordinate", filename, lines[0].Item1)
                     );
                     throw new Exception();
                 }
@@ -79,29 +83,24 @@ namespace Compiler.Parser
                     out double radius) == false)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Invalid CIRCLE_SECTORLINE radius", data.fullPath, startLine + 1)
+                    new SyntaxError("Invalid CIRCLE_SECTORLINE radius", filename, lines[0].Item1)
                 );
                 throw new Exception();
             }
 
 
             List<SectorlineDisplayRule> displayRules = new List<SectorlineDisplayRule>();
-            int i = startLine + 1;
-            while (i < data.lines.Count)
+            int i = 1;
+            while (i < lines.Count)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(lines[i].Item2))
                 {
                     i++;
                     continue;
                 }
 
-                SectorFormatLine displayData = this.sectorLineParser.ParseLine(data.lines[i]);
-
-                if (IsNewDeclaration(displayData))
-                {
-                    break;
-                }
+                SectorFormatLine displayData = this.sectorLineParser.ParseLine(lines[i].Item2);
 
                 try
                 {
@@ -109,7 +108,7 @@ namespace Compiler.Parser
                 } catch (Exception exception)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError(exception.Message, data.fullPath, i + 1)
+                        new SyntaxError(exception.Message, filename, lines[i].Item1)
                     );
                     throw exception;
                 }
@@ -141,44 +140,38 @@ namespace Compiler.Parser
                 );
             }
 
-            return i - startLine;
         }
 
-        private int ParseStandardSectorline(ref SectorFormatData data, int startLine)
+        private void ParseStandardSectorline(List<(int, string)> lines, string filename)
         {
             // Deal with the declaration line
-            SectorFormatLine declarationLine = this.sectorLineParser.ParseLine(data.lines[startLine]);
+            SectorFormatLine declarationLine = this.sectorLineParser.ParseLine(lines[0].Item2);
 
             if (declarationLine.dataSegments.Count != 2)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Incorrect number of segments for SECTORLINE declaration", data.fullPath, startLine + 1)
+                    new SyntaxError("Incorrect number of segments for SECTORLINE declaration", filename, lines[0].Item1)
                 );
                 throw new Exception();
             }
 
             List<SectorlineDisplayRule> displayRules = new List<SectorlineDisplayRule>();
             List<SectorlineCoordinate> coordinates = new List<SectorlineCoordinate>();
-            int i = startLine + 1;
-            while (i < data.lines.Count)
+            int i = 1;
+            while (i < lines.Count)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(lines[i].Item2))
                 {
                     i++;
                     continue;
                 }
 
-                SectorFormatLine dataLine = this.sectorLineParser.ParseLine(data.lines[i]);
+                SectorFormatLine dataLine = this.sectorLineParser.ParseLine(lines[i].Item2);
 
                 try
                 {
-                    if (IsNewDeclaration(dataLine))
-                    {
-                        // Declaration of new data object, so stop
-                        break;
-                    }
-                    else if (IsCoordDeclaration(dataLine))
+                    if (IsCoordDeclaration(dataLine))
                     {
                         coordinates.Add(ParseCoordinate(dataLine));
                     }
@@ -193,7 +186,7 @@ namespace Compiler.Parser
                 } catch (Exception exception)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError(exception.Message, data.fullPath, i + 1)
+                        new SyntaxError(exception.Message, filename, lines[0].Item1)
                     );
                     throw exception;
                 }
@@ -204,7 +197,7 @@ namespace Compiler.Parser
             if (coordinates.Count == 0)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("No coordinates found for SECTORLINE ", data.fullPath, startLine + 1)
+                    new SyntaxError("No coordinates found for SECTORLINE ", filename, lines[0].Item1)
                 );
                 throw new Exception();
             }
@@ -217,8 +210,6 @@ namespace Compiler.Parser
                     declarationLine.comment
                 )
             );
-
-            return i - startLine;
         }
 
         private SectorlineDisplayRule ParseDisplayRule(SectorFormatLine data)

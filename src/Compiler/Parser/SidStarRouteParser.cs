@@ -2,11 +2,12 @@
 using Compiler.Model;
 using Compiler.Error;
 using Compiler.Event;
+using Compiler.Input;
 using System.Linq;
 
 namespace Compiler.Parser
 {
-    public class SidStarRouteParser: AbstractSectorElementParser, IFileParser
+    public class SidStarRouteParser: AbstractSectorElementParser, ISectorDataParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
@@ -28,20 +29,20 @@ namespace Compiler.Parser
 
         public SidStarType Type { get; }
 
-        public void ParseData(SectorFormatData data)
+        public void ParseData(AbstractSectorDataFile data)
         {
             List<SectorFormatLine> linesToProcess = new List<SectorFormatLine>();
             bool foundFirst = false;
             int newSegmentStartLine = 0;
-            for (int i = 0; i < data.lines.Count; i++)
+            foreach (string line in data)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(line))
                 {
                     continue;
                 }
 
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
 
                 // We haven't yet started a SID/STAR route, so make sure we have a new declaration
                 if (
@@ -51,21 +52,28 @@ namespace Compiler.Parser
                 )
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid new SIDSTAR route declaration", data.fullPath, i + 1)
+                        new SyntaxError("Invalid new SIDSTAR route declaration", data.FullPath, data.CurrentLineNumber)
                     );
                     return;
                 } else if (!foundFirst) {
                     linesToProcess.Add(sectorData);
+                    newSegmentStartLine = data.CurrentLineNumber;
                     foundFirst = true;
                     continue;
                 }
 
                 // We've reached the end of the segment, time to make the thing and start over!
-                if (this.GetFirstPointIndex(sectorData) != 0)
+                int firstPointIndex = this.GetFirstPointIndex(sectorData);
+                if (firstPointIndex == -1)
                 {
-                    this.ProcessSidStar(linesToProcess, data.fullPath, newSegmentStartLine);
+                    this.errorLog.AddEvent(
+                      new SyntaxError("Unable to find first point", data.FullPath, data.CurrentLineNumber)
+                  );
+                    return;
+                } else if (firstPointIndex != 0)
+                {
+                    this.ProcessSidStar(linesToProcess, data, newSegmentStartLine);
                     linesToProcess.Clear();
-                    newSegmentStartLine = i;
                     linesToProcess.Add(sectorData);
                     continue;
                 }
@@ -77,7 +85,7 @@ namespace Compiler.Parser
             // If we've got some lines left over, process them now
             if (linesToProcess.Count != 0)
             {
-                this.ProcessSidStar(linesToProcess, data.fullPath, newSegmentStartLine);
+                this.ProcessSidStar(linesToProcess, data, newSegmentStartLine);
             }
         }
 
@@ -110,14 +118,14 @@ namespace Compiler.Parser
         /**
          * Process an individual SID/STARs worth of lines
          */
-        private void ProcessSidStar(List<SectorFormatLine> lines, string filename, int startLine)
+        private void ProcessSidStar(List<SectorFormatLine> lines, AbstractSectorDataFile data, int startLine)
         {
             // Get the name out and remove it from the array
             int firstLineFirstCoordinateIndex = this.GetFirstPointIndex(lines[0]);
             if (firstLineFirstCoordinateIndex == -1)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Invalid SID/STAR route segment coordinates", filename, startLine + startLine + 1)
+                    new SyntaxError("Invalid SID/STAR route segment coordinates", data.FullPath, startLine)
                 );
                 return;
             }

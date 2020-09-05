@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -28,10 +29,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItRaisesASyntaxErrorIfIncorrectNumberOfSegments()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "\"test label\" N050.57.00.000 W001.21.24.490" })
             );
             this.parser.ParseData(data);
@@ -42,10 +41,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItRaisesASyntaxErrorIfCoordinateNotvalid()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "\"test label\" N050.57.00.000 N001.21.24.490 red" })
             );
             this.parser.ParseData(data);
@@ -56,10 +53,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "" })
             );
 
@@ -70,10 +65,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsLabelData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "\"test label\" N050.57.00.000 W001.21.24.490 red ;comment" })
             );
             this.parser.ParseData(data);

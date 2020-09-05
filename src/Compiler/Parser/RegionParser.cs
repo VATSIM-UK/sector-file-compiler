@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Error;
+using Compiler.Input;
 using System.Linq;
 
 namespace Compiler.Parser
 {
-    public class RegionParser : AbstractSectorElementParser, IFileParser
+    public class RegionParser : AbstractSectorElementParser, ISectorDataParser
     {
         private readonly SectorElementCollection elements;
         private readonly ISectorLineParser sectorLineParser;
@@ -26,7 +27,7 @@ namespace Compiler.Parser
             this.eventLogger = eventLogger;
         }
 
-        public void ParseData(SectorFormatData data)
+        public void ParseData(AbstractSectorDataFile data)
         {
             string colour = "";
             List<Point> points = new List<Point>();
@@ -34,22 +35,22 @@ namespace Compiler.Parser
             bool foundFirst = false;
             string regionName = "";
             bool expectingColourDefinition = false;
-            for (int i = 0; i < data.lines.Count; i++)
+            bool expectingRegionNameDefinition = true;
+            foreach (string line in data)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(line))
                 {
                     continue;
                 }
 
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
 
                 // Check for the first REGIONNAME
-                if (i == 0 && (sectorData.dataSegments.Count < 2 || !sectorData.data.StartsWith(RegionParser.regionNameDeclaration)))
+                if (expectingRegionNameDefinition && (sectorData.dataSegments.Count < 2 || !sectorData.data.StartsWith(RegionParser.regionNameDeclaration)))
                 {
-                    expectingColourDefinition = true;
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid first line of region " + data.lines[i], data.fullPath, i + 1)
+                        new SyntaxError("Invalid first line of region " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                     );
                     return;
                 }
@@ -57,17 +58,20 @@ namespace Compiler.Parser
                 if (expectingColourDefinition && sectorData.dataSegments.Count != 3)
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Unexpected colour defintion " + data.lines[i], data.fullPath, i + 1)
+                        new SyntaxError("Unexpected colour defintion " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                     );
                     return;
                 }
+
+                // We've found our first region name if we get here for the first time, so we don't demand another in this file
+                expectingRegionNameDefinition = false;
 
                 // Expecting a colour definition for the region
                 if (expectingColourDefinition) {
                     if (sectorData.dataSegments.Count != 3)
                     {
                         this.eventLogger.AddEvent(
-                            new SyntaxError("All regions must have a colour " + data.lines[i], data.fullPath, i + 1)
+                            new SyntaxError("All regions must have a colour " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                         );
                         return;
                     }
@@ -77,7 +81,7 @@ namespace Compiler.Parser
                     if (parsedNewPoint.Equals(PointParser.invalidPoint))
                     {
                         this.eventLogger.AddEvent(
-                            new SyntaxError("Invalid region point format: " + data.lines[i], data.fullPath, i + 1)
+                            new SyntaxError("Invalid region point format: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                         );
                         return;
                     }
@@ -124,7 +128,7 @@ namespace Compiler.Parser
                 if (parsedPoint == PointParser.invalidPoint)
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid region point format: " + data.lines[i], data.fullPath, i + 1)
+                        new SyntaxError("Invalid region point format: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                     );
                     return;
                 }
@@ -137,9 +141,9 @@ namespace Compiler.Parser
             {
                 this.eventLogger.AddEvent(
                     new SyntaxError(
-                        "Incomplete region at end of file: " + data.lines[^1],
-                        data.fullPath,
-                        data.lines.Count
+                        "Incomplete region at end of file",
+                        data.FullPath,
+                        data.CurrentLineNumber
                     )
                 );
                 return;

@@ -4,10 +4,11 @@ using System.Text;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Error;
+using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class InfoParser : AbstractSectorElementParser, IFileParser
+    public class InfoParser : AbstractSectorElementParser, ISectorDataParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection elements;
@@ -25,7 +26,7 @@ namespace Compiler.Parser
             this.eventLogger = eventLogger;
         }
 
-        public void ParseData(SectorFormatData data)
+        public void ParseData(AbstractSectorDataFile data)
         {
             string name = "";
             string controllerPosition = "";
@@ -37,15 +38,15 @@ namespace Compiler.Parser
             int effectiveLine = 0;
             int scale = 0;
             double magVar = 0.0;
-            for (int i = 0; i < data.lines.Count; i++)
+            foreach (string line in data)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(line))
                 {
                     continue;
                 }
 
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
 
                 // First line is the name
                 if (effectiveLine == 0)
@@ -88,7 +89,7 @@ namespace Compiler.Parser
                     if (CoordinateParser.Parse(latitude, longitude).Equals(CoordinateParser.invalidCoordinate))
                     {
                         this.eventLogger.AddEvent(
-                            new SyntaxError("Invalid INFO coordinate: " + data.lines[i], data.fullPath, i)
+                            new SyntaxError("Invalid INFO coordinate: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                         );
                         return;
                     }
@@ -102,7 +103,7 @@ namespace Compiler.Parser
                 {
                     if (!int.TryParse(sectorData.data, out milesPerLatitude)) {
                         this.eventLogger.AddEvent(
-                            new SyntaxError("Invalid INFO miles per degree latitude: " + data.lines[i], data.fullPath, i)
+                            new SyntaxError("Invalid INFO miles per degree latitude: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                         );
                         return;
                     }
@@ -117,7 +118,7 @@ namespace Compiler.Parser
                     if (!double.TryParse(sectorData.data, out milesPerLongitude))
                     {
                         this.eventLogger.AddEvent(
-                            new SyntaxError("Invalid INFO miles per degree longitude: " + data.lines[i], data.fullPath, i)
+                            new SyntaxError("Invalid INFO miles per degree longitude: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                         );
                         return;
                     }
@@ -132,7 +133,7 @@ namespace Compiler.Parser
                     if (!double.TryParse(sectorData.data, out magVar))
                     {
                         this.eventLogger.AddEvent(
-                            new SyntaxError("Invalid INFO magvar: " + data.lines[i], data.fullPath, i)
+                            new SyntaxError("Invalid INFO magvar: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                         );
                         return;
                     }
@@ -147,7 +148,7 @@ namespace Compiler.Parser
                     if (!int.TryParse(sectorData.data, out scale))
                     {
                         this.eventLogger.AddEvent(
-                            new SyntaxError("Invalid INFO scale: " + data.lines[i], data.fullPath, i)
+                            new SyntaxError("Invalid INFO scale: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                         );
                         return;
                     }
@@ -162,7 +163,7 @@ namespace Compiler.Parser
             if (effectiveLine != 9)
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Missing INFO data", data.fullPath, 0)
+                    new SyntaxError("Missing INFO data", data.FullPath, 0)
                 );
                 return;
             }

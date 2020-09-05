@@ -6,6 +6,7 @@ using Compiler.Output;
 using Xunit;
 using Compiler.Error;
 using System.Collections.Generic;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -28,10 +29,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void ItRaisesSyntaxErrorInvalidDeclaration()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] {
                     "NOPE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
                     "DISPLAY:BBAPP:BBAPP:BBTWR ;comment1",
@@ -46,15 +45,32 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "" })
+                new List<string>(new string[] {
+                    ""
+                })
             );
 
             this.parser.ParseData(data);
             Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]);
+        }
+
+        [Fact]
+        public void TestItDealsWithData()
+        {
+            MockSectorDataFile data = new MockSectorDataFile(
+                "test.txt",
+                new List<string>(new string[] {
+                    "FIR_COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment",
+                    "FIR_COPX:*:*:HEMEL:EGNX:*:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment"
+                })
+            );
+
+            this.parser.ParseData(data);
+            Assert.Equal(2, this.collection.CoordinationPoints.Count);
+            Assert.IsType<CoordinationPoint>(this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]);
+            Assert.IsType<CoordinationPoint>(this.collection.Compilables[OutputSections.ESE_AIRSPACE][1]);
         }
     }
 }

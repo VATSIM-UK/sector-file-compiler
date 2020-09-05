@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -25,97 +26,36 @@ namespace CompilerTest.Parser
                 .GetParserForSection(OutputSections.RWY_ACTIVE_RUNWAYS);
         }
 
-        [Fact]
-        public void TestItRaisesSyntaxErrorTooManySegments()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "ACTIVE_RUNWAY:EGHI:20:1:EXTRA ;comment" })
-            );
-            this.parser.ParseData(data);
+            new object[] { new List<string>{ "ACTIVE_RUNWAY:EGHI:20:1:EXTRA ;comment" }}, // Too many segments
+            new object[] { new List<string>{ "ACTIVE_RUNWAY:EGHI:20 ;comment" }}, // Too few segments
+            new object[] { new List<string>{ "ACTIVE_RUNWAYS:EGHI:20:1 ;comment" } }, // Bad declaration
+            new object[] { new List<string>{ "ACTIVE_RUNWAY:ASD1:20:1 ;comment" } }, // Invalid icao
+            new object[] { new List<string>{ "ACTIVE_RUNWAY:EGHI:37:1 ;comment" } }, // Invalid runway
+            new object[] { new List<string>{ "ACTIVE_RUNWAY:EGHI:20:2 ;comment" } }, // Invalid mode
+        };
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorTooFewSegments()
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "ACTIVE_RUNWAY:EGHI:20 ;comment" })
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
             );
-            this.parser.ParseData(data);
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorIncorrectDeclaration()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "ACTIVE_RUNWAYS:EGHI:20:1 ;comment" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorInalidIcao()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "ACTIVE_RUNWAY:ASD1:20:1 ;comment" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorInvalidRunway()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "ACTIVE_RUNWAY:EGHI:37:1 ;comment" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxInvalidMode()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "ACTIVE_RUNWAY:EGHI:20:2 ;comment" })
-            );
-            this.parser.ParseData(data);
-
+            Assert.Empty(this.collection.ActiveRunways);
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "" })
             );
 
@@ -126,12 +66,11 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsDataInMode0()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
                 new List<string>(new string[] { "ACTIVE_RUNWAY:EGHI:20:0 ;comment" })
             );
+
             this.parser.ParseData(data);
 
             ActiveRunway result = this.collection.ActiveRunways[0];
@@ -144,12 +83,11 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsDataInMode1()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
                 new List<string>(new string[] { "ACTIVE_RUNWAY:EGHI:20:1 ;comment" })
             );
+
             this.parser.ParseData(data);
 
             ActiveRunway result = this.collection.ActiveRunways[0];

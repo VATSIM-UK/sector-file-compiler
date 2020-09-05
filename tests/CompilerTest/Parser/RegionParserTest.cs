@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -28,10 +29,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "" })
             );
 
@@ -42,10 +41,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsSinglePointRegionData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
                 new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment" })
             );
             this.parser.ParseData(data);
@@ -61,10 +58,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsMultipleLineRegionData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
                 new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment", "BHD BHD", " JSY JSY" })
             );
             this.parser.ParseData(data);
@@ -82,10 +77,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsMultipleRegionsData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
                 new List<string>(new string[] { 
                     "REGIONNAME TestRegion1",
                     "Red BCN BCN ;comment",
@@ -115,94 +108,46 @@ namespace CompilerTest.Parser
             Assert.Equal("TestRegion2", result2.Name);
         }
 
-        [Fact]
-        public void TestItRaisesSyntaxErrorInvalidFirstLine()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "BCN BCN ;comment", " BHD BHD"})
-            );
-            this.parser.ParseData(data);
+            new object[] { new List<string>{
+                "BCN BCN ;comment", " BHD BHD"
+            }}, // Invalid first line
+            new object[] { new List<string>{
+                "REGIONNAME TestRegion", "Red BCN BHD ;comment",
+                " BHD BHD"
+            }}, // Invalid first region point
+            new object[] { new List<string>{
+                "REGIONNAME TestRegion", "Red BCN BCN ;comment",
+                "BHD MID"
+            }}, // Invalid continuation point
+            new object[] { new List<string>{
+                "REGIONNAME TestRegion",
+                "Red BCN BCN ;comment",
+                "Red BCN BCN ;comment"
+            }}, // Unexpected colour
+            new object[] { new List<string>{
+                "REGIONNAME TestRegion",
+                "BCN BCN ;comment"
+            }}, // No colour
+            new object[] { new List<string>{
+                "REGIONNAME TestRegion2"
+            }}, // Incomplete region at end of file
+        };
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
+        {
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
+            );
+
             Assert.Empty(this.collection.Regions);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorInvalidFirstLinePoint()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BHD ;comment", " BHD BHD"})
-            );
-            this.parser.ParseData(data);
-
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Regions);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorContinuationPointInvalid()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment", "BHD MID" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Regions);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorUnexpectedColour()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment", "Red BCN BCN ;comment" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Regions);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorNoColour()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "REGIONNAME TestRegion", "BCN BCN ;comment" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Regions);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorIncompleteRegionAtEndOfFile()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment", "REGIONNAME TestRegion2" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Single(this.collection.Regions);
         }
     }
 }

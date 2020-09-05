@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -25,112 +26,51 @@ namespace CompilerTest.Parser
                 .GetParserForSection(OutputSections.SCT_RUNWAY);
         }
 
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfTooFewSegments()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "15 33 148 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment" })
+            new object[] { new List<string>{
+                "15 33 148 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment"
+            }}, // Too few segments
+            new object[] { new List<string>{
+                "37R 33 148 328 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment"
+            }}, // Invalid first identifier
+            new object[] { new List<string>{
+                "15 00A 148 328 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment"
+            }}, // Invalid reverse identifier
+            new object[] { new List<string>{
+                "15 33 abc 328 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment"
+            }}, // Invalid first heading
+            new object[] { new List<string>{
+                "15 33 148 360 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment"
+            }}, // Invalid reverse heading
+            new object[] { new List<string>{
+                "15 33 148 328 abc W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment"
+            }}, // Invalid first coordinate
+            new object[] { new List<string>{
+                "15 33 148 328 N052.27.48.520 W001.45.31.430 N052.26.46.580 abc ;comment"
+            }}, // Invalid second coordinate
+        };
+
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
+        {
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
             );
 
-            this.parser.ParseData(data);
+            Assert.Empty(this.collection.Runways);
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfInvalidFirstIdentifier()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "37R 33 148 328 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfInvalidReverseIdentifier()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "15 00A 148 328 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfInvalidFirstHeading()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "15 33 abc 328 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfInvalidReverseHeading()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "15 33 148 360 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfInvalidFirstCoordinate()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "15 33 148 328 abc W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfInvalidReverseCoordinate()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "15 33 148 328 N052.27.48.520 W001.45.31.430 N052.26.46.580 abc ;comment" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
 
         [Fact]
         public void TestItAddsRunwayDataNoDescription()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "15 33 148 328 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment" })
             );
 
@@ -150,10 +90,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsRunwayDataWithDescription()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "15 33 148 328 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 EGBB - Birmingham ;comment" })
             );
 

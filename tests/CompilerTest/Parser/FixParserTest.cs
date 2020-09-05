@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -25,55 +26,39 @@ namespace CompilerTest.Parser
                 .GetParserForSection(OutputSections.SCT_FIXES);
         }
 
-        [Fact]
-        public void TestItRaisesSyntaxErrorTooManySections()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "ABCDE N050.57.00.000 W001.21.24.490 MORE" })
-            );
-            this.parser.ParseData(data);
+            new object[] { new List<string>{
+                "ABCDE N050.57.00.000 W001.21.24.490 MORE"
+            }}, // Too many sections
+            new object[] { new List<string>{
+                "ABCDE N050.57.00.000W001.21.24.490"
+            }}, // Too few sections
+            new object[] { new List<string>{
+                "ABCDE N050.57.00.000 N001.21.24.490"
+            }}, // Invalid coordinates
+        };
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorTooFewSections()
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "ABCDE N050.57.00.000W001.21.24.490" })
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
             );
-            this.parser.ParseData(data);
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorInvalidCoordinates()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "ABCDE N050.57.00.000 N001.21.24.490" })
-            );
-            this.parser.ParseData(data);
-
+            Assert.Empty(this.collection.Fixes);
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "" })
             );
 
@@ -84,10 +69,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsFixData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
                 new List<string>(new string[] { "ABCDE N050.57.00.000 W001.21.24.490;comment" })
             );
             this.parser.ParseData(data);
