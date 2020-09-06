@@ -15,6 +15,14 @@ namespace CompilerTest.Parser
             Assert.Equal("W006.12.57.000", coordinate.longitude);
         }
 
+        [Fact]
+        public void TestItAllowsOfScreenCoordinate()
+        {
+            Coordinate coordinate = CoordinateParser.Parse("S999.00.00.000", "E999.00.00.000");
+            Assert.Equal("S999.00.00.000", coordinate.latitude);
+            Assert.Equal("E999.00.00.000", coordinate.longitude);
+        }
+
         public static IEnumerable<object[]> BadData => new List<object[]>
         {
             new object[] {"W054.39.27.000", "W006.12.57.000"}, // Invalid latitude north south

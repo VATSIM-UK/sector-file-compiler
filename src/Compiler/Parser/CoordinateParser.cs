@@ -10,6 +10,12 @@ namespace Compiler.Parser
         
         public static Coordinate Parse(string latitude, string longitude)
         {
+            // If its the special value used in the sectorfile, allow it
+            if (latitude == "S999.00.00.000" && longitude == "E999.00.00.000")
+            {
+                return new Coordinate(latitude, longitude);
+            }
+
             string parsedLatitude = CoordinateParser.ParseCoordinate(true, latitude.Trim());
             string parsedLongitude = CoordinateParser.ParseCoordinate(false, longitude.Trim());
 
