@@ -67,8 +67,9 @@ namespace Compiler.Parser
                 if (firstPointIndex == -1)
                 {
                     this.errorLog.AddEvent(
-                      new SyntaxError("Unable to find first point", data.FullPath, data.CurrentLineNumber)
-                  );
+                      new SyntaxError("Unable to find first point in SID/STAR route", data.FullPath, data.CurrentLineNumber)
+                    );
+                    this.errorLog.AddEvent(new ParserSuggestion("Have you provided valid coordinates?"));
                     return;
                 } else if (firstPointIndex != 0)
                 {

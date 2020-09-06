@@ -186,7 +186,7 @@ namespace Compiler.Parser
                 } catch (Exception exception)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError(exception.Message, filename, lines[0].Item1)
+                        new SyntaxError(exception.Message, filename, lines[0].Item1 + i)
                     );
                     throw exception;
                 }
