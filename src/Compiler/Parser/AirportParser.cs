@@ -90,7 +90,7 @@ namespace Compiler.Parser
             if (!AirportValidator.IcaoValid(icaoLine.data))
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid airport ICAO: " + icaoLine, data.FullPath, icaoLineNumber)
+                    new SyntaxError("Invalid airport ICAO: " + icaoLine.data, data.FullPath, icaoLineNumber)
                 );
                 return;
             }
@@ -99,7 +99,7 @@ namespace Compiler.Parser
             if (coordinateLine.dataSegments.Count != 2)
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid coordinate format: " + coordinateLine, data.FullPath, coordinateLineNumber)
+                    new SyntaxError("Invalid coordinate format: " + coordinateLine.data, data.FullPath, coordinateLineNumber)
                 );
                 return;
             }
@@ -108,7 +108,7 @@ namespace Compiler.Parser
             if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid coordinate format: " + coordinateLine, data.FullPath, coordinateLineNumber)
+                    new SyntaxError("Invalid coordinate format: " + coordinateLine.data, data.FullPath, coordinateLineNumber)
                 );
                 return;
             }
