@@ -29,5 +29,8 @@
         ESE_FREETEXT,
         ESE_SIDSSTARS,
         ESE_AIRSPACE,
+
+        // RWY
+        RWY_ACTIVE_RUNWAYS
     }
 }

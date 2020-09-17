@@ -21,6 +21,11 @@ namespace Compiler.Compile
                 compilers.Add(sectionFactory.Create(section));
             }
 
+            foreach (OutputSections section in arguments.RwySections)
+            {
+                compilers.Add(sectionFactory.Create(section));
+            }
+
             return new CompileEngine(compilers);
         }
     }

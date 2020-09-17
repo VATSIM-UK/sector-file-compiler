@@ -19,8 +19,9 @@ namespace Compiler.Validate
                 {
                     if (!this.RunwayValid(sectorElements, active.Runway, active.Airfield))
                     {
+                        this.RunwayValid(sectorElements, active.Runway, active.Airfield);
                         string message = String.Format(
-                            "Invalid ACTIVE runway {0}/{1} on sector {1}",
+                            "Invalid ACTIVE runway {0}/{1} on sector {2}",
                             active.Airfield,
                             active.Runway,
                             sector.Name
@@ -34,10 +35,15 @@ namespace Compiler.Validate
 
         private bool RunwayValid(SectorElementCollection sectorElements, string runwayIdentifier, string airportCode)
         {
+            if (airportCode == "000A" && (runwayIdentifier == "00" || runwayIdentifier == "01"))
+            {
+                return true;
+            }
+
             List<Airport> airport = sectorElements.Airports.Where(airport => airport.Icao == airportCode).ToList();
 
             return airport.Count != 0 && sectorElements.Runways
-                .Where(runway => runway.RunwayDialogDescription == airport[0].Name)
+                .Where(runway => runway.RunwayDialogDescription == airport[0] .Icao + " " + airport[0].Name)
                 .Where(runway => runway.FirstIdentifier == runwayIdentifier || runway.ReverseIdentifier == runwayIdentifier)
                 .ToList()
                 .Count() != 0;

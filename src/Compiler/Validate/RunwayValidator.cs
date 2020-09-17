@@ -7,7 +7,7 @@ namespace Compiler.Validate
 {
     public class RunwayValidator
     {
-        private static readonly string RUNWAY_REGEX = "^(0?[1-9]|[1-2]\\d|3[0-6])[LCR]?$";
+        private static readonly string RUNWAY_REGEX = "^(0?[1-9]|[1-2]\\d|3[0-6])[LCRG]?$";
 
         public static bool RunwayValid(string runway)
         {

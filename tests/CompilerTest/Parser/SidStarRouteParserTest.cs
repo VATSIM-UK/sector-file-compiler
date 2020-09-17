@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -25,55 +26,48 @@ namespace CompilerTest.Parser
                 .GetParserForSection(OutputSections.SCT_SID);
         }
 
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfFirstItemIsNotANewSegment()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "                           abc def ghi jkl" })
+            new object[] { new List<string>{
+                "                           abc def ghi jkl"
+            }}, // First item not a new segment
+            new object[] { new List<string>{
+                "Test                       a b def def"
+            }}, // First point not valid
+            new object[] { new List<string>{
+                "Test                       abc abc d e"
+            }}, // Second point not valid
+            new object[] { new List<string>{
+                "Test                       abc abc def def",
+                "                           abc b def def",
+            }}, // Second line first point not valid
+            new object[] { new List<string>{
+                "Test                       abc abc def def",
+                "                           abc abc hhh def",
+            }}, // Second line second point not valid
+        };
+
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
+        {
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
             );
 
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfFirstPointNotValid()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "Test                       a b def def" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfSecondPointNotValid()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "Test                       abc abc d e" })
-            );
-
-            this.parser.ParseData(data);
+            Assert.Empty(this.collection.StarRoutes);
+            Assert.Empty(this.collection.SidRoutes);
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "" })
             );
 
@@ -84,10 +78,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsSingleRowElements()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "Test                       abc abc def def" })
             );
 
@@ -106,10 +98,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsMultiRowElements()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(
                     new string[] {
                         "Test                       abc abc def def",
@@ -134,10 +124,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsMultipleElements()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(
                     new string[] {
                         "Test                       abc abc def def",
@@ -172,10 +160,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsMultipleElementsWithColour()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(
                     new string[] {
                         "Test                       abc abc def def Red",

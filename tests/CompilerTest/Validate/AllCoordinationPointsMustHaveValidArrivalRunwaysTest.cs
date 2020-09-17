@@ -24,22 +24,22 @@ namespace CompilerTest.Validate
                 new Airport("testairport1", "EGKK", new Coordinate("a", "b"), "a", "c")
             );
             this.sectorElements.Add(
-                new Runway("26L", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "testairport1", "")
+                new Runway("26L", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "EGKK testairport1", "")
             );
             this.sectorElements.Add(
                 new Airport("testairport2", "EGLL", new Coordinate("a", "b"), "a", "c")
             );
             this.sectorElements.Add(
-                new Runway("09R", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "testairport2", "")
+                new Runway("09R", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "EGLL testairport2", "")
             );
             this.sectorElements.Add(
-                new Runway("09L", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "testairport2", "")
+                new Runway("09L", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "EGLL testairport2", "")
             );
             this.sectorElements.Add(
                 new Airport("yetanotherairport", "EGSS", new Coordinate("a", "b"), "a", "c")
             );
             this.sectorElements.Add(
-                new Runway("04", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "notyetanothertestairport", "")
+                new Runway("04", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "EGSS notyetanothertestairport", "")
             );
 
             this.rule = new AllCoordinationPointsMustHaveValidArrivalRunways();
@@ -52,6 +52,7 @@ namespace CompilerTest.Validate
         [InlineData("EGLL", "09L")]
         [InlineData("EGLL", "*")]
         [InlineData("EGSS", "*")]
+        [InlineData("XXXX", "*")] // Airport doesnt exist, but any runway
         [InlineData("*", "09R")] // Should never happen
         [InlineData("*", "*")]
 
@@ -94,7 +95,6 @@ namespace CompilerTest.Validate
         }
 
         [Theory]
-        [InlineData("EGGW", "*")] // Airport doesnt exist
         [InlineData("EGLL", "27R")]
         [InlineData("EGLL", "27L")]
         [InlineData("EGKK", "08R")]

@@ -24,13 +24,14 @@ namespace Compiler.Parser
             this.errorLog = errorLog;
         }
 
-        public int ParseData(SectorFormatData data, int i)
+        public void ParseData(List<(int, string)> lines, string filename)
         {
-            SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+            int lineNumber = lines[0].Item1;
+            SectorFormatLine sectorData = this.sectorLineParser.ParseLine(lines[0].Item2);
             if (sectorData.dataSegments.Count != 11)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Incorrect number of Coordination Point segments", data.fullPath, i + 1)
+                    new SyntaxError("Incorrect number of Coordination Point segments", filename, lineNumber)
                 );
                 throw new Exception();
             }
@@ -40,7 +41,7 @@ namespace Compiler.Parser
                 sectorData.dataSegments[0] != CoordinationPoint.POINT_TYPE_INTERNAL
             ) {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Unknown Coordination point type " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                    new SyntaxError("Unknown Coordination point type " + sectorData.dataSegments[0], filename, lineNumber)
                 );
                 throw new Exception();
             }
@@ -50,7 +51,7 @@ namespace Compiler.Parser
                 sectorData.dataSegments[2] != "*"
             ) {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Cannot specify a runway without a departure airport " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                    new SyntaxError("Cannot specify a runway without a departure airport " + sectorData.dataSegments[0], filename, lineNumber)
                 );
                 throw new Exception();
             }
@@ -61,7 +62,7 @@ namespace Compiler.Parser
             )
                         {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Cannot specify a runway without an arrival airport " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                    new SyntaxError("Cannot specify a runway without an arrival airport " + sectorData.dataSegments[0], filename, lineNumber)
                 );
                 throw new Exception();
             }
@@ -71,7 +72,7 @@ namespace Compiler.Parser
                 sectorData.dataSegments[9] != CoordinationPoint.DATA_NOT_SPECIFIED
             ) {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Cannot set both descend and climb level " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                    new SyntaxError("Cannot set both descend and climb level " + sectorData.dataSegments[0], filename, lineNumber)
                 );
                 throw new Exception();
             }
@@ -82,7 +83,7 @@ namespace Compiler.Parser
                 climbLevel < 0)
             ) {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Invalid coordination point climb level " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                    new SyntaxError("Invalid coordination point climb level " + sectorData.dataSegments[0], filename, lineNumber)
                 );
                 throw new Exception();
             }
@@ -93,7 +94,7 @@ namespace Compiler.Parser
                 descendLevel < 0)
             ) {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Invalid coordination point descend level " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                    new SyntaxError("Invalid coordination point descend level " + sectorData.dataSegments[0], filename, lineNumber)
                 );
                 throw new Exception();
             }
@@ -114,9 +115,6 @@ namespace Compiler.Parser
                     sectorData.comment
                 )
             );
-
-            // This parser always processes one line
-            return 1;
         }
     }
 }

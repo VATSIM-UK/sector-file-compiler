@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -25,69 +26,63 @@ namespace CompilerTest.Parser
                 .GetParserForSection(OutputSections.SCT_GEO);
         }
 
-        [Fact]
-        public void TestItRaisesSyntaxErrorTooManySections()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "TestGeo                     N050.57.00.000 W001.21.24.490 N050.57.00.000 W001.21.24.490 test test" })
-            );
-            this.parser.ParseData(data);
+            new object[] { new List<string>{
+                "TestGeo                     N050.57.00.000 W001.21.24.490 N050.57.00.000 W001.21.24.490 test test"
+            }}, // Too many sections
+            new object[] { new List<string>{
+                "N050.57.00.000 W001.21.24.490 N050.57.00.000 W001.21.24.490"
+            }}, // Too few sections
+            new object[] { new List<string>{
+                "TestGeo                     N050.57.00.000 N050.57.00.001 N050.57.00.000 W001.21.24.490 test"
+            }}, // First point invalid
+            new object[] { new List<string>{
+                "TestGeo                     N050.57.00.000 W001.21.24.490 N050.57.00.000 N050.57.00.001 test"
+            }}, // Second point invalid
+            new object[] { new List<string>{
+                "COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:-5:*:|HEMEL20 ;comment"
+            }}, // Climb level negative
+            new object[] { new List<string>{
+                "COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:*:abc:|HEMEL20 ;comment"
+            }}, // Descend level not integer
+            new object[] { new List<string>{
+                "COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:*:-5:|HEMEL20 ;comment"
+            }}, // Descend level negative
+            new object[] { new List<string>{
+                "FIR_COPX:*:*:HEMEL:*:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment"
+            }}, // Arrival airport any, but runway set
+            new object[] { new List<string>{
+                "FIR_COPX:*:*:HEMEL:DIKAS:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment"
+            }}, // Next fix is a fix (not an airport) but arrival runway is specified
+            new object[] { new List<string>{
+                "FIR_COPX:*:09R:HEMEL:EGKK:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment"
+            }}, // Any departure airport, but runway specified
+            new object[] { new List<string>{
+                "FIR_COPX:IBROD:09R:HEMEL:EGKK:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment"
+            }}, // Next fix is a fix (not an airport) but departure runway is specified
+        };
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Exactly(2));
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorTooFewSections()
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "N050.57.00.000 W001.21.24.490 N050.57.00.000 W001.21.24.490" })
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
             );
-            this.parser.ParseData(data);
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Exactly(2));
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorFirstPointInvalid()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "TestGeo                     N050.57.00.000 N050.57.00.001 N050.57.00.000 W001.21.24.490 test" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Exactly(2));
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorSecondPointInvalid()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "TestGeo                     N050.57.00.000 W001.21.24.490 N050.57.00.000 N050.57.00.001 test" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Exactly(2));
+            Assert.Empty(this.collection.GeoElements);
+            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "" })
             );
 
@@ -98,10 +93,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsGeoData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
                 new List<string>(new string[] { "TestGeo                     N050.57.00.000 W001.21.24.490 BCN BCN test ;comment" })
             );
             this.parser.ParseData(data);
@@ -128,10 +121,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsFakePoint()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
                 new List<string>(new string[] { "TestGeo                     S999.00.00.000 E999.00.00.000 S999.00.00.000 E999.00.00.000" })
             );
             this.parser.ParseData(data);
@@ -146,7 +137,7 @@ namespace CompilerTest.Parser
                 result.Segments[0].SecondPoint
             );
             Assert.Equal(
-                "",
+                "0",
                 result.Segments[0].Colour
             );
             Assert.Equal(

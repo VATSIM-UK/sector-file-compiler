@@ -22,11 +22,15 @@ namespace Compiler.Model
 
         public string Compile()
         {
-            string output = this.Identifier.PadRight(27, ' ') + this.Segments[0].Compile();
+            string output = String.Format(
+                "{0} {1}",
+                this.Identifier.PadRight(26, ' '),
+                this.Segments[0].Compile()
+            );
 
             for (int i = 1; i < this.Segments.Count; i++)
             {
-                output += "".PadRight(27) + this.Segments[i].Compile();
+                output += "".PadRight(this.Identifier.PadRight(26, ' ').Length + 1) + this.Segments[i].Compile();
             }
 
             return output;

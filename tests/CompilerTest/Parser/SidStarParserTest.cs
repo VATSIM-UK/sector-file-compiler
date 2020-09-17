@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -28,10 +29,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItRaisesASyntaxErrorIfIncorrectNumberOfSegments()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "abc:def:ghi" })
             );
 
@@ -42,10 +41,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItRaisesAnErrorIfUnknownType()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "abc:def:ghi:jkl:mno" })
             );
 
@@ -56,10 +53,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "" })
             );
 
@@ -72,10 +67,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsSidStarData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 ;comment" })
             );
 

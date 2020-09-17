@@ -34,10 +34,13 @@ namespace CompilerTest.Validate
         public void TestItPassesOnValidReferences()
         {
             this.elements.Add(
-                new Runway("27", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "anairport", "")
+                new Runway("27", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "EGKK anairport", "")
             );
             this.elements.Add(
-                new Runway("27", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "anotherairport", "")
+                new Runway("27", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "EGLL anotherairport", "")
+            );
+            this.elements.Add(
+                new Runway("00", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "000A Show adjacent departure airports", "")
             );
 
             this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
@@ -48,7 +51,7 @@ namespace CompilerTest.Validate
         public void TestItFailsOnInvalidReferences()
         {
             this.elements.Add(
-                new Runway("27", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "notanairport", "")
+                new Runway("27", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "EGKK - anairport", "")
             );
             this.elements.Add(
                 new Runway("27", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "notanotherairport", "")

@@ -5,6 +5,7 @@ using Compiler.Parser;
 using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
+using CompilerTest.Mock;
 using Compiler.Output;
 
 namespace CompilerTest.Parser
@@ -25,71 +26,63 @@ namespace CompilerTest.Parser
                 .GetParserForSection(OutputSections.SCT_AIRPORT);
         }
 
-        [Fact]
-        public void TestItRaisesSyntaxErrorTooManyLines()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
+            new object[] { new List<string>{
                 "EGHI",
-                new List<string>(new string[] { "Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3",  "Another line!" })
-            );
-            this.parser.ParseData(data);
+                "Southampton; comment1",
+                "N050.57.00.000 W001.21.24.490 ;comment2",
+                "120.220 ;comment3",
+                "Another line!"
+            }}, // Too many lines
+            new object[] { new List<string>{
+                "EGHI",
+                "Southampton; comment1",
+                "N050.57.00.000 W001.21.24.490 ;comment2"
+            }}, // Too few lines
+            new object[] { new List<string>{
+                "1233",
+                "Southampton; comment1",
+                "N050.57.00.000 W001.21.24.490 ;comment2",
+                "120.220 ;comment3"
+            }}, // Invalid icao
+            new object[] { new List<string>{
+                "EGHI",
+                "Southampton; comment1",
+                "N050.57.00.000W001.21.24.490 ;comment2",
+                "120.220 ;comment3"
+            }}, // Invalid coordinate format
+            new object[] { new List<string>{
+                "EGHI",
+                "Southampton; comment1",
+                "NAA050.57.00.000 W001.21.24.490 ;comment2",
+                "120.220 ;comment3"
+            }}, // Invalid coordinates
+        };
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorTooFewLines()
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2" })
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
             );
-            this.parser.ParseData(data);
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorInvalidCoordinateFormat()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "Southampton; comment1", "N050.57.00.000W001.21.24.490 ;comment2", "120.220 ;comment3" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorInvalidCoordinates()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "Southampton; comment1", "NAA050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3" })
-            );
-            this.parser.ParseData(data);
-
+            Assert.Empty(this.collection.ActiveRunways);
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsAirportData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3" })
+                new List<string>(new string[] { "EGHI", "Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3" })
             );
+
             this.parser.ParseData(data);
 
             Airport result = this.collection.Airports[0];
@@ -103,12 +96,11 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsAirportDataNoLineComments()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { "Southampton", "N050.57.00.000 W001.21.24.490", "120.220" })
+                new List<string>(new string[] { "EGHI", "Southampton", "N050.57.00.000 W001.21.24.490", "120.220" })
             );
+
             this.parser.ParseData(data);
 
             Airport result = this.collection.Airports[0];
@@ -122,12 +114,11 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsAirportDataWithMetadataBetweenLines()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] { ";comment1", "Southampton; comment1", ";comment2", "N050.57.00.000 W001.21.24.490 ;comment2", ";comment3", "120.220 ;comment3", ";comment4" })
+                new List<string>(new string[] { ";comment1", "EGHI", "Southampton; comment1", ";comment2", "N050.57.00.000 W001.21.24.490 ;comment2", ";comment3", "120.220 ;comment3", ";comment4" })
             );
+
             this.parser.ParseData(data);
 
             Airport result = this.collection.Airports[0];

@@ -25,14 +25,14 @@ namespace Compiler.Parser
             this.errorLog = errorLog;
         }
 
-        public int ParseData(SectorFormatData data, int i)
+        public void ParseData(List<(int, string)> lines, string filename)
         {
-            // Check the declaration
-            SectorFormatLine declarationLine = this.sectorLineParser.ParseLine(data.lines[i]);
+            // Check the declaration line
+            SectorFormatLine declarationLine = this.sectorLineParser.ParseLine(lines[0].Item2);
             if (declarationLine.dataSegments[0] != "SECTOR")
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Invalid SECTOR declaration ", data.fullPath, i + 1)
+                    new SyntaxError("Invalid SECTOR declaration ", filename, lines[0].Item1)
                 );
                 throw new Exception();
             }
@@ -41,7 +41,7 @@ namespace Compiler.Parser
             if (!int.TryParse(declarationLine.dataSegments[2], out int minimumAltitude))
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("SECTOR minimum altitude must be an integer ", data.fullPath, i + 1)
+                    new SyntaxError("SECTOR minimum altitude must be an integer ", filename, lines[0].Item1)
                 );
                 throw new Exception();
             }
@@ -49,13 +49,12 @@ namespace Compiler.Parser
             if (!int.TryParse(declarationLine.dataSegments[3], out int maximumAltitude))
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("SECTOR maximum altitude must be an integer ", data.fullPath, i + 1)
+                    new SyntaxError("SECTOR maximum altitude must be an integer ", filename, lines[0].Item1)
                 );
                 throw new Exception();
             }
 
 
-            int nextLine = i + 1;
             SectorOwnerHierarchy ownerHierarchy = null;
             List<SectorAlternateOwnerHierarchy> altOwners = new List<SectorAlternateOwnerHierarchy>();
             SectorBorder border = new SectorBorder();
@@ -63,21 +62,17 @@ namespace Compiler.Parser
             List<SectorGuest> guests = new List<SectorGuest>();
             SectorDepartureAirports departureAirports = new SectorDepartureAirports();
             SectorArrivalAirports arrivalAirports = new SectorArrivalAirports();
-            while (nextLine < data.lines.Count)
+            int i = 1;
+            while (i < lines.Count)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[nextLine]))
+                if (this.ParseMetadata(lines[i].Item2))
                 {
-                    nextLine++;
+                    i++;
                     continue;
                 }
 
-                SectorFormatLine lineToParse = this.sectorLineParser.ParseLine(data.lines[nextLine]);
-
-                if (IsNewDeclaration(lineToParse))
-                {
-                    break;
-                }
+                SectorFormatLine lineToParse = this.sectorLineParser.ParseLine(lines[i].Item2);
 
                 /*
                  * Parse each line one at a time, stopping if we reach a new declaration.
@@ -129,18 +124,18 @@ namespace Compiler.Parser
                 catch (Exception exception)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError(exception.Message, data.fullPath, i + 1)
+                        new SyntaxError(exception.Message, filename, lines[i].Item1)
                     );
                     throw exception;
                 }
 
-                nextLine++;
+                i++;
             }
 
             if (ownerHierarchy == null)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Every SECTOR must have an owner ", data.fullPath, i + 1)
+                    new SyntaxError("Every SECTOR must have an owner ", filename, lines[0].Item1)
                 );
                 this.errorLog.AddEvent(
                     new ParserSuggestion("Have you added an OWNER declaration?")
@@ -163,8 +158,6 @@ namespace Compiler.Parser
                     declarationLine.comment
                 )
             );
-
-            return nextLine - i;
         }
 
         /*

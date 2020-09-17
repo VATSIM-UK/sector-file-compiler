@@ -2,10 +2,11 @@
 using Compiler.Model;
 using Compiler.Error;
 using Compiler.Event;
+using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class SidStarParser: AbstractSectorElementParser, IFileParser
+    public class SidStarParser: AbstractSectorElementParser, ISectorDataParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
@@ -23,21 +24,21 @@ namespace Compiler.Parser
             this.errorLog = errorLog;
         }
 
-        public void ParseData(SectorFormatData data)
+        public void ParseData(AbstractSectorDataFile data)
         {
-            for (int i = 0; i < data.lines.Count; i++)
+            foreach (string line in data)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(line))
                 {
                     continue;
                 }
 
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
                 if (sectorData.dataSegments.Count != 5)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Incorrect number of SIDSTAR segments", data.fullPath, i)
+                        new SyntaxError("Incorrect number of SIDSTAR segments", data.FullPath, data.CurrentLineNumber)
                     );
                     continue;
                 }
@@ -45,7 +46,7 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments[0] != "SID" && sectorData.dataSegments[0] != "STAR")
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Unknown SIDSTAR type " + sectorData.dataSegments[0], data.fullPath, i)
+                        new SyntaxError("Unknown SIDSTAR type " + sectorData.dataSegments[0], data.FullPath, data.CurrentLineNumber)
                     ); ;
                     continue;
                 }

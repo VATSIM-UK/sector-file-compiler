@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -28,10 +29,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsPositionData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:W002.43.29.830:N051.32.26.871:W002.43.29.831:N051.32.26.872:W002.43.29.832:N051.32.26.873:W002.43.29.833 ;comment" })
             );
 
@@ -58,10 +57,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsPositionDataSkippedCenters()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:W002.43.29.830:::::: ;comment" })
             );
 
@@ -85,10 +82,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsPositionDataSkippedSquawks()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-::-:N051.32.26.870:W002.43.29.830 ;comment" })
             );
 
@@ -109,129 +104,52 @@ namespace CompilerTest.Parser
             Assert.Equal(coordinateList, position.VisCentres);
         }
 
-        [Fact]
-        public void TestItRaisesASyntaxErrorInvalidNumberOfSegments()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301 ;comment" })
+            new object[] { new List<string>{
+                "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301 ;comment"
+            }}, // Incorrect number of segments
+            new object[] { new List<string>{
+                "LON_CTR:London Control:127.821:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:W002.43.29.830 ;comment"
+            }}, // Invalid RTF frequency
+            new object[] { new List<string>{
+                "LON_CTR:London Control:127.820:L:9:LON:LOL:-:-:0301:0377:N051.32.26.870:W002.43.29.830 ;comment"
+            }}, // Invalid suffix
+            new object[] { new List<string>{
+                "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0381:0377:N051.32.26.870:W002.43.29.830 ;comment"
+            }}, // Invalid squawk range start
+            new object[] { new List<string>{
+                "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0371xxxx:0377:N051.32.26.870:W002.43.29.830 ;comment"
+            }}, // Squawk range start has extra characters
+            new object[] { new List<string>{
+                "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0378:N051.32.26.870:W002.43.29.830 ;comment"
+            }}, // Invalid squawk range end
+            new object[] { new List<string>{
+                "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377xxxxx:N051.32.26.870:W002.43.29.830 ;comment"
+            }}, // Squawk range end has extra characters
+            new object[] { new List<string>{
+                "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:W002.43.29.830:::::::: ;comment"
+            }}, // Too many vis centers
+            new object[] { new List<string>{
+                "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:W002.43.29.830: ;comment"
+            }}, // Vis center missing longitude
+            new object[] { new List<string>{
+                "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:N002.43.29.830 ;comment"
+            }}, // Invalid vis center coordinate
+        };
+
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
+        {
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
             );
 
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorInvalidRtfFrequency()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "LON_CTR:London Control:127.821:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:W002.43.29.830 ;comment" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorInvalidSuffix()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:LOL:-:-:0301:0377:N051.32.26.870:W002.43.29.830 ;comment" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorInvalidStartSquawkRange()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0381:0377:N051.32.26.870:W002.43.29.830 ;comment" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorInvalidEndSquawkRange()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0378:N051.32.26.870:W002.43.29.830 ;comment" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorSquawkRangeEndLessThanStart()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0300:N051.32.26.870:W002.43.29.830 ;comment" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorTooManyVisCenters()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:W002.43.29.830:::::::: ;comment" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorVisCenterMissingLongitude()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:W002.43.29.830: ;comment" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorVisCenterInvalidCoordinate()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] { "LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:N002.43.29.830 ;comment" })
-            );
-
-            this.parser.ParseData(data);
+            Assert.Empty(this.collection.EsePositions);
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
     }

@@ -2,10 +2,11 @@
 using Compiler.Model;
 using Compiler.Error;
 using Compiler.Event;
+using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class FreetextParser : AbstractSectorElementParser, IFileParser
+    public class FreetextParser : AbstractSectorElementParser, ISectorDataParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
@@ -23,30 +24,30 @@ namespace Compiler.Parser
             this.errorLog = errorLog;
         }
 
-        public void ParseData(SectorFormatData data)
+        public void ParseData(AbstractSectorDataFile data)
         {
-            for (int i = 0; i < data.lines.Count; i++)
+            foreach (string line in data)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(line))
                 {
                     continue;
                 }
 
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
                 if (sectorData.dataSegments.Count != 4)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Incorrect number of Freetext segments", data.fullPath, i)
+                        new SyntaxError("Incorrect number of Freetext segments", data.FullPath, data.CurrentLineNumber)
                     );
-                    continue;
+                    return;
                 }
 
                 Coordinate parsedCoordinate = CoordinateParser.Parse(sectorData.dataSegments[0], sectorData.dataSegments[1]);
                 if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid coordinate format: " + data.lines[i], data.fullPath, i)
+                        new SyntaxError("Invalid coordinate format: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                     );
                     return;
                 }

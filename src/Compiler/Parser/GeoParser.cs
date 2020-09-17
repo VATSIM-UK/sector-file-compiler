@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Error;
+using Compiler.Input;
 using System.Linq;
 
 namespace Compiler.Parser
 {
-    public class GeoParser : AbstractSectorElementParser, IFileParser
+    public class GeoParser : AbstractSectorElementParser, ISectorDataParser
     {
         private readonly SectorElementCollection elements;
         private readonly ISectorLineParser sectorLineParser;
@@ -27,20 +28,20 @@ namespace Compiler.Parser
             this.eventLogger = eventLogger;
         }
 
-        public void ParseData(SectorFormatData data)
+        public void ParseData(AbstractSectorDataFile data)
         {
             bool foundFirst = false;
             string name = "";
             List<GeoSegment> segments = new List<GeoSegment>();
-            for (int i = 0; i < data.lines.Count; i++)
+            foreach (string line in data)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(line))
                 {
                     continue;
                 }
 
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
                 // Find the name
                 if (!foundFirst)
                 {
@@ -59,7 +60,7 @@ namespace Compiler.Parser
                         new GeoSegment(
                             new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
                             new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
-                            "",
+                            "0",
                             "Compiler inserted line"
                         )
                     );
@@ -70,9 +71,9 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments.Count != 5)
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Incorrect number parts for GEO segment", data.fullPath, i + 1)
+                        new SyntaxError("Incorrect number parts for GEO segment", data.FullPath, data.CurrentLineNumber)
                     );
-                    continue;
+                    return;
                 }
 
                 // Parse the first coordinate
@@ -80,9 +81,9 @@ namespace Compiler.Parser
                 if (parsedStartPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid GEO segment point format: " + data.lines[i], data.fullPath, i + 1)
+                        new SyntaxError("Invalid GEO segment point format: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                     );
-                    continue;
+                    return;
                 }
 
                 // Parse the end coordinate
@@ -90,9 +91,9 @@ namespace Compiler.Parser
                 if (parsedEndPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid GEO segment point format: " + data.lines[i], data.fullPath, i + 1)
+                        new SyntaxError("Invalid GEO segment point format: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                     );
-                    continue;
+                    return;
                 }
 
                 // Add segment
@@ -105,7 +106,7 @@ namespace Compiler.Parser
             if (segments.Count == 0)
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Expected GEO segements in file", data.fullPath, 0)
+                    new SyntaxError("Expected GEO segements in file", data.FullPath, 0)
                 );
                 return;
             }

@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -28,10 +29,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] {
                     "",
                     ";comment",
@@ -57,556 +56,273 @@ namespace CompilerTest.Parser
             );
         }
 
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidDeclaration()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "NOPESECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
+            new object[] { new List<string>{
+                "NOPESECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Invalid declaration
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:abc:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Invalid lower bound
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:abc ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Invalid upper bound
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Invalid owner
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Invalid ALTOWNER
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Invalid BORDER
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "BORDER:AAFIN2:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Duplicate border
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Invalid ACTIVE segments
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:LHR:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Invalid ACTIVE airport
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:36B ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Invalid ACTIVE runway
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:* ;comment7",
+            }}, // Invalid number of GUEST segments
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:000A ;comment7",
+            }}, // Invalid GUEST arrival airport
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:LHR:EGAA ;comment7",
+            }}, // Invalid GUEST departure airport
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Duplicate DEPAPT
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Invalid DEPAPT segments
+             new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:LHR ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Invalid DEPAPT code
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Duplicate ARRAPT
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Invalid number of ARRAPT segments
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "OWNER:AAF:AAR:STA ;comment2",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:LHR ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // Invalid ARRAPT code
+            new object[] { new List<string>{
+                "SECTOR:AAFIN:100:6000 ;comment1",
+                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
+                "ALTOWNER:AAWHAT2:S ;comment3.1",
+                "BORDER:AAFIN:AAWHAT ;comment4",
+                "ARRAPT:EGAA:EGAC ;comment5",
+                "DEPAPT:EGAA ;comment6",
+                "ACTIVE:EGLL:09R ;comment6.5",
+                "ACTIVE:EGLL:09L ;comment6.5.1",
+                "GUEST:GDR:*:EGAA ;comment7",
+            }}, // No OWNER defined
+
+        };
+
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
+        {
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
             );
 
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidLowerBound()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:abc:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidUpperBound()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:abc ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidOwner()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvaldAltOwner()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidBorder()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForDuplicateBorder()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "BORDER:AAFIN2:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidActiveSegments()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidAirportInActiveSegment()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:LHR:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidRunwayInActiveSegment()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:36B ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidGuestSegments()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:* ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidArrivalAirportInGuestSegment()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:000A ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidDepartureAirportInGuestSegment()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:LHR:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForDuplicateDepApt()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidDepAptSegments()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidDepAptCode()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:LHR ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForDuplicateArrApt()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidArrAptSegments()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidArrAptCode()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "OWNER:AAF:AAR:STA ;comment2",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:LHR ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForNoOwner()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTOR:AAFIN:100:6000 ;comment1",
-                    "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                    "ALTOWNER:AAWHAT2:S ;comment3.1",
-                    "BORDER:AAFIN:AAWHAT ;comment4",
-                    "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
-                    "ACTIVE:EGLL:09R ;comment6.5",
-                    "ACTIVE:EGLL:09L ;comment6.5.1",
-                    "GUEST:GDR:*:EGAA ;comment7",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.Sectors);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
         public void TestItAddsData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] {
                     "SECTOR:AAFIN:100:6000 ;comment1",
                     "OWNER:AAF:AAR:STA ;comment2",

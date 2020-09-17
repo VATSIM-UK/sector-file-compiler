@@ -27,16 +27,16 @@ namespace CompilerTest.Validate
             this.elements.Add(new Airport("b", "EGLL", new Coordinate("a", "b"), "a", "c"));
             this.elements.Add(new Airport("c", "EGCC", new Coordinate("a", "b"), "a", "c"));
             this.elements.Add(
-                new Runway("26L", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "a", "")
+                new Runway("26L", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "EGKK a", "a")
             );
             this.elements.Add(
-                new Runway("27L", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "b", "")
+                new Runway("27L", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "EGLL b", "b")
             );
             this.elements.Add(
-                new Runway("27R", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "b", "")
+                new Runway("27R", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "EGLL b", "b")
             );
             this.elements.Add(
-                new Runway("23L", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "c", "")
+                new Runway("23L", 270, new Coordinate("abc", "def"), "09", 90, new Coordinate("abc", "def"), "EGCC c", "c")
             );
         }
 
@@ -45,6 +45,7 @@ namespace CompilerTest.Validate
         [InlineData("EGLL", "27L", "EGLL", "27R")]
         [InlineData("EGKK", "26L", "EGCC", "23L")]
         [InlineData("EGCC", "23L", "EGCC", "23L")]
+        [InlineData("000A", "00", "000A", "01")]
         public void TestItPassesOnAllValid(string firstAirport, string firstRunway, string secondAirport, string secondRunway)
         {
             this.elements.Add(
@@ -138,6 +139,7 @@ namespace CompilerTest.Validate
         [InlineData("EGKK", "27L", "EGLL", "27R", 2)]
         [InlineData("EGKK", "26R", "EGKK", "26R", 2)] // Double failures only count once
         [InlineData("EGLL", "26R", "EGLL", "23L", 2)]
+        [InlineData("000B", "01", "000A", "04", 2)]
         public void TestItFailsOnInvalid (string firstAirport, string firstRunway, string secondAirport, string secondRunway, int failTimes)
         {
             this.elements.Add(

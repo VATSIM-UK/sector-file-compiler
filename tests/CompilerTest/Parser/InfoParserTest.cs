@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -28,10 +29,8 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsInfoData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "EGHI",
                 new List<string>(new string[] {
                     "UK (EGTT and EGPX) {VERSION}",
                     "LON_CTR",
@@ -57,109 +56,52 @@ namespace CompilerTest.Parser
             Assert.Equal(10, result.Scale);
         }
 
-        [Fact]
-        public void TestItRaisesSyntaxErrorForNotEnoughData()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] {
-                    "UK (EGTT and EGPX) {VERSION}",
-                    "LON_CTR",
-                    "EGLL",
-                    "N053.03.32.931",
-                    "W001.00.00.000",
-                    "60",
-                    "36.06",
-                    "-1.0",
-                })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidLatitude()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] {
-                    "UK (EGTT and EGPX) {VERSION}",
-                    "LON_CTR",
-                    "EGLL",
-                    "abc",
-                    "W001.00.00.000",
-                    "60",
-                    "36.06",
-                    "-1.0",
-                    "10",
-                })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidLongitude()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] {
-                    "UK (EGTT and EGPX) {VERSION}",
-                    "LON_CTR",
-                    "EGLL",
-                    "N053.03.32.931",
-                    "abc",
-                    "60",
-                    "36.06",
-                    "-1.0",
-                    "10",
-                })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidMilesPerLatitude()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] {
-                    "UK (EGTT and EGPX) {VERSION}",
-                    "LON_CTR",
-                    "EGLL",
-                    "N053.03.32.931",
-                    "W001.00.00.000",
-                    "abc",
-                    "36.06",
-                    "-1.0",
-                    "10",
-                })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidMilesPerLongitude()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] {
+            new object[] { new List<string>{
+                "UK (EGTT and EGPX) {VERSION}",
+                "LON_CTR",
+                "EGLL",
+                "N053.03.32.931",
+                "W001.00.00.000",
+                "60",
+                "36.06",
+                "-1.0",
+            }}, // Not enough data
+            new object[] { new List<string>{
+                "UK (EGTT and EGPX) {VERSION}",
+                "LON_CTR",
+                "EGLL",
+                "abc",
+                "W001.00.00.000",
+                "60",
+                "36.06",
+                "-1.0",
+                "10",
+            }}, // Invalid latitude
+            new object[] { new List<string>{
+                "UK (EGTT and EGPX) {VERSION}",
+                "LON_CTR",
+                "EGLL",
+                "N053.03.32.931",
+                "abc",
+                "60",
+                "36.06",
+                "-1.0",
+                "10",
+            }}, // Invalid longitude
+            new object[] { new List<string>{
+                "UK (EGTT and EGPX) {VERSION}",
+                "LON_CTR",
+                "EGLL",
+                "N053.03.32.931",
+                "W001.00.00.000",
+                "abc",
+                "36.06",
+                "-1.0",
+                "10",
+            }}, // Invalid miles per latitude
+            new object[] { new List<string>{
                     "UK (EGTT and EGPX) {VERSION}",
                     "LON_CTR",
                     "EGLL",
@@ -169,21 +111,8 @@ namespace CompilerTest.Parser
                     "abc",
                     "-1.0",
                     "10",
-                })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidMagvar()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] {
+            }}, // Invalid miles per longitude
+            new object[] { new List<string>{
                     "UK (EGTT and EGPX) {VERSION}",
                     "LON_CTR",
                     "EGLL",
@@ -193,21 +122,8 @@ namespace CompilerTest.Parser
                     "36.06",
                     "abc",
                     "10",
-                })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidScale()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "EGHI",
-                new List<string>(new string[] {
+            }}, // Invalid magvar
+            new object[] { new List<string>{
                     "UK (EGTT and EGPX) {VERSION}",
                     "LON_CTR",
                     "EGLL",
@@ -217,10 +133,21 @@ namespace CompilerTest.Parser
                     "36.06",
                     "-1.0",
                     "abc",
-                })
-            );
-            this.parser.ParseData(data);
+            }}, // Invalid scale
+        };
 
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
+        {
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
+            );
+
+            Assert.Null(this.collection.Info);
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
     }

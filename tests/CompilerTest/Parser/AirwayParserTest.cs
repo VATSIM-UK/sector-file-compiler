@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -25,69 +26,43 @@ namespace CompilerTest.Parser
                 .GetParserForSection(OutputSections.SCT_LOW_AIRWAY);
         }
 
-        [Fact]
-        public void TestItRaisesSyntaxErrorNotEnoughSegments()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "UN864.txt",
-                "UN864",
-                "EGHI",
-                new List<string>(new string[] { "BHD BHD DIKAS" })
-            );
-            this.parser.ParseData(data);
+            new object[] { new List<string>{
+                "BHD BHD DIKAS DIKAS"
+            }}, // Too few segments
+            new object[] { new List<string>{
+                "N864 BHD BHD DIKAS DIKAS EXMOR"
+            }}, // Too many segments
+            new object[] { new List<string>{
+                "N864 N050.57.00.000 W001.21.24.490 N050.57.00.000 N001.21.24.490"
+            }}, // Invalid end point
+            new object[] { new List<string>{
+                "N864 N050.57.00.000 N001.21.24.490 N050.57.00.000 W001.21.24.490"
+            }}, // Invalid start point
+        };
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorTooManySegments()
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            SectorFormatData data = new SectorFormatData(
-                "UN864.txt",
-                "UN864",
-                "EGHI",
-                new List<string>(new string[] { "BHD BHD DIKAS DIKAS EXMOR" })
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
             );
-            this.parser.ParseData(data);
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorInvalidEndPoint()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "UN864.txt",
-                "UN864",
-                "EGHI",
-                new List<string>(new string[] { "N050.57.00.000 W001.21.24.490 N050.57.00.000 N001.21.24.490" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorInvalidStartPoint()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "UN864.txt",
-                "UN864",
-                "EGHI",
-                new List<string>(new string[] { "N050.57.00.000 N001.21.24.490 N050.57.00.000 W001.21.24.490" })
-            );
-            this.parser.ParseData(data);
-
+            Assert.Empty(this.collection.HighAirways);
+            Assert.Empty(this.collection.LowAirways);
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItHandlesMetadata()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "UN864.txt",
-                "UN864",
-                "test",
                 new List<string>(new string[] { "" })
             );
 
@@ -100,11 +75,9 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsAirwayData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "UN864.txt",
-                "UN864",
-                "EGHI",
-                new List<string>(new string[] { "N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" })
+                new List<string>(new string[] { "UN864 N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" })
             );
             this.parser.ParseData(data);
 
@@ -119,11 +92,9 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsAirwayDataWithIdentifiers()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "UN864.txt",
-                "UN864",
-                "EGHI",
-                new List<string>(new string[] { "DIKAS DIKAS BHD BHD;comment" })
+                new List<string>(new string[] { "UN864 DIKAS DIKAS BHD BHD;comment" })
             );
             this.parser.ParseData(data);
 

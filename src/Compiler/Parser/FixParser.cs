@@ -4,10 +4,11 @@ using System.Text;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Error;
+using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class FixParser : AbstractSectorElementParser, IFileParser
+    public class FixParser : AbstractSectorElementParser, ISectorDataParser
     {
         private readonly SectorElementCollection elements;
         private readonly ISectorLineParser sectorLineParser;
@@ -25,22 +26,22 @@ namespace Compiler.Parser
             this.eventLogger = eventLogger;
         }
 
-        public void ParseData(SectorFormatData data)
+        public void ParseData(AbstractSectorDataFile data)
         {
-            for (int i = 0; i < data.lines.Count; i++)
+            foreach (string line in data)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(line))
                 {
                     continue;
                 }
 
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
 
                 if (sectorData.dataSegments.Count != 3)
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Incorrect number of FIX segments", data.fullPath, i)
+                        new SyntaxError("Incorrect number of FIX segments", data.FullPath, data.CurrentLineNumber)
                     );
                     continue;
                 }
@@ -50,7 +51,7 @@ namespace Compiler.Parser
                 if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid coordinate format: " + data.lines[i], data.fullPath, i)
+                        new SyntaxError("Invalid coordinate format: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
                     );
                     return;
                 }

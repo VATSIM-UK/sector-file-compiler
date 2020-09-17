@@ -3,10 +3,11 @@ using System.Text.RegularExpressions;
 using Compiler.Model;
 using Compiler.Error;
 using Compiler.Event;
+using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class EsePositionParser: AbstractSectorElementParser, IFileParser
+    public class EsePositionParser: AbstractSectorElementParser, ISectorDataParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly IFrequencyParser frequencyParser;
@@ -41,24 +42,24 @@ namespace Compiler.Parser
             this.frequencyParser = frequencyParser;
             this.sectorElements = sectorElements;
             this.errorLog = errorLog;
-            this.squawkRegex = new Regex(@"[0-7]{4}");
+            this.squawkRegex = new Regex(@"^[0-7]{4}$");
         }
 
-        public void ParseData(SectorFormatData data)
+        public void ParseData(AbstractSectorDataFile data)
         {
-            for (int i = 0; i < data.lines.Count; i++)
+            foreach (string line in data)
             {
                 // Defer all metadata lines to the base
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(line))
                 {
                     continue;
                 }
 
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(data.lines[i]);
+                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
                 if (sectorData.dataSegments.Count < 11)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Incorrect number of ESE position segments", data.fullPath, i + 1)
+                        new SyntaxError("Incorrect number of ESE position segments", data.FullPath, data.CurrentLineNumber)
                     );
                     this.errorLog.AddEvent(
                         new ParserSuggestion("Have you remembered to add the two non-used fields?")
@@ -69,7 +70,7 @@ namespace Compiler.Parser
                 if (this.frequencyParser.ParseFrequency(sectorData.dataSegments[2]) == null)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid RTF frequency " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                        new SyntaxError("Invalid RTF frequency " + sectorData.dataSegments[0], data.FullPath, data.CurrentLineNumber)
                     );
                     continue;
                 }
@@ -77,7 +78,7 @@ namespace Compiler.Parser
                 if (!this.allowedTypes.Contains(sectorData.dataSegments[6]))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Unknown Position suffix " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                        new SyntaxError("Unknown Position suffix " + sectorData.dataSegments[0], data.FullPath, data.CurrentLineNumber)
                     );
                     continue;
                 }
@@ -86,7 +87,7 @@ namespace Compiler.Parser
                 {
                     if (!squawkRegex.IsMatch(sectorData.dataSegments[9])) {
                         this.errorLog.AddEvent(
-                            new SyntaxError("Invalid squawk range start " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                            new SyntaxError("Invalid squawk range start " + sectorData.dataSegments[0], data.FullPath, data.CurrentLineNumber)
                         );
                         continue;
                     }
@@ -94,7 +95,7 @@ namespace Compiler.Parser
                     if (!squawkRegex.IsMatch(sectorData.dataSegments[10]))
                     {
                         this.errorLog.AddEvent(
-                            new SyntaxError("Invalid squawk range end " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                            new SyntaxError("Invalid squawk range end " + sectorData.dataSegments[0], data.FullPath, data.CurrentLineNumber)
                         );
                         continue;
                     }
@@ -102,7 +103,7 @@ namespace Compiler.Parser
                     if (int.Parse(sectorData.dataSegments[10]) < int.Parse(sectorData.dataSegments[9]))
                     {
                         this.errorLog.AddEvent(
-                            new SyntaxError("Squawk range end is smaller than start " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                            new SyntaxError("Squawk range end is smaller than start " + sectorData.dataSegments[0], data.FullPath, data.CurrentLineNumber)
                         );
                         continue;
                     }
@@ -115,7 +116,7 @@ namespace Compiler.Parser
                 if (sectorData.dataSegments.Count - coordNumber > 8)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("A maxium of 4 visibility centers may be specified " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                        new SyntaxError("A maxium of 4 visibility centers may be specified " + sectorData.dataSegments[0], data.FullPath, data.CurrentLineNumber)
                     );
                     continue;
                 }
@@ -128,7 +129,7 @@ namespace Compiler.Parser
                     if (coordNumber + 1 == sectorData.dataSegments.Count)
                     {
                         this.errorLog.AddEvent(
-                            new SyntaxError("Missing visibility center longitude coordinate " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                            new SyntaxError("Missing visibility center longitude coordinate " + sectorData.dataSegments[0], data.FullPath, data.CurrentLineNumber)
                         );
                         coordinateError = true;
                         break;
@@ -149,7 +150,7 @@ namespace Compiler.Parser
                     if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
                     {
                         this.errorLog.AddEvent(
-                            new SyntaxError("Invalid visibility center " + sectorData.dataSegments[0], data.fullPath, i + 1)
+                            new SyntaxError("Invalid visibility center " + sectorData.dataSegments[0], data.FullPath, data.CurrentLineNumber)
                         );
                         coordinateError = true;
                         break;

@@ -14,8 +14,9 @@ namespace Compiler.Validate
                 if (!ColourValidator.ColourValid(sectorElements, region.Colour))
                 {
                     string errorMessage = string.Format(
-                        "Invalid colour value {0} for region",
-                        region.Colour
+                        "Invalid colour value {0} for region {1}",
+                        region.Colour,
+                        region.Name
                     );
                     events.AddEvent(new ValidationRuleFailure(errorMessage));
                     continue;

@@ -6,6 +6,7 @@ using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Output;
+using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
@@ -25,253 +26,95 @@ namespace CompilerTest.Parser
                 .GetParserForSection(OutputSections.ESE_AIRSPACE);
         }
 
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidType()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "NOPE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
-                    "DISPLAY:BBAPP:BBAPP:BBTWR ;comment1",
-                    "DISPLAY:BBTWR:BBAPP:BBTWR ;comment2",
-                })
+            new object[] { new List<string>{
+                "NOPE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
+                "DISPLAY:BBAPP:BBAPP:BBTWR ;comment1",
+                "DISPLAY:BBTWR:BBAPP:BBTWR ;comment2",
+            }}, // Invalid type
+            new object[] { new List<string>{
+                "CIRCLE_SECTORLINE:BBTWR:EGBB ;comment",
+                "DISPLAY:BBAPP:BBAPP:BBTWR ;comment1",
+                "DISPLAY:BBTWR:BBAPP:BBTWR ;comment2",
+            }}, // Invalid segments CIRCLE_SECTORLINE
+            new object[] { new List<string>{
+                "CIRCLE_SECTORLINE:AEAPP:W054.39.27.000:W006.12.57.000:30 ;comment3",
+                "DISPLAY:AEAPP:AEAPP:Rathlin West ;comment4"
+            }}, // Invalid coordinate CIRCLE_SECTORLINE
+            new object[] { new List<string>{
+                "CIRCLE_SECTORLINE:BBTWR:EGBB:abc ;comment",
+                "DISPLAY:BBAPP:BBAPP:BBTWR ;comment1",
+                "DISPLAY:BBTWR:BBAPP:BBTWR ;comment2",
+            }}, // Invalid radius CIRCLE_SECTORLINE
+            new object[] { new List<string>{
+                "CIRCLE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
+                "DISPLAY:BBAPP:BBAPP ;comment1",
+                "DISPLAY:BBTWR:BBAPP:BBTWR ;comment2",
+            }}, // Invalid display rule CIRCLE_SECTORLINE
+            new object[] { new List<string>{
+                "SECTORLINE:JJCTR - S6:LOLOL ;comment1",
+                "DISPLAY:London S6:JJCTR:London S6 ;comment2",
+                "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
+                "COORD:N050.00.00.000:W002.40.34.000 ;comment4",
+                "COORD:N049.59.60.000:W002.29.35.000 ;comment5",
+            }}, // Invalid declaration SECTORLINE
+            new object[] { new List<string>{
+                "SECTORLINE:JJCTR - S6 ;comment1",
+                "WHATDISPLAY:London S6:JJCTR:London S6 ;comment2",
+                "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
+                "COORD:N050.00.00.000:W002.40.34.000 ;comment4",
+                "COORD:N049.59.60.000:W002.29.35.000 ;comment5",
+            }}, // Unknown row SECTORLINE
+            new object[] { new List<string>{
+                "SECTORLINE:JJCTR - S6 ;comment1",
+                "DISPLAY:London S6:JJCTR:London S6 ;comment2",
+                "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
+            }}, // No coordinates SECTORLINE
+            new object[] { new List<string>{
+                "SECTORLINE:JJCTR - S6 ;comment1",
+                "DISPLAY:London S6:JJCTR:London S6:HI ;comment2",
+                "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
+                "COORD:N050.00.00.000:W002.40.34.000 ;comment4",
+                "COORD:N049.59.60.000:W002.29.35.000 ;comment5",
+            }}, // Invalid display rule SECTORLINE
+            new object[] { new List<string>{
+                "SECTORLINE:JJCTR - S6 ;comment1",
+                "DISPLAY:London S6:JJCTR:London S6 ;comment2",
+                "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
+                "COORD:N050.00.00.000:W002.40.34.000:HI ;comment4",
+                "COORD:N049.59.60.000:W002.29.35.000 ;comment5",
+            }}, // Too many coordinate segments SECTORLINE
+            new object[] { new List<string>{
+                "SECTORLINE:JJCTR - S6 ;comment1",
+                "DISPLAY:London S6:JJCTR:London S6 ;comment2",
+                "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
+                "COORD:W050.00.00.000:W002.40.34.000 ;comment4",
+                "COORD:N049.59.60.000:W002.29.35.000 ;comment5",
+            }}, // Invalid coordinate SECTORLINE
+        };
+
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
+        {
+            this.parser.ParseData(
+                new MockSectorDataFile(
+                    "test.txt",
+                    lines
+                )
             );
 
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
             Assert.Empty(this.collection.SectorLines);
             Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidSegmentsCircleSectorline()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "CIRCLE_SECTORLINE:BBTWR:EGBB ;comment",
-                    "DISPLAY:BBAPP:BBAPP:BBTWR ;comment1",
-                    "DISPLAY:BBTWR:BBAPP:BBTWR ;comment2",
-                })
-            );
-
-            this.parser.ParseData(data);
             this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.SectorLines);
-            Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidCoordinateCircleSectorline()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "CIRCLE_SECTORLINE:AEAPP:W054.39.27.000:W006.12.57.000:30 ;comment3",
-                    "DISPLAY:AEAPP:AEAPP:Rathlin West ;comment4"
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.SectorLines);
-            Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidRadiusCircleSectorline()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "CIRCLE_SECTORLINE:BBTWR:EGBB:abc ;comment",
-                    "DISPLAY:BBAPP:BBAPP:BBTWR ;comment1",
-                    "DISPLAY:BBTWR:BBAPP:BBTWR ;comment2",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.SectorLines);
-            Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidDisplayRuleCircleSectorline()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "CIRCLE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
-                    "DISPLAY:BBAPP:BBAPP ;comment1",
-                    "DISPLAY:BBTWR:BBAPP:BBTWR ;comment2",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.SectorLines);
-            Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidDeclarationStandardSectorline()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTORLINE:JJCTR - S6:LOLOL ;comment1",
-                    "DISPLAY:London S6:JJCTR:London S6 ;comment2",
-                    "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
-                    "COORD:N050.00.00.000:W002.40.34.000 ;comment4",
-                    "COORD:N049.59.60.000:W002.29.35.000 ;comment5",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.SectorLines);
-            Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForUnknownRowStandardSectorline()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTORLINE:JJCTR - S6 ;comment1",
-                    "WHATDISPLAY:London S6:JJCTR:London S6 ;comment2",
-                    "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
-                    "COORD:N050.00.00.000:W002.40.34.000 ;comment4",
-                    "COORD:N049.59.60.000:W002.29.35.000 ;comment5",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.SectorLines);
-            Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForNoCoordinatesStandardSectorline()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTORLINE:JJCTR - S6 ;comment1",
-                    "DISPLAY:London S6:JJCTR:London S6 ;comment2",
-                    "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.SectorLines);
-            Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidDisplayRuleStandardSectorline()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTORLINE:JJCTR - S6 ;comment1",
-                    "DISPLAY:London S6:JJCTR:London S6:HI ;comment2",
-                    "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
-                    "COORD:N050.00.00.000:W002.40.34.000 ;comment4",
-                    "COORD:N049.59.60.000:W002.29.35.000 ;comment5",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.SectorLines);
-            Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidSectorsDeclarationStandardSectorline()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTORLINE:JJCTR - S6 ;comment1",
-                    "DISPLAY:London S6:JJCTR:London S6 ;comment2",
-                    "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
-                    "COORD:N050.00.00.000:W002.40.34.000:HI ;comment4",
-                    "COORD:N049.59.60.000:W002.29.35.000 ;comment5",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.SectorLines);
-            Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
-        }
-
-        [Fact]
-        public void TestItRaisesSyntaxErrorForInvalidCoordinateStandardSectorline()
-        {
-            SectorFormatData data = new SectorFormatData(
-                "test.txt",
-                "test",
-                "test",
-                new List<string>(new string[] {
-                    "SECTORLINE:JJCTR - S6 ;comment1",
-                    "DISPLAY:London S6:JJCTR:London S6 ;comment2",
-                    "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
-                    "COORD:W050.00.00.000:W002.40.34.000 ;comment4",
-                    "COORD:N049.59.60.000:W002.29.35.000 ;comment5",
-                })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-            Assert.Empty(this.collection.SectorLines);
-            Assert.Empty(this.collection.CircleSectorLines);
-            Assert.Empty(this.collection.Compilables[OutputSections.ESE_AIRSPACE]);
         }
 
         [Fact]
         public void TestItAddsCircleSectorlines()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] {
                     "CIRCLE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
                     "DISPLAY:BBAPP:BBAPP:BBTWR ;comment1",
@@ -314,20 +157,18 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsSectorlines()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] {
                     "SECTORLINE:JJCTR - S6 ;comment1",
                     "DISPLAY:London S6:JJCTR:London S6 ;comment2",
                     "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
                     "COORD:N050.00.00.000:W002.40.34.000 ;comment4",
-                    "COORD:N049.59.60.000:W002.29.35.000 ;comment5",
+                    "COORD:N049.59.59.000:W002.29.35.000 ;comment5",
                     "SECTORLINE:JJCTR - LS ;comment6",
                     "DISPLAY:London AC Worthing:JJCTR:London S6 ;comment7",
                     "DISPLAY:JJCTR:JJCTR:London AC Worthing ;comment8",
-                    "COORD:N049.59.60.000:W002.29.35.000 ;comment9",
+                    "COORD:N049.59.59.000:W002.29.35.000 ;comment9",
                     "COORD:N050.00.00.000:W001.47.00.000 ;comment10",
                 })
             );
@@ -348,7 +189,7 @@ namespace CompilerTest.Parser
             List<SectorlineCoordinate> coordinates1 = new List<SectorlineCoordinate>
             {
                 new SectorlineCoordinate(new Coordinate("N050.00.00.000", "W002.40.34.000"), "comment4"),
-                new SectorlineCoordinate(new Coordinate("N049.59.60.000", "W002.29.35.000"), "comment5"),
+                new SectorlineCoordinate(new Coordinate("N049.59.59.000", "W002.29.35.000"), "comment5"),
             };
             Assert.Equal(coordinates1, result1.Coordinates);
             Assert.Equal("comment1", result1.Comment);
@@ -367,7 +208,7 @@ namespace CompilerTest.Parser
 
             List<SectorlineCoordinate> coordinates2 = new List<SectorlineCoordinate>
             {
-                new SectorlineCoordinate(new Coordinate("N049.59.60.000", "W002.29.35.000"), "comment9"),
+                new SectorlineCoordinate(new Coordinate("N049.59.59.000", "W002.29.35.000"), "comment9"),
                 new SectorlineCoordinate(new Coordinate("N050.00.00.000", "W001.47.00.000"), "comment10"),
             };
             Assert.Equal(coordinates2, result2.Coordinates);
@@ -377,15 +218,13 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsMixedData()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] {
                     "SECTORLINE:JJCTR - LS ;comment6",
                     "DISPLAY:London AC Worthing:JJCTR:London S6 ;comment7",
                     "DISPLAY:JJCTR:JJCTR:London AC Worthing ;comment8",
-                    "COORD:N049.59.60.000:W002.29.35.000 ;comment9",
+                    "COORD:N049.59.59.000:W002.29.35.000 ;comment9",
                     "COORD:N050.00.00.000:W001.47.00.000 ;comment10",
                     "",
                     "CIRCLE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
@@ -424,7 +263,7 @@ namespace CompilerTest.Parser
 
             List<SectorlineCoordinate> coordinates2 = new List<SectorlineCoordinate>
             {
-                new SectorlineCoordinate(new Coordinate("N049.59.60.000", "W002.29.35.000"), "comment9"),
+                new SectorlineCoordinate(new Coordinate("N049.59.59.000", "W002.29.35.000"), "comment9"),
                 new SectorlineCoordinate(new Coordinate("N050.00.00.000", "W001.47.00.000"), "comment10"),
             };
             Assert.Equal(coordinates2, result2.Coordinates);
@@ -434,13 +273,11 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsMixedDataNoDisplayRules()
         {
-            SectorFormatData data = new SectorFormatData(
+            MockSectorDataFile data = new MockSectorDataFile(
                 "test.txt",
-                "test",
-                "test",
                 new List<string>(new string[] {
                     "SECTORLINE:JJCTR - LS ;comment6",
-                    "COORD:N049.59.60.000:W002.29.35.000 ;comment9",
+                    "COORD:N049.59.59.000:W002.29.35.000 ;comment9",
                     "COORD:N050.00.00.000:W001.47.00.000 ;comment10",
                     "",
                     "CIRCLE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
@@ -473,7 +310,7 @@ namespace CompilerTest.Parser
 
             List<SectorlineCoordinate> coordinates2 = new List<SectorlineCoordinate>
             {
-                new SectorlineCoordinate(new Coordinate("N049.59.60.000", "W002.29.35.000"), "comment9"),
+                new SectorlineCoordinate(new Coordinate("N049.59.59.000", "W002.29.35.000"), "comment9"),
                 new SectorlineCoordinate(new Coordinate("N050.00.00.000", "W001.47.00.000"), "comment10"),
             };
             Assert.Equal(coordinates2, result2.Coordinates);

@@ -14,6 +14,7 @@ namespace Compiler.Validate
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
             List<string> airports = sectorElements.Airports.Select(airport => airport.Icao).ToList();
+            airports.Add("000A");
             foreach (Sector sector in sectorElements.Sectors)
             {
                 foreach (SectorActive active in sector.Active)

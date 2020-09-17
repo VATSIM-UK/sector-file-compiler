@@ -13,7 +13,10 @@ namespace Compiler.Validate
     {
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            List<string> airportDescriptions = sectorElements.Airports.Select(airport => airport.Name).ToList();
+            List<string> airportDescriptions = sectorElements.Airports
+                .Select(airport => airport.Icao + " " + airport.Name)
+                .ToList();
+            airportDescriptions.Add("000A Show adjacent departure airports");
             foreach (Runway runway in sectorElements.Runways)
             {
                 if (!airportDescriptions.Contains(runway.RunwayDialogDescription))

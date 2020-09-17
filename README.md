@@ -77,6 +77,9 @@ the VOR section could have subsections for VORs within each FIR.
 
 `ese_airspace` - The \[AIRSPACE\] section of the ESE.
 
+### RWY (EuroScope Only)
+`rwy_active` - The default active runway setup (.rwy file)
+
 ### Example compiler configuration
 
 ```JSON
@@ -112,6 +115,8 @@ the VOR section could have subsections for VORs within each FIR.
 times, then the compiler will attempt to merge the configs together.
 
 `--out-file-ese` - Takes a single argument. Where the output file for the EuroScope ESE should be generated.
+
+`--out-file-rwy` - Takes a single argument. Where the output file for the EuroScope RWY should be generated.
 
 `--out-file-sct` - Takes a single argument. Where the output file for the SCT should be generated.
 

@@ -44,6 +44,8 @@ namespace Compiler.Model
 
         public List<Runway> Runways { get; } = new List<Runway>();
 
+        public List<ActiveRunway> ActiveRunways { get; } = new List<ActiveRunway>();
+
         public Dictionary<OutputSections, List<ICompilable>> Compilables { get; } = new Dictionary<OutputSections, List<ICompilable>>();
 
         public SectorElementCollection()
@@ -141,6 +143,12 @@ namespace Compiler.Model
         {
             this.Compilables[OutputSections.SCT_RUNWAY].Add(runway);
             this.Runways.Add(runway);
+        }
+
+        public void Add(ActiveRunway runway)
+        {
+            this.Compilables[OutputSections.RWY_ACTIVE_RUNWAYS].Add(runway);
+            this.ActiveRunways.Add(runway);
         }
 
         public void Add(SidStarRoute sidStar)

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Error;
 using Compiler.Model;
+using Compiler.Validate;
+using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class AirportParser : AbstractSectorElementParser, IFileParser
+    public class AirportParser : AbstractSectorElementParser, ISectorDataParser
     {
         private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection elements;
@@ -24,48 +26,71 @@ namespace Compiler.Parser
             this.eventLogger = eventLogger;
         }
 
-        public void ParseData(SectorFormatData data)
+        public void ParseData(AbstractSectorDataFile data)
         {
             int linesParsed = 0;
+
+            int icaoLineNumber = 0;
+            SectorFormatLine icaoLine = new SectorFormatLine("", new List<string>(), "");
+            int nameLineNumber = 0;
             SectorFormatLine nameLine = new SectorFormatLine("", new List<string>(), "");
+            int coordinateLineNumber = 0;
             SectorFormatLine coordinateLine = new SectorFormatLine("", new List<string>(), "");
+            int frequencyLineNumber = 0;
             SectorFormatLine frequencyLine = new SectorFormatLine("", new List<string>(), "");
 
             // Loop the lines to get the data out
-            for (int i = 0; i < data.lines.Count; i++)
+            foreach (string line in data)
             {
-                if (this.ParseMetadata(data.lines[i]))
+                if (this.ParseMetadata(line))
                 {
                     continue;
                 }
 
-                SectorFormatLine parsedLine = this.sectorLineParser.ParseLine(data.lines[i]);
+                SectorFormatLine parsedLine = this.sectorLineParser.ParseLine(line);
                 if (linesParsed == 0)
                 {
-                    nameLine = parsedLine;
+                    icaoLine = parsedLine;
+                    icaoLineNumber = data.CurrentLineNumber;
                     linesParsed++;
                     continue;
                 } else if (linesParsed == 1) {
-                    coordinateLine = parsedLine;
+                    nameLine = parsedLine;
+                    nameLineNumber = data.CurrentLineNumber;
                     linesParsed++;
                     continue;
                 } else if (linesParsed == 2) {
+                    coordinateLine = parsedLine;
+                    coordinateLineNumber = data.CurrentLineNumber;
+                    linesParsed++;
+                    continue;
+                } else if (linesParsed == 3) {
                     frequencyLine = parsedLine;
+                    frequencyLineNumber = data.CurrentLineNumber;
                     linesParsed++;
                     continue;
                 }
 
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid number of airport lines", data.fullPath, 0)
+                    new SyntaxError("Invalid number of airport lines", data.FullPath, data.CurrentLineNumber)
                 );
                 return;
             }
 
             // Check the syntax
-            if (linesParsed != 3)
+            if (linesParsed != 4)
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid number of airport lines", data.fullPath, 0)
+                    new SyntaxError("Invalid number of airport lines", data.FullPath, data.CurrentLineNumber)
+                );
+                return;
+            }
+
+            // Parse the coordinate
+            if (!AirportValidator.IcaoValid(icaoLine.data))
+            {
+                this.eventLogger.AddEvent(
+                    new SyntaxError("Invalid airport ICAO: " + icaoLine.data, data.FullPath, icaoLineNumber)
                 );
                 return;
             }
@@ -74,7 +99,7 @@ namespace Compiler.Parser
             if (coordinateLine.dataSegments.Count != 2)
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid coordinate format: " + data.lines[1], data.fullPath, 0)
+                    new SyntaxError("Invalid coordinate format: " + coordinateLine.data, data.FullPath, coordinateLineNumber)
                 );
                 return;
             }
@@ -83,7 +108,7 @@ namespace Compiler.Parser
             if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid coordinate format: " + data.lines[1], data.fullPath, 0)
+                    new SyntaxError("Invalid coordinate format: " + coordinateLine.data, data.FullPath, coordinateLineNumber)
                 );
                 return;
             }
@@ -108,7 +133,7 @@ namespace Compiler.Parser
             this.elements.Add(
                 new Airport(
                     nameLine.data,
-                    data.parentDirectory,
+                    icaoLine.data,
                     parsedCoordinate,
                     frequencyLine.data,
                     String.Join(", ", validComments)

@@ -24,7 +24,6 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(new Fix("testfix", new Coordinate("abc", "def"), "test"));
             this.sectorElements.Add(new Vor("testvor", "123.456", new Coordinate("abc", "def"), "test"));
             this.sectorElements.Add(new Ndb("testndb", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Airport("testairport", "testairport", new Coordinate("abc", "def"), "123.456", "test"));
 
             this.rule = new AllCoordinationPointsMustHaveValidPrior();
             this.args = new CompilerArguments();
@@ -35,7 +34,7 @@ namespace CompilerTest.Validate
         [InlineData("*")]
         [InlineData("testvor")]
         [InlineData("testndb")]
-        [InlineData("testairport")]
+        [InlineData("EGGD")]
         public void TestItPassesOnValidPrior(string fix)
         {
             this.sectorElements.Add(
@@ -78,7 +77,7 @@ namespace CompilerTest.Validate
         [InlineData("nottestfix","testfix")]
         [InlineData("testvor", "nottestvor")]
         [InlineData("nottestndb", "*")]
-        [InlineData("testairport", "nottestairport")]
+        [InlineData("EGGD", "EGG1")]
         public void TestItFailsOnInvalidPrior(string firstFix, string secondFix)
         {
             this.sectorElements.Add(
