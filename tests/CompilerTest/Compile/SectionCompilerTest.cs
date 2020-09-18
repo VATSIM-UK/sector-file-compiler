@@ -27,8 +27,8 @@ namespace CompilerTest.Compile
             this.compilerFactory = new SectionCompilerFactory(this.arguments, this.elements);
             this.arguments.OutFileEse = this.mockOutput.Object;
 
-            this.elements.Add(new CommentLine("test1"), OutputSections.ESE_SIDSSTARS);
-            this.elements.Add(new CommentLine("test2"), OutputSections.ESE_AIRSPACE);
+            this.elements.Add(new Comment("test1"), OutputSections.ESE_SIDSSTARS);
+            this.elements.Add(new Comment("test2"), OutputSections.ESE_AIRSPACE);
         }
 
         [Fact]

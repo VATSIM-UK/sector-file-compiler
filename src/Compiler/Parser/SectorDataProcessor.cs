@@ -32,7 +32,7 @@ namespace Compiler.Parser
                     if (args.DisplayInputFiles)
                     {
                         elements.Add(
-                            new CommentLine("Start of input file " + file.GetPath()),
+                            new Comment("Start of input file " + file.GetPath()),
                             section
                         );
                     }

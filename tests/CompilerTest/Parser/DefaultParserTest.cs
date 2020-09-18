@@ -29,7 +29,7 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<CommentLine>(
+            Assert.IsType<Comment>(
                 this.sectorElements.Compilables[OutputSections.ESE_HEADER][0]
             );
         }

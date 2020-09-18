@@ -808,7 +808,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsCommentLines()
         {
-            CommentLine comment = new CommentLine("test");
+            Comment comment = new Comment("test");
             this.collection.Add(comment, OutputSections.SCT_COLOUR_DEFS);
 
             Assert.Equal(comment, this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][0]);

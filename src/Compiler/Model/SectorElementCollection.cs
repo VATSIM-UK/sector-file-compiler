@@ -219,7 +219,7 @@ namespace Compiler.Model
             this.Compilables[section].Add(blankLine);
         }
 
-        public void Add(CommentLine comment, OutputSections section)
+        public void Add(Comment comment, OutputSections section)
         {
             this.Compilables[section].Add(comment);
         }

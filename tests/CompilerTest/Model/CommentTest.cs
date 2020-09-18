@@ -3,13 +3,13 @@ using Compiler.Model;
 
 namespace CompilerTest.Model
 {
-    public class CommentLineTest
+    public class CommentTest
     {
-        private readonly CommentLine comment;
+        private readonly Comment comment;
 
-        public CommentLineTest()
+        public CommentTest()
         {
-            this.comment = new CommentLine("test comment");
+            this.comment = new Comment("test comment");
         }
 
         [Fact]

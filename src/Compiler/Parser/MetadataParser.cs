@@ -25,7 +25,7 @@ namespace Compiler.Parser
             }
 
             this.sectorElements.Add(
-                new CommentLine(LineCommentParser.ParseComment(line)),
+                new Comment(LineCommentParser.ParseComment(line)),
                 this.section
             );
             return true;

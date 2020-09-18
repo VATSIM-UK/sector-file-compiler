@@ -45,7 +45,7 @@ namespace CompilerTest.Parser
             Assert.IsType<BlankLine>(
                 this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]
             );
-            Assert.IsType<CommentLine>(
+            Assert.IsType<Comment>(
                 this.collection.Compilables[OutputSections.ESE_AIRSPACE][1]
             );
             Assert.IsType<BlankLine>(

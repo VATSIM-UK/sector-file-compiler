@@ -2,20 +2,20 @@
 
 namespace Compiler.Model
 {
-    public class CommentLine : ICompilable
+    public class Comment : ICompilable
     {
-        private readonly string comment;
-
-        public CommentLine(string comment)
+        public Comment(string comment)
         {
-            this.comment = comment;
+            CommentString = comment;
         }
+
+        public string CommentString { get; }
 
         public string Compile()
         {
             return String.Format(
                 "; {0}\r\n",
-                this.comment
+                this.CommentString
             );
         }
     }
