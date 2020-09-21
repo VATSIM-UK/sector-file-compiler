@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.dotCover.DotNetCliTool" Version="2020.2.2">
+    <PackageReference Include="JetBrains.dotCover.DotNetCliTool" Version="2020.2.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
