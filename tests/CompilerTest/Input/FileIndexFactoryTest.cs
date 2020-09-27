@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Compiler.Input;
+﻿using Compiler.Input;
 using Xunit;
 using Moq;
 using Compiler.Output;
