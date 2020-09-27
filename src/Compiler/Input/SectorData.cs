@@ -11,11 +11,12 @@ namespace Compiler.Input
      */
     public struct SectorData
     {
-        public SectorData(Docblock docblock, Comment inlineComment, List<string> dataSegments)
+        public SectorData(Docblock docblock, Comment inlineComment, List<string> dataSegments, Definition definition)
         {
             this.docblock = docblock;
             this.inlineComment = inlineComment;
             this.dataSegments = dataSegments;
+            this.definition = definition;
         }
 
         // The docblock above this line of sector data
@@ -26,5 +27,8 @@ namespace Compiler.Input
 
         // The segmented data based on whatever delimiter is used
         public readonly List<string> dataSegments;
+
+        // Definition for where this piece of data was defined
+        public readonly Definition definition;
     }
 }

@@ -35,7 +35,12 @@ namespace Compiler.Input
                     }
                     else
                     {
-                        yield return new SectorData(docblock, reader.GetCommentSegment(line), reader.GetDataSegments(line));
+                        yield return new SectorData(
+                            docblock,
+                            reader.GetCommentSegment(line),
+                            reader.GetDataSegments(line),
+                            new Definition(this.FullPath, this.CurrentLineNumber)
+                        );
                         docblock = new Docblock();
                     }
                 }

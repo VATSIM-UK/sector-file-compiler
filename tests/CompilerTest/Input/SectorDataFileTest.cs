@@ -52,6 +52,7 @@ namespace CompilerTest.Input
                 Assert.Equal(expectedDocblock, dataLine.docblock);
                 Assert.Equal(new Comment("Inline " + expectedLine.ToString()), dataLine.inlineComment);
                 Assert.Equal(expectedLine++, this.file.CurrentLineNumber);
+                Assert.Equal(new Definition("_TestData/StreamTest.txt", expectedLine), dataLine.definition);
             }
 
             Assert.Equal(8, this.file.CurrentLineNumber);
