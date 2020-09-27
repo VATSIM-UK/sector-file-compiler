@@ -13,7 +13,7 @@ namespace Compiler.Input
             this.FullPath = fullPath;
         }
 
-        public override IEnumerator<string> GetEnumerator()
+        public override IEnumerator<SectorDataFile> GetEnumerator()
         {
             string line;
             using (StreamReader file = new StreamReader(this.FullPath))
