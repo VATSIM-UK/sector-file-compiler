@@ -13,6 +13,7 @@ namespace CompilerTest.Input
         {
             this.file = new SectorDataFile(
                 "_TestData/StreamTest.txt",
+                InputDataType.ESE_AGREEMENTS,
                 new EseSectorDataReader()
             );
         }
@@ -36,6 +37,12 @@ namespace CompilerTest.Input
         public void CurrentLineStartsAtEmpty()
         {
             Assert.Equal("", this.file.CurrentLine);
+        }
+
+        [Fact]
+        public void ItHasADataType()
+        {
+            Assert.Equal(InputDataType.ESE_AGREEMENTS, this.file.DataType);
         }
 
         [Fact]

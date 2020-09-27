@@ -10,12 +10,19 @@ namespace Compiler.Input
     public class SectorDataFile: AbstractSectorDataFile
     {
         private readonly AbstractSectorDataReader reader;
-        public SectorDataFile(string fullPath, AbstractSectorDataReader reader)
+        public SectorDataFile(string fullPath, InputDataType dataType, AbstractSectorDataReader reader)
+            : base(dataType)
         {
             this.FullPath = fullPath;
             this.reader = reader;
         }
 
+        /*
+         * Iterate the lines in a file.
+         * - Skip any blank line
+         * - Store up any full-comment lines to be turned into a DocBlock
+         * - If it's a data line, yield a data item for parsing
+         */
         public override IEnumerator<SectorData> GetEnumerator()
         {
             string line;

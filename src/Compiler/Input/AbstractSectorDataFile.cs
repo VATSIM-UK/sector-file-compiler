@@ -16,6 +16,14 @@ namespace Compiler.Input
         // The full path to the file
         public string FullPath { get; protected set; }
 
+        // The type of data this file contains
+        public InputDataType DataType { get; }
+
+        public AbstractSectorDataFile(InputDataType dataType)
+        {
+            DataType = dataType;
+        }
+
         public int CompareTo(object obj)
         {
             return this.FullPath.CompareTo(((AbstractSectorDataFile)obj).FullPath);
