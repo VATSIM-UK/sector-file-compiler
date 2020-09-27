@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Compiler.Model;
 
 namespace Compiler.Input
 {
@@ -25,10 +26,10 @@ namespace Compiler.Input
         /*
          * Returns the comment part of a line of data
          */
-        public string GetCommentSegment(string line)
+        public Comment GetCommentSegment(string line)
         {
             int commentIndex = line.IndexOf(this.GetCommentDelimiter());
-            return commentIndex == -1 ? "" : line.Substring(commentIndex);
+            return new Comment(commentIndex == -1 ? "" : line.Substring(commentIndex));
         }
 
         /*

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Compiler.Input;
+using Compiler.Model;
 using Xunit;
 
 namespace CompilerTest.Input
@@ -56,7 +57,7 @@ namespace CompilerTest.Input
         [InlineData("abc ; comment\r\n", "comment")]
         public void ItReturnsACommentSegment(string line, string expected)
         {
-            Assert.Equal(expected, this.reader.GetCommentSegment(line));
+            Assert.Equal(new Comment(expected), this.reader.GetCommentSegment(line));
         }
 
         public static IEnumerable<object[]> DataSegmentData =>
