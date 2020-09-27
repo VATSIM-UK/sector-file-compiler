@@ -3,26 +3,41 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Compiler.Model;
 
 namespace Compiler.Input
 {
     public class SectorDataFile: AbstractSectorDataFile
     {
-        public SectorDataFile(string fullPath)
+        private readonly AbstractSectorDataReader reader;
+        public SectorDataFile(string fullPath, AbstractSectorDataReader reader)
         {
             this.FullPath = fullPath;
+            this.reader = reader;
         }
 
-        public override IEnumerator<SectorDataFile> GetEnumerator()
+        public override IEnumerator<SectorData> GetEnumerator()
         {
             string line;
+            Docblock docblock = new Docblock();
             using (StreamReader file = new StreamReader(this.FullPath))
             {
                 while ((line = file.ReadLine()) != null)
                 {
-                    this.CurrentLine = line;
                     this.CurrentLineNumber++;
-                    yield return this.CurrentLine;
+                    if (reader.IsBlankLine(line))
+                    {
+                        continue;
+                    }
+                    else if (reader.IsCommentLine(line))
+                    {
+                        docblock.AddLine(reader.GetCommentSegment(line));
+                    }
+                    else
+                    {
+                        yield return new SectorData(docblock, reader.GetCommentSegment(line), reader.GetDataSegments(line));
+                        docblock = new Docblock();
+                    }
                 }
             }
         }

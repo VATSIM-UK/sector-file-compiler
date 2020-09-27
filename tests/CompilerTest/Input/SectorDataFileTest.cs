@@ -1,4 +1,6 @@
-﻿using Compiler.Input;
+﻿using System.Collections.Generic;
+using Compiler.Input;
+using Compiler.Model;
 using Xunit;
 
 namespace CompilerTest.Input
@@ -10,7 +12,8 @@ namespace CompilerTest.Input
         public SectorDataFileTest()
         {
             this.file = new SectorDataFile(
-                "_TestData/StreamTest.txt"
+                "_TestData/StreamTest.txt",
+                new EseSectorDataReader()
             );
         }
 
@@ -39,10 +42,15 @@ namespace CompilerTest.Input
         public void TestItIteratesTheInputFile()
         {
             int expectedLine = 1;
-            foreach (string line in this.file)
+            foreach (SectorData dataLine in this.file)
             {
-                Assert.Equal("Line " + expectedLine.ToString(), line);
-                Assert.Equal("Line " + expectedLine.ToString(), this.file.CurrentLine);
+                Assert.Equal(new List<string> { "Line", expectedLine.ToString() }, dataLine.dataSegments);
+
+                Docblock expectedDocblock = new Docblock();
+                expectedDocblock.AddLine(new Comment("Docblock " + expectedLine.ToString()));
+                expectedDocblock.AddLine(new Comment("Docblock " + expectedLine.ToString() + "a"));
+                Assert.Equal(expectedDocblock, dataLine.docblock);
+                Assert.Equal(new Comment("Inline " + expectedLine.ToString()), dataLine.inlineComment);
                 Assert.Equal(expectedLine++, this.file.CurrentLineNumber);
             }
 

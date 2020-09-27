@@ -1,8 +1,33 @@
-Line 1
-Line 2
-Line 3
-Line 4
-Line 5
-Line 6
-Line 7
-Line 8
+; Docblock 1
+; Docblock 1a
+Line:1 ; Inline 1
+
+; Docblock 2
+; Docblock 2a
+Line:2 ; Inline 2
+
+; Docblock 3
+; Docblock 3a
+Line:3 ; Inline 3
+
+; Docblock 4
+; Docblock 4a
+Line:4 ; Inline 4
+
+; Docblock 5
+; Docblock 5a
+Line:5 ; Inline 5
+
+; Docblock 6
+; Docblock 6a
+Line:6 ; Inline 6
+
+; Docblock 7
+; Docblock 7a
+Line:7 ; Inline 7
+
+; Docblock 8
+; Docblock 8a
+Line:8 ; Inline 8
+
+; Extra comment to be ignored
