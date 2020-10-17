@@ -22,7 +22,7 @@ namespace CompilerTest.Parser
         {
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
-            this.parser = (ActiveRunwayParser) (new SectionParserFactory(this.collection, this.log.Object))
+            this.parser = (ActiveRunwayParser) (new DataParserFactory(this.collection, this.log.Object))
                 .GetParserForSection(OutputSections.RWY_ACTIVE_RUNWAYS);
         }
 

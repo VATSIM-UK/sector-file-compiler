@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Compiler.Input;
 
 namespace Compiler.Config
 {
-    public class ConfigFileList
+    public class ConfigFileList: IEnumerable<AbstractSectorDataFile>
     {
-        public List<AbstractSectorDataFile> Files { get; private set; }
+        private List<AbstractSectorDataFile> files = new List<AbstractSectorDataFile>();
 
         /*
          * Merge two config files together
          */
         public void Merge(ConfigFileList fileToMerge)
         {
-            foreach (AbstractSectorDataFile file in fileToMerge.Files)
+            foreach (AbstractSectorDataFile file in fileToMerge.files)
             {
                 this.AddFile(file);
             }
@@ -25,13 +26,23 @@ namespace Compiler.Config
          */
         public bool AddFile(AbstractSectorDataFile file)
         {
-            if (this.Files.Contains(file))
+            if (this.files.Contains(file))
             {
                 return false;
             }
 
-            this.Files.Add(file);
+            this.files.Add(file);
             return true;
+        }
+
+        public IEnumerator<AbstractSectorDataFile> GetEnumerator()
+        {
+            return ((IEnumerable<AbstractSectorDataFile>)files).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable)files).GetEnumerator();
         }
     }
 }

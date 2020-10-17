@@ -22,7 +22,7 @@ namespace CompilerTest.Parser
         {
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
-            this.parser = (EsePositionParser)(new SectionParserFactory(this.collection, this.log.Object))
+            this.parser = (EsePositionParser)(new DataParserFactory(this.collection, this.log.Object))
                 .GetParserForSection(OutputSections.ESE_POSITIONS);
         }
 

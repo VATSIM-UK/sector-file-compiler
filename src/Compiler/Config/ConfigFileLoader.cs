@@ -11,6 +11,14 @@ namespace Compiler.Config
 {
     public class ConfigFileLoader
     {
+
+        private readonly OutputGroupRepository outputGroupRepository;
+
+        public ConfigFileLoader(OutputGroupRepository outputGroupRepository)
+        {
+            this.outputGroupRepository = outputGroupRepository;
+        }
+
         /**
          * Load config files and append roots as required.
          */
@@ -35,14 +43,32 @@ namespace Compiler.Config
                 JToken airportData = jsonConfig.SelectToken("airports");
                 if (airportData != null)
                 {
+                    if (airportData.Type != JTokenType.Array)
+                    {
+                        throw new ConfigFileInvalidException(
+                            string.Format("Invalid airport config in {0}... must be an array", file)
+                        );
+                    }
 
+                    int airportConfigIndex = 0;
+                    foreach(JToken airportConfig in airportData)
+                    {
+                        if (airportConfig.Type != JTokenType.Object)
+                        {
+                            throw new ConfigFileInvalidException(
+                                string.Format("Invalid airport config[{0}] in {1}... must be an array", airportConfigIndex, file)
+                            );
+                        }
+                        airportConfigIndex++;
+                        this.LoadAirportConfig(airportData, config, file);
+                    }
                 }
 
                 // Load enroute data
                 JToken enrouteData = jsonConfig.SelectToken("enroute");
                 if (enrouteData != null)
                 {
-
+                    this.LoadEnrouteConfig(enrouteData, config, file);
                 }
 
                 // Load misc data
@@ -75,10 +101,33 @@ namespace Compiler.Config
 
         private bool IsValidConfigSectionFormat(JToken section)
         {
-            return section.Type == JTokenType.Array || section.Type == JTokenType.String;
+            if (section.Type != JTokenType.Array && section.Type != JTokenType.String)
+            {
+                return false;
+            }
+
+            if (section.Type == JTokenType.String)
+            {
+                return true;
+            }
+
+            foreach (JToken item in section)
+            {
+                if (item.Type != JTokenType.String)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
-        private void LoadMiscConfig(JToken jsonConfig, ConfigFileList configFile, string pathRoot)
+        private bool IsValidConfigSectionSubitemFormat(JToken section)
+        {
+            return section.Type == JTokenType.String;
+        }
+
+        private void LoadMiscConfig(JToken jsonConfig, ConfigFileList configFile, string configFilePath)
         {
             if (jsonConfig.Type != JTokenType.Object)
             {
@@ -101,84 +150,142 @@ namespace Compiler.Config
                     );
                 }
 
+                OutputGroup outputGroup = OutputGroupFactory.CreateMisc(configSection);
                 if (configObjectSection.Type == JTokenType.String)
                 {
+                    outputGroup.AddFile(this.NormaliseFilePath(configFilePath, configObjectSection.Value<string>()));
                     configFile.AddFile(
                         SectorDataFileFactory.Create(
-                            configObjectSection.Value<string>(),
-                            configSection.DataType,
-                            string.Format("Start of misc {0}", configSection.
+                            this.NormaliseFilePath(configFilePath, configObjectSection.Value<string>()),
+                            configSection.DataType
                         )
-                    )
-                }
-
-                // Create the new group for the data
-                AbstractOutputGroup group;
-                if (configSection.OutputGroupDescriptor == null)
-                {
-                    group = new NullOutputGroup(configSection.DataType);
+                    );
                 } else
                 {
-                    group = new MiscOutputGroup(configSection.DataType, configSection.OutputGroupDescriptor);
-          0      }
-                this.outputGroupRepository.AddGroup(group);
-
-                // Create the files, attach the files to the group
-
-            }
-
-            // Parse the sections
-            foreach (var item in config)
-            {
-                ConfigSectionsMisc configSection = ConfigSectionsMiscMapper.GetSectionForConfigKey(item.Key);
-                if (configSection == ConfigSectionsMisc.INVALID)
-                {
-                    throw new ConfigFileInvalidException("Invalid misc section " + item.Key);
+                    foreach (JToken item in configObjectSection)
+                    {
+                        outputGroup.AddFile(this.NormaliseFilePath(configFilePath, item.Value<string>()));
+                        configFile.AddFile(
+                            SectorDataFileFactory.Create(
+                                this.NormaliseFilePath(configFilePath, item.Value<string>()),
+                                configSection.DataType
+                            )
+                        );
+                    }
                 }
-
-                // Normalise any files, parse arrays if required and return a file index
             }
         }
 
-        private void LoadEnrouteConfig(JObject config)
+        private void LoadEnrouteConfig(JToken jsonConfig, ConfigFileList configFile, string configFilePath)
         {
-            // Parse the sections
-            foreach (var item in config)
+            if (jsonConfig.Type != JTokenType.Object)
             {
-                ConfigSectionsEnroute configSection = ConfigSectionsEnrouteMapper.GetSectionForConfigKey(item.Key);
-                if (configSection == ConfigSectionsEnroute.INVALID)
+                throw new ConfigFileInvalidException(GetInvalidConfigParentSectionFormatMessage("enroute"));
+            }
+
+            JObject configObject = (JObject)jsonConfig;
+            foreach (ConfigFileSection configSection in EnrouteConfigFileSections.configFileSections)
+            {
+                JToken configObjectSection = configObject.SelectToken(configSection.JsonPath);
+                if (configObjectSection == null)
                 {
-                    throw new ConfigFileInvalidException("Invalid enroute section " + item.Key);
+                    continue;
                 }
 
-                // Normalise any files, parse arrays if required and return a file index
+                if (!IsValidConfigSectionFormat(configObjectSection))
+                {
+                    throw new ConfigFileInvalidException(
+                        GetInvalidConfigSectionFormatMessage("enroute." + configSection.JsonPath)
+                    );
+                }
+
+                OutputGroup outputGroup = OutputGroupFactory.CreateEnroute(configSection);
+                if (configObjectSection.Type == JTokenType.String)
+                {
+                    outputGroup.AddFile(this.NormaliseFilePath(configFilePath, configObjectSection.Value<string>()));
+                    configFile.AddFile(
+                        SectorDataFileFactory.Create(
+                            this.NormaliseFilePath(configFilePath, configObjectSection.Value<string>()),
+                            configSection.DataType
+                        )
+                    );
+                }
+                else
+                {
+                    foreach (JToken item in configObjectSection)
+                    {
+                        outputGroup.AddFile(this.NormaliseFilePath(configFilePath, item.Value<string>()));
+                        configFile.AddFile(
+                            SectorDataFileFactory.Create(
+                                this.NormaliseFilePath(configFilePath, item.Value<string>()),
+                                configSection.DataType
+                            )
+                        );
+                    }
+                }
             }
         }
 
-        private void LoadAirportConfig(JObject config)
+        private void LoadAirportConfig(JToken jsonConfig, ConfigFileList configFile, string configFilePath)
         {
-            // Parse the sections
-            foreach (var item in config)
+            if (jsonConfig.Type != JTokenType.Object)
             {
-                ConfigSectionsAirport configSection = ConfigSectionsAirportMapper.GetSectionForConfigKey(item.Key);
-                if (configSection == ConfigSectionsAirport.INVALID)
+                throw new ConfigFileInvalidException(GetInvalidConfigParentSectionFormatMessage("airport"));
+            }
+
+            JObject configObject = (JObject)jsonConfig;
+            foreach (ConfigFileSection configSection in EnrouteConfigFileSections.configFileSections)
+            {
+                JToken configObjectSection = configObject.SelectToken(configSection.JsonPath);
+                if (configObjectSection == null)
                 {
-                    throw new ConfigFileInvalidException("Invalid airport section " + item.Key);
+                    continue;
                 }
 
-                // Split off for SMR/Ground Map as required
+                if (!IsValidConfigSectionFormat(configObjectSection))
+                {
+                    throw new ConfigFileInvalidException(
+                        GetInvalidConfigSectionFormatMessage("airport." + configSection.JsonPath)
+                    );
+                }
 
-                // Normalise any files, parse arrays if required and return a file index
+                // Airport files may not exist, so we check for them
+                OutputGroup outputGroup = OutputGroupFactory.CreateEnroute(configSection);
+                if (configObjectSection.Type == JTokenType.String)
+                {
+                    string filePath = this.NormaliseFilePath(configFilePath, configObjectSection.Value<string>());
+                    if (!File.Exists(filePath))
+                    {
+                        continue;
+                    }
+                    outputGroup.AddFile(filePath);
+                    configFile.AddFile(
+                        SectorDataFileFactory.Create(
+                            filePath,
+                            configSection.DataType
+                        )
+                    );
+                }
+                else
+                {
+                    foreach (JToken item in configObjectSection)
+                    {
+                        string filePath = this.NormaliseFilePath(configFilePath, configObjectSection.Value<string>());
+                        if (!File.Exists(filePath))
+                        {
+                            continue;
+                        }
+                        outputGroup.AddFile(filePath);
+                        configFile.AddFile(
+                            SectorDataFileFactory.Create(
+                                filePath,
+                                configSection.DataType
+                            )
+                        );
+                    }
+                }
             }
         }
-
-        //private static void NormaliseFileArray(IFileInterface file, JArray fileArray)
-        //{
-        //    for (int key = 0; key < fileArray.Count; key++)
-        //    {
-        //        fileArray[key] = Path.GetFullPath(file.DirectoryLocation() + Path.DirectorySeparatorChar + fileArray[key]);
-        //    }
-        //}
 
         private string NormaliseFilePath(string pathToConfigFile, string relativeInputFilePath)
         {

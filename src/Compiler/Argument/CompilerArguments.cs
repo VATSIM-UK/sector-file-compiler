@@ -10,22 +10,7 @@ namespace Compiler.Argument
     {
         public const string COMPILER_VERISON = "1.0.0";
 
-        public List<IFileInterface> ConfigFiles { get; } = new List<IFileInterface>();
-
-        public override string ToString()
-        {
-            if (ConfigFiles.Count == 0)
-            {
-                return "No configuration provided";
-            }
-
-            string output = "";
-            foreach (IFileInterface file in ConfigFiles)
-            {
-                output += "Config File: " + Path.GetFullPath(file.GetPath()) + Environment.NewLine;
-            }
-            return output;
-        }
+        public List<string> ConfigFiles { get; } = new List<string>();
 
         public override bool Equals(Object obj)
         {

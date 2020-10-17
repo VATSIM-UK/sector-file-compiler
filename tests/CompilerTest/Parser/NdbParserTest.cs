@@ -22,7 +22,7 @@ namespace CompilerTest.Parser
         {
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
-            this.parser = (NdbParser)(new SectionParserFactory(this.collection, this.log.Object))
+            this.parser = (NdbParser)(new DataParserFactory(this.collection, this.log.Object))
                 .GetParserForSection(OutputSections.SCT_NDB);
         }
 

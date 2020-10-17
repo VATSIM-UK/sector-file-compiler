@@ -10,14 +10,12 @@ namespace Compiler.Input
     public class SectorDataFile: AbstractSectorDataFile
     {
         private readonly AbstractSectorDataReader reader;
-        private readonly string initialDocblock;
 
-        public SectorDataFile(string fullPath, InputDataType dataType, AbstractSectorDataReader reader, string initialDocblock)
+        public SectorDataFile(string fullPath, InputDataType dataType, AbstractSectorDataReader reader)
             : base(dataType)
         {
             this.FullPath = fullPath;
             this.reader = reader;
-            this.initialDocblock = initialDocblock;
         }
 
         /*
@@ -30,7 +28,6 @@ namespace Compiler.Input
         {
             string line;
             Docblock docblock = new Docblock();
-            docblock.AddLine(new Comment(initialDocblock));
             using (StreamReader file = new StreamReader(this.FullPath))
             {
                 while ((line = file.ReadLine()) != null)

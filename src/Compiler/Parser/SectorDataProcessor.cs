@@ -11,7 +11,7 @@ namespace Compiler.Parser
     public class SectorDataProcessor
     {
         public static void Parse(
-            SectionParserFactory sectionParsers,
+            DataParserFactory sectionParsers,
             SectorElementCollection elements,
             CompilerArguments args,
             FileIndex files,

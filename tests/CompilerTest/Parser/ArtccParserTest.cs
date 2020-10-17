@@ -22,7 +22,7 @@ namespace CompilerTest.Parser
         {
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
-            this.parser = (ArtccParser)(new SectionParserFactory(this.collection, this.log.Object))
+            this.parser = (ArtccParser)(new DataParserFactory(this.collection, this.log.Object))
                 .GetParserForSection(OutputSections.SCT_ARTCC);
         }
 

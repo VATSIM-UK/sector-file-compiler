@@ -41,27 +41,28 @@ namespace Compiler
                 return 1;
             }
 
-            // Parse the config file and index all the files
-            JObject mergedConfig;
+            // Parse all the config files
+            OutputGroupRepository outputGroups = new OutputGroupRepository();
+            ConfigFileLoader fileLoader = new ConfigFileLoader(outputGroups);
+
+            ConfigFileList fileList;
             try
             {
-                mergedConfig = ConfigFileMerger.MergeConfigFiles(this.arguments);
+                fileList = fileLoader.LoadConfigFiles(this.arguments.ConfigFiles);
             } catch (ConfigFileInvalidException e)
             {
-                this.events.AddEvent(new ConfigFileValidationError(e.Message));
+                this.events.AddEvent(new CompilationMessage(e.Message));
                 this.events.AddEvent(new CompilationFinishedEvent(false));
                 return 1;
             }
 
             // Parse all the input files
             SectorElementCollection sectorElements = new SectorElementCollection();
-            SectorDataProcessor.Parse(
-                new SectionParserFactory(sectorElements, events),
-                sectorElements,
-                this.arguments,
-                FileIndexFactory.CreateFileIndex(mergedConfig, events),
-                events
-            );
+            DataParserFactory parserFactory = new DataParserFactory(sectorElements, events);
+            foreach (AbstractSectorDataFile dataFile in fileList)
+            {
+                parserFactory.GetParserForFile(dataFile).ParseData(dataFile);
+            }
 
             if (this.events.HasFatalError())
             {

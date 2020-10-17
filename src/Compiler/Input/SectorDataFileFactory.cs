@@ -8,7 +8,7 @@ namespace Compiler.Input
 {
     public class SectorDataFileFactory
     {
-        public static AbstractSectorDataFile Create(string fullPath, InputDataType inputDataType, Docblock initialDocblock)
+        public static AbstractSectorDataFile Create(string fullPath, InputDataType inputDataType)
         {
             if (!File.Exists(fullPath))
             {
@@ -17,7 +17,7 @@ namespace Compiler.Input
 
             return inputDataType == InputDataType.FILE_HEADERS
                 ? (AbstractSectorDataFile) new HeaderDataFile()
-                : new SectorDataFile(fullPath, inputDataType, SectorDataReaderFactory.Create(inputDataType), initialDocblock);
+                : new SectorDataFile(fullPath, inputDataType, SectorDataReaderFactory.Create(inputDataType));
         }
     }
 }

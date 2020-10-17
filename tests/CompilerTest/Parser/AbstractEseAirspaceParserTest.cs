@@ -20,7 +20,7 @@ namespace CompilerTest.Parser
         {
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
-            this.parser = (AirspaceParser)(new SectionParserFactory(this.collection, this.log.Object))
+            this.parser = (AirspaceParser)(new DataParserFactory(this.collection, this.log.Object))
                 .GetParserForSection(OutputSections.ESE_AIRSPACE);
         }
 
