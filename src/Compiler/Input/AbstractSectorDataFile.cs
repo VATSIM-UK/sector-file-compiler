@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compiler.Input
 {
-    abstract public class AbstractSectorDataFile: IEnumerable<SectorData>, IComparable
+    abstract public class AbstractSectorDataFile: IEnumerable<SectorData>
     {
         // The number of the current line
         public int CurrentLineNumber { get; protected set; } = 0;
@@ -24,9 +24,9 @@ namespace Compiler.Input
             DataType = dataType;
         }
 
-        public int CompareTo(object obj)
+        public bool Equals(AbstractSectorDataFile compare)
         {
-            return this.FullPath.CompareTo(((AbstractSectorDataFile)obj).FullPath);
+            return this.FullPath == compare.FullPath;
         }
 
         public abstract IEnumerator<SectorData> GetEnumerator();
