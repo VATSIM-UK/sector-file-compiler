@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Compiler.Input;
+using System.Linq;
 
 namespace Compiler.Output
 {
@@ -14,9 +15,20 @@ namespace Compiler.Output
             this.outputGroups = new SortedSet<OutputGroup>();
         }
 
+        /*
+         * Add an OutputGroup
+         */
         public void Add(OutputGroup group)
         {
-            this.outputGroups.Add(group);
+            // If we can't add the group, then it already exists, so just add its files to
+            // the existing group
+            if (!this.outputGroups.Add(group))
+            {
+                foreach (string file in group.FileList)
+                {
+                    this.outputGroups.FirstOrDefault(g => g.Key == group.Key).AddFile(file);
+                }
+            }
         }
     }
 }
