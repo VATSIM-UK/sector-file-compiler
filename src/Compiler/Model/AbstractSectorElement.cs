@@ -8,17 +8,21 @@ namespace Compiler.Model
     {
         private readonly Definition definition;
 
-        public string Comment { get; }
+        // The unique ID of the element
+        public int Id { get; }
 
-        protected AbstractSectorElement(Definition definition, string comment)
+        // The elements preceding comment line(s) - or Docblock
+        public Docblock Docblock { get; }
+
+        // The inline comment for this element - goes on the end of the line
+        public Comment InlineComment { get; }
+
+        protected AbstractSectorElement(int id, Definition definition, Docblock docblock, Comment inlineComment)
         {
+            this.Id = id;
             this.definition = definition;
-            this.Comment = comment;
-        }
-
-        protected string CompileComment()
-        {
-            return this.Comment != null && this.Comment != "" ? " ;" + this.Comment : "";
+            Docblock = docblock;
+            InlineComment = inlineComment;
         }
 
         public Definition GetDefinition()

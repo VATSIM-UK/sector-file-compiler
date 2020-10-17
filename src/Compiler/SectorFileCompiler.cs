@@ -10,6 +10,7 @@ using Compiler.Parser;
 using Compiler.Compile;
 using Compiler.Config;
 using Compiler.Error;
+using Compiler.Exception;
 using System;
 using Newtonsoft.Json.Linq;
 
@@ -45,7 +46,7 @@ namespace Compiler
             try
             {
                 mergedConfig = ConfigFileMerger.MergeConfigFiles(this.arguments);
-            } catch (Exception e)
+            } catch (ConfigFileInvalidException e)
             {
                 this.events.AddEvent(new ConfigFileValidationError(e.Message));
                 this.events.AddEvent(new CompilationFinishedEvent(false));

@@ -14,7 +14,8 @@ namespace CompilerTest.Input
             this.file = new SectorDataFile(
                 "_TestData/StreamTest.txt",
                 InputDataType.ESE_AGREEMENTS,
-                new EseSectorDataReader()
+                new EseSectorDataReader(),
+                "Initial docblock"
             );
         }
 
@@ -54,6 +55,11 @@ namespace CompilerTest.Input
                 Assert.Equal(new List<string> { "Line", expectedLine.ToString() }, dataLine.dataSegments);
 
                 Docblock expectedDocblock = new Docblock();
+                if(expectedLine == 1)
+                {
+                    expectedDocblock.AddLine(new Comment("Initial docblock"));
+                }
+
                 expectedDocblock.AddLine(new Comment("Docblock " + expectedLine.ToString()));
                 expectedDocblock.AddLine(new Comment("Docblock " + expectedLine.ToString() + "a"));
                 Assert.Equal(expectedDocblock, dataLine.docblock);
