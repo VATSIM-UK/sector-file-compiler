@@ -29,9 +29,9 @@ namespace CompilerTest.Validate
             this.args = new CompilerArguments();
         }
 
-        private Airway GetAirway(AirwayType type, string startPointIdentifier, string endPointIdentifier)
+        private AirwaySegment GetAirway(AirwayType type, string startPointIdentifier, string endPointIdentifier)
         {
-            return new Airway("test", type, new Point(startPointIdentifier), new Point(endPointIdentifier), "");
+            return new AirwaySegment("test", type, new Point(startPointIdentifier), new Point(endPointIdentifier), "");
         }
 
         [Fact]

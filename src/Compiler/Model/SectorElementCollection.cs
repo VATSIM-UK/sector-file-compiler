@@ -21,8 +21,8 @@ namespace Compiler.Model
         public List<Artcc> Artccs { get; } = new List<Artcc>();
         public List<Artcc> LowArtccs { get; } = new List<Artcc>();
         public List<Artcc> HighArtccs { get; } = new List<Artcc>();
-        public List<Airway> LowAirways { get; } = new List<Airway>();
-        public List<Airway> HighAirways { get; } = new List<Airway>();
+        public List<AirwaySegment> LowAirways { get; } = new List<AirwaySegment>();
+        public List<AirwaySegment> HighAirways { get; } = new List<AirwaySegment>();
         public List<SidStarRoute> SidRoutes { get; } = new List<SidStarRoute>();
         public List<SidStarRoute> StarRoutes { get; } = new List<SidStarRoute>();
         public List<Geo> GeoElements { get; } = new List<Geo>();
@@ -62,7 +62,7 @@ namespace Compiler.Model
             this.Airports.Add(airport);
         }
 
-        public void Add(Airway airway)
+        public void Add(AirwaySegment airway)
         {
             switch (airway.Type)
             {

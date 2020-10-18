@@ -2,7 +2,7 @@
 
 namespace Compiler.Model
 {
-    public class Airport : AbstractCompilableElement, ICompilable
+    public class Airport : AbstractCompilableElement
     {
         public string Name { get; }
         public string Icao { get; }
@@ -38,6 +38,11 @@ namespace Compiler.Model
                 this.CompileComment(),
                 this.Name
             );
+        }
+
+        public override string GetCompileData()
+        {
+            throw new NotImplementedException();
         }
     }
 }

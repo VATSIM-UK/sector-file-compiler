@@ -81,7 +81,7 @@ namespace CompilerTest.Parser
             );
             this.parser.ParseData(data);
 
-            Airway result = this.collection.LowAirways[0];
+            AirwaySegment result = this.collection.LowAirways[0];
             Assert.Equal("UN864", result.Identifier);
             Assert.Equal(AirwayType.LOW, result.Type);
             Assert.Equal(new Point(new Coordinate("N050.57.00.001", "W001.21.24.490")), result.StartPoint);
@@ -98,7 +98,7 @@ namespace CompilerTest.Parser
             );
             this.parser.ParseData(data);
 
-            Airway result = this.collection.LowAirways[0];
+            AirwaySegment result = this.collection.LowAirways[0];
             Assert.Equal("UN864", result.Identifier);
             Assert.Equal(AirwayType.LOW, result.Type);
             Assert.Equal(new Point("DIKAS"), result.StartPoint);

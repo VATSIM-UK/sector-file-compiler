@@ -17,11 +17,11 @@ namespace Compiler.Validate
         }
 
         private void TestAirwayCategory(
-            List<Airway> airways,
+            List<AirwaySegment> airways,
             SectorElementCollection sectorElements,
             IEventLogger events
         ) {
-            foreach (Airway airway in airways)
+            foreach (AirwaySegment airway in airways)
             {
                 if (airway.StartPoint.Type() == Point.TYPE_IDENTIFIER)
                 {

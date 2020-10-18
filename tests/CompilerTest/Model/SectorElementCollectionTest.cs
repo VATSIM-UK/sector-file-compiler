@@ -225,7 +225,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsLowAirways()
         {
-            Airway airway = new Airway(
+            AirwaySegment airway = new AirwaySegment(
                 "UN864",
                 AirwayType.LOW,
                 new Point(new Coordinate("abc", "def")),
@@ -240,7 +240,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsLowAirwaysToCompilableSection()
         {
-            Airway airway = new Airway(
+            AirwaySegment airway = new AirwaySegment(
                 "UN864",
                 AirwayType.LOW,
                 new Point(new Coordinate("abc", "def")),
@@ -255,7 +255,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsHighAirways()
         {
-            Airway airway = new Airway(
+            AirwaySegment airway = new AirwaySegment(
                 "UN864",
                 AirwayType.HIGH,
                 new Point(new Coordinate("abc", "def")),
@@ -270,7 +270,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsHighAirwaysToCompilableSection()
         {
-            Airway airway = new Airway(
+            AirwaySegment airway = new AirwaySegment(
                 "UN864",
                 AirwayType.HIGH,
                 new Point(new Coordinate("abc", "def")),

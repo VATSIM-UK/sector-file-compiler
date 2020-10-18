@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class Point : ICompilable
+    public class Point
     {
         // The different types of point
         public const int TYPE_COORDINATE = 0;
@@ -40,7 +40,7 @@ namespace Compiler.Model
             return this.Identifier == null ? Point.TYPE_COORDINATE : Point.TYPE_IDENTIFIER;
         }
 
-        public string Compile()
+        public override string ToString()
         {
             return this.Identifier != null
                 ? this.Identifier + " " + this.Identifier

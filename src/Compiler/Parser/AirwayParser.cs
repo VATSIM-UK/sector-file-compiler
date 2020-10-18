@@ -8,22 +8,17 @@ using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class AirwayParser : AbstractSectorElementParser, ISectorDataParser
+    public class AirwayParser : ISectorDataParser
     {
-        private readonly ISectorLineParser sectorLineParser;
         private readonly AirwayType airwayType;
         private readonly SectorElementCollection elements;
         private readonly IEventLogger eventLogger;
 
         public AirwayParser(
-            MetadataParser metadataParser,
-            ISectorLineParser sectorLineParser,
             AirwayType airwayType,
             SectorElementCollection elements,
             IEventLogger eventLogger
-        ) : base(metadataParser)
-        {
-            this.sectorLineParser = sectorLineParser;
+        ) {
             this.airwayType = airwayType;
             this.elements = elements;
             this.eventLogger = eventLogger;
@@ -31,16 +26,9 @@ namespace Compiler.Parser
 
         public void ParseData(AbstractSectorDataFile data)
         {
-            foreach (string line in data)
+            foreach (SectorData line in data)
             {
-                // Defer all metadata lines to the base
-                if (this.ParseMetadata(line))
-                {
-                    continue;
-                }
-
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
-                if (sectorData.dataSegments.Count != 5)
+                if (line.dataSegments.Count != 5)
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Incorrect number of Airway segments", data.FullPath, data.CurrentLineNumber)
@@ -49,7 +37,7 @@ namespace Compiler.Parser
                 }
 
                 // Parse the airway segment point
-                Point startPoint = PointParser.Parse(sectorData.dataSegments[1], sectorData.dataSegments[2]);
+                Point startPoint = PointParser.Parse(line.dataSegments[1], line.dataSegments[2]);
                 if (startPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
@@ -60,7 +48,7 @@ namespace Compiler.Parser
 
 
                 // Parse the segment endpoint
-                Point endPoint = PointParser.Parse(sectorData.dataSegments[3], sectorData.dataSegments[4]);
+                Point endPoint = PointParser.Parse(line.dataSegments[3], line.dataSegments[4]);
                 if (endPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
@@ -71,12 +59,14 @@ namespace Compiler.Parser
 
                 // Add it
                 this.elements.Add(
-                    new Airway(
-                        sectorData.dataSegments[0],
+                    new AirwaySegment(
+                        line.dataSegments[0],
                         this.airwayType,
                         startPoint,
                         endPoint,
-                        sectorData.comment
+                        line.definition,
+                        line.docblock,
+                        line.inlineComment
                     )
                 );
             }

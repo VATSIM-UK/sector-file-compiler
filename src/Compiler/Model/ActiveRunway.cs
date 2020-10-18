@@ -10,10 +10,10 @@ namespace Compiler.Model
             string airfield,
             int mode,
             Definition definition,
-            Docblock docBlock,
+            Docblock docblock,
             Comment inlineComment
 
-        ) : base(definition, docBlock, inlineComment)
+        ) : base(definition, docblock, inlineComment)
         {
             Identifier = identifier;
             Airfield = airfield;

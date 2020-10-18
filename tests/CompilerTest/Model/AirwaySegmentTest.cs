@@ -3,13 +3,13 @@ using Compiler.Model;
 
 namespace CompilerTest.Model
 {
-    public class AirwayTest
+    public class AirwaySegmentTest
     {
-        private readonly Airway airway;
+        private readonly AirwaySegment airway;
 
-        public AirwayTest()
+        public AirwaySegmentTest()
         {
-            this.airway = new Airway(
+            this.airway = new AirwaySegment(
                 "UN864",
                 AirwayType.HIGH,
                 new Point("ABCDE"),
