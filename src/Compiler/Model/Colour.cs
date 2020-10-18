@@ -1,6 +1,6 @@
 ﻿namespace Compiler.Model
 {
-    public class Colour : AbstractSectorElement, ICompilable
+    public class Colour : AbstractCompilableElement, ICompilable
     {
         public Colour(string name, int value, string comment) : base(comment)
         {

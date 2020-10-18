@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class Vor : AbstractSectorElement, ICompilable
+    public class Vor : AbstractCompilableElement, ICompilable
     {
         public string Identifier { get; }
         public string Frequency { get; }

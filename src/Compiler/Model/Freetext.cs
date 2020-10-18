@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class Freetext : AbstractSectorElement, ICompilable
+    public class Freetext : AbstractCompilableElement, ICompilable
     {
         public Freetext(string title, string text, Coordinate coordinate, string comment)
             : base(comment)

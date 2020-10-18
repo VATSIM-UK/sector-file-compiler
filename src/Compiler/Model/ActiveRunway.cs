@@ -1,10 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Compiler.Model
 {
-    public class ActiveRunway : AbstractSectorElement, ICompilable
+    public class ActiveRunway : AbstractCompilableElement
     {
-        public ActiveRunway(string identifier, string airfield, int mode, string comment) : base(comment)
+        public ActiveRunway(
+            string identifier,
+            string airfield,
+            int mode,
+            Definition definition,
+            Docblock docBlock,
+            Comment inlineComment
+
+        ) : base(definition, docBlock, inlineComment)
         {
             Identifier = identifier;
             Airfield = airfield;
@@ -15,14 +24,13 @@ namespace Compiler.Model
         public string Airfield { get; }
         public int Mode { get; }
 
-        public string Compile()
+        public override string GetCompileData()
         {
             return String.Format(
-                "ACTIVE_RUNWAY:{0}:{1}:{2}{3}\r\n",
+                "ACTIVE_RUNWAY:{0}:{1}:{2}",
                 this.Airfield,
                 this.Identifier,
-                this.Mode,
-                this.CompileComment()
+                this.Mode
             );
         }
     }

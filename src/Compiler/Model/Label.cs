@@ -1,6 +1,6 @@
 ﻿namespace Compiler.Model
 {
-    public class Label : AbstractSectorElement, ICompilable
+    public class Label : AbstractCompilableElement, ICompilable
     {
         public Label(string text, Coordinate position, string colour, string comment) : base(comment)
         {

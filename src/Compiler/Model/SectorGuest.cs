@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class SectorGuest : AbstractSectorElement, ICompilable
+    public class SectorGuest : AbstractCompilableElement, ICompilable
     {
         public SectorGuest(
             string controller,

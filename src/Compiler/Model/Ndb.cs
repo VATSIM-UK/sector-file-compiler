@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class Ndb : AbstractSectorElement, ICompilable
+    public class Ndb : AbstractCompilableElement, ICompilable
     {
         public string Identifier { get; }
         public string Frequency { get; }

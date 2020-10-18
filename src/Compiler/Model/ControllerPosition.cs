@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class ControllerPosition : AbstractSectorElement, ICompilable
+    public class ControllerPosition : AbstractCompilableElement, ICompilable
     {
         public ControllerPosition(
             string callsign,

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class SectorBorder : AbstractSectorElement, ICompilable
+    public class SectorBorder : AbstractCompilableElement, ICompilable
     {
         public SectorBorder() : base("") 
         {

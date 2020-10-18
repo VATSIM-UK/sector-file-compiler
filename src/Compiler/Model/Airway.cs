@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class Airway : AbstractSectorElement, ICompilable
+    public class Airway : AbstractCompilableElement, ICompilable
     {
         public Airway(
             string identifier,

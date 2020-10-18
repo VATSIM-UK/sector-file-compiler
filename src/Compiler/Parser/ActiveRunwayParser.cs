@@ -8,20 +8,15 @@ using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class ActiveRunwayParser : AbstractSectorElementParser, ISectorDataParser
+    public class ActiveRunwayParser : ISectorDataParser
     {
-        private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection elements;
         private readonly IEventLogger eventLogger;
 
         public ActiveRunwayParser(
-            MetadataParser metadataParser,
-            ISectorLineParser sectorLineParser,
             SectorElementCollection elements,
             IEventLogger eventLogger
-        ) : base(metadataParser)
-        {
-            this.sectorLineParser = sectorLineParser;
+        ) {
             this.elements = elements;
             this.eventLogger = eventLogger;
         }
@@ -29,16 +24,9 @@ namespace Compiler.Parser
         public void ParseData(AbstractSectorDataFile data)
         {
             // Loop the lines to get the data out
-            foreach (string line in data)
+            foreach (SectorData line in data)
             {
-                if (this.ParseMetadata(line))
-                {
-                    continue;
-                }
-
-                SectorFormatLine parsedLine = this.sectorLineParser.ParseLine(line) ;
-
-                if (parsedLine.dataSegments.Count != 4)
+                if (line.dataSegments.Count != 4)
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid number of ACTIVE_RUNWAY segments", data.FullPath, data.CurrentLineNumber)
@@ -46,7 +34,7 @@ namespace Compiler.Parser
                     return;
                 }
 
-                if (parsedLine.dataSegments[0] != "ACTIVE_RUNWAY")
+                if (line.dataSegments[0] != "ACTIVE_RUNWAY")
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Active runway declarations must begin with ACTIVE_RUNWAY", data.FullPath, data.CurrentLineNumber)
@@ -54,7 +42,7 @@ namespace Compiler.Parser
                     return;
                 }
 
-                if (!AirportValidator.IcaoValid(parsedLine.dataSegments[1]))
+                if (!AirportValidator.IcaoValid(line.dataSegments[1]))
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid airport ICAO for Active runway declaration", data.FullPath, data.CurrentLineNumber)
@@ -62,7 +50,7 @@ namespace Compiler.Parser
                     return;
                 }
 
-                if (!RunwayValidator.RunwayValid(parsedLine.dataSegments[2]))
+                if (!RunwayValidator.RunwayValid(line.dataSegments[2]))
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid runway designator for Active runway declaration", data.FullPath, data.CurrentLineNumber)
@@ -70,7 +58,7 @@ namespace Compiler.Parser
                     return;
                 }
 
-                if (!int.TryParse(parsedLine.dataSegments[3], out int mode) || (mode != 0 && mode != 1))
+                if (!int.TryParse(line.dataSegments[3], out int mode) || (mode != 0 && mode != 1))
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid mode for Active runway declaration", data.FullPath, data.CurrentLineNumber)
@@ -83,10 +71,12 @@ namespace Compiler.Parser
 
                 this.elements.Add(
                     new ActiveRunway(
-                        parsedLine.dataSegments[2],
-                        parsedLine.dataSegments[1],
+                        line.dataSegments[2],
+                        line.dataSegments[1],
                         mode,
-                        parsedLine.comment
+                        line.definition,
+                        line.docblock,
+                        line.inlineComment
                     )
                 );
             }

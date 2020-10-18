@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class GeoSegment : AbstractSectorElement, ICompilable
+    public class GeoSegment : AbstractCompilableElement, ICompilable
     {
         public GeoSegment(Point firstPoint, Point secondPoint, string colour, string comment)
             : base(comment)

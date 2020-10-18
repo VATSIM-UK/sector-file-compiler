@@ -2,7 +2,7 @@
 
 namespace Compiler.Model
 {
-    public class Runway : AbstractSectorElement, ICompilable
+    public class Runway : AbstractCompilableElement, ICompilable
     {
 
         public Runway(

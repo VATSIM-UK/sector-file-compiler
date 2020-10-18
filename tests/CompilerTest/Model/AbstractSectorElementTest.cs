@@ -9,7 +9,7 @@ namespace CompilerTest.Model
     /*
      * Mock class for testing.
      */
-    class MockSectorElement : AbstractSectorElement
+    class MockSectorElement : AbstractCompilableElement
     {
         public MockSectorElement(Definition definition, string comment) : base(definition, comment)
         {

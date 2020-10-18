@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class RouteSegment : AbstractSectorElement, ICompilable
+    public class RouteSegment : AbstractCompilableElement, ICompilable
     {
         public RouteSegment(
             Point start,

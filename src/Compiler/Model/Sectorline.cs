@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class Sectorline : AbstractSectorElement, ICompilable
+    public class Sectorline : AbstractCompilableElement, ICompilable
     {
         public Sectorline(
             string name,

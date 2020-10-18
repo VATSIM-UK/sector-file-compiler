@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class SectorDepartureAirports : AbstractSectorElement, ICompilable
+    public class SectorDepartureAirports : AbstractCompilableElement, ICompilable
     {
         public SectorDepartureAirports()
             : base("") 

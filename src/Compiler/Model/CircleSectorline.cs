@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class CircleSectorline : AbstractSectorElement, ICompilable
+    public class CircleSectorline : AbstractCompilableElement, ICompilable
     {
         public CircleSectorline(
             string name,

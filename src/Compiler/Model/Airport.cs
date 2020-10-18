@@ -2,7 +2,7 @@
 
 namespace Compiler.Model
 {
-    public class Airport : AbstractSectorElement, ICompilable
+    public class Airport : AbstractCompilableElement, ICompilable
     {
         public string Name { get; }
         public string Icao { get; }

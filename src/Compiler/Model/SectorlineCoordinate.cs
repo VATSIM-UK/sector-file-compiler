@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class SectorlineCoordinate : AbstractSectorElement, ICompilable
+    public class SectorlineCoordinate : AbstractCompilableElement, ICompilable
     {
         public SectorlineCoordinate(
             Coordinate coordinate,

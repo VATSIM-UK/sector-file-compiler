@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class SectorActive : AbstractSectorElement, ICompilable
+    public class SectorActive : AbstractCompilableElement, ICompilable
     {
         public SectorActive(
             string airfield,

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class RunwayCentrelines : AbstractSectorElement, ICompilable
+    public class RunwayCentrelines : AbstractCompilableElement, ICompilable
     {
         public RunwayCentrelines(List<Coordinate> coordinates, string comment)
             : base(comment)

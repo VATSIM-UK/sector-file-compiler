@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class Fix : AbstractSectorElement, ICompilable
+    public class Fix : AbstractCompilableElement, ICompilable
     {
         public string Identifier { get; }
         public Coordinate Coordinate { get; }

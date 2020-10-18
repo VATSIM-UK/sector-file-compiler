@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class Info : AbstractSectorElement, ICompilable
+    public class Info : AbstractCompilableElement, ICompilable
     {
         public Info(
             string name,

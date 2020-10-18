@@ -2,7 +2,7 @@
 
 namespace Compiler.Model
 {
-    public class SidStar :AbstractSectorElement, ICompilable
+    public class SidStar :AbstractCompilableElement, ICompilable
     {
         public string Type { get; }
         public string Airport { get; }

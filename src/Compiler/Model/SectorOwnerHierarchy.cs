@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class SectorOwnerHierarchy : AbstractSectorElement, ICompilable
+    public class SectorOwnerHierarchy : AbstractCompilableElement, ICompilable
     {
         public SectorOwnerHierarchy(
             List<string> owners,

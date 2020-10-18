@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Compiler.Model
 {
-    public class Region : AbstractSectorElement, ICompilable
+    public class Region : AbstractCompilableElement, ICompilable
     {
         public Region(string name, string colour, List<Point> points, string comment) : base(comment)
         {

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class SectorlineDisplayRule : AbstractSectorElement, ICompilable
+    public class SectorlineDisplayRule : AbstractCompilableElement, ICompilable
     {
         public SectorlineDisplayRule(
             string controlledSector,

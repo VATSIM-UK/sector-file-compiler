@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class CoordinationPoint : AbstractSectorElement, ICompilable
+    public class CoordinationPoint : AbstractCompilableElement, ICompilable
     {
         public static readonly string POINT_TYPE_FIR = "FIR_COPX";
         public static readonly string POINT_TYPE_INTERNAL = "COPX";

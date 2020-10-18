@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class Artcc : AbstractSectorElement, ICompilable
+    public class Artcc : AbstractCompilableElement, ICompilable
     {
         public Artcc(
             string identifier,
