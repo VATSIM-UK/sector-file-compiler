@@ -135,7 +135,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsArtccs()
         {
-            Artcc artcc = new Artcc(
+            ArtccSegment artcc = new ArtccSegment(
                 "EGTT",
                 ArtccType.REGULAR,
                 new Point(new Coordinate("abc", "def")),
@@ -150,7 +150,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsArtccsToCompilableSection()
         {
-            Artcc artcc = new Artcc(
+            ArtccSegment artcc = new ArtccSegment(
                 "EGTT",
                 ArtccType.REGULAR,
                 new Point(new Coordinate("abc", "def")),
@@ -165,7 +165,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsLowArtccs()
         {
-            Artcc artcc = new Artcc(
+            ArtccSegment artcc = new ArtccSegment(
                 "EGTT",
                 ArtccType.LOW,
                 new Point(new Coordinate("abc", "def")),
@@ -180,7 +180,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsLowArtccsToCompilableSection()
         {
-            Artcc artcc = new Artcc(
+            ArtccSegment artcc = new ArtccSegment(
                 "EGTT",
                 ArtccType.LOW,
                 new Point(new Coordinate("abc", "def")),
@@ -195,7 +195,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsHighArtccs()
         {
-            Artcc artcc = new Artcc(
+            ArtccSegment artcc = new ArtccSegment(
                 "EGTT",
                 ArtccType.HIGH,
                 new Point(new Coordinate("abc", "def")),
@@ -210,7 +210,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsHighArtccsToCompilableSection()
         {
-            Artcc artcc = new Artcc(
+            ArtccSegment artcc = new ArtccSegment(
                 "EGTT",
                 ArtccType.HIGH,
                 new Point(new Coordinate("abc", "def")),

@@ -29,9 +29,9 @@ namespace CompilerTest.Validate
             this.args = new CompilerArguments();
         }
 
-        private Artcc GetArtcc(ArtccType type, string startPointIdentifier, string endPointIdentifier)
+        private ArtccSegment GetArtcc(ArtccType type, string startPointIdentifier, string endPointIdentifier)
         {
-            return new Artcc("test", type, new Point(startPointIdentifier), new Point(endPointIdentifier), "");
+            return new ArtccSegment("test", type, new Point(startPointIdentifier), new Point(endPointIdentifier), "");
         }
 
         [Fact]

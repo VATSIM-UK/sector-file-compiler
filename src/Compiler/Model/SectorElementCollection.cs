@@ -18,9 +18,9 @@ namespace Compiler.Model
 
         public List<Ndb> Ndbs { get; } = new List<Ndb>();
 
-        public List<Artcc> Artccs { get; } = new List<Artcc>();
-        public List<Artcc> LowArtccs { get; } = new List<Artcc>();
-        public List<Artcc> HighArtccs { get; } = new List<Artcc>();
+        public List<ArtccSegment> Artccs { get; } = new List<ArtccSegment>();
+        public List<ArtccSegment> LowArtccs { get; } = new List<ArtccSegment>();
+        public List<ArtccSegment> HighArtccs { get; } = new List<ArtccSegment>();
         public List<AirwaySegment> LowAirways { get; } = new List<AirwaySegment>();
         public List<AirwaySegment> HighAirways { get; } = new List<AirwaySegment>();
         public List<SidStarRoute> SidRoutes { get; } = new List<SidStarRoute>();
@@ -77,7 +77,7 @@ namespace Compiler.Model
             }
         }
 
-        public void Add(Artcc artcc)
+        public void Add(ArtccSegment artcc)
         {
             switch (artcc.Type)
             {

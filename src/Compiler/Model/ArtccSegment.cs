@@ -4,16 +4,22 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class Artcc : AbstractCompilableElement, ICompilable
+    /*
+     * Similarly to Airways, the SCT2 format doesn't recognise ARTCCs as a single entity with many points, rather
+     * each individually named segments. Therefore this model represents a single oneof these segments.
+     */
+    public class ArtccSegment : AbstractCompilableElement
     {
-        public Artcc(
+        public ArtccSegment(
             string identifier,
             ArtccType type,
             Point startPoint,
             Point endPoint,
-            string comment
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
         ) 
-            : base(comment)
+            : base(definition, docblock, inlineComment)
         {
             Identifier = identifier;
             Type = type;
@@ -26,14 +32,13 @@ namespace Compiler.Model
         public Point StartPoint { get; }
         public Point EndPoint { get; }
 
-        public string Compile()
+        public override string GetCompileData()
         {
             return String.Format(
-                "{0} {1} {2}{3}\r\n",
+                "{0} {1} {2}",
                 this.Identifier,
-                this.StartPoint.Compile(),
-                this.EndPoint.Compile(),
-                this.CompileComment()
+                this.StartPoint.ToString(),
+                this.EndPoint.ToString()
             );
         }
     }

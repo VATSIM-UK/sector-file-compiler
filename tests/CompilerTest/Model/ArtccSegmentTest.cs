@@ -3,13 +3,13 @@ using Compiler.Model;
 
 namespace CompilerTest.Model
 {
-    public class ArtccTest
+    public class ArtccSegmentTest
     {
-        private readonly Artcc artcc;
+        private readonly ArtccSegment artcc;
 
-        public ArtccTest()
+        public ArtccSegmentTest()
         {
-            this.artcc = new Artcc(
+            this.artcc = new ArtccSegment(
                 "EGTT",
                 ArtccType.HIGH,
                 new Point("ABCDE"),

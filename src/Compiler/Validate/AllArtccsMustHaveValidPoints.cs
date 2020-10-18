@@ -18,11 +18,11 @@ namespace Compiler.Validate
         }
 
         private void TestArtccCategory(
-            List<Artcc> artccs,
+            List<ArtccSegment> artccs,
             SectorElementCollection sectorElements,
             IEventLogger events
         ) {
-            foreach (Artcc artcc in artccs)
+            foreach (ArtccSegment artcc in artccs)
             {
                 if (artcc.StartPoint.Type() == Point.TYPE_IDENTIFIER)
                 {

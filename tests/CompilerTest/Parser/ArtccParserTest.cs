@@ -77,7 +77,7 @@ namespace CompilerTest.Parser
             );
             this.parser.ParseData(data);
 
-            Artcc result = this.collection.Artccs[0];
+            ArtccSegment result = this.collection.Artccs[0];
             Assert.Equal("EGTT London FIR", result.Identifier);
             Assert.Equal(ArtccType.REGULAR, result.Type);
             Assert.Equal(new Point(new Coordinate("N050.57.00.001", "W001.21.24.490")), result.StartPoint);
@@ -94,7 +94,7 @@ namespace CompilerTest.Parser
             );
             this.parser.ParseData(data);
 
-            Artcc result = this.collection.Artccs[0];
+            ArtccSegment result = this.collection.Artccs[0];
             Assert.Equal("EGTT London FIR", result.Identifier);
             Assert.Equal(ArtccType.REGULAR, result.Type);
             Assert.Equal(new Point("DIKAS"), result.StartPoint);
