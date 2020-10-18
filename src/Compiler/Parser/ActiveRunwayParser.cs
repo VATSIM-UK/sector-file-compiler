@@ -29,7 +29,7 @@ namespace Compiler.Parser
                 if (line.dataSegments.Count != 4)
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid number of ACTIVE_RUNWAY segments", data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Invalid number of ACTIVE_RUNWAY segments", line)
                     );
                     return;
                 }
@@ -37,7 +37,7 @@ namespace Compiler.Parser
                 if (line.dataSegments[0] != "ACTIVE_RUNWAY")
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Active runway declarations must begin with ACTIVE_RUNWAY", data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Active runway declarations must begin with ACTIVE_RUNWAY", line)
                     );
                     return;
                 }
@@ -45,7 +45,7 @@ namespace Compiler.Parser
                 if (!AirportValidator.IcaoValid(line.dataSegments[1]))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid airport ICAO for Active runway declaration", data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Invalid airport ICAO for Active runway declaration", line)
                     );
                     return;
                 }
@@ -53,7 +53,7 @@ namespace Compiler.Parser
                 if (!RunwayValidator.RunwayValid(line.dataSegments[2]))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid runway designator for Active runway declaration", data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Invalid runway designator for Active runway declaration", line)
                     );
                     return;
                 }
@@ -61,7 +61,7 @@ namespace Compiler.Parser
                 if (!int.TryParse(line.dataSegments[3], out int mode) || (mode != 0 && mode != 1))
                 {
                     this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid mode for Active runway declaration", data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Invalid mode for Active runway declaration", line)
                     );
                     this.eventLogger.AddEvent(
                         new ParserSuggestion("Valid modes for Active runways are 0 and 1")

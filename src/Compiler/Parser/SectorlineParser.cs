@@ -32,7 +32,7 @@ namespace Compiler.Parser
                 ) {
                     {
                         this.errorLog.AddEvent(
-                            new SyntaxError("Invalid SECTORLINE declaration", data.FullPath, line.definition.LineNumber)
+                            new SyntaxError("Invalid SECTORLINE declaration", line)
                         );
                         return;
                     }
@@ -105,11 +105,7 @@ namespace Compiler.Parser
             if (declarationLine.dataSegments.Count != 4 && declarationLine.dataSegments.Count != 5)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError(
-                        "Incorrect number of segments for SECTORLINE declaration",
-                        file.FullPath,
-                        declarationLine.definition.LineNumber
-                    )
+                    new SyntaxError("Incorrect number of segments for SECTORLINE declaration", declarationLine)
                 );
                 throw new ArgumentException();
             }
@@ -126,10 +122,7 @@ namespace Compiler.Parser
                 {
                     this.errorLog.AddEvent(
                         new SyntaxError(
-                            "Invalid CIRCLE_SECTORLINE coordinate",
-                            file.FullPath,
-                            declarationLine.definition.LineNumber
-                        )
+                            "Invalid CIRCLE_SECTORLINE coordinate", declarationLine)
                     );
                     throw new ArgumentException();
                 }
@@ -142,10 +135,7 @@ namespace Compiler.Parser
             {
                 this.errorLog.AddEvent(
                     new SyntaxError(
-                        "Invalid CIRCLE_SECTORLINE radius",
-                        file.FullPath,
-                        declarationLine.definition.LineNumber
-                    )
+                        "Invalid CIRCLE_SECTORLINE radius", declarationLine)
                 );
                 throw new ArgumentException();
             }
@@ -162,7 +152,7 @@ namespace Compiler.Parser
                     displayRules.Add(this.ParseDisplayRule(displayData));
                 } catch (ArgumentException exception) {
                     this.errorLog.AddEvent(
-                        new SyntaxError(exception.Message, file.FullPath, displayData.definition.LineNumber)
+                        new SyntaxError(exception.Message, displayData)
                     );
                     throw exception;
                 }
@@ -208,7 +198,7 @@ namespace Compiler.Parser
             if (declarationLine.dataSegments.Count != 2)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Incorrect number of segments for SECTORLINE declaration", file.FullPath, declarationLine.definition.LineNumber)
+                    new SyntaxError("Incorrect number of segments for SECTORLINE declaration", declarationLine)
                 );
                 throw new ArgumentException();
             }
@@ -237,7 +227,7 @@ namespace Compiler.Parser
                 } catch (ArgumentException exception)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError(exception.Message, file.FullPath, dataLine.definition.LineNumber)
+                        new SyntaxError(exception.Message, dataLine)
                     );
                     throw exception;
                 }
@@ -248,11 +238,7 @@ namespace Compiler.Parser
             if (coordinates.Count == 0)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError(
-                        "No coordinates found for SECTORLINE",
-                        file.FullPath,
-                        declarationLine.definition.LineNumber
-                    )
+                    new SyntaxError("No coordinates found for SECTORLINE", declarationLine)
                 );
                 throw new ArgumentException();
             }

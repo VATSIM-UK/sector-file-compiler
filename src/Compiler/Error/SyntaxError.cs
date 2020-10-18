@@ -1,32 +1,30 @@
 ﻿using System;
 using Compiler.Event;
+using Compiler.Input;
+using Compiler.Model;
 
 namespace Compiler.Error
 {
     public class SyntaxError : ICompilerEvent
     {
         private readonly string problem;
-        private readonly string fileName;
-        private readonly int itemNumber;
+        private readonly Definition definition;
 
         public SyntaxError(
             string problem,
-            string fileName,
-            int itemNumber 
-        )
-        {
+            SectorData line
+        ) {
             this.problem = problem;
-            this.fileName = fileName;
-            this.itemNumber = itemNumber;
+            this.definition = line.definition;
         }
 
         public string GetMessage()
         {
-            return String.Format(
-                "Syntax Error: {0} in {1} at position {2}",
+            return string.Format(
+                "Syntax Error: {0} in {1} at line {2}",
                 this.problem,
-                this.fileName,
-                this.itemNumber
+                this.definition.Filename,
+                this.definition.LineNumber
             );
         }
 
