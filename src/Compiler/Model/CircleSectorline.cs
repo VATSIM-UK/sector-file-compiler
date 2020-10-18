@@ -5,15 +5,17 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class CircleSectorline : AbstractCompilableElement, ICompilable
+    public class CircleSectorline : AbstractCompilableElement
     {
         public CircleSectorline(
             string name,
             string centrePoint,
             double radius,
             List<SectorlineDisplayRule> displayRules,
-            string definitionComment
-        ) : base(definitionComment) 
+            Definition definition,
+            Docblock definitionLineDocblock,
+            Comment definitionLineComment
+        ) : base(definition, definitionLineDocblock, definitionLineComment)
         {
             Name = name;
             CentrePoint = centrePoint;
@@ -26,8 +28,10 @@ namespace Compiler.Model
             Coordinate centreCoordinate,
             double radius,
             List<SectorlineDisplayRule> displayRules,
-            string definitionComment
-        ) : base(definitionComment)
+            Definition definition,
+            Docblock definitionLineDocblock,
+            Comment definitionLineComment
+        ) : base(definition, definitionLineDocblock, definitionLineComment)
         {
             Name = name;
             CentreCoordinate = centreCoordinate;
@@ -41,15 +45,28 @@ namespace Compiler.Model
         public double Radius { get; }
         public List<SectorlineDisplayRule> DisplayRules { get; }
 
-        public string Compile()
+        /*
+         * This class contains the base definition of the CIRCLE_SECTORLINE plus a number of
+         * display rules, so the compilable elements are itself followed by all the display rules.
+         */
+        public override IEnumerable<ICompilableElement> GetCompilableElements()
         {
-            return String.Format(
-                "CIRCLE_SECTORLINE:{0}:{1}:{2}{3}\r\n{4}\r\n",
+            List<ICompilableElement> elements = new List<ICompilableElement>();
+            elements.Add(this);
+            elements.Concat(this.DisplayRules);
+            return elements;
+        }
+
+        /*
+         * Returns the compile data for just the main definition.
+         */
+        public override string GetCompileData()
+        {
+            return string.Format(
+                "CIRCLE_SECTORLINE:{0}:{1}:{2}",
                 this.Name,
                 this.CentrePoint ?? this.CentreCoordinate.latitude + ":" + this.CentreCoordinate.longitude,
-                this.Radius,
-                this.CompileComment(),
-                this.DisplayRules.Aggregate("", (ruleString, newRule) => ruleString + newRule.Compile())
+                this.Radius
             );
         }
     }
