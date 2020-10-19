@@ -43,14 +43,14 @@ namespace Compiler.Model
         {
             foreach (Comment line in this.Docblock)
             {
-                output.WriteLine(";" + line.CommentString);
+                output.WriteLine(line.ToString());
             }
 
             output.WriteLine(
                 string.Format(
-                    "{0}{1}",
+                    "{0}{1}{2}",
                     this.GetCompileData(),
-                    this.InlineComment.CommentString == "" ? "" : " ;" + this.InlineComment.CommentString
+                    this.InlineComment.ToString()
                 )
             );
         }

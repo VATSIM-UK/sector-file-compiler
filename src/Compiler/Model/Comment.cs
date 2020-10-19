@@ -1,8 +1,12 @@
 ﻿using System;
+using System.IO;
 
 namespace Compiler.Model
 {
-    public class Comment : ICompilable
+    /*
+     * A single comment segment in the output - may be a whole line or the end of one.
+     */
+    public class Comment
     {
         public Comment(string comment)
         {
@@ -11,12 +15,9 @@ namespace Compiler.Model
 
         public string CommentString { get; }
 
-        public string Compile()
+        public override string ToString()
         {
-            return String.Format(
-                "; {0}\r\n",
-                this.CommentString
-            );
+            return this.CommentString == "" ? "" : " ;" + this.CommentString;
         }
     }
 }
