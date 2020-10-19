@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class ControllerPosition : AbstractCompilableElement, ICompilable
+    public class ControllerPosition : AbstractCompilableElement
     {
         public ControllerPosition(
             string callsign,
@@ -17,8 +17,10 @@ namespace Compiler.Model
             string squawkRangeStart,
             string squawkRangeEnd,
             List<Coordinate> visCentres,
-            string comment
-        ) : base (comment)
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base (definition, docblock, inlineComment)
         {
             Callsign = callsign;
             RtfCallsign = rtfCallsign;
@@ -43,10 +45,10 @@ namespace Compiler.Model
         public string SquawkRangeEnd { get; }
         public List<Coordinate> VisCentres { get; }
 
-        public string Compile()
+        public override string GetCompileData()
         {
-            return String.Format(
-                "{0}:{1}:{2}:{3}:{4}:{5}:{6}:-:-:{7}:{8}{9}{10}\r\n",
+            return string.Format(
+                "{0}:{1}:{2}:{3}:{4}:{5}:{6}:-:-:{7}:{8}{9}",
                 this.Callsign,
                 this.RtfCallsign,
                 this.Frequency,
@@ -56,8 +58,7 @@ namespace Compiler.Model
                 this.Suffix,
                 this.SquawkRangeStart,
                 this.SquawkRangeEnd,
-                this.CompileVisCenters(),
-                this.CompileComment()
+                this.CompileVisCenters()
             );
         }
 
