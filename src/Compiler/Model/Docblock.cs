@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Compiler.Model
 {
+    /*
+     * Represents a possibly multi-line comment that exists on its own lines.
+     */
     public class Docblock : IEnumerable<Comment>
     {
         protected List<Comment> Lines { get; set; }
