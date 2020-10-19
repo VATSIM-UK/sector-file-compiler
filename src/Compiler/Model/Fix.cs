@@ -4,24 +4,29 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class Fix : AbstractCompilableElement, ICompilable
+    public class Fix : AbstractCompilableElement
     {
         public string Identifier { get; }
         public Coordinate Coordinate { get; }
 
-        public Fix(string identifier, Coordinate coordinate, string comment) : base(comment)
+        public Fix(
+            string identifier,
+            Coordinate coordinate,
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base(definition, docblock, inlineComment)
         {
             Identifier = identifier;
             Coordinate = coordinate;
         }
 
-        public string Compile()
+        public override string GetCompileData()
         {
-            return String.Format(
-                "{0} {1}{2}\r\n",
+            return string.Format(
+                "{0} {1}",
                 this.Identifier,
-                this.Coordinate.ToString(),
-                this.CompileComment()
+                this.Coordinate.ToString()
             );
         }
     }
