@@ -6,48 +6,36 @@ using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class FreetextParser : AbstractSectorElementParser, ISectorDataParser
+    public class FreetextParser : ISectorDataParser
     {
-        private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
         private readonly IEventLogger errorLog;
 
         public FreetextParser(
-            MetadataParser metadataParser,
-            ISectorLineParser sectorLineParser,
             SectorElementCollection sectorElements,
             IEventLogger errorLog
-        ) : base(metadataParser)
-        {
-            this.sectorLineParser = sectorLineParser;
+        ) {
             this.sectorElements = sectorElements;
             this.errorLog = errorLog;
         }
 
         public void ParseData(AbstractSectorDataFile data)
         {
-            foreach (string line in data)
+            foreach (SectorData line in data)
             {
-                // Defer all metadata lines to the base
-                if (this.ParseMetadata(line))
-                {
-                    continue;
-                }
-
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
-                if (sectorData.dataSegments.Count != 4)
+                if (line.dataSegments.Count != 4)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Incorrect number of Freetext segments", data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Incorrect number of Freetext segments", line)
                     );
                     return;
                 }
 
-                Coordinate parsedCoordinate = CoordinateParser.Parse(sectorData.dataSegments[0], sectorData.dataSegments[1]);
+                Coordinate parsedCoordinate = CoordinateParser.Parse(line.dataSegments[0], line.dataSegments[1]);
                 if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid coordinate format: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Invalid coordinate format: " + data.CurrentLine, line)
                     );
                     return;
                 }
@@ -55,10 +43,12 @@ namespace Compiler.Parser
 
                 this.sectorElements.Add(
                     new Freetext(
-                        sectorData.dataSegments[2],
-                        sectorData.dataSegments[3],
+                        line.dataSegments[2],
+                        line.dataSegments[3],
                         parsedCoordinate,
-                        sectorData.comment
+                        line.definition,
+                        line.docblock,
+                        line.inlineComment
                     )
                 );
             }
