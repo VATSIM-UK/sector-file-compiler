@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class CoordinationPoint : AbstractCompilableElement, ICompilable
+    public class CoordinationPoint : AbstractCompilableElement
     {
         public static readonly string POINT_TYPE_FIR = "FIR_COPX";
         public static readonly string POINT_TYPE_INTERNAL = "COPX";
@@ -23,8 +23,10 @@ namespace Compiler.Model
             string climbLevel,
             string descendLevel,
             string name,
-            string comment
-        ) : base(comment) 
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base(definition, docblock, inlineComment) 
         {
             IsFirCopx = isFirCopx;
             DepartureAirportOrFixBefore = departureAirportOrFixBefore;
@@ -51,10 +53,10 @@ namespace Compiler.Model
         public string DescendLevel { get; }
         public string Name { get; }
 
-        public string Compile()
+        public override string GetCompileData()
         {
-            return String.Format(
-                "{0}:{1}:{2}:{3}:{4}:{5}:{6}:{7}:{8}:{9}:{10}{11}\r\n",
+            return string.Format(
+                "{0}:{1}:{2}:{3}:{4}:{5}:{6}:{7}:{8}:{9}:{10}",
                 this.IsFirCopx ? "FIR_COPX" : "COPX",
                 this.DepartureAirportOrFixBefore,
                 this.DepartureRunway,
@@ -65,8 +67,7 @@ namespace Compiler.Model
                 this.ToSector,
                 this.ClimbLevel,
                 this.DescendLevel,
-                this.Name,
-                this.CompileComment()
+                this.Name
             );
         }
     }
