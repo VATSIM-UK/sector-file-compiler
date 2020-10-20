@@ -18,6 +18,14 @@ namespace Compiler.Error
             this.definition = line.definition;
         }
 
+        public SyntaxError(
+            string problem,
+            string filename
+        ) {
+            this.problem = problem;
+            this.definition = new Definition(filename, 0);
+        }
+
         public string GetMessage()
         {
             return string.Format(

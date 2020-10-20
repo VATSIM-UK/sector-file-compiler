@@ -4,10 +4,17 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class GeoSegment : AbstractCompilableElement, ICompilable
+    public class GeoSegment : AbstractCompilableElement
     {
-        public GeoSegment(Point firstPoint, Point secondPoint, string colour, string comment)
-            : base(comment)
+        public GeoSegment(
+            Point firstPoint,
+            Point secondPoint,
+            string colour,
+            Definition definition,
+            Docblock docblock,
+            Comment comment
+
+        ) : base(definition, docblock, comment)
         {
             FirstPoint = firstPoint;
             SecondPoint = secondPoint;
@@ -18,14 +25,13 @@ namespace Compiler.Model
         public Point SecondPoint { get; }
         public string Colour { get; }
 
-        public string Compile()
+        public override string GetCompileData()
         {
-            return String.Format(
-                "{0} {1} {2}{3}\r\n",
-                this.FirstPoint.Compile(),
-                this.SecondPoint.Compile(),
-                this.Colour,
-                this.CompileComment()
+            return string.Format(
+                "{0} {1} {2}",
+                this.FirstPoint.ToString(),
+                this.SecondPoint.ToString(),
+                this.Colour
             );
         }
     }
