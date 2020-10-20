@@ -1,8 +1,15 @@
 ﻿namespace Compiler.Model
 {
-    public class Label : AbstractCompilableElement, ICompilable
+    public class Label : AbstractCompilableElement
     {
-        public Label(string text, Coordinate position, string colour, string comment) : base(comment)
+        public Label(
+            string text,
+            Coordinate position,
+            string colour,
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base(definition, docblock, inlineComment)
         {
             Text = text;
             Position = position;
@@ -13,14 +20,13 @@
         public Coordinate Position { get; }
         public string Colour { get; }
 
-        public string Compile()
+        public override string GetCompileData()
         {
             return string.Format(
-                "\"{0}\" {1} {2}{3}\r\n",
+                "\"{0}\" {1} {2}",
                 this.Text,
                 this.Position.ToString(),
-                this.Colour,
-                this.CompileComment()
+                this.Colour
             );
         }
     }

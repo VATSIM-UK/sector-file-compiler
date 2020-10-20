@@ -52,7 +52,7 @@ namespace Compiler.Model
                 this.Name.PadRight(27, ' '),
                 this.InitialSegment.FirstPoint.ToString(),
                 this.InitialSegment.SecondPoint.ToString(),
-                this.InitialSegment.Colour()
+                this.InitialSegment.Colour
             );
         }
     }
