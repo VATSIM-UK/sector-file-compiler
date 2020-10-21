@@ -47,6 +47,7 @@ namespace Compiler.Input
                             docblock,
                             reader.GetCommentSegment(line),
                             reader.GetDataSegments(line),
+                            line,
                             new Definition(this.FullPath, this.CurrentLineNumber)
                         );
                         docblock = new Docblock();
