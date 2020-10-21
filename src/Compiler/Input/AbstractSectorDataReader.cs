@@ -46,15 +46,23 @@ namespace Compiler.Input
         protected abstract string GetCommentDelimiter();
 
         /*
-         * Returns a list of segements, that have been split up from the original line using the
+         * Returns a list of segments, that have been split up from the original line using the
          * data delimiter, once the comment has been stripped off.
          */
         public List<string> GetDataSegments(string line)
         {
+            return new List<string>(this.GetRawData(line).Split(this.GetDataDelimiter()));
+        }
+
+        /*
+         * Returns the raw data for the line, that is, the unaltered line up until the comment character.
+         */
+        public string GetRawData(string line)
+        {
             int commentIndex = line.IndexOf(this.GetCommentDelimiter());
-            return commentIndex == -1 
-                ? new List<string>(line.Trim().Split(this.GetDataDelimiter()))
-                :  new List<string>(line.Substring(0, commentIndex).Trim().Split(this.GetDataDelimiter()));
+            return commentIndex == -1
+                ? line.Trim()
+                : line.Substring(0, commentIndex).Trim();
         }
     }
 }
