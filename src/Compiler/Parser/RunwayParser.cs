@@ -112,7 +112,7 @@ namespace Compiler.Parser
                         int.Parse(line.dataSegments[3]),
                         reverseThreshold,
                         line.definition,
-                        line.docblock
+                        line.docblock,
                         line.inlineComment
                     )
                 );
