@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class Sector : AbstractCompilableElement, ICompilable
+    public class Sector : AbstractCompilableElement
     {
         public Sector(
             string name,
@@ -18,8 +18,10 @@ namespace Compiler.Model
             SectorBorder border,
             SectorArrivalAirports arrivalAirports,
             SectorDepartureAirports departureAirports,
-            string definitionComment
-        ) : base(definitionComment) 
+            Definition initialDefinition,
+            Docblock initialDocblock,
+            Comment initialInlineComment
+        ) : base(initialDefinition, initialDocblock, initialInlineComment) 
         {
             Name = name;
             MinimumAltitude = minimumAltitude;
@@ -45,21 +47,27 @@ namespace Compiler.Model
         public SectorArrivalAirports ArrivalAirports { get; }
         public SectorDepartureAirports DepartureAirports { get; }
 
-        public string Compile()
+        public override IEnumerable<ICompilableElement> GetCompilableElements()
         {
-            return String.Format(
-                "SECTOR:{0}:{1}:{2}{3}\r\n{4}{5}{6}{7}{8}{9}{10}\r\n",
+            List<ICompilableElement> elements = new List<ICompilableElement>();
+            elements.Add(this);
+            elements.Add(this.Owners);
+            elements.Concat(this.AltOwners);
+            elements.Concat(this.Active);
+            elements.Concat(this.Guests);
+            elements.Add(this.Border);
+            elements.Add(this.ArrivalAirports);
+            elements.Add(this.DepartureAirports);
+            return elements;
+        }
+
+        public override string GetCompileData()
+        {
+            return string.Format(
+                "SECTOR:{0}:{1}:{2}",
                 this.Name,
                 this.MinimumAltitude.ToString(),
-                this.MaximumAltitude.ToString(),
-                this.CompileComment(),
-                this.Owners.Compile(),
-                this.AltOwners.Aggregate("", (ownerString, newOwner) => ownerString + newOwner.Compile()),
-                this.Active.Aggregate("", (activeString, newActive) => activeString + newActive.Compile()),
-                this.Guests.Aggregate("", (guestString, newGuest) => guestString + newGuest.Compile()),
-                this.Border.Compile(),
-                this.ArrivalAirports.Compile(),
-                this.DepartureAirports.Compile()
+                this.MaximumAltitude.ToString()
             );
         }
     }
