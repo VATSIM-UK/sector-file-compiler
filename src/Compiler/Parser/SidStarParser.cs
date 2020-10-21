@@ -6,59 +6,49 @@ using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class SidStarParser: AbstractSectorElementParser, ISectorDataParser
+    public class SidStarParser: ISectorDataParser
     {
-        private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
         private readonly IEventLogger errorLog;
 
         public SidStarParser(
-            MetadataParser metadataParser,
-            ISectorLineParser sectorLineParser,
             SectorElementCollection sectorElements,
             IEventLogger errorLog
-        ) : base(metadataParser)
-        {
-            this.sectorLineParser = sectorLineParser;
+        ) {
             this.sectorElements = sectorElements;
             this.errorLog = errorLog;
         }
 
         public void ParseData(AbstractSectorDataFile data)
         {
-            foreach (string line in data)
+            foreach (SectorData line in data)
             {
-                // Defer all metadata lines to the base
-                if (this.ParseMetadata(line))
-                {
-                    continue;
-                }
-
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
-                if (sectorData.dataSegments.Count != 5)
+                if (line.dataSegments.Count != 5)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Incorrect number of SIDSTAR segments", data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Incorrect number of SIDSTAR segments", line)
                     );
                     continue;
                 }
 
-                if (sectorData.dataSegments[0] != "SID" && sectorData.dataSegments[0] != "STAR")
+                if (line.dataSegments[0] != "SID" && line.dataSegments[0] != "STAR")
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Unknown SIDSTAR type " + sectorData.dataSegments[0], data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Unknown SIDSTAR type " + line.dataSegments[0], line)
                     ); ;
                     continue;
                 }
 
                 this.sectorElements.Add(
                     new SidStar(
-                        sectorData.dataSegments[0],
-                        sectorData.dataSegments[1],
-                        sectorData.dataSegments[2],
-                        sectorData.dataSegments[3],
-                        new List<string>(sectorData.dataSegments[4].Split(' ')),
-                        sectorData.comment
+                        line.dataSegments[0],
+                        line.dataSegments[1],
+                        line.dataSegments[2],
+                        line.dataSegments[3],
+                        new List<string>(line.dataSegments[4].Split(' ')),
+                        line.definition,
+                        line.docblock,
+                        line.inlineComment
                     )
                 );
             }
