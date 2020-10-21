@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -27,6 +28,11 @@ namespace Compiler.Input
         public bool Equals(AbstractSectorDataFile compare)
         {
             return this.FullPath == compare.FullPath;
+        }
+
+        public string GetParentDirectory()
+        {
+            return Path.GetDirectoryName(this.FullPath);
         }
 
         public abstract IEnumerator<SectorData> GetEnumerator();

@@ -29,6 +29,15 @@ namespace CompilerTest.Input
         }
 
         [Fact]
+        public void ItGetsParentDirectory()
+        {
+            Assert.Equal(
+                "_TestData",
+                this.file.GetParentDirectory()
+            );
+        }
+
+        [Fact]
         public void CurrentLineNumberStartsAtZero()
         {
             Assert.Equal(0, this.file.CurrentLineNumber);
