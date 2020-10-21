@@ -8,20 +8,15 @@ using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class AirportParser : AbstractSectorElementParser, ISectorDataParser
+    public class AirportParser : ISectorDataParser
     {
-        private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection elements;
         private readonly IEventLogger eventLogger;
 
         public AirportParser(
-            MetadataParser metadataParser,
-            ISectorLineParser sectorLineParser,
             SectorElementCollection elements,
             IEventLogger eventLogger
-        ) : base(metadataParser)
-        {
-            this.sectorLineParser = sectorLineParser;
+        ) {
             this.elements = elements;
             this.eventLogger = eventLogger;
         }
@@ -30,67 +25,38 @@ namespace Compiler.Parser
         {
             int linesParsed = 0;
 
-            int icaoLineNumber = 0;
-            SectorFormatLine icaoLine = new SectorFormatLine("", new List<string>(), "");
-            int nameLineNumber = 0;
-            SectorFormatLine nameLine = new SectorFormatLine("", new List<string>(), "");
-            int coordinateLineNumber = 0;
-            SectorFormatLine coordinateLine = new SectorFormatLine("", new List<string>(), "");
-            int frequencyLineNumber = 0;
-            SectorFormatLine frequencyLine = new SectorFormatLine("", new List<string>(), "");
+            SectorData nameLine = new SectorData();
+            SectorData coordinateLine = new SectorData();
+            SectorData frequencyLine = new SectorData();
 
             // Loop the lines to get the data out
-            foreach (string line in data)
+            foreach (SectorData line in data)
             {
-                if (this.ParseMetadata(line))
-                {
-                    continue;
-                }
-
-                SectorFormatLine parsedLine = this.sectorLineParser.ParseLine(line);
-                if (linesParsed == 0)
-                {
-                    icaoLine = parsedLine;
-                    icaoLineNumber = data.CurrentLineNumber;
+                if (linesParsed == 0) {
+                    nameLine = line;
                     linesParsed++;
                     continue;
                 } else if (linesParsed == 1) {
-                    nameLine = parsedLine;
-                    nameLineNumber = data.CurrentLineNumber;
+                    coordinateLine = line;
                     linesParsed++;
                     continue;
                 } else if (linesParsed == 2) {
-                    coordinateLine = parsedLine;
-                    coordinateLineNumber = data.CurrentLineNumber;
-                    linesParsed++;
-                    continue;
-                } else if (linesParsed == 3) {
-                    frequencyLine = parsedLine;
-                    frequencyLineNumber = data.CurrentLineNumber;
+                    frequencyLine = line;
                     linesParsed++;
                     continue;
                 }
 
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid number of airport lines", data.FullPath, data.CurrentLineNumber)
+                    new SyntaxError("Invalid number of airport lines", line)
                 );
                 return;
             }
 
             // Check the syntax
-            if (linesParsed != 4)
+            if (linesParsed != 3)
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid number of airport lines", data.FullPath, data.CurrentLineNumber)
-                );
-                return;
-            }
-
-            // Parse the coordinate
-            if (!AirportValidator.IcaoValid(icaoLine.data))
-            {
-                this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid airport ICAO: " + icaoLine.data, data.FullPath, icaoLineNumber)
+                    new SyntaxError("Invalid number of airport lines", data.FullPath)
                 );
                 return;
             }
@@ -99,7 +65,7 @@ namespace Compiler.Parser
             if (coordinateLine.dataSegments.Count != 2)
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid coordinate format: " + coordinateLine.data, data.FullPath, coordinateLineNumber)
+                    new SyntaxError("Invalid coordinate format for airport: " + coordinateLine.rawData, coordinateLine)
                 );
                 return;
             }
@@ -108,35 +74,20 @@ namespace Compiler.Parser
             if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
             {
                 this.eventLogger.AddEvent(
-                    new SyntaxError("Invalid coordinate format: " + coordinateLine.data, data.FullPath, coordinateLineNumber)
+                    new SyntaxError("Invalid coordinate format for airport: " + coordinateLine.rawData, coordinateLine)
                 );
                 return;
             }
 
-            // Create the element, join all the comments together
-            List<string> validComments = new List<string>();
-            if (nameLine.comment != null)
-            {
-                validComments.Add(nameLine.comment);
-            }
-
-            if (coordinateLine.comment != null)
-            {
-                validComments.Add(coordinateLine.comment);
-            }
-
-            if (frequencyLine.comment != null)
-            {
-                validComments.Add(frequencyLine.comment);
-            }
-
             this.elements.Add(
                 new Airport(
-                    nameLine.data,
-                    icaoLine.data,
+                    nameLine.rawData,
+                    data.GetParentDirectory(),
                     parsedCoordinate,
-                    frequencyLine.data,
-                    String.Join(", ", validComments)
+                    frequencyLine.rawData,
+                    nameLine.definition,
+                    nameLine.docblock,
+                    nameLine.inlineComment
                 )
             );
         }

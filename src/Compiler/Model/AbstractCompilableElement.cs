@@ -39,7 +39,7 @@ namespace Compiler.Model
         /*
          * Compiles the data, along with inline comments and docblocks
          */
-        public void Compile(SectorElementCollection elements, TextWriter output)
+        public virtual void Compile(SectorElementCollection elements, TextWriter output)
         {
             foreach (Comment line in this.Docblock)
             {
@@ -48,7 +48,7 @@ namespace Compiler.Model
 
             output.WriteLine(
                 string.Format(
-                    "{0}{1}{2}",
+                    "{0}{1}",
                     this.GetCompileData(),
                     this.InlineComment.ToString()
                 )
