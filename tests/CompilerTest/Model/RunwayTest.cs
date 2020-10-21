@@ -10,13 +10,13 @@ namespace CompilerTest.Model
         public RunwayTest()
         {
             this.runway = new Runway(
+                "EGGD",
                 "09",
                 90,
                 new Coordinate("abc", "def"),
                 "27",
                 270,
                 new Coordinate("ghi", "jkl"),
-                "EGGD - Bristol",
                 "comment"
             );
         }
@@ -58,9 +58,9 @@ namespace CompilerTest.Model
         }
 
         [Fact]
-        public void TestItSetsRunwayDialogDescription()
+        public void TestItSetsAirfieldIcao()
         {
-            Assert.Equal("EGGD - Bristol", this.runway.RunwayDialogDescription);
+            Assert.Equal("EGGD", this.runway.AirfieldIcao);
         }
 
 
