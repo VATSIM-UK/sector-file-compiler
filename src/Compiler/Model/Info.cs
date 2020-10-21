@@ -4,19 +4,18 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class Info : AbstractCompilableElement, ICompilable
+    public class Info : ICompilableElementProvider
     {
         public Info(
-            string name,
-            string callsign,
-            string airport,
+            InfoName name,
+            InfoCallsign callsign,
+            InfoAirport airport,
             Coordinate coordinate,
             int milesPerDegreeLatitude,
             double milesPerDegreeLongitude,
             double magneticVariation,
             int scale
-        ) : base("")
-        {
+        ){
             Name = name;
             Callsign = callsign;
             Airport = airport;
@@ -27,9 +26,9 @@ namespace Compiler.Model
             Scale = scale;
         }
 
-        public string Name { get; }
-        public string Callsign { get; }
-        public string Airport { get; }
+        public InfoName Name { get; }
+        public InfoCallsign Callsign { get; }
+        public InfoAirport Airport { get; }
         public Coordinate Coordinate { get; }
         public int MilesPerDegreeLatitude { get; }
         public double MilesPerDegreeLongitude { get; }
@@ -50,6 +49,16 @@ namespace Compiler.Model
                 this.MagneticVariation.ToString("n1"),
                 this.Scale
             );
+        }
+
+        public IEnumerable<ICompilableElement> GetCompilableElements()
+        {
+            return new List<ICompilableElement>()
+            {
+                this.Name,
+                this.Callsign,
+                this.Airport
+            };
         }
     }
 }
