@@ -14,8 +14,7 @@ namespace CompilerTest.Input
             this.file = new SectorDataFile(
                 "_TestData/StreamTest.txt",
                 InputDataType.ESE_AGREEMENTS,
-                new EseSectorDataReader(),
-                "Initial docblock"
+                new EseSectorDataReader()
             );
         }
 
@@ -33,6 +32,15 @@ namespace CompilerTest.Input
         {
             Assert.Equal(
                 "_TestData",
+                this.file.GetParentDirectory()
+            );
+        }
+
+        [Fact]
+        public void ItGetsFileName()
+        {
+            Assert.Equal(
+                "StreamTest",
                 this.file.GetParentDirectory()
             );
         }

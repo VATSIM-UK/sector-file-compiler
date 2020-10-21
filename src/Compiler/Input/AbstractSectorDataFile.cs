@@ -35,6 +35,11 @@ namespace Compiler.Input
             return Path.GetDirectoryName(this.FullPath);
         }
 
+        public string GetFileName()
+        {
+            return Path.GetFileNameWithoutExtension(this.FullPath);
+        }
+
         public abstract IEnumerator<SectorData> GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
