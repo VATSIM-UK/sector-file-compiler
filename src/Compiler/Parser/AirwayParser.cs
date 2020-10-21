@@ -28,7 +28,7 @@ namespace Compiler.Parser
         {
             foreach (SectorData line in data)
             {
-                if (line.dataSegments.Count != 5)
+                if (line.dataSegments.Count != 4)
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Incorrect number of Airway segments", line)
@@ -37,7 +37,7 @@ namespace Compiler.Parser
                 }
 
                 // Parse the airway segment point
-                Point startPoint = PointParser.Parse(line.dataSegments[1], line.dataSegments[2]);
+                Point startPoint = PointParser.Parse(line.dataSegments[0], line.dataSegments[1]);
                 if (startPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
@@ -48,7 +48,7 @@ namespace Compiler.Parser
 
 
                 // Parse the segment endpoint
-                Point endPoint = PointParser.Parse(line.dataSegments[3], line.dataSegments[4]);
+                Point endPoint = PointParser.Parse(line.dataSegments[2], line.dataSegments[3]);
                 if (endPoint.Equals(PointParser.invalidPoint))
                 {
                     this.eventLogger.AddEvent(
@@ -57,10 +57,10 @@ namespace Compiler.Parser
                     return;
                 }
 
-                // Add it
+                // Add it to the collection
                 this.elements.Add(
                     new AirwaySegment(
-                        line.dataSegments[0],
+                        data.GetFileName(),  // Each airway is in a file with its name
                         this.airwayType,
                         startPoint,
                         endPoint,
