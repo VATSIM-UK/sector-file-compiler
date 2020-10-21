@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Compiler.Parser
 {
-    public class VorParser : AbstractSectorElementParser, ISectorDataParser
+    public class VorParser : ISectorDataParser
     {
         private readonly SectorElementCollection elements;
         private readonly IFrequencyParser frequencyParser;
