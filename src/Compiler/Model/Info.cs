@@ -12,7 +12,7 @@ namespace Compiler.Model
             InfoAirport airport,
             InfoCoordinate coordinate,
             InfoMilesPerDegreeLatitude milesPerDegreeLatitude,
-            double milesPerDegreeLongitude,
+            InfoMilesPerDegreeLongitude milesPerDegreeLongitude,
             double magneticVariation,
             int scale
         ){
@@ -31,7 +31,7 @@ namespace Compiler.Model
         public InfoAirport Airport { get; }
         public InfoCoordinate Coordinate { get; }
         public InfoMilesPerDegreeLatitude MilesPerDegreeLatitude { get; }
-        public double MilesPerDegreeLongitude { get; }
+        public InfoMilesPerDegreeLongitude MilesPerDegreeLongitude { get; }
         public double MagneticVariation { get; }
         public int Scale { get; }
 
@@ -59,7 +59,8 @@ namespace Compiler.Model
                 this.Callsign,
                 this.Airport,
                 this.Coordinate,
-                this.MilesPerDegreeLatitude
+                this.MilesPerDegreeLatitude,
+                this.MilesPerDegreeLongitude
             };
         }
     }
