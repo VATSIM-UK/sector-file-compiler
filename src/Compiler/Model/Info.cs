@@ -13,7 +13,7 @@ namespace Compiler.Model
             InfoCoordinate coordinate,
             InfoMilesPerDegreeLatitude milesPerDegreeLatitude,
             InfoMilesPerDegreeLongitude milesPerDegreeLongitude,
-            double magneticVariation,
+            InfoMagneticVariation magneticVariation,
             int scale
         ){
             Name = name;
@@ -32,7 +32,7 @@ namespace Compiler.Model
         public InfoCoordinate Coordinate { get; }
         public InfoMilesPerDegreeLatitude MilesPerDegreeLatitude { get; }
         public InfoMilesPerDegreeLongitude MilesPerDegreeLongitude { get; }
-        public double MagneticVariation { get; }
+        public InfoMagneticVariation MagneticVariation { get; }
         public int Scale { get; }
 
         public string Compile()
@@ -60,7 +60,8 @@ namespace Compiler.Model
                 this.Airport,
                 this.Coordinate,
                 this.MilesPerDegreeLatitude,
-                this.MilesPerDegreeLongitude
+                this.MilesPerDegreeLongitude,
+                this.MagneticVariation
             };
         }
     }

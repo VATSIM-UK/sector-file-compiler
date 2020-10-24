@@ -3,14 +3,14 @@ using Compiler.Model;
 
 namespace CompilerTest.Model
 {
-    public class InfoMilesPerDegreLongitudeTest : AbstractModelTestCase
+    public class InfoMagneticVariationTest : AbstractModelTestCase
     {
-        private readonly InfoMilesPerDegreeLongitude model;
+        private readonly InfoMagneticVariation model;
 
-        public InfoMilesPerDegreLongitudeTest()
+        public InfoMagneticVariationTest()
         {
-            this.model = new InfoMilesPerDegreeLongitude(
-                12.1254,
+            this.model = new InfoMagneticVariation(
+                12.154,
                 this.GetDefinition(),
                 this.GetDocbock(),
                 this.GetInlineComment()
@@ -18,9 +18,9 @@ namespace CompilerTest.Model
         }
 
         [Fact]
-        public void TestItSetsCallsign()
+        public void TestItSetsVariation()
         {
-            Assert.Equal(12.1254, this.model.Miles);
+            Assert.Equal(12.154, this.model.Variation);
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "12.13",
+                "12.2",
                 this.model.GetCompileData()
             );
         }
