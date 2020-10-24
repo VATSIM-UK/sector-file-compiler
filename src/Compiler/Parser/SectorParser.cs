@@ -1,60 +1,33 @@
 ﻿using System.Collections.Generic;
 using Compiler.Model;
 using Compiler.Error;
+using Compiler.Input;
 using Compiler.Event;
 using Compiler.Validate;
 using System;
 
 namespace Compiler.Parser
 {
-    public class SectorParser : AbstractEseAirspaceParser
+    public class SectorParser : ISectorDataParser
     {
-        private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
         private readonly IEventLogger errorLog;
 
         public SectorParser(
-            MetadataParser metadataParser,
-            ISectorLineParser sectorLineParser,
             SectorElementCollection sectorElements,
             IEventLogger errorLog
-        ) : base(metadataParser)
-        {
-            this.sectorLineParser = sectorLineParser;
+        ) {
+
             this.sectorElements = sectorElements;
             this.errorLog = errorLog;
         }
 
-        public void ParseData(List<(int, string)> lines, string filename)
+        public void ParseData(AbstractSectorDataFile data)
         {
-            // Check the declaration line
-            SectorFormatLine declarationLine = this.sectorLineParser.ParseLine(lines[0].Item2);
-            if (declarationLine.dataSegments[0] != "SECTOR")
-            {
-                this.errorLog.AddEvent(
-                    new SyntaxError("Invalid SECTOR declaration ", filename, lines[0].Item1)
-                );
-                throw new Exception();
-            }
+            bool checkedFirstLine = false;
 
-            // Check the minimum and maximum altitudes
-            if (!int.TryParse(declarationLine.dataSegments[2], out int minimumAltitude))
-            {
-                this.errorLog.AddEvent(
-                    new SyntaxError("SECTOR minimum altitude must be an integer ", filename, lines[0].Item1)
-                );
-                throw new Exception();
-            }
-
-            if (!int.TryParse(declarationLine.dataSegments[3], out int maximumAltitude))
-            {
-                this.errorLog.AddEvent(
-                    new SyntaxError("SECTOR maximum altitude must be an integer ", filename, lines[0].Item1)
-                );
-                throw new Exception();
-            }
-
-
+            int minimumAltitude = 0;
+            int maximumAltitude = 0;
             SectorOwnerHierarchy ownerHierarchy = null;
             List<SectorAlternateOwnerHierarchy> altOwners = new List<SectorAlternateOwnerHierarchy>();
             SectorBorder border = new SectorBorder();
@@ -62,85 +35,111 @@ namespace Compiler.Parser
             List<SectorGuest> guests = new List<SectorGuest>();
             SectorDepartureAirports departureAirports = new SectorDepartureAirports();
             SectorArrivalAirports arrivalAirports = new SectorArrivalAirports();
-            int i = 1;
-            while (i < lines.Count)
+            SectorData declarationLine = new SectorData();
+            foreach (SectorData line in data)
             {
-                // Defer all metadata lines to the base
-                if (this.ParseMetadata(lines[i].Item2))
+                if (!checkedFirstLine)
                 {
-                    i++;
+                    declarationLine = line;
+                    // Check the declaration line
+                    if (declarationLine.dataSegments[0] != "SECTOR")
+                    {
+                        this.errorLog.AddEvent(
+                            new SyntaxError("Invalid SECTOR declaration", declarationLine)
+                        );
+                        return;
+                    }
+
+                    // Check the minimum and maximum altitudes
+                    if (!int.TryParse(declarationLine.dataSegments[2], out minimumAltitude))
+                    {
+                        this.errorLog.AddEvent(
+                            new SyntaxError("SECTOR minimum altitude must be an integer", declarationLine)
+                        );
+                    }
+
+                    if (!int.TryParse(declarationLine.dataSegments[3], out maximumAltitude))
+                    {
+                        this.errorLog.AddEvent(
+                            new SyntaxError("SECTOR maximum altitude must be an integer", declarationLine)
+                        );
+                    }
+                    checkedFirstLine = true;
                     continue;
                 }
 
-                SectorFormatLine lineToParse = this.sectorLineParser.ParseLine(lines[i].Item2);
-
-                /*
-                 * Parse each line one at a time, stopping if we reach a new declaration.
-                 */
                 try
                 {
-                    switch (lineToParse.dataSegments[0])
+                    switch (line.dataSegments[0])
                     {
                         case "OWNER":
-                            ownerHierarchy = this.ParseOwnerHierarchy(lineToParse);
+                            ownerHierarchy = this.ParseOwnerHierarchy(line);
                             break;
                         case "ALTOWNER":
-                            altOwners.Add(this.ParseAlternateOwnerHierarchy(lineToParse));
+                            altOwners.Add(this.ParseAlternateOwnerHierarchy(line));
                             break;
                         case "BORDER":
                             if (border.BorderLines.Count != 0)
                             {
-                                throw new Exception("Each SECTOR declaration may only have one BORDER ");
+                                this.errorLog.AddEvent(
+                                    new SyntaxError("Each SECTOR declaration may only have one BORDER", line)
+                                );
+                                return;
                             }
-
-                            border = this.ParseBorder(lineToParse);
+                            border = this.ParseBorder(line);
                             break;
                         case "ACTIVE":
-                            actives.Add(this.ParseActive(lineToParse));
+                            actives.Add(this.ParseActive(line));
                             break;
                         case "GUEST":
-                            guests.Add(this.ParseGuest(lineToParse));
+                            guests.Add(this.ParseGuest(line));
                             break;
                         case "DEPAPT":
                             if (departureAirports.Airports.Count != 0)
                             {
-                                throw new Exception("Each SECTOR declaration may only have one DEPAPT definition ");
+                                this.errorLog.AddEvent(
+                                     new SyntaxError("Each SECTOR declaration may only have one DEPAPT definition", line)
+                                );
+                                return;
                             }
 
-                            departureAirports = this.ParseDepartureAirport(lineToParse);
+                            departureAirports = this.ParseDepartureAirport(line);
                             break;
                         case "ARRAPT":
-
                             if (arrivalAirports.Airports.Count != 0)
                             {
-                                throw new Exception("Each SECTOR declaration may only have one ARRAPT definition ");
+                                this.errorLog.AddEvent(
+                                     new SyntaxError("Each SECTOR declaration may only have one ARRAPT definition", line)
+                                );
+                                return;
                             }
 
-                            arrivalAirports = this.ParseArrivalAirport(lineToParse);
+                            arrivalAirports = this.ParseArrivalAirport(line);
                             break;
-
+                        default:
+                            this.errorLog.AddEvent(
+                                 new SyntaxError("Unknown SECTOR line type", line)
+                            );
+                            return;
                     }
-                }
-                catch (Exception exception)
-                {
+                } catch (ArgumentException exception) {
                     this.errorLog.AddEvent(
-                        new SyntaxError(exception.Message, filename, lines[i].Item1)
+                        new SyntaxError(exception.Message, line)
                     );
-                    throw exception;
+                    return;
                 }
 
-                i++;
             }
 
             if (ownerHierarchy == null)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Every SECTOR must have an owner ", filename, lines[0].Item1)
+                    new SyntaxError("Every SECTOR must have an owner", declarationLine)
                 );
                 this.errorLog.AddEvent(
                     new ParserSuggestion("Have you added an OWNER declaration?")
                 );
-                throw new Exception();
+                return;
             }
 
             this.sectorElements.Add(
@@ -155,7 +154,9 @@ namespace Compiler.Parser
                     border,
                     arrivalAirports,
                     departureAirports,
-                    declarationLine.comment
+                    declarationLine.definition,
+                    declarationLine.docblock,
+                    declarationLine.inlineComment
                 )
             );
         }
@@ -163,11 +164,11 @@ namespace Compiler.Parser
         /*
          * Parse and validate an OWNER line
          */
-        private SectorOwnerHierarchy ParseOwnerHierarchy(SectorFormatLine line)
+        private SectorOwnerHierarchy ParseOwnerHierarchy(SectorData line)
         {
             if (line.dataSegments.Count < 2)
             {
-                throw new Exception("Invalid number of OWNER segements");
+                throw new ArgumentException("Invalid number of OWNER segements");
             }
 
             List<string> owners = new List<string>();
@@ -179,18 +180,20 @@ namespace Compiler.Parser
 
             return new SectorOwnerHierarchy(
                 owners,
-                line.comment
+                line.definition,
+                line.docblock,
+                line.inlineComment
             );
         }
 
         /*
          * Parse and valdiate an ALTOWNER line
          */
-        private SectorAlternateOwnerHierarchy ParseAlternateOwnerHierarchy(SectorFormatLine line)
+        private SectorAlternateOwnerHierarchy ParseAlternateOwnerHierarchy(SectorData line)
         {
             if (line.dataSegments.Count < 3)
             {
-                throw new Exception("Invalid number of ALTOWNER segements");
+                throw new ArgumentException("Invalid number of ALTOWNER segements");
             }
 
             List<string> altOwners = new List<string>();
@@ -202,18 +205,20 @@ namespace Compiler.Parser
             return new SectorAlternateOwnerHierarchy(
                 line.dataSegments[1],
                 altOwners,
-                line.comment
+                line.definition,
+                line.docblock,
+                line.inlineComment
             );
         }
 
         /*
          * Parse and valdiate a BORDER line
          */
-        private SectorBorder ParseBorder(SectorFormatLine line)
+        private SectorBorder ParseBorder(SectorData line)
         {
             if (line.dataSegments.Count < 2)
             {
-                throw new Exception("Invalid number of BORDER segements");
+                throw new ArgumentException("Invalid number of BORDER segements");
             }
 
             List<string> borders = new List<string>();
@@ -224,73 +229,79 @@ namespace Compiler.Parser
 
             return new SectorBorder(
                 borders,
-                line.comment
+                line.definition,
+                line.docblock,
+                line.inlineComment
             );
         }
 
         /*
          * Parse and valdiate a ACTIVE line
          */
-        private SectorActive ParseActive(SectorFormatLine line)
+        private SectorActive ParseActive(SectorData line)
         {
             if (line.dataSegments.Count != 3)
             {
-                throw new Exception("Invalid number of ACTIVE segements ");
+                throw new ArgumentException("Invalid number of ACTIVE segements ");
             }
 
             if (!AirportValidator.ValidEuroscopeAirport(line.dataSegments[1]))
             {
-                throw new Exception("Invalid airport designator in ACTIVE segement ");
+                throw new ArgumentException("Invalid airport designator in ACTIVE segement ");
             }
 
             if (!RunwayValidator.RunwayValidIncludingAdjacent(line.dataSegments[2]))
             {
-                throw new Exception("Invalid runway designator in ACTIVE segement ");
+                throw new ArgumentException("Invalid runway designator in ACTIVE segement ");
             }
 
             return new SectorActive(
                 line.dataSegments[1],
                 line.dataSegments[2],
-                line.comment
+                line.definition,
+                line.docblock,
+                line.inlineComment
             );
         }
 
         /*
         * Parse and valdiate a GUEST line
         */
-        private SectorGuest ParseGuest(SectorFormatLine line)
+        private SectorGuest ParseGuest(SectorData line)
         {
             if (line.dataSegments.Count != 4)
             {
-                throw new Exception("Invalid number of GUEST segements ");
+                throw new ArgumentException("Invalid number of GUEST segements ");
             }
 
             if (!AirportValidator.ValidSectorGuestAirport(line.dataSegments[2]))
             {
-                throw new Exception("Invalid departure airport designator in GUEST segement ");
+                throw new ArgumentOutOfRangeException("Invalid departure airport designator in GUEST segement ");
             }
 
             if (!AirportValidator.ValidSectorGuestAirport(line.dataSegments[3]))
             {
-                throw new Exception("Invalid arrival airport designator in GUEST segement ");
+                throw new ArgumentException("Invalid arrival airport designator in GUEST segement ");
             }
 
             return new SectorGuest(
                 line.dataSegments[1],
                 line.dataSegments[2],
                 line.dataSegments[3],
-                line.comment
+                line.definition,
+                line.docblock,
+                line.inlineComment
             );
         }
 
         /*
         * Parse and valdiate a DEPAPT line
         */
-        private SectorDepartureAirports ParseDepartureAirport(SectorFormatLine line)
+        private SectorDepartureAirports ParseDepartureAirport(SectorData line)
         {
             if (line.dataSegments.Count < 2)
             {
-                throw new Exception("Invalid number of DEPAPT segments ");
+                throw new ArgumentException("Invalid number of DEPAPT segments ");
             }
 
             List<string> airports = new List<string>();
@@ -298,7 +309,7 @@ namespace Compiler.Parser
             {
                 if (!AirportValidator.IcaoValid(line.dataSegments[i]))
                 {
-                    throw new Exception("Invalid ICAO code in DEPAPT ");
+                    throw new ArgumentException("Invalid ICAO code in DEPAPT ");
                 }
 
                 airports.Add(line.dataSegments[i]);
@@ -306,18 +317,20 @@ namespace Compiler.Parser
 
             return new SectorDepartureAirports(
                 airports,
-                line.comment
+                line.definition,
+                line.docblock,
+                line.inlineComment
             );
         }
 
         /*
         * Parse and valdiate a DEPAPT line
         */
-        private SectorArrivalAirports ParseArrivalAirport(SectorFormatLine line)
+        private SectorArrivalAirports ParseArrivalAirport(SectorData line)
         {
             if (line.dataSegments.Count < 2)
             {
-                throw new Exception("Invalid number of ARRAPT segments ");
+                throw new ArgumentException("Invalid number of ARRAPT segments ");
             }
 
             List<string> airports = new List<string>();
@@ -325,7 +338,7 @@ namespace Compiler.Parser
             {
                 if (!AirportValidator.IcaoValid(line.dataSegments[i]))
                 {
-                    throw new Exception("Invalid ICAO code in ARRAPT ");
+                    throw new ArgumentException("Invalid ICAO code in ARRAPT ");
                 }
 
                 airports.Add(line.dataSegments[i]);
@@ -333,7 +346,9 @@ namespace Compiler.Parser
 
             return new SectorArrivalAirports(
                 airports,
-                line.comment
+                line.definition,
+                line.docblock,
+                line.inlineComment
             );
         }
     }
