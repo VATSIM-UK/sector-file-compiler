@@ -18,7 +18,7 @@ namespace CompilerTest.Model
         }
 
         [Fact]
-        public void TestItSetsCallsign()
+        public void TestItSetsMiles()
         {
             Assert.Equal(12, this.model.Miles);
         }
