@@ -8,45 +8,62 @@ using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class InfoParser : AbstractSectorElementParser, ISectorDataParser
+    public class InfoParser : ISectorDataParser
     {
-        private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection elements;
         private readonly IEventLogger eventLogger;
 
         public InfoParser(
-            MetadataParser metadataParser,
-            ISectorLineParser sectorLineParser,
             SectorElementCollection elements,
             IEventLogger eventLogger
-        ) : base(metadataParser)
-        {
-            this.sectorLineParser = sectorLineParser;
+        ) {
             this.elements = elements;
             this.eventLogger = eventLogger;
         }
 
+        private InfoName GetName(SectorData line)
+        {
+            return new InfoName(line.rawData, line.definition, line.docblock, line.inlineComment);
+        }
+
+        private InfoCallsign GetCallsign(SectorData line)
+        {
+            return new InfoCallsign(line.rawData, line.definition, line.docblock, line.inlineComment);
+        }
+
         public void ParseData(AbstractSectorDataFile data)
         {
-            string name = "";
-            string controllerPosition = "";
-            string airport = "";
-            string latitude = "";
-            string longitude = "";
-            int milesPerLatitude = 0;
-            double milesPerLongitude = 0.0;
-            int effectiveLine = 0;
-            int scale = 0;
-            double magVar = 0.0;
-            foreach (string line in data)
+            // Get all the lines out up-front
+            List<SectorData> lines = new List<SectorData>();
+            foreach (SectorData line in data)
             {
-                // Defer all metadata lines to the base
-                if (this.ParseMetadata(line))
-                {
-                    continue;
-                }
+                lines.Add(line);
+            }
 
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
+            if (lines.Count != 9)
+            {
+                this.eventLogger.AddEvent(
+                    new SyntaxError("Invalid number of INFO lines", data.FullPath)
+                );
+                return;
+            }
+
+            try
+            {
+                this.elements.Add(
+                    new Info(
+                        this.GetName(lines[0]),
+                        this.GetCallsign(lines[1])
+                    )
+                );
+            } catch
+            {
+                // Exceptions dealt with in handler functions
+            }
+
+
+            foreach (string sectorData in data)
+            {
 
                 // First line is the name
                 if (effectiveLine == 0)
