@@ -10,7 +10,7 @@ namespace Compiler.Model
             InfoName name,
             InfoCallsign callsign,
             InfoAirport airport,
-            Coordinate coordinate,
+            InfoCoordinate coordinate,
             int milesPerDegreeLatitude,
             double milesPerDegreeLongitude,
             double magneticVariation,
