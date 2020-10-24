@@ -38,22 +38,6 @@ namespace Compiler.Model
         public InfoMagneticVariation MagneticVariation { get; }
         public InfoScale Scale { get; }
 
-        public string Compile()
-        {
-            return String.Format(
-                "{0}\r\n{1}\r\n{2}\r\n{3}\r\n{4}\r\n{5}\r\n{6}\r\n{7}\r\n{8}\r\n",
-                this.Name,
-                this.Callsign,
-                this.Airport,
-                this.Coordinate.latitude,
-                this.Coordinate.longitude,
-                this.MilesPerDegreeLatitude,
-                this.MilesPerDegreeLongitude.ToString("n2"),
-                this.MagneticVariation.ToString("n1"),
-                this.Scale
-            );
-        }
-
         public IEnumerable<ICompilableElement> GetCompilableElements()
         {
             return new List<ICompilableElement>()
@@ -61,7 +45,8 @@ namespace Compiler.Model
                 this.Name,
                 this.Callsign,
                 this.Airport,
-                this.Coordinate,
+                this.Latitude,
+                this.Longitude,
                 this.MilesPerDegreeLatitude,
                 this.MilesPerDegreeLongitude,
                 this.MagneticVariation,
