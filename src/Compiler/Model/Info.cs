@@ -14,7 +14,7 @@ namespace Compiler.Model
             InfoMilesPerDegreeLatitude milesPerDegreeLatitude,
             InfoMilesPerDegreeLongitude milesPerDegreeLongitude,
             InfoMagneticVariation magneticVariation,
-            int scale
+            InfoScale scale
         ){
             Name = name;
             Callsign = callsign;
@@ -33,7 +33,7 @@ namespace Compiler.Model
         public InfoMilesPerDegreeLatitude MilesPerDegreeLatitude { get; }
         public InfoMilesPerDegreeLongitude MilesPerDegreeLongitude { get; }
         public InfoMagneticVariation MagneticVariation { get; }
-        public int Scale { get; }
+        public InfoScale Scale { get; }
 
         public string Compile()
         {
@@ -61,7 +61,8 @@ namespace Compiler.Model
                 this.Coordinate,
                 this.MilesPerDegreeLatitude,
                 this.MilesPerDegreeLongitude,
-                this.MagneticVariation
+                this.MagneticVariation,
+                this.Scale
             };
         }
     }
