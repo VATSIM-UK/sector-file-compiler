@@ -3,14 +3,14 @@ using Compiler.Model;
 
 namespace CompilerTest.Model
 {
-    public class InfoCoordinateTest : AbstractModelTestCase
+    public class InfoLongitudeTest : AbstractModelTestCase
     {
-        private readonly InfoCoordinate model;
+        private readonly InfoLongitude model;
 
-        public InfoCoordinateTest()
+        public InfoLongitudeTest()
         {
-            this.model = new InfoCoordinate(
-                new Coordinate("abc", "def"),
+            this.model = new InfoLongitude(
+                "def",
                 this.GetDefinition(),
                 this.GetDocbock(),
                 this.GetInlineComment()
@@ -18,9 +18,9 @@ namespace CompilerTest.Model
         }
 
         [Fact]
-        public void TestItSetsCoordinate()
+        public void TestItSetsLongitude()
         {
-            Assert.Equal(new Coordinate("abc", "def"), this.model.Coordinate);
+            Assert.Equal("def", this.model.Longitude);
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "abc def",
+                "def",
                 this.model.GetCompileData()
             );
         }

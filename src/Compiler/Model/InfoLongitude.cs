@@ -4,23 +4,23 @@ using System.Text;
 
 namespace Compiler.Model
 {
-    public class InfoCoordinate : AbstractCompilableElement
+    public class InfoLongitude : AbstractCompilableElement
     {
-        public InfoCoordinate(
-            Coordinate coordinate,
+        public InfoLongitude(
+            string longitude,
             Definition definition,
             Docblock docblock,
             Comment inlineComment
         ) : base(definition, docblock, inlineComment)
         {
-            this.Coordinate = coordinate;
+            this.Longitude = longitude;
         }
 
-        public Coordinate Coordinate { get; }
+        public string Longitude { get; }
 
         public override string GetCompileData()
         {
-            return this.Coordinate.ToString();
+            return this.Longitude;
         }
     }
 }

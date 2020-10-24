@@ -10,7 +10,8 @@ namespace Compiler.Model
             InfoName name,
             InfoCallsign callsign,
             InfoAirport airport,
-            InfoCoordinate coordinate,
+            InfoLatitude latitude,
+            InfoLongitude longitude,
             InfoMilesPerDegreeLatitude milesPerDegreeLatitude,
             InfoMilesPerDegreeLongitude milesPerDegreeLongitude,
             InfoMagneticVariation magneticVariation,
@@ -19,7 +20,8 @@ namespace Compiler.Model
             Name = name;
             Callsign = callsign;
             Airport = airport;
-            Coordinate = coordinate;
+            Latitude = latitude;
+            Longitude = longitude;
             MilesPerDegreeLatitude = milesPerDegreeLatitude;
             MilesPerDegreeLongitude = milesPerDegreeLongitude;
             MagneticVariation = magneticVariation;
@@ -29,7 +31,8 @@ namespace Compiler.Model
         public InfoName Name { get; }
         public InfoCallsign Callsign { get; }
         public InfoAirport Airport { get; }
-        public InfoCoordinate Coordinate { get; }
+        public InfoLatitude Latitude { get; }
+        public InfoLongitude Longitude { get; }
         public InfoMilesPerDegreeLatitude MilesPerDegreeLatitude { get; }
         public InfoMilesPerDegreeLongitude MilesPerDegreeLongitude { get; }
         public InfoMagneticVariation MagneticVariation { get; }
