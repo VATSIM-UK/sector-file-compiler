@@ -15,9 +15,9 @@ namespace Compiler.Model
             List<SectorAlternateOwnerHierarchy> altOwners,
             List<SectorActive> active,
             List<SectorGuest> guests,
-            SectorBorder border,
-            SectorArrivalAirports arrivalAirports,
-            SectorDepartureAirports departureAirports,
+            List<SectorBorder> borders,
+            List<SectorArrivalAirports> arrivalAirports,
+            List<SectorDepartureAirports> departureAirports,
             Definition initialDefinition,
             Docblock initialDocblock,
             Comment initialInlineComment
@@ -30,7 +30,7 @@ namespace Compiler.Model
             AltOwners = altOwners;
             Active = active;
             Guests = guests;
-            Border = border;
+            Borders = borders;
             ArrivalAirports = arrivalAirports;
             DepartureAirports = departureAirports;
         }
@@ -43,9 +43,10 @@ namespace Compiler.Model
         public List<SectorAlternateOwnerHierarchy> AltOwners { get; }
         public List<SectorActive> Active { get; }
         public List<SectorGuest> Guests { get; }
-        public SectorBorder Border { get; }
-        public SectorArrivalAirports ArrivalAirports { get; }
-        public SectorDepartureAirports DepartureAirports { get; }
+
+        public List<SectorBorder> Borders { get; }
+        public List<SectorArrivalAirports> ArrivalAirports { get; }
+        public List<SectorDepartureAirports> DepartureAirports { get; }
 
         public override IEnumerable<ICompilableElement> GetCompilableElements()
         {
@@ -55,9 +56,9 @@ namespace Compiler.Model
             elements.Concat(this.AltOwners);
             elements.Concat(this.Active);
             elements.Concat(this.Guests);
-            elements.Add(this.Border);
-            elements.Add(this.ArrivalAirports);
-            elements.Add(this.DepartureAirports);
+            elements.Concat(this.Borders);
+            elements.Concat(this.ArrivalAirports);
+            elements.Concat(this.DepartureAirports);
             return elements;
         }
 

@@ -30,11 +30,11 @@ namespace Compiler.Parser
             int maximumAltitude = 0;
             SectorOwnerHierarchy ownerHierarchy = null;
             List<SectorAlternateOwnerHierarchy> altOwners = new List<SectorAlternateOwnerHierarchy>();
-            SectorBorder border = new SectorBorder();
+            List<SectorBorder> borders = new List<SectorBorder>();
             List<SectorActive> actives = new List<SectorActive>();
             List<SectorGuest> guests = new List<SectorGuest>();
-            SectorDepartureAirports departureAirports = new SectorDepartureAirports();
-            SectorArrivalAirports arrivalAirports = new SectorArrivalAirports();
+            List<SectorDepartureAirports> departureAirports = new List<SectorDepartureAirports>();
+            List<SectorArrivalAirports> arrivalAirports = new List<SectorArrivalAirports>();
             SectorData declarationLine = new SectorData();
             foreach (SectorData line in data)
             {
@@ -79,14 +79,7 @@ namespace Compiler.Parser
                             altOwners.Add(this.ParseAlternateOwnerHierarchy(line));
                             break;
                         case "BORDER":
-                            if (border.BorderLines.Count != 0)
-                            {
-                                this.errorLog.AddEvent(
-                                    new SyntaxError("Each SECTOR declaration may only have one BORDER", line)
-                                );
-                                return;
-                            }
-                            border = this.ParseBorder(line);
+                            borders.Add(this.ParseBorder(line));
                             break;
                         case "ACTIVE":
                             actives.Add(this.ParseActive(line));
@@ -95,26 +88,10 @@ namespace Compiler.Parser
                             guests.Add(this.ParseGuest(line));
                             break;
                         case "DEPAPT":
-                            if (departureAirports.Airports.Count != 0)
-                            {
-                                this.errorLog.AddEvent(
-                                     new SyntaxError("Each SECTOR declaration may only have one DEPAPT definition", line)
-                                );
-                                return;
-                            }
-
-                            departureAirports = this.ParseDepartureAirport(line);
+                            departureAirports.Add(this.ParseDepartureAirport(line));
                             break;
                         case "ARRAPT":
-                            if (arrivalAirports.Airports.Count != 0)
-                            {
-                                this.errorLog.AddEvent(
-                                     new SyntaxError("Each SECTOR declaration may only have one ARRAPT definition", line)
-                                );
-                                return;
-                            }
-
-                            arrivalAirports = this.ParseArrivalAirport(line);
+                            arrivalAirports.Add(this.ParseArrivalAirport(line));
                             break;
                         default:
                             this.errorLog.AddEvent(
@@ -151,7 +128,7 @@ namespace Compiler.Parser
                     altOwners,
                     actives,
                     guests,
-                    border,
+                    borders,
                     arrivalAirports,
                     departureAirports,
                     declarationLine.definition,
