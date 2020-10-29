@@ -11,15 +11,18 @@ namespace Compiler.Validate
         {
             foreach (Region region in sectorElements.Regions)
             {
-                if (!ColourValidator.ColourValid(sectorElements, region.Colour))
+                foreach (RegionPoint point in region.Points)
                 {
-                    string errorMessage = string.Format(
-                        "Invalid colour value {0} for region {1}",
-                        region.Colour,
-                        region.Name
-                    );
-                    events.AddEvent(new ValidationRuleFailure(errorMessage));
-                    continue;
+                    if (!ColourValidator.ColourValid(sectorElements, point.Colour))
+                    {
+                        string errorMessage = string.Format(
+                            "Invalid colour value {0} for region {1}",
+                            point.Colour,
+                            region.Name
+                        );
+                        events.AddEvent(new ValidationRuleFailure(errorMessage));
+                        continue;
+                    }
                 }
             }
         }

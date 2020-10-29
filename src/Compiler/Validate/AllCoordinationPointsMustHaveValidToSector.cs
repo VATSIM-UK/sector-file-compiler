@@ -21,7 +21,7 @@ namespace Compiler.Validate
                     string message = String.Format(
                         "Invalid TO sector {0} for coordination point: {1}",
                         point.ToSector,
-                        point.Compile()
+                        point.GetCompileData()
                     );
                     events.AddEvent(new ValidationRuleFailure(message));
                     continue;

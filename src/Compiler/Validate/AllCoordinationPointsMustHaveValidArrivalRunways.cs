@@ -20,7 +20,7 @@ namespace Compiler.Validate
                         "Invalid arrival runway {0}/{1} for coordination point: {1}",
                         point.ArrivalRunway,
                         point.ArrivalAiportOrFixAfter,
-                        point.Compile()
+                        point.GetCompileData()
                     );
                     events.AddEvent(new ValidationRuleFailure(message));
                     continue;

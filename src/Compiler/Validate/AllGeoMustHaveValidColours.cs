@@ -11,18 +11,24 @@ namespace Compiler.Validate
         {
             foreach (Geo geo in sectorElements.GeoElements)
             {
-                foreach (GeoSegment segment in geo.Segments)
+                this.ValidateGeoSegment(geo.InitialSegment, sectorElements, events);
+                foreach (GeoSegment segment in geo.AdditionalSegments)
                 {
-                    if (!ColourValidator.ColourValid(sectorElements, segment.Colour))
-                    {
-                        string errorMessage = string.Format(
-                            "Invalid colour value {0} in GEO segment {1}",
-                            segment.Colour,
-                            segment.Compile()
-                        );
-                        events.AddEvent(new ValidationRuleFailure(errorMessage));
-                    }
+                    this.ValidateGeoSegment(segment, sectorElements, events);
                 }
+            }
+        }
+
+        private void ValidateGeoSegment(GeoSegment segment, SectorElementCollection sectorElements, IEventLogger events)
+        {
+            if (!ColourValidator.ColourValid(sectorElements, segment.Colour))
+            {
+                string errorMessage = string.Format(
+                    "Invalid colour value {0} in GEO segment {1}",
+                    segment.Colour,
+                    segment.GetCompileData()
+                );
+                events.AddEvent(new ValidationRuleFailure(errorMessage));
             }
         }
     }

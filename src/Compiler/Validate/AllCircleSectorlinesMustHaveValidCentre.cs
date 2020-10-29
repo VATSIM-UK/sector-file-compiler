@@ -29,7 +29,7 @@ namespace Compiler.Validate
                     string message = String.Format(
                         "Invalid fix {0} for CIRCLE_SECTORLINE: {1}",
                         circle.CentrePoint,
-                        circle.Compile()
+                        circle.GetCompileData()
                     );
                     events.AddEvent(new ValidationRuleFailure(message));
                     continue;

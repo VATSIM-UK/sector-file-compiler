@@ -28,7 +28,7 @@ namespace Compiler.Validate
                     string message = String.Format(
                         "Invalid next fix or arrival airport {0} on coordination point: {1}",
                         point.ArrivalAiportOrFixAfter,
-                        point.Compile()
+                        point.GetCompileData()
                     );
                     events.AddEvent(new ValidationRuleFailure(message));
                     continue;

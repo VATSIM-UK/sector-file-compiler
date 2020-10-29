@@ -29,7 +29,7 @@ namespace Compiler.Validate
                     string message = String.Format(
                         "Invalid fix {0} for coordination point: {1}",
                         point.CoordinationFix,
-                        point.Compile()
+                        point.GetCompileData()
                     );
                     events.AddEvent(new ValidationRuleFailure(message));
                     continue;

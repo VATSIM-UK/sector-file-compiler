@@ -20,7 +20,7 @@ namespace Compiler.Validate
                         "Invalid departure runway {0}/{1} for coordination point: {1}",
                         point.DepartureRunway,
                         point.DepartureAirportOrFixBefore,
-                        point.Compile()
+                        point.GetCompileData()
                     );
                     events.AddEvent(new ValidationRuleFailure(message));
                     continue;
