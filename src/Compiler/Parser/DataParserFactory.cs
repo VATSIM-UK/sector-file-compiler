@@ -97,8 +97,6 @@ namespace Compiler.Parser
                     );
                 case InputDataType.SCT_LABELS:
                     return new LabelParser(
-                        this.GetMetadataParser(section),
-                        new SctLabelLineParser(),
                         this.sectorElements,
                         this.logger
                     );
