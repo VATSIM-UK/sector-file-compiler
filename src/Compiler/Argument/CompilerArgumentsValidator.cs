@@ -17,16 +17,6 @@ namespace Compiler.Argument
                 );
             }
 
-            foreach (IFileInterface configFile in arguments.ConfigFiles)
-            {
-                if (!configFile.Exists())
-                {
-                    events.AddEvent(
-                        new CompilerArgumentError("The configuration file could not be found: " + configFile.GetPath())
-                    );
-                }
-            }
-
             if (arguments.OutFileEse == null)
             {
                 events.AddEvent(new CompilerArgumentError("ESE output file path must be specified"));

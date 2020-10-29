@@ -14,7 +14,7 @@ namespace Compiler.Validate
         {
             foreach(Airport airport in sectorElements.Airports)
             {
-                if (airport.Icao == sectorElements.Info.Airport)
+                if (airport.Icao == sectorElements.Info.Airport.AirportIcao)
                 {
                     return;
                 }
