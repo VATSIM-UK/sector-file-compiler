@@ -45,7 +45,7 @@ namespace Compiler.Validate
                         string message = String.Format(
                             "Invalid second compare sector {0} for CIRCLE_SECTORLINE display rule: {1}",
                             rule.CompareSectorSecond,
-                            rule.Compile()
+                            rule.GetCompileData()
                         );
                         events.AddEvent(new ValidationRuleFailure(message));
                         continue;

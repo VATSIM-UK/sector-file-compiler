@@ -16,17 +16,20 @@ namespace Compiler.Validate
             List<string> airports = sectorElements.Airports.Select(airport => airport.Icao).ToList();
             foreach (Sector sector in sectorElements.Sectors)
             {
-                foreach (string airport in sector.DepartureAirports.Airports)
+                foreach (SectorDepartureAirports departureAirports in sector.DepartureAirports)
                 {
-                    if (!airports.Contains(airport))
+                    foreach (string airport in departureAirports.Airports)
                     {
-                        string message = String.Format(
-                            "Invalid DEPAPT {0} on sector {1}",
-                            airport,
-                            sector.Name
-                        );
-                        events.AddEvent(new ValidationRuleFailure(message));
-                        break;
+                        if (!airports.Contains(airport))
+                        {
+                            string message = String.Format(
+                                "Invalid DEPAPT {0} on sector {1}",
+                                airport,
+                                sector.Name
+                            );
+                            events.AddEvent(new ValidationRuleFailure(message));
+                            break;
+                        }
                     }
                 }
             }

@@ -43,7 +43,7 @@ namespace Compiler.Validate
             List<Airport> airport = sectorElements.Airports.Where(airport => airport.Icao == airportCode).ToList();
 
             return airport.Count != 0 && sectorElements.Runways
-                .Where(runway => runway.RunwayDialogDescription == airport[0] .Icao + " " + airport[0].Name)
+                .Where(runway => runway.AirfieldIcao == airport[0].Icao)
                 .Where(runway => runway.FirstIdentifier == runwayIdentifier || runway.ReverseIdentifier == runwayIdentifier)
                 .ToList()
                 .Count() != 0;

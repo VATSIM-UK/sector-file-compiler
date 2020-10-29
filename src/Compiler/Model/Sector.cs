@@ -35,7 +35,6 @@ namespace Compiler.Model
             DepartureAirports = departureAirports;
         }
 
-        public List<string> BorderLines { get; }
         public string Name { get; }
         public int MinimumAltitude { get; }
         public int MaximumAltitude { get; }

@@ -9,23 +9,23 @@ using System.Linq;
 
 namespace Compiler.Validate
 {
-    public class AllRunwayDescriptionsMustReferenceAnAirport : IValidationRule
+    public class AllRunwaysMustReferenceAnAirport : IValidationRule
     {
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            List<string> airportDescriptions = sectorElements.Airports
-                .Select(airport => airport.Icao + " " + airport.Name)
+            List<string> airports = sectorElements.Airports
+                .Select(airport => airport.Icao)
                 .ToList();
-            airportDescriptions.Add("000A Show adjacent departure airports");
+            airports.Add("000A");
             foreach (Runway runway in sectorElements.Runways)
             {
-                if (!airportDescriptions.Contains(runway.RunwayDialogDescription))
+                if (!airports.Contains(runway.AirfieldIcao))
                 {
                     string message = String.Format(
-                        "Runway {0}/{1} ({2}) does not match up to a defined airport name",
+                        "Runway {0}/{1} ({2}) does not match up to a defined airport",
                         runway.FirstIdentifier,
                         runway.ReverseIdentifier,
-                        runway.RunwayDialogDescription
+                        runway.AirfieldIcao
                     );
 
                     events.AddEvent(

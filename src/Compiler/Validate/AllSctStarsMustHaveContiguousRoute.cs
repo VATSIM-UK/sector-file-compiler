@@ -12,9 +12,12 @@ namespace Compiler.Validate
     {
         // A coordinate that some routes have at the start, so we ignore it for validation
         private readonly RouteSegment defaultStarter = new RouteSegment(
+            "Test",
             new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
             new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
-            null
+            new Definition("", 0),
+            new Docblock(),
+            new Comment("")
         );
 
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)

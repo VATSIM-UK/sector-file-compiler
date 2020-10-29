@@ -14,20 +14,25 @@ namespace Compiler.Validate
         {
             foreach (Region region in sectorElements.Regions)
             {
-                foreach (Point point in region.Points)
+                foreach (RegionPoint point in region.Points)
                 {
-                    if (!RoutePointValidator.ValidatePoint(point, sectorElements))
-                    {
-                        string message = String.Format(
-                            "Invalid waypoint {0} on region {1}",
-                            point.Compile(),
-                            region.Colour
-                        );
-                        events.AddEvent(
-                            new ValidationRuleFailure(message)
-                        );
-                    }
+                    this.CheckPoint(point, region, sectorElements, events);
                 }
+            }
+        }
+
+        public void CheckPoint(RegionPoint point, Region region, SectorElementCollection sectorElements, IEventLogger events)
+        {
+            if (!RoutePointValidator.ValidatePoint(point.Point, sectorElements))
+            {
+                string message = String.Format(
+                    "Invalid waypoint {0} on region {1}",
+                    point.Point.ToString(),
+                    region.Name
+                );
+                events.AddEvent(
+                    new ValidationRuleFailure(message)
+                );
             }
         }
     }
