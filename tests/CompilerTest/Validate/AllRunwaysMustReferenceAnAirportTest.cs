@@ -8,14 +8,14 @@ using Compiler.Argument;
 
 namespace CompilerTest.Validate
 {
-    public class AllRunwayDescriptionsMustReferenceAnAirportTest
+    public class AllRunwaysMustReferenceAnAirportTest
     {
         private readonly SectorElementCollection elements;
         private readonly AllRunwayDescriptionsMustReferenceAnAirport validator;
         private readonly Mock<IEventLogger> loggerMock;
         private readonly CompilerArguments args;
 
-        public AllRunwayDescriptionsMustReferenceAnAirportTest()
+        public AllRunwaysMustReferenceAnAirportTest()
         {
             this.elements = new SectorElementCollection();
             this.loggerMock = new Mock<IEventLogger>();

@@ -13,8 +13,6 @@ namespace Compiler.Parser
         private readonly SectorElementCollection elements;
         private readonly IEventLogger eventLogger;
 
-        private static readonly string noDataString = "S999.00.00.000 E999.00.00.000";
-
         public GeoParser(
             SectorElementCollection elements,
             IEventLogger eventLogger

@@ -48,7 +48,7 @@ namespace Compiler.Validate
             new AllSectorsMustHaveValidGuestController(),
             new AllSectorsMustHaveValidDepartureAirports(),
             new AllSectorsMustHaveValidArrivalAirports(),
-            new AllRunwayDescriptionsMustReferenceAnAirport(),
+            new AllRunwaysMustReferenceAnAirport(),
             new AllCoordinationPointsMustHaveValidDepartureRunways(),
             new AllCoordinationPointsMustHaveValidArrivalRunways(),
         };
