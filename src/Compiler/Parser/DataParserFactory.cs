@@ -131,7 +131,7 @@ namespace Compiler.Parser
                         this.sectorElements,
                         this.logger
                     );
-                case InputDataType.ESE_SIDS:
+                case InputDataType.ESE_STARS:
                     return new SidStarParser(
                         this.sectorElements,
                         this.logger
