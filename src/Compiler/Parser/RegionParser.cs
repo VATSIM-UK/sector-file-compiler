@@ -24,9 +24,7 @@ namespace Compiler.Parser
 
         public void ParseData(AbstractSectorDataFile data)
         {
-            string colour = "";
             List<RegionPoint> points = new List<RegionPoint>();
-            string firstLineComment = "";
             bool foundFirst = false;
             string regionName = "";
             bool expectingColourDefinition = false;
@@ -162,11 +160,6 @@ namespace Compiler.Parser
                     declarationLine.inlineComment
                 )
             );
-        }
-
-        private bool ValidPoint(string lat, string lon)
-        {
-            return PointParser.Parse(lat, lon) != PointParser.invalidPoint;
         }
     }
 }
