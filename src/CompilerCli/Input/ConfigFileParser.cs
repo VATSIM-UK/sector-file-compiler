@@ -14,7 +14,7 @@ namespace CompilerCli.Input
                 throw new ArgumentException("Config file path should have only one argument");
             }
 
-            compilerSettings.ConfigFiles.Add(new InputFile(values[0]));
+            compilerSettings.ConfigFiles.Add(values[0]);
             return compilerSettings;
         }
     }
