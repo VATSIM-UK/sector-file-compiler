@@ -31,8 +31,8 @@ namespace Compiler.Model
         public override string GetCompileData()
         {
             return String.Format(
-                " {0}{1}",
-                this.Colour == null ? "" : this.Colour + " ",
+                "{0}{1}",
+                this.Colour == null ? " " : this.Colour + " ",
                 this.Point.ToString()
             );
         }

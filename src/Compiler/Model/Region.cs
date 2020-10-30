@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Compiler.Model
 {
@@ -33,7 +32,7 @@ namespace Compiler.Model
         {
             List<ICompilableElement> elements = new List<ICompilableElement>();
             elements.Add(this);
-            elements.Concat(this.Points);
+            elements.AddRange(this.Points);
             return elements;
         }
     }
