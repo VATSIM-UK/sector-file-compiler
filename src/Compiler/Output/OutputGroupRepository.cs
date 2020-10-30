@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Compiler.Input;
 using System.Linq;
+using Compiler.Model;
 
 namespace Compiler.Output
 {
@@ -29,6 +30,11 @@ namespace Compiler.Output
                     this.outputGroups.FirstOrDefault(g => g.Key == group.Key).AddFile(file);
                 }
             }
+        }
+
+        public OutputGroup GetForDefinitionFile(Definition definition)
+        {
+           return this.outputGroups.First(group => group.FileList.Contains(definition.Filename));
         }
     }
 }
