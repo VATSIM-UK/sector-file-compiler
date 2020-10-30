@@ -12,8 +12,6 @@ namespace Compiler.Output
      */
     public interface ICompilableElementCollector
     {
-        public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements(
-            OutputSections section
-        );
+        public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements();
     }
 }

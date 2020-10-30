@@ -17,7 +17,7 @@ namespace Compiler.Output
             this.repository = repository;
         }
 
-        public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements(OutputSections section)
+        public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements()
         {
             return this.sectorElements.Regions.GroupBy(
                 region => this.repository.GetForDefinitionFile(region.GetDefinition()),
