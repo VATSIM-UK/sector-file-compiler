@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Compiler.Output
 {
-    public class OutputGroup
+    public class OutputGroup: IComparable<OutputGroup>
     {
-        public SortedSet<string> FileList { get; }
+        public SortedSet<string> FileList { get; } = new SortedSet<string>();
         public string Key { get; }
         public string HeaderDescription { get; }
 
@@ -30,6 +30,11 @@ namespace Compiler.Output
         public bool Equals(OutputGroup compare)
         {
             return compare.Key == this.Key;
+        }
+
+        public int CompareTo(OutputGroup obj)
+        {
+            return this.Key.CompareTo(obj.Key);
         }
     }
 }
