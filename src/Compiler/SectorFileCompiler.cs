@@ -43,6 +43,12 @@ namespace Compiler
 
             // Parse all the config files
             OutputGroupRepository outputGroups = new OutputGroupRepository();
+            // TODO: Remove this and uncomment below
+            SectorElementCollection sectorElements = new SectorElementCollection();
+            (new OutputGenerator()).GenerateOutput(sectorElements, outputGroups, new StreamWriter("outputtest.txt"));
+            return 1;
+
+
             ConfigFileLoader fileLoader = new ConfigFileLoader(outputGroups);
 
             ConfigFileList fileList;
@@ -57,7 +63,8 @@ namespace Compiler
             }
 
             // Parse all the input files
-            SectorElementCollection sectorElements = new SectorElementCollection();
+            // TODO: UNCOMMENT
+            //SectorElementCollection sectorElements = new SectorElementCollection();
             DataParserFactory parserFactory = new DataParserFactory(sectorElements, events);
             foreach (AbstractSectorDataFile dataFile in fileList)
             {
@@ -86,7 +93,7 @@ namespace Compiler
             }
 
             // Perform the compilation
-            CompileEngineFactory.Create(arguments, sectorElements).Compile();
+            //CompileEngineFactory.Create(arguments, sectorElements).Compile();
 
             this.events.AddEvent(new CompilationFinishedEvent(true));
             return 0;
