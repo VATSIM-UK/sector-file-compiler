@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace Compiler.Output
 {
-    public class AirportsCollector : ICompilableElementCollector
+    public class VorsCollector : ICompilableElementCollector
     {
         private readonly SectorElementCollection sectorElements;
         private readonly OutputGroupRepository repository;
 
-        public AirportsCollector(SectorElementCollection sectorElements, OutputGroupRepository repository)
+        public VorsCollector(SectorElementCollection sectorElements, OutputGroupRepository repository)
         {
             this.sectorElements = sectorElements;
             this.repository = repository;
@@ -19,9 +19,9 @@ namespace Compiler.Output
 
         public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements()
         {
-            return this.sectorElements.Airports.GroupBy(
-                airport => this.repository.GetForDefinitionFile(airport.GetDefinition()),
-                airport => airport
+            return this.sectorElements.Vors.GroupBy(
+                vor => this.repository.GetForDefinitionFile(vor.GetDefinition()),
+                vor => vor
             );
         }
     }
