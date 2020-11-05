@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace Compiler.Output
 {
-    public class RegionsCompilableElementCollector : ICompilableElementCollector
+    public class RegionsCollector : ICompilableElementCollector
     {
         private readonly SectorElementCollection sectorElements;
         private readonly OutputGroupRepository repository;
 
-        public RegionsCompilableElementCollector(SectorElementCollection sectorElements, OutputGroupRepository repository)
+        public RegionsCollector(SectorElementCollection sectorElements, OutputGroupRepository repository)
         {
             this.sectorElements = sectorElements;
             this.repository = repository;

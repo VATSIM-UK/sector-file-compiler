@@ -59,7 +59,7 @@ namespace Compiler.Output
             repository.Add(testGroup);
             repository.Add(testGroup2);
 
-            RegionsCompilableElementCollector collector = new RegionsCompilableElementCollector(sectorElements, repository);
+            RegionsCollector collector = new RegionsCollector(sectorElements, repository);
             foreach (IGrouping<OutputGroup, ICompilableElementProvider> outputGroup in collector.GetCompilableElements(OutputSections.SCT_REGIONS))
             {
                 if (testGroup.HeaderDescription != null)

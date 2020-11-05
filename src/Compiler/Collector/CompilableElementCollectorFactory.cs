@@ -23,7 +23,7 @@ namespace Compiler.Output
             switch (section)
             {
                 case OutputSections.SCT_REGIONS:
-                    return new RegionsCompilableElementCollector(this.sectorElements, this.outputGroups);
+                    return new RegionsCollector(this.sectorElements, this.outputGroups);
                 default:
                     break;
             }
