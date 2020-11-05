@@ -22,6 +22,8 @@ namespace Compiler.Output
         {
             switch (section)
             {
+                case OutputSections.SCT_INFO:
+                    return new InfoCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.SCT_REGIONS:
                     return new RegionsCollector(this.sectorElements, this.outputGroups);
                 default:
