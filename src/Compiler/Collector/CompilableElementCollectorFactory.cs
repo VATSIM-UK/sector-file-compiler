@@ -62,6 +62,8 @@ namespace Compiler.Output
                     return new PositionsCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.ESE_FREETEXT:
                     return new FreetextCollector(this.sectorElements, this.outputGroups);
+                case OutputSections.ESE_SIDSSTARS:
+                    return new SidStarsCollector(this.sectorElements, this.outputGroups);
                 default:
                     break;
             }
