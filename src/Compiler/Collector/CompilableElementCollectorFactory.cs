@@ -58,6 +58,8 @@ namespace Compiler.Output
                 case OutputSections.SCT_REGIONS:
                     return new RegionsCollector(this.sectorElements, this.outputGroups);
                 // TODO: ADD ESE HEADER
+                case OutputSections.ESE_POSITIONS:
+                    return new PositionsCollector(this.sectorElements, this.outputGroups);
                 default:
                     break;
             }
