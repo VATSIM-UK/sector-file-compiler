@@ -60,6 +60,8 @@ namespace Compiler.Output
                 // TODO: ADD ESE HEADER
                 case OutputSections.ESE_POSITIONS:
                     return new PositionsCollector(this.sectorElements, this.outputGroups);
+                case OutputSections.ESE_FREETEXT:
+                    return new FreetextCollector(this.sectorElements, this.outputGroups);
                 default:
                     break;
             }
