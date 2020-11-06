@@ -30,6 +30,8 @@ namespace Compiler.Output
                     return new RunwaysCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.SCT_VOR:
                     return new VorsCollector(this.sectorElements, this.outputGroups);
+                case OutputSections.SCT_NDB:
+                    return new NdbsCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.SCT_REGIONS:
                     return new RegionsCollector(this.sectorElements, this.outputGroups);
                 default:
