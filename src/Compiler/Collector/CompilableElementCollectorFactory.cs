@@ -37,7 +37,7 @@ namespace Compiler.Output
                 case OutputSections.SCT_GEO:
                     return new GeoCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.SCT_LOW_AIRWAY:
-                    return new LowAirwaysCollector(this.sectorElements, this.outputGroups);
+                    return new HighAirwaysCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.SCT_REGIONS:
                     return new RegionsCollector(this.sectorElements, this.outputGroups);
                 default:
