@@ -24,7 +24,6 @@
 
         // ESE
         ESE_HEADER,
-        ESE_PREAMBLE,
         ESE_POSITIONS,
         ESE_FREETEXT,
         ESE_SIDSSTARS,

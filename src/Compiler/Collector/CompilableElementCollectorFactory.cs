@@ -22,6 +22,7 @@ namespace Compiler.Output
         {
             switch (section)
             {
+                // TODO: ADD SCT HEADER
                 case OutputSections.SCT_COLOUR_DEFS:
                     return new ColoursCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.SCT_INFO:
@@ -56,6 +57,7 @@ namespace Compiler.Output
                     return new LabelsCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.SCT_REGIONS:
                     return new RegionsCollector(this.sectorElements, this.outputGroups);
+                // TODO: ADD ESE HEADER
                 default:
                     break;
             }
