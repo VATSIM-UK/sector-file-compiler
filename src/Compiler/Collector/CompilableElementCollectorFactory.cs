@@ -46,6 +46,8 @@ namespace Compiler.Output
                     return new LowArtccCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.SCT_ARTCC_HIGH:
                     return new HighArtccCollector(this.sectorElements, this.outputGroups);
+                case OutputSections.SCT_SID:
+                    return new SidsCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.SCT_REGIONS:
                     return new RegionsCollector(this.sectorElements, this.outputGroups);
                 default:
