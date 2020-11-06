@@ -48,6 +48,8 @@ namespace Compiler.Output
                     return new HighArtccCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.SCT_SID:
                     return new SidsCollector(this.sectorElements, this.outputGroups);
+                case OutputSections.SCT_STAR:
+                    return new StarsCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.SCT_REGIONS:
                     return new RegionsCollector(this.sectorElements, this.outputGroups);
                 default:
