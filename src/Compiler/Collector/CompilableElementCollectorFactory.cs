@@ -66,6 +66,8 @@ namespace Compiler.Output
                     return new SidStarsCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.ESE_AIRSPACE:
                     return new AirspaceCollector(this.sectorElements, this.outputGroups);
+                case OutputSections.RWY_ACTIVE_RUNWAYS:
+                    return new ActiveRunwaysCollector(this.sectorElements, this.outputGroups);
                 default:
                     break;
             }
