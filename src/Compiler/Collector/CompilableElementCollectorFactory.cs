@@ -64,6 +64,8 @@ namespace Compiler.Output
                     return new FreetextCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.ESE_SIDSSTARS:
                     return new SidStarsCollector(this.sectorElements, this.outputGroups);
+                case OutputSections.ESE_AIRSPACE:
+                    return new AirspaceCollector(this.sectorElements, this.outputGroups);
                 default:
                     break;
             }
