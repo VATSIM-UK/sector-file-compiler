@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Compiler.Argument;
 using System.IO;
+using Compiler.Output;
 
 namespace CompilerCli.Input
 {
@@ -16,7 +17,7 @@ namespace CompilerCli.Input
 
             StreamWriter writer = new StreamWriter(values[0], false);
             writer.AutoFlush = true;
-            compilerSettings.OutFileRwy = writer;
+            compilerSettings.OutputFiles.Add(new RwyOutput(writer));
             return compilerSettings;
         }
     }

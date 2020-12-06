@@ -4,78 +4,68 @@ using System.Text;
 using System.IO;
 using Compiler.Model;
 using System.Linq;
+using Compiler.Argument;
 
 namespace Compiler.Output
 {
     public class OutputGenerator
     {
-        public void GenerateOutput(SectorElementCollection sectorElements, OutputGroupRepository repository, TextWriter outputFile)
+        private readonly SectorElementCollection sectorElements;
+        private readonly OutputGroupRepository outputGroups;
+        private readonly CompilableElementCollectorFactory collectorFactory;
+
+        public OutputGenerator(
+            SectorElementCollection sectorElements,
+            OutputGroupRepository outputGroups,
+            CompilableElementCollectorFactory collectorFactory
+        ) {
+            this.sectorElements = sectorElements;
+            this.outputGroups = outputGroups;
+            this.collectorFactory = collectorFactory;
+        }
+
+        public void GenerateOutput(AbstractOutputFile outputFile)
         {
-            // TODO: Remove this test code when ready
-            Docblock testDocblock = new Docblock();
-            testDocblock.AddLine(new Comment("Line 1"));
-            testDocblock.AddLine(new Comment("Line 2"));
-            Region testRegion = new Region(
-                "TESTREGION",
-                new List<RegionPoint>()
-                {
-                    new RegionPoint(new Point("BNN"), new Definition("test", 1), testDocblock, new Comment("inline"), "red"),
-                    new RegionPoint(new Point("LAM"), new Definition("test", 1), testDocblock, new Comment("inline")),
-                },
-                new Definition("testfile.txt", 0),
-                testDocblock,
-                new Comment("mainInline")
-            );
-            Region testRegion2 = new Region(
-                "TESTREGION",
-                new List<RegionPoint>()
-                {
-                                new RegionPoint(new Point("BNN"), new Definition("test", 1), testDocblock, new Comment("inline"), "red"),
-                                new RegionPoint(new Point("LAM"), new Definition("test", 1), testDocblock, new Comment("inline")),
-                },
-                new Definition("testfile.txt", 0),
-                testDocblock,
-                new Comment("mainInline")
-            );
-            Region testRegion3= new Region(
-                "TESTREGION",
-                new List<RegionPoint>()
-                {
-                    new RegionPoint(new Point("BNN"), new Definition("test", 1), testDocblock, new Comment("inline"), "red"),
-                    new RegionPoint(new Point("LAM"), new Definition("test", 1), testDocblock, new Comment("inline")),
-                },
-                new Definition("testfile2.txt", 0),
-                testDocblock,
-                new Comment("mainInline")
-            );
-            sectorElements.Add(testRegion);
-            sectorElements.Add(testRegion2);
-            sectorElements.Add(testRegion3);
 
-            OutputGroup testGroup = new OutputGroup("testkey", "Test header");
-            testGroup.AddFile("testfile.txt");
-            OutputGroup testGroup2 = new OutputGroup("testkey2", "Test header");
-            testGroup2.AddFile("testfile2.txt");
-            repository.Add(testGroup);
-            repository.Add(testGroup2);
+            TextWriter outputStream = outputFile.GetOutputStream();
 
-            RegionsCollector collector = new RegionsCollector(sectorElements, repository);
-            foreach (IGrouping<OutputGroup, ICompilableElementProvider> outputGroup in collector.GetCompilableElements(OutputSections.SCT_REGIONS))
+            // Process each section in the output
+            foreach (OutputSections section in outputFile.GetOutputSections())
             {
-                if (testGroup.HeaderDescription != null)
+                // If the section has a header declaration, do it
+                if (SectionHeaders.headers.ContainsKey(section))
                 {
-                    outputFile.WriteLine("; " + testGroup.HeaderDescription);
+                    outputStream.WriteLine(
+                        string.Format("[{0}]", SectionHeaders.headers[section])
+                    );
+                    outputStream.WriteLine("");
                 }
 
-                foreach (ICompilableElementProvider elementProvider in outputGroup)
+                // Get the output groups
+                IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> outputGroups =
+                    this.collectorFactory.GetCollectorForOutputSection(section).GetCompilableElements();
+
+                foreach (IGrouping<OutputGroup, ICompilableElementProvider> outputGroup in outputGroups)
                 {
-                    foreach (ICompilableElement compilableElement in elementProvider.GetCompilableElements())
+                    // Print the header for the group if there is one
+                    if (outputGroup.Key.HeaderDescription != null)
                     {
-                        compilableElement.Compile(sectorElements, outputFile);
+                        outputStream.WriteLine("; " + outputGroup.Key.HeaderDescription);
+                    }
+
+                    // For every individual compilable element (each line of output) print it
+                    foreach (ICompilableElementProvider elementProvider in outputGroup)
+                    {
+                        foreach (ICompilableElement compilableElement in elementProvider.GetCompilableElements())
+                        {
+                            compilableElement.Compile(sectorElements, outputStream);
+                        }
                     }
                 }
             }
-            outputFile.Flush();
+
+            // Flush the file to make sure it's written
+            outputStream.Flush();
         }
     }
 }

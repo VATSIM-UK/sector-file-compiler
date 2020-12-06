@@ -16,16 +16,6 @@ namespace Compiler.Argument
                     new CompilerArgumentError("No config files specificed")
                 );
             }
-
-            if (arguments.OutFileEse == null)
-            {
-                events.AddEvent(new CompilerArgumentError("ESE output file path must be specified"));
-            }
-
-            if (arguments.OutFileSct == null)
-            {
-                events.AddEvent(new CompilerArgumentError("SCT output file path must be specified"));
-            }
         }
     }
 }
