@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Compiler.Config
 {
-    public class Config: IEnumerable<IInclusionRule>
+    public class ConfigInclusionRules: IEnumerable<IInclusionRule>
     {
         private List<IInclusionRule> airportInclusionRules = new List<IInclusionRule>();
         private List<IInclusionRule> enrouteInclusionRules = new List<IInclusionRule>();

@@ -2,37 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Compiler.Input;
 
-namespace Compiler.Config
+namespace Compiler.Input
 {
-    public class ConfigFileList: IEnumerable<AbstractSectorDataFile>
+    public class InputFileList: IEnumerable<AbstractSectorDataFile>
     {
         private List<AbstractSectorDataFile> files = new List<AbstractSectorDataFile>();
 
-        /*
-         * Merge two config files together
-         */
-        public void Merge(ConfigFileList fileToMerge)
-        {
-            foreach (AbstractSectorDataFile file in fileToMerge.files)
-            {
-                this.AddFile(file);
-            }
-        }
-
-        /*
-         * Add a file to the input if it's not already been added.
-         */
-        public bool AddFile(AbstractSectorDataFile file)
+        public void Add(AbstractSectorDataFile file)
         {
             if (this.files.Contains(file))
             {
-                return false;
+                return;
             }
 
             this.files.Add(file);
-            return true;
         }
 
         public IEnumerator<AbstractSectorDataFile> GetEnumerator()

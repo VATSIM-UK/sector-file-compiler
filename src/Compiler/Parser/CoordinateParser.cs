@@ -63,7 +63,7 @@ namespace Compiler.Parser
 
         private static bool ValidateMinutesSeconds(int minutes, float seconds)
         {
-            return minutes < 60 && seconds < 60.0;
+            return minutes <= 60 && seconds <= 60.0;
         }
 
         private static bool ValidateLongitude(int degrees, int minutes, float seconds)

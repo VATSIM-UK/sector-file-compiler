@@ -21,15 +21,7 @@ namespace Compiler.Output
          */
         public void Add(OutputGroup group)
         {
-            // If we can't add the group, then it already exists, so just add its files to
-            // the existing group
-            if (!this.outputGroups.Add(group))
-            {
-                foreach (string file in group.FileList)
-                {
-                    this.outputGroups.FirstOrDefault(g => g.Key == group.Key).AddFile(file);
-                }
-            }
+            this.outputGroups.Add(group);
         }
 
         public OutputGroup GetForDefinitionFile(Definition definition)

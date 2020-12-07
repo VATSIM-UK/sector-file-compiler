@@ -24,10 +24,73 @@ namespace Compiler.Parser
 
         public void ParseData(AbstractSectorDataFile data)
         {
-            bool checkedFirstLine = false;
+            List<SectorData> linesToProcess = new List<SectorData>();
+            bool foundFirst = false;
+            foreach (SectorData line in data)
+            {
+                if (
+                    !foundFirst &&
+                    !this.IsNewDeclaration(line)
+                ) {
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Invalid SECTOR declaration", line)
+                    );
+                    return;
+                }
+
+                if (!foundFirst)
+                {
+                    linesToProcess.Add(line);
+                    foundFirst = true;
+                    continue;
+                }
+
+                if (this.IsNewDeclaration(line))
+                {
+                    this.ProcessLines(ref linesToProcess, data);
+                    linesToProcess.Clear();
+                }
+
+                linesToProcess.Add(line);
+            }
+
+            this.ProcessLines(ref linesToProcess, data);
+        }
+
+        public void ProcessLines(ref List<SectorData> lines, AbstractSectorDataFile file)
+        {
+            if (lines.Count == 0)
+            {
+                return;
+            }
+
+            SectorData declarationLine = lines[0];
 
             int minimumAltitude = 0;
             int maximumAltitude = 0;
+            if (declarationLine.dataSegments[0] != "SECTOR")
+            {
+                this.errorLog.AddEvent(
+                    new SyntaxError("Invalid SECTOR declaration", declarationLine)
+                );
+                return;
+            }
+
+            // Check the minimum and maximum altitudes
+            if (!int.TryParse(declarationLine.dataSegments[2], out minimumAltitude))
+            {
+                this.errorLog.AddEvent(
+                    new SyntaxError("SECTOR minimum altitude must be an integer", declarationLine)
+                );
+            }
+
+            if (!int.TryParse(declarationLine.dataSegments[3], out maximumAltitude))
+            {
+                this.errorLog.AddEvent(
+                    new SyntaxError("SECTOR maximum altitude must be an integer", declarationLine)
+                );
+            }
+
             SectorOwnerHierarchy ownerHierarchy = null;
             List<SectorAlternateOwnerHierarchy> altOwners = new List<SectorAlternateOwnerHierarchy>();
             List<SectorBorder> borders = new List<SectorBorder>();
@@ -35,79 +98,51 @@ namespace Compiler.Parser
             List<SectorGuest> guests = new List<SectorGuest>();
             List<SectorDepartureAirports> departureAirports = new List<SectorDepartureAirports>();
             List<SectorArrivalAirports> arrivalAirports = new List<SectorArrivalAirports>();
-            SectorData declarationLine = new SectorData();
-            foreach (SectorData line in data)
+
+            for (int i = 1; i < lines.Count; i++)
             {
-                if (!checkedFirstLine)
-                {
-                    declarationLine = line;
-                    // Check the declaration line
-                    if (declarationLine.dataSegments[0] != "SECTOR")
-                    {
-                        this.errorLog.AddEvent(
-                            new SyntaxError("Invalid SECTOR declaration", declarationLine)
-                        );
-                        return;
-                    }
-
-                    // Check the minimum and maximum altitudes
-                    if (!int.TryParse(declarationLine.dataSegments[2], out minimumAltitude))
-                    {
-                        this.errorLog.AddEvent(
-                            new SyntaxError("SECTOR minimum altitude must be an integer", declarationLine)
-                        );
-                    }
-
-                    if (!int.TryParse(declarationLine.dataSegments[3], out maximumAltitude))
-                    {
-                        this.errorLog.AddEvent(
-                            new SyntaxError("SECTOR maximum altitude must be an integer", declarationLine)
-                        );
-                    }
-                    checkedFirstLine = true;
-                    continue;
-                }
-
                 try
                 {
-                    switch (line.dataSegments[0])
+                    switch (lines[i].dataSegments[0])
                     {
                         case "OWNER":
-                            ownerHierarchy = this.ParseOwnerHierarchy(line);
+                            ownerHierarchy = this.ParseOwnerHierarchy(lines[i]);
                             break;
                         case "ALTOWNER":
-                            altOwners.Add(this.ParseAlternateOwnerHierarchy(line));
+                            altOwners.Add(this.ParseAlternateOwnerHierarchy(lines[i]));
                             break;
                         case "BORDER":
-                            borders.Add(this.ParseBorder(line));
+                            borders.Add(this.ParseBorder(lines[i]));
                             break;
                         case "ACTIVE":
-                            actives.Add(this.ParseActive(line));
+                            actives.Add(this.ParseActive(lines[i]));
                             break;
                         case "GUEST":
-                            guests.Add(this.ParseGuest(line));
+                            guests.Add(this.ParseGuest(lines[i]));
                             break;
                         case "DEPAPT":
-                            departureAirports.Add(this.ParseDepartureAirport(line));
+                            departureAirports.Add(this.ParseDepartureAirport(lines[i]));
                             break;
                         case "ARRAPT":
-                            arrivalAirports.Add(this.ParseArrivalAirport(line));
+                            arrivalAirports.Add(this.ParseArrivalAirport(lines[i]));
                             break;
                         default:
                             this.errorLog.AddEvent(
-                                 new SyntaxError("Unknown SECTOR line type", line)
+                                 new SyntaxError("Unknown SECTOR line type", lines[i])
                             );
                             return;
                     }
-                } catch (ArgumentException exception) {
+                }
+                catch (ArgumentException exception)
+                {
                     this.errorLog.AddEvent(
-                        new SyntaxError(exception.Message, line)
+                        new SyntaxError(exception.Message, lines[i])
                     );
                     return;
                 }
 
             }
-
+        
             if (ownerHierarchy == null)
             {
                 this.errorLog.AddEvent(
@@ -136,6 +171,11 @@ namespace Compiler.Parser
                     declarationLine.inlineComment
                 )
             );
+        }
+
+        public bool IsNewDeclaration(SectorData line)
+        {
+            return line.dataSegments[0] == "SECTOR";
         }
 
         /*

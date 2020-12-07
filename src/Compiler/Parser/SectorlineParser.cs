@@ -47,14 +47,29 @@ namespace Compiler.Parser
 
                 if (this.IsNewDeclaration(line))
                 {
-                    this.ProcessLines(ref linesToProcess, data);
+                    try
+                    {
+                        this.ProcessLines(ref linesToProcess, data);
+                    } catch
+                    {
+                        // Logging done higher up
+                        return;
+                    }
                     linesToProcess.Clear();
                 }
 
                 linesToProcess.Add(line);
             }
 
-            this.ProcessLines(ref linesToProcess, data);
+            try
+            {
+                this.ProcessLines(ref linesToProcess, data);
+            }
+            catch
+            {
+                // Logging done higher up
+                return;
+            }
         }
 
         private void ProcessLines(ref List<SectorData> lines, AbstractSectorDataFile file)
@@ -121,8 +136,7 @@ namespace Compiler.Parser
                 if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError(
-                            "Invalid CIRCLE_SECTORLINE coordinate", declarationLine)
+                        new SyntaxError("Invalid CIRCLE_SECTORLINE coordinate", declarationLine)
                     );
                     throw new ArgumentException();
                 }
@@ -134,8 +148,7 @@ namespace Compiler.Parser
                     out double radius) == false)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError(
-                        "Invalid CIRCLE_SECTORLINE radius", declarationLine)
+                    new SyntaxError("Invalid CIRCLE_SECTORLINE radius", declarationLine)
                 );
                 throw new ArgumentException();
             }
@@ -222,6 +235,7 @@ namespace Compiler.Parser
                     }
                     else
                     {
+                        this.errorLog.AddEvent(new SyntaxError("Invalid declaration in SECTORLINE declaration", dataLine));
                         throw new ArgumentException("Invalid declaration in SECTORLINE declaration");
                     }
                 } catch (ArgumentException exception)
@@ -259,7 +273,8 @@ namespace Compiler.Parser
         {
             if (data.dataSegments.Count != 4)
             {
-                throw new ArgumentException("Invalid number of SECTORLINE DISPLAY rule segements");
+                this.errorLog.AddEvent(new SyntaxError("Invalid number of SECTORLINE DISPLAY rule segements", data));
+                throw new ArgumentException();
             }
 
             return new SectorlineDisplayRule(
@@ -276,7 +291,8 @@ namespace Compiler.Parser
         {
             if (data.dataSegments.Count != 3)
             {
-                throw new ArgumentException("Invalid number of SECTORLINE COORD segements");
+                this.errorLog.AddEvent(new SyntaxError("Invalid number of SECTORLINE COORD segements", data));
+                throw new ArgumentException();
             }
 
             Coordinate parsedCoordinate = CoordinateParser.Parse(
@@ -285,9 +301,9 @@ namespace Compiler.Parser
             );
 
             if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
-
             {
-                throw new ArgumentException("Invalid SECTORLINE coordinate");
+                this.errorLog.AddEvent(new SyntaxError("Invalid SECTORLINE coordinate", data));
+                throw new ArgumentException();
             }
 
             return new SectorlineCoordinate(

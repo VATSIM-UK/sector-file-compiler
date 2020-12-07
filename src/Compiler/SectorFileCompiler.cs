@@ -43,12 +43,11 @@ namespace Compiler
 
             // Parse all the config files
             OutputGroupRepository outputGroups = new OutputGroupRepository();
-            ConfigFileLoader fileLoader = new ConfigFileLoader(outputGroups);
 
-            ConfigFileList fileList;
+            ConfigInclusionRules config;
             try
             {
-                fileList = fileLoader.LoadConfigFiles(this.arguments.ConfigFiles);
+                config = new ConfigFileLoader().LoadConfigFiles(this.arguments.ConfigFiles);
             } catch (ConfigFileInvalidException e)
             {
                 this.events.AddEvent(new CompilationMessage(e.Message));
@@ -59,7 +58,7 @@ namespace Compiler
             // Parse all the input files
             SectorElementCollection sectorElements = new SectorElementCollection();
             DataParserFactory parserFactory = new DataParserFactory(sectorElements, events);
-            foreach (AbstractSectorDataFile dataFile in fileList)
+            foreach (AbstractSectorDataFile dataFile in InputFileListFactory.CreateFromInclusionRules(config, outputGroups))
             {
                 parserFactory.GetParserForFile(dataFile).ParseData(dataFile);
             }
