@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace Compiler.Model
+﻿namespace Compiler.Model
 {
     /*
      * A single comment segment in the output - may be a whole line or the end of one.

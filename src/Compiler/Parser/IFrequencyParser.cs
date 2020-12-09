@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Parser
+﻿namespace Compiler.Parser
 {
     /**
      * Interface for classes that parse and check frequencies.

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Compiler.Transformer
+﻿namespace Compiler.Transformer
 {
     public interface ITransformer
     {

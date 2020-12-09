@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Compiler.Argument;
-using Compiler.Input;
 
 namespace CompilerCli.Input
 {

@@ -1,10 +1,8 @@
 ﻿using Xunit;
 using Compiler.Model;
 using Compiler.Event;
-using Compiler.Error;
 using Compiler.Validate;
 using Moq;
-using Compiler.Argument;
 
 namespace CompilerTest.Validate
 {

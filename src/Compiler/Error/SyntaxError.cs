@@ -1,5 +1,4 @@
-﻿using System;
-using Compiler.Event;
+﻿using Compiler.Event;
 using Compiler.Input;
 using Compiler.Model;
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Compiler.Input;
-using Compiler.Output;
+﻿using Compiler.Input;
 
 namespace Compiler.Config
 {

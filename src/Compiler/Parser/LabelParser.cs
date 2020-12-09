@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Compiler.Error;
 using Compiler.Event;
 using Compiler.Model;

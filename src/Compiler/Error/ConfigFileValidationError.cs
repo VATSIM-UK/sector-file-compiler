@@ -1,7 +1,5 @@
 ﻿using Compiler.Event;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Compiler.Error
 {

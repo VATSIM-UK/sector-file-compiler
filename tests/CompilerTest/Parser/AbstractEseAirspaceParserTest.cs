@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Moq;
+﻿using Moq;
 using Compiler.Parser;
 using Compiler.Model;
 using Compiler.Event;

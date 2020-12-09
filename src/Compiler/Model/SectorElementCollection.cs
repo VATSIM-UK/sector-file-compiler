@@ -1,6 +1,4 @@
-﻿using System;
-using Compiler.Output;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Compiler.Model
 {

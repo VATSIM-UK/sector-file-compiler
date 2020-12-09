@@ -1,8 +1,6 @@
 ﻿using Compiler.Output;
-using Compiler.Input;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Compiler.Argument
 {

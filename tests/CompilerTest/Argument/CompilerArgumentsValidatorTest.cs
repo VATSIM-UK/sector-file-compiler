@@ -2,7 +2,6 @@
 using Moq;
 using System.IO;
 using Compiler.Argument;
-using Compiler.Input;
 using Compiler.Event;
 using Compiler.Error;
 

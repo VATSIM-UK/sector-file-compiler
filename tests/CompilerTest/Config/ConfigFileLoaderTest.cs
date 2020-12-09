@@ -1,7 +1,6 @@
 ﻿using System;
 using Xunit;
 using Moq;
-using Compiler.Input;
 using Compiler.Config;
 using Newtonsoft.Json.Linq;
 using System.IO;

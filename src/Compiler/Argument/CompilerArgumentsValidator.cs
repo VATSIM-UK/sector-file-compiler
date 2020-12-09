@@ -1,8 +1,5 @@
 ﻿using Compiler.Error;
 using Compiler.Event;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using Compiler.Input;
 
 namespace Compiler.Argument
 {

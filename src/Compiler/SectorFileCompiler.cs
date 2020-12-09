@@ -1,18 +1,12 @@
 ﻿using Compiler.Argument;
 using Compiler.Input;
 using Compiler.Output;
-using System.Collections.Generic;
 using Compiler.Model;
 using Compiler.Event;
-using Newtonsoft.Json;
 using Compiler.Validate;
 using Compiler.Parser;
 using Compiler.Config;
-using Compiler.Error;
 using Compiler.Exception;
-using System;
-using Newtonsoft.Json.Linq;
-using System.IO;
 
 namespace Compiler
 {

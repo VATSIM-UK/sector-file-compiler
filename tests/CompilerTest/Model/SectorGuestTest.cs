@@ -1,6 +1,5 @@
 ﻿using Xunit;
 using Compiler.Model;
-using System.Collections.Generic;
 
 namespace CompilerTest.Model
 {

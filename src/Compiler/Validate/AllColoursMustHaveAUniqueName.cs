@@ -2,7 +2,6 @@
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
-using Compiler.Output;
 using Compiler.Argument;
 
 namespace Compiler.Validate

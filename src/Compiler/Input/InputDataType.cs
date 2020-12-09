@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Input
+﻿namespace Compiler.Input
 {
     /*
      * All the different types of input data we can expect to see throughout

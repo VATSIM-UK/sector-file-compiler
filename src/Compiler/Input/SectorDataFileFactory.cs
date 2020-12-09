@@ -1,10 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Text;
-using Compiler.Model;
-
-namespace Compiler.Input
+﻿namespace Compiler.Input
 {
     public class SectorDataFileFactory
     {

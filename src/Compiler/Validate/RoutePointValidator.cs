@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Compiler.Event;
-using Compiler.Model;
-using Compiler.Argument;
+﻿using Compiler.Model;
 
 namespace Compiler.Validate
 {

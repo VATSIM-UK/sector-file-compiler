@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Compiler.Input;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Compiler.Model;
 

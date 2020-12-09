@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Compiler.Model;
+﻿using Compiler.Model;
 using Compiler.Event;
 using Compiler.Error;
 using Compiler.Input;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Error;

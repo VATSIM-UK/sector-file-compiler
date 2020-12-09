@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Compiler.Model;
+﻿using Compiler.Model;
 using Compiler.Error;
 using Compiler.Event;
 using Compiler.Input;

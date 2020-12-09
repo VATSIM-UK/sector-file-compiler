@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Compiler.Transformer
+﻿namespace Compiler.Transformer
 {
     /**
      * Transformer to remove all lines that are blank and contain no content.
