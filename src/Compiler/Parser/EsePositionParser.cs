@@ -42,7 +42,7 @@ namespace Compiler.Parser
         {
             foreach (SectorData line in data)
             {
-                if (line.dataSegments.Count < 11)
+                if (line.dataSegments.Count < 7)
                 {
                     this.errorLog.AddEvent(
                         new SyntaxError("Incorrect number of ESE position segments", line)
@@ -69,11 +69,22 @@ namespace Compiler.Parser
                     continue;
                 }
 
-                if (line.dataSegments[9] != EsePositionParser.noData && line.dataSegments[9] != "")
+                if (line.dataSegments.Count == 10)
                 {
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Squawk range end not specified", line)
+                    );
+                    continue;
+                }
+
+                string squawkRangeStart = "";
+                string squawkRangeEnd = "";
+                if (line.dataSegments.Count > 9 && line.dataSegments[9] != EsePositionParser.noData && line.dataSegments[9] != "")
+                {
+
                     if (!SquawkValidator.SquawkValid(line.dataSegments[9])) {
                         this.errorLog.AddEvent(
-                            new SyntaxError("Invalid squawk range start " + line.dataSegments[0], line)
+                            new SyntaxError("Invalid squawk range start " + line.dataSegments[9], line)
                         );
                         continue;
                     }
@@ -81,7 +92,7 @@ namespace Compiler.Parser
                     if (!SquawkValidator.SquawkValid(line.dataSegments[10]))
                     {
                         this.errorLog.AddEvent(
-                            new SyntaxError("Invalid squawk range end " + line.dataSegments[0], line)
+                            new SyntaxError("Invalid squawk range end " + line.dataSegments[10], line)
                         );
                         continue;
                     }
@@ -93,6 +104,9 @@ namespace Compiler.Parser
                         );
                         continue;
                     }
+
+                    squawkRangeStart = line.dataSegments[9];
+                    squawkRangeEnd = line.dataSegments[10];
                 }
 
                 // Coordinates start at position 11
@@ -161,8 +175,8 @@ namespace Compiler.Parser
                         line.dataSegments[4],
                         line.dataSegments[5],
                         line.dataSegments[6],
-                        line.dataSegments[9],
-                        line.dataSegments[10],
+                        squawkRangeStart,
+                        squawkRangeEnd,
                         parsedCoordinates,
                         line.definition,
                         line.docblock,

@@ -4,7 +4,6 @@ using Compiler.Model;
 using Compiler.Event;
 using Compiler.Error;
 using Compiler.Input;
-using System.Linq;
 
 namespace Compiler.Parser
 {
@@ -40,14 +39,18 @@ namespace Compiler.Parser
                 // If we haven't found the first item,
                 if (!foundFirst)
                 {
-                    if (line.dataSegments.Count != 6)
+
+                    int nameEndIndex = this.GetEndOfNameIndex(line);
+                    if (nameEndIndex == -1)
                     {
                         this.eventLogger.AddEvent(
                             new SyntaxError("Expected name at start of GEO segment", line)
                         );
                         return;
                     }
-                    name = line.dataSegments[0];
+
+                    name = string.Join(' ', line.dataSegments.GetRange(0, nameEndIndex));
+                    line.dataSegments.RemoveRange(0, nameEndIndex);
 
                     try
                     {
@@ -93,19 +96,29 @@ namespace Compiler.Parser
             );
         }
 
+        /**
+         * The name in this format of line can be determined to mean all data segments up until the first coordinate.
+         */
+        private int GetEndOfNameIndex(SectorData line)
+        {
+            for (int i = 0; i < line.dataSegments.Count - 1; i++)
+            {
+                if (!PointParser.Parse(line.dataSegments[i], line.dataSegments[i + 1]).Equals(PointParser.invalidPoint))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
         /*
          * Parses an individual GEO segment of coordinates and colours
          */
-        private GeoSegment ParseGeoSegment(SectorData line, bool isFirstSegment)
+        private GeoSegment ParseGeoSegment(SectorData line, bool isFirstLine)
         {
-            // If it's the first item, it alwayus has a name attached so drop that off
-            List<string> dataSegments = new List<string>();
-            if (isFirstSegment)
-            {
-                dataSegments.RemoveAt(0);
-            }
 
-            if (dataSegments.Count != 5)
+            if (!isFirstLine && line.dataSegments.Count != 5)
             {
                 this.eventLogger.AddEvent(
                     new SyntaxError("Incorrect number parts for GEO segment", line)

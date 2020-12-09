@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Input
+﻿namespace Compiler.Input
 {
     public class EseSectorDataReader : AbstractSectorDataReader
     {
@@ -12,6 +8,11 @@ namespace Compiler.Input
         protected override string GetCommentDelimiter()
         {
             return EseSectorDataReader.commentDelimiter;
+        }
+
+        protected override bool FilterExtraWhitespace()
+        {
+            return false;
         }
 
         protected override string GetDataDelimiter()

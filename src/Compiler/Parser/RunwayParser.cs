@@ -25,6 +25,7 @@ namespace Compiler.Parser
         {
             foreach (SectorData line in data)
             {
+                // Runways are weird and have double spaces randomly, so handle it.
                 if (line.dataSegments.Count < 8)
                 {
                     this.errorLog.AddEvent(
