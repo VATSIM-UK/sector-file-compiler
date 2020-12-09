@@ -160,7 +160,7 @@ namespace Compiler.Parser
 
             throw new NotImplementedException(
                 string.Format(
-                    "Parser not not implented for input data type {0}",
+                    "Parser not not implemented for input data type {0}",
                     file.DataType.ToString()
                 )
             );

@@ -35,6 +35,7 @@ namespace Compiler.Input
                 case InputDataType.SCT_RUNWAYS:
                 case InputDataType.SCT_SIDS:
                 case InputDataType.SCT_STARS:
+                case InputDataType.SCT_LOWER_AIRWAYS:
                 case InputDataType.SCT_UPPER_AIRWAYS:
                 case InputDataType.SCT_VORS:
                     return new SctSectorDataReader();

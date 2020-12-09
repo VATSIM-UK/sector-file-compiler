@@ -57,7 +57,7 @@ namespace Compiler.Config
                 if (miscData != null)
                 {
                     this.IterateConfigFileSections(
-                        enrouteData,
+                        miscData,
                         MiscConfigFileSections.configFileSections,
                         x => OutputGroupFactory.CreateMisc(x),
                         x => config.AddMiscInclusionRule(x),
