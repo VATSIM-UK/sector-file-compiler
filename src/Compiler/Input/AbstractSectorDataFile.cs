@@ -18,8 +18,9 @@ namespace Compiler.Input
         // The type of data this file contains
         public InputDataType DataType { get; }
 
-        public AbstractSectorDataFile(InputDataType dataType)
+        public AbstractSectorDataFile(string fullPath, InputDataType dataType)
         {
+            FullPath = fullPath;
             DataType = dataType;
         }
 

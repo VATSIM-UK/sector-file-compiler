@@ -37,6 +37,8 @@ namespace Compiler.Input
                 case InputDataType.SCT_UPPER_AIRWAYS:
                 case InputDataType.SCT_VORS:
                     return new SctSectorDataReader();
+                case InputDataType.FILE_HEADERS:
+                    return new FileHeaderDataReader();
                 default:
                     throw new ArgumentException("Unknown data type for SectorDataReaderFactory");
             }

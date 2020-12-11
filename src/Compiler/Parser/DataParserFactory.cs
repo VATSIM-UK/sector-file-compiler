@@ -155,6 +155,17 @@ namespace Compiler.Parser
                         this.sectorElements,
                         this.logger
                     );
+                case InputDataType.FILE_HEADERS:
+                    return new HeaderParser(
+                        this.sectorElements,
+                        this.logger
+                    );
+                case InputDataType.ESE_PRE_POSITIONS:
+                    return new EsePositionParser(
+                        new EuroscopeNoFrequencyParser(), 
+                        this.sectorElements,
+                        this.logger
+                    );
             }
 
             throw new NotImplementedException(

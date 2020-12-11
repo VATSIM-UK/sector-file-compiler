@@ -20,7 +20,12 @@ namespace Compiler.Output
         {
             switch (section)
             {
-                // TODO: ADD SCT HEADER
+                // Headers
+                case OutputSections.ESE_HEADER:
+                case OutputSections.SCT_HEADER:
+                    return new HeaderCollector(this.sectorElements, this.outputGroups);
+
+                // SCT Sections
                 case OutputSections.SCT_COLOUR_DEFS:
                     return new ColoursCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.SCT_INFO:
@@ -55,7 +60,8 @@ namespace Compiler.Output
                     return new LabelsCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.SCT_REGIONS:
                     return new RegionsCollector(this.sectorElements, this.outputGroups);
-                // TODO: ADD ESE HEADER
+
+                // ESE sections.
                 case OutputSections.ESE_POSITIONS:
                     return new PositionsCollector(this.sectorElements, this.outputGroups);
                 case OutputSections.ESE_FREETEXT:

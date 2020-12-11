@@ -44,6 +44,8 @@ namespace Compiler.Model
 
         public List<ActiveRunway> ActiveRunways { get; } = new List<ActiveRunway>();
 
+        public List<Header> FileHeaders { get; } = new List<Header>();
+
         public SectorElementCollection()
         {
         }
@@ -179,6 +181,11 @@ namespace Compiler.Model
         public void Add(CoordinationPoint coordinationPoint)
         {
             this.CoordinationPoints.Add(coordinationPoint);
+        }
+
+        public void Add(Header header)
+        {
+            this.FileHeaders.Add(header);
         }
     }
 }

@@ -9,9 +9,8 @@ namespace Compiler.Input
         private readonly AbstractSectorDataReader reader;
 
         public SectorDataFile(string fullPath, InputDataType dataType, AbstractSectorDataReader reader)
-            : base(dataType)
+            : base(fullPath, dataType)
         {
-            this.FullPath = fullPath;
             this.reader = reader;
         }
 
