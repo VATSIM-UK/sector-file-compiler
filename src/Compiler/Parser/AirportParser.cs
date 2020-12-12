@@ -79,7 +79,7 @@ namespace Compiler.Parser
             this.elements.Add(
                 new Airport(
                     nameLine.rawData,
-                    data.GetParentDirectory(),
+                    data.GetParentDirectoryName(),
                     parsedCoordinate,
                     frequencyLine.rawData,
                     nameLine.definition,

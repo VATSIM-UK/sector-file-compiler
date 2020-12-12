@@ -29,9 +29,9 @@ namespace Compiler.Input
             return this.FullPath == compare.FullPath;
         }
 
-        public string GetParentDirectory()
+        public string GetParentDirectoryName()
         {
-            return Path.GetDirectoryName(this.FullPath);
+            return Path.GetFileName(Path.GetDirectoryName(this.FullPath));
         }
 
         public string GetFileName()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Compiler.Event;
 using Compiler.Error;
 using Compiler.Model;
@@ -12,17 +13,10 @@ namespace Compiler.Validate
         {
             foreach(SidStar sidStar in sectorElements.SidStars)
             {
-                bool airportFound = false;
-                foreach (Airport airport in sectorElements.Airports)
-                {
-                    if (sidStar.Airport == airport.Icao)
-                    {
-                        airportFound = true;
-                        break;
-                    }
-                }
+                bool airportExists = sectorElements.Airports
+                    .Count(airport => sidStar.Airport == airport.Icao) != 0;
 
-                if (!airportFound)
+                if (!airportExists)
                 {
                     string errorMessage = String.Format(
                         "Airport {0} is not valid for {1}/{2}",

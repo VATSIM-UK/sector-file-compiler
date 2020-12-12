@@ -32,7 +32,7 @@ namespace CompilerTest.Input
         {
             Assert.Equal(
                 "_TestData",
-                this.file.GetParentDirectory()
+                this.file.GetParentDirectoryName()
             );
         }
 
@@ -41,7 +41,7 @@ namespace CompilerTest.Input
         {
             Assert.Equal(
                 "StreamTest",
-                this.file.GetParentDirectory()
+                this.file.GetParentDirectoryName()
             );
         }
 
