@@ -23,7 +23,7 @@ namespace Compiler.Validate
         {
             foreach (Colour colour in sectorElements.Colours)
             {
-                if (colourString == colour.Name)
+                if (colourString.ToLower() == colour.Name.ToLower())
                 {
                     return true;
                 }

@@ -13,13 +13,13 @@ namespace Compiler.Validate
             List<string> coloursProcessed = new List<string>();
             foreach (Colour colour in sectorElements.Colours)
             {
-                if (coloursProcessed.Contains(colour.Name))
+                if (coloursProcessed.Contains(colour.Name.ToLower()))
                 {
                     events.AddEvent(new ValidationRuleFailure("Duplicate colourm definition " + colour.Name));
                     continue;
                 }
 
-                coloursProcessed.Add(colour.Name);
+                coloursProcessed.Add(colour.Name.ToLower());
             }
         }
     }
