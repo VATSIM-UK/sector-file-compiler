@@ -9,17 +9,20 @@ namespace Compiler.Input
     {
         private readonly IEnumerable<string> fileList;
         private readonly bool ignoreMissing;
+        private readonly string exceptWhereExists;
         private readonly InputDataType inputDataType;
         private readonly OutputGroup outputGroup;
 
         public FileListInclusionRule(
             IEnumerable<string> fileList,
             bool ignoreMissing,
+            string exceptWhereExists,
             InputDataType inputDataType,
             OutputGroup outputGroup
         ) {
             this.fileList = fileList;
             this.ignoreMissing = ignoreMissing;
+            this.exceptWhereExists = exceptWhereExists;
             this.inputDataType = inputDataType;
             this.outputGroup = outputGroup;
         }
@@ -31,7 +34,10 @@ namespace Compiler.Input
             {
                 if (File.Exists(path))
                 {
-                    files.Add(SectorDataFileFactory.Create(path, this.inputDataType));
+                    if (this.exceptWhereExists == "" || !File.Exists(exceptWhereExists))
+                    {
+                        files.Add(SectorDataFileFactory.Create(path, this.inputDataType));
+                    }
                 } else if (!this.ignoreMissing)
                 {
                     throw new InputFileNotFoundException(path);

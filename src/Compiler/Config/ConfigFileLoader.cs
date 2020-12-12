@@ -152,6 +152,14 @@ namespace Compiler.Config
             );
         }
 
+        private string GetInvalidExceptWhereExistsMessage(string section)
+        {
+            return string.Format(
+                "Invalid except_where_exists value in section {0} - must be a string",
+                section
+            );
+        }
+
         private string GetInvalidConfigParentSectionFormatMessage(string section)
         {
             return string.Format(
@@ -472,8 +480,7 @@ namespace Compiler.Config
 
             // Determine whether we should ignore missing files
             bool ignoreMissing = false;
-            JToken ignoreMissingToken;
-            if (filesObject.TryGetValue("ignore_missing", out ignoreMissingToken))
+            if (filesObject.TryGetValue("ignore_missing", out var ignoreMissingToken))
             {
                 if (ignoreMissingToken.Type != JTokenType.Boolean)
                 {
@@ -483,6 +490,20 @@ namespace Compiler.Config
                 }
 
                 ignoreMissing = (bool)ignoreMissingToken;
+            }
+
+            // Should we apply any conditional logic here
+            string exceptWhereExists = "";
+            if (filesObject.TryGetValue("except_where_exists", out var exceptWhereExistsToken))
+            {
+                if (exceptWhereExistsToken.Type != JTokenType.String)
+                {
+                    throw new ConfigFileInvalidException(
+                        GetInvalidExceptWhereExistsMessage(sectionRootString + configFileSection.JsonPath)
+                    );
+                }
+
+                exceptWhereExists = this.NormaliseFilePath(rootPath, (string) exceptWhereExistsToken);
             }
 
             // Get the file paths and normalise against the config files folder
@@ -504,11 +525,14 @@ namespace Compiler.Config
                 new FileListInclusionRule(
                     filePaths,
                     ignoreMissing,
+                    exceptWhereExists,
                     configFileSection.DataType,
                     outputGroup
                 )
             );
         }
+
+
 
         private string NormaliseFilePath(string configFileFolder, string relativeInputFilePath)
         {

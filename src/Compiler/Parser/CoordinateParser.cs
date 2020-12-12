@@ -7,13 +7,15 @@ namespace Compiler.Parser
         private const char COORDINATE_SEPARATOR = '.';
 
         public static readonly Coordinate invalidCoordinate = new Coordinate("", "");
+
+        public static readonly Coordinate starterCoordinate = new Coordinate("S999.00.00.000", "E999.00.00.000");
         
         public static Coordinate Parse(string latitude, string longitude)
         {
             // If its the special value used in the sectorfile, allow it
             if (latitude == "S999.00.00.000" && longitude == "E999.00.00.000")
             {
-                return new Coordinate(latitude, longitude);
+                return starterCoordinate;
             }
 
             string parsedLatitude = CoordinateParser.ParseCoordinate(true, latitude.Trim());

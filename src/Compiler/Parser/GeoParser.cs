@@ -34,21 +34,22 @@ namespace Compiler.Parser
             Docblock initialDocblock = new Docblock();
 
             List<GeoSegment> segments = new List<GeoSegment>();
+
             foreach (SectorData line in data)
             {
-                // If we haven't found the first item,
+                // If not found the first item, we should check it's a name.
                 if (!foundFirst)
                 {
-
-                    int nameEndIndex = this.GetEndOfNameIndex(line);
-                    if (nameEndIndex == -1)
-                    {
+                    if (!this.IsNameSegment(line)) {
                         this.eventLogger.AddEvent(
-                            new SyntaxError("Expected name at start of GEO segment", line)
+                            new SyntaxError("Invalid start to geo segment, expected a name", line)
                         );
-                        return;
                     }
 
+                    foundFirst = true;
+
+                    // Set up the segment
+                    int nameEndIndex = this.GetEndOfNameIndex(line);
                     name = string.Join(' ', line.dataSegments.GetRange(0, nameEndIndex));
                     line.dataSegments.RemoveRange(0, nameEndIndex);
 
@@ -61,20 +62,66 @@ namespace Compiler.Parser
                         initialDefinition = firstSegment.GetDefinition();
                         initialDocblock = firstSegment.Docblock;
                         initialComment = firstSegment.InlineComment;
-                    } catch
+                    }
+                    catch (ArgumentException)
                     {
                         // Syntax errors dealt with in segment parsing method
                         return;
                     }
 
-                    foundFirst = true;
                     continue;
                 }
 
+                // If it's a name segment, we should save our progress and start afresh
+                if (this.IsNameSegment(line))
+                {
+                    // Add the full geo element
+                    this.elements.Add(
+                        new Geo(
+                            name,
+                            initialFirstPoint,
+                            initialSecondPoint,
+                            initialColour,
+                            segments,
+                            initialDefinition,
+                            initialDocblock,
+                            initialComment
+                        )
+                    );
+
+                    // Reset the segments array
+                    segments = new List<GeoSegment>();
+
+                    // Set up the segment
+                    int nameEndIndex = this.GetEndOfNameIndex(line);
+                    name = string.Join(' ', line.dataSegments.GetRange(0, nameEndIndex));
+                    line.dataSegments.RemoveRange(0, nameEndIndex);
+
+                    try
+                    {
+                        GeoSegment firstSegment = this.ParseGeoSegment(line, true);
+                        initialFirstPoint = firstSegment.FirstPoint;
+                        initialSecondPoint = firstSegment.SecondPoint;
+                        initialColour = firstSegment.Colour;
+                        initialDefinition = firstSegment.GetDefinition();
+                        initialDocblock = firstSegment.Docblock;
+                        initialComment = firstSegment.InlineComment;
+                    }
+                    catch (ArgumentException)
+                    {
+                        // Syntax errors dealt with in segment parsing method
+                        return;
+                    }
+
+                    continue;
+                }
+
+                // Otherwise, process the segment
                 try
                 {
                     segments.Add(this.ParseGeoSegment(line, false));
-                } catch
+                }
+                catch
                 {
                     // Syntax errors dealt with in segment parsing method
                     return;
@@ -110,6 +157,12 @@ namespace Compiler.Parser
             }
 
             return -1;
+        }
+
+        private bool IsNameSegment(SectorData line)
+        {
+            return line.dataSegments.Count >= 2 &&
+                   PointParser.Parse(line.dataSegments[0], line.dataSegments[1]).Equals(PointParser.invalidPoint);
         }
 
         /*
@@ -149,7 +202,7 @@ namespace Compiler.Parser
             return new GeoSegment(
                 parsedStartPoint,
                 parsedEndPoint,
-                line.dataSegments[4],
+                isFirstLine ? null : line.dataSegments[4],
                 line.definition,
                 line.docblock,
                 line.inlineComment
