@@ -26,6 +26,11 @@ namespace Compiler.Output
             this.FileList.Add(path);
         }
 
+        public void Merge(OutputGroup group)
+        {
+            this.FileList.UnionWith(group.FileList);
+        }
+
         public bool Equals(OutputGroup compare)
         {
             return compare.Key == this.Key;

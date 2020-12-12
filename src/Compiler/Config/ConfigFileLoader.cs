@@ -44,7 +44,7 @@ namespace Compiler.Config
                     this.IterateConfigFileSections(
                         enrouteData,
                         EnrouteConfigFileSections.configFileSections,
-                        x => OutputGroupFactory.CreateEnroute(x),
+                        OutputGroupFactory.CreateEnroute,
                         x => config.AddEnrouteInclusionRule(x),
                         GetFolderForConfigFile(file),
                         "enroute"
@@ -58,7 +58,7 @@ namespace Compiler.Config
                     this.IterateConfigFileSections(
                         miscData,
                         MiscConfigFileSections.configFileSections,
-                        x => OutputGroupFactory.CreateMisc(x),
+                        OutputGroupFactory.CreateMisc,
                         x => config.AddMiscInclusionRule(x),
                         GetFolderForConfigFile(file),
                         "misc"
@@ -234,7 +234,7 @@ namespace Compiler.Config
                         configItem.Value,
                         AirfieldConfigFileSections.configFileSections,
                         x => OutputGroupFactory.CreateAirport(x, Path.GetFileName(directory)),
-                        x => config.AddAirportInclusionRule(x),
+                        config.AddAirportInclusionRule,
                         directory,
                         "airport"
                     );

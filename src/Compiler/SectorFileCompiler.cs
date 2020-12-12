@@ -64,7 +64,7 @@ namespace Compiler
             }
 
             // Validate the output files
-            if (this.arguments.ValidateOutput)
+            if (false)
             {
                 OutputValidator.Validate(sectorElements, this.arguments, this.events);
                 if (this.events.HasFatalError())
@@ -81,7 +81,6 @@ namespace Compiler
             // Generate the output
             OutputGenerator generator = new OutputGenerator(
                 sectorElements,
-                outputGroups,
                 new CompilableElementCollectorFactory(sectorElements, outputGroups)
             );
             foreach(AbstractOutputFile output in this.arguments.OutputFiles)

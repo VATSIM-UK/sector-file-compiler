@@ -18,7 +18,10 @@ namespace Compiler.Output
          */
         public void Add(OutputGroup group)
         {
-            this.outputGroups.Add(group);
+            if (!this.outputGroups.Add(group))
+            {
+                this.outputGroups.First(findGroup => findGroup.Key == group.Key).Merge(group);
+            }
         }
 
         public OutputGroup GetForDefinitionFile(Definition definition)

@@ -8,16 +8,13 @@ namespace Compiler.Output
     public class OutputGenerator
     {
         private readonly SectorElementCollection sectorElements;
-        private readonly OutputGroupRepository outputGroups;
         private readonly CompilableElementCollectorFactory collectorFactory;
 
         public OutputGenerator(
             SectorElementCollection sectorElements,
-            OutputGroupRepository outputGroups,
             CompilableElementCollectorFactory collectorFactory
         ) {
             this.sectorElements = sectorElements;
-            this.outputGroups = outputGroups;
             this.collectorFactory = collectorFactory;
         }
 
@@ -59,6 +56,9 @@ namespace Compiler.Output
                         }
                     }
                 }
+
+                // Write a newline
+                outputStream.WriteLine();
             }
 
             // Flush the file to make sure it's written

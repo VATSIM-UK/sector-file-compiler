@@ -7,10 +7,13 @@
         const int firstMaxValue = 136;
         const int secondDividend = 25;
 
+        private const string prePositionsFrequency = "199.998";
+        private const string notValidFrequency = "199.900";
+
         public string ParseFrequency(string frequency)
         {
             // No frequency, accept this
-            if (frequency == "199.998")
+            if (frequency == prePositionsFrequency || frequency == notValidFrequency)
             {
                 return frequency;
             }
