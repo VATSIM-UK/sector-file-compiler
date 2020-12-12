@@ -26,6 +26,7 @@ namespace Compiler.Config
             new ConfigFileSection("ground_map.geo", InputDataType.SCT_GEO, "Group Map Geo"),
             new ConfigFileSection("ground_map.regions", InputDataType.SCT_REGIONS, "Ground Map Regions"),
             new ConfigFileSection("ground_map.labels", InputDataType.SCT_LABELS, "Ground Map Labels"),
+            new ConfigFileSection("vrps", InputDataType.ESE_VRPS, "VRPs"),
         };
 
     }

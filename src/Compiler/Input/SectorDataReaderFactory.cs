@@ -16,6 +16,7 @@ namespace Compiler.Input
                 case InputDataType.ESE_SECTORLINES:
                 case InputDataType.ESE_SIDS:
                 case InputDataType.ESE_STARS:
+                case InputDataType.ESE_VRPS:
                 case InputDataType.RWY_ACTIVE_RUNWAY:
                     return new EseSectorDataReader();
                 case InputDataType.SCT_AIRPORT_BASIC:

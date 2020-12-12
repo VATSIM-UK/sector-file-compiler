@@ -28,6 +28,9 @@ namespace Compiler.Config
                 catch (Newtonsoft.Json.JsonReaderException e)
                 {
                     throw new ConfigFileInvalidException("Invalid JSON in " + file + ": " + e.Message);
+                } catch (FileNotFoundException)
+                {
+                    throw new ConfigFileInvalidException("Config file not found");
                 }
 
                 // Load airport data

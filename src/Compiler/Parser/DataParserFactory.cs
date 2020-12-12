@@ -166,6 +166,11 @@ namespace Compiler.Parser
                         this.sectorElements,
                         this.logger
                     );
+                case InputDataType.ESE_VRPS:
+                    return new VrpParser(
+                        this.sectorElements,
+                        this.logger
+                    );
             }
 
             throw new NotImplementedException(
