@@ -27,8 +27,8 @@
                 "{0} {1} {2}",
                 this.FirstPoint.ToString(),
                 this.SecondPoint.ToString(),
-                this.Colour
-            );
+                Colour ?? ""
+            ).Trim();
         }
     }
 }

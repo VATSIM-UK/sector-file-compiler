@@ -55,7 +55,7 @@ namespace Compiler.Parser
 
                     try
                     {
-                        GeoSegment firstSegment = this.ParseGeoSegment(line, true);
+                        GeoSegment firstSegment = this.ParseGeoSegment(line);
                         initialFirstPoint = firstSegment.FirstPoint;
                         initialSecondPoint = firstSegment.SecondPoint;
                         initialColour = firstSegment.Colour;
@@ -99,7 +99,7 @@ namespace Compiler.Parser
 
                     try
                     {
-                        GeoSegment firstSegment = this.ParseGeoSegment(line, true);
+                        GeoSegment firstSegment = this.ParseGeoSegment(line);
                         initialFirstPoint = firstSegment.FirstPoint;
                         initialSecondPoint = firstSegment.SecondPoint;
                         initialColour = firstSegment.Colour;
@@ -119,7 +119,7 @@ namespace Compiler.Parser
                 // Otherwise, process the segment
                 try
                 {
-                    segments.Add(this.ParseGeoSegment(line, false));
+                    segments.Add(this.ParseGeoSegment(line));
                 }
                 catch
                 {
@@ -168,10 +168,10 @@ namespace Compiler.Parser
         /*
          * Parses an individual GEO segment of coordinates and colours
          */
-        private GeoSegment ParseGeoSegment(SectorData line, bool isFirstLine)
+        private GeoSegment ParseGeoSegment(SectorData line)
         {
 
-            if (!isFirstLine && line.dataSegments.Count != 5)
+            if (line.dataSegments.Count < 4)
             {
                 this.eventLogger.AddEvent(
                     new SyntaxError("Incorrect number parts for GEO segment", line)
@@ -202,7 +202,7 @@ namespace Compiler.Parser
             return new GeoSegment(
                 parsedStartPoint,
                 parsedEndPoint,
-                isFirstLine ? null : line.dataSegments[4],
+                line.dataSegments.Count > 4 ? line.dataSegments[4] : null,
                 line.definition,
                 line.docblock,
                 line.inlineComment
