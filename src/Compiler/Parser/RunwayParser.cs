@@ -104,7 +104,7 @@ namespace Compiler.Parser
                 // Add the element
                 this.sectorElements.Add(
                     new Runway(
-                        "TEST",
+                        data.GetParentDirectoryName(),
                         line.dataSegments[0],
                         int.Parse(line.dataSegments[2]),
                         firstThreshold,
