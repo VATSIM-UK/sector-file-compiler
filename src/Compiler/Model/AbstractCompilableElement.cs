@@ -41,7 +41,7 @@ namespace Compiler.Model
         {
             foreach (Comment line in this.Docblock)
             {
-                output.WriteLine(line.ToString());
+                output.WriteLine(line.ToString().Trim());
             }
 
             output.WriteLine(
