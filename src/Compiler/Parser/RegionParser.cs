@@ -85,7 +85,7 @@ namespace Compiler.Parser
                 }
 
 
-                /**
+                /*
                  * We've found a new REGIONNAME declaration, so must be the start of a new region.
                  */
                 if (line.rawData.StartsWith(RegionParser.regionNameDeclaration))

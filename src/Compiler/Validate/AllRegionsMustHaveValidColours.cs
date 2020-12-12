@@ -13,7 +13,7 @@ namespace Compiler.Validate
             {
                 foreach (RegionPoint point in region.Points)
                 {
-                    if (!ColourValidator.ColourValid(sectorElements, point.Colour))
+                    if (point.Colour != null && !ColourValidator.ColourValid(sectorElements, point.Colour))
                     {
                         string errorMessage = string.Format(
                             "Invalid colour value {0} for region {1}",

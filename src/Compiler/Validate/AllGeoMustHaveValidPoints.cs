@@ -16,7 +16,7 @@ namespace Compiler.Validate
         {
             foreach (Geo geo in sectorElements.GeoElements)
             {
-                this.ValidateGeoSegment(geo.InitialSegment, sectorElements, events);
+                this.ValidateBaseGeo(geo, sectorElements, events);
                 foreach (GeoSegment segment in geo.AdditionalSegments)
                 {
                     this.ValidateGeoSegment(segment, sectorElements, events);
@@ -24,21 +24,38 @@ namespace Compiler.Validate
             }
         }
 
-        private void ValidateGeoSegment(GeoSegment segment, SectorElementCollection sectorElements, IEventLogger events)
+        private void ValidateBaseGeo(Geo geo, SectorElementCollection sectorElements, IEventLogger events)
         {
-            if (
-                !RoutePointValidator.ValidatePoint(segment.FirstPoint, sectorElements) ||
-                !RoutePointValidator.ValidatePoint(segment.SecondPoint, sectorElements)
-            )
+            if (!PointsValid(geo.FirstPoint, geo.SecondPoint, sectorElements))
             {
                 string message = String.Format(
-                    "Invalid waypoint {0} on GEO",
+                    "Invalid waypoint on GEO declaration: {0}",
+                    geo.GetCompileData()
+                );
+                events.AddEvent(
+                    new ValidationRuleFailure(message)
+                );
+            }
+        }
+
+        private void ValidateGeoSegment(GeoSegment segment, SectorElementCollection sectorElements, IEventLogger events)
+        {
+            if (!PointsValid(segment.FirstPoint, segment.SecondPoint, sectorElements))
+            {
+                string message = String.Format(
+                    "Invalid waypoint on GEO segment: {0}",
                     segment.GetCompileData()
                 );
                 events.AddEvent(
                     new ValidationRuleFailure(message)
                 );
             }
+        }
+
+        private bool PointsValid(Point point1, Point point2, SectorElementCollection sectorElements)
+        {
+            return RoutePointValidator.ValidatePoint(point1, sectorElements) && 
+                   RoutePointValidator.ValidatePoint(point2, sectorElements);
         }
     }
 }

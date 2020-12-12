@@ -21,18 +21,13 @@ namespace Compiler.Model
 
         public string Colour { get; }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
         public override string GetCompileData()
         {
             return String.Format(
-                "{0}{1}",
-                this.Colour == null ? " " : this.Colour + " ",
+                "{0} {1}",
+                this.Colour ?? "",
                 this.Point.ToString()
-            );
+            ).Trim();
         }
     }
 }

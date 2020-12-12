@@ -31,7 +31,6 @@ namespace Compiler.Model
         public Point FirstPoint { get; }
         public Point SecondPoint { get; }
         public string Colour { get; }
-        public GeoSegment InitialSegment { get; }
         public List<GeoSegment> AdditionalSegments { get; }
 
         public override IEnumerable<ICompilableElement> GetCompilableElements()
@@ -50,10 +49,10 @@ namespace Compiler.Model
             return string.Format(
                 "{0} {1} {2} {3}",
                 this.Name.PadRight(27, ' '),
-                this.InitialSegment.FirstPoint.ToString(),
-                this.InitialSegment.SecondPoint.ToString(),
-                this.InitialSegment.Colour
-            );
+                this.FirstPoint.ToString(),
+                this.SecondPoint.ToString(),
+                this.Colour ?? ""
+            ).Trim();
         }
     }
 }
