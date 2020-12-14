@@ -7,49 +7,33 @@ namespace Compiler.Output
     public class AirspaceCollector : ICompilableElementCollector
     {
         private readonly SectorElementCollection sectorElements;
-        private readonly OutputGroupRepository repository;
+        private readonly OutputGroupRepository outputGroups;
 
-        public AirspaceCollector(SectorElementCollection sectorElements, OutputGroupRepository repository)
+        public AirspaceCollector(SectorElementCollection sectorElements, OutputGroupRepository outputGroups)
         {
             this.sectorElements = sectorElements;
-            this.repository = repository;
+            this.outputGroups = outputGroups;
         }
 
         /*
-         * The airspace section is a mashup of Sectorlines, Sectors and Agreements
+         * The airspace section is a mashup of Sectorlines, Sectors and Agreements.
+         *
+         * Sectorlines and CircleSectorlines should be sorted together, followed by sectors, followed by agreements.
          */
-        public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements()
+        public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-            List<IGrouping<OutputGroup, ICompilableElementProvider>> elements = new List<IGrouping<OutputGroup, ICompilableElementProvider>>();
 
-            // Sectorlines and circle sectorlines live together, so handle them first.
-            List<AbstractCompilableElement> sectorlines = new List<AbstractCompilableElement>();
-            sectorlines.Concat(this.sectorElements.SectorLines);
-            sectorlines.Concat(this.sectorElements.CircleSectorLines);
-            elements = (List<IGrouping<OutputGroup, ICompilableElementProvider>>) elements.Concat(
-                sectorlines.GroupBy(
-                    sectorline => this.repository.GetForDefinitionFile(sectorline.GetDefinition()),
-                    sectorline => sectorline
+            return this.sectorElements.SectorLines.Cast<AbstractCompilableElement>()
+                .Concat(this.sectorElements.Sectors)
+                .OrderBy(
+                    sectorline => this.outputGroups.GetForDefinitionFile(sectorline.GetDefinition())
                 )
-            );
-
-            // Sectors rely on sectorline definitions, so add them next.
-            elements.Concat(
-                this.sectorElements.Sectors.GroupBy(
-                    sector => this.repository.GetForDefinitionFile(sector.GetDefinition()),
-                    sector => sector
+                .Concat(
+                    this.sectorElements.Sectors.OrderBy(sector => this.outputGroups.GetForDefinitionFile(sector.GetDefinition()))
                 )
-            );
-
-            // Finally, agreements / coordination points rely on sectors, so add them last
-            elements.Concat(
-                this.sectorElements.CoordinationPoints.GroupBy(
-                    coordinationPoint => this.repository.GetForDefinitionFile(coordinationPoint.GetDefinition()),
-                    coordinationPoint => coordinationPoint
-                )
-            );
-
-            return elements;
+                .Concat(
+                    this.sectorElements.CoordinationPoints.OrderBy(coordinationPoint => this.outputGroups.GetForDefinitionFile(coordinationPoint.GetDefinition()))
+                );
         }
     }
 }

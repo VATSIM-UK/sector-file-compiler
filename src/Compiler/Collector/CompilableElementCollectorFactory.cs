@@ -21,17 +21,16 @@ namespace Compiler.Output
             switch (section)
             {
                 // Headers
-                case OutputSectionKeys.ESE_HEADER:
-                case OutputSectionKeys.SCT_HEADER:
-                    return new HeaderCollector(this.sectorElements, this.outputGroups);
+                case OutputSectionKeys.FILE_HEADER:
+                    return new HeaderCollector(this.sectorElements);
 
                 // SCT Sections
                 case OutputSectionKeys.SCT_COLOUR_DEFS:
-                    return new ColoursCollector(this.sectorElements, this.outputGroups);
+                    return new ColoursCollector(this.sectorElements);
                 case OutputSectionKeys.SCT_INFO:
                     return new InfoCollector(this.sectorElements, this.outputGroups);
                 case OutputSectionKeys.SCT_AIRPORT:
-                    return new AirportsCollector(this.sectorElements, this.outputGroups);
+                    return new AirportsCollector(this.sectorElements);
                 case OutputSectionKeys.SCT_RUNWAY:
                     return new RunwaysCollector(this.sectorElements, this.outputGroups);
                 case OutputSectionKeys.SCT_VOR:
@@ -39,19 +38,19 @@ namespace Compiler.Output
                 case OutputSectionKeys.SCT_NDB:
                     return new NdbsCollector(this.sectorElements, this.outputGroups);
                 case OutputSectionKeys.SCT_FIXES:
-                    return new FixesCollector(this.sectorElements, this.outputGroups);
+                    return new FixesCollector(this.sectorElements);
                 case OutputSectionKeys.SCT_GEO:
                     return new GeoCollector(this.sectorElements, this.outputGroups);
                 case OutputSectionKeys.SCT_LOW_AIRWAY:
-                    return new HighAirwaysCollector(this.sectorElements, this.outputGroups);
+                    return new LowAirwaysCollector(this.sectorElements, this.outputGroups);
                 case OutputSectionKeys.SCT_HIGH_AIRWAY:
-                    return new HighAirwaysCollector(this.sectorElements, this.outputGroups);
+                    return new HighAirwaysCollector(this.sectorElements);
                 case OutputSectionKeys.SCT_ARTCC:
-                    return new ArtccCollector(this.sectorElements, this.outputGroups);
+                    return new ArtccCollector(this.sectorElements);
                 case OutputSectionKeys.SCT_ARTCC_LOW:
                     return new LowArtccCollector(this.sectorElements, this.outputGroups);
                 case OutputSectionKeys.SCT_ARTCC_HIGH:
-                    return new HighArtccCollector(this.sectorElements, this.outputGroups);
+                    return new HighArtccCollector(this.sectorElements);
                 case OutputSectionKeys.SCT_SID:
                     return new SidsCollector(this.sectorElements, this.outputGroups);
                 case OutputSectionKeys.SCT_STAR:
@@ -71,7 +70,7 @@ namespace Compiler.Output
                 case OutputSectionKeys.ESE_AIRSPACE:
                     return new AirspaceCollector(this.sectorElements, this.outputGroups);
                 case OutputSectionKeys.RWY_ACTIVE_RUNWAYS:
-                    return new ActiveRunwaysCollector(this.sectorElements, this.outputGroups);
+                    return new ActiveRunwaysCollector(this.sectorElements);
                 default:
                     break;
             }

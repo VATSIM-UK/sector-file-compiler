@@ -7,20 +7,15 @@ namespace Compiler.Output
     public class AirportsCollector : ICompilableElementCollector
     {
         private readonly SectorElementCollection sectorElements;
-        private readonly OutputGroupRepository repository;
 
-        public AirportsCollector(SectorElementCollection sectorElements, OutputGroupRepository repository)
+        public AirportsCollector(SectorElementCollection sectorElements)
         {
             this.sectorElements = sectorElements;
-            this.repository = repository;
         }
 
-        public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements()
+        public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-            return this.sectorElements.Airports.GroupBy(
-                airport => this.repository.GetForDefinitionFile(airport.GetDefinition()),
-                airport => airport
-            );
+            return this.sectorElements.Airports.OrderBy(airport => airport.Icao);
         }
     }
 }

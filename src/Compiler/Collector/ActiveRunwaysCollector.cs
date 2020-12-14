@@ -7,20 +7,16 @@ namespace Compiler.Output
     public class ActiveRunwaysCollector : ICompilableElementCollector
     {
         private readonly SectorElementCollection sectorElements;
-        private readonly OutputGroupRepository repository;
 
-        public ActiveRunwaysCollector(SectorElementCollection sectorElements, OutputGroupRepository repository)
+        public ActiveRunwaysCollector(SectorElementCollection sectorElements)
         {
             this.sectorElements = sectorElements;
-            this.repository = repository;
         }
 
-        public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements()
+        public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-            return this.sectorElements.ActiveRunways.GroupBy(
-                runway => this.repository.GetForDefinitionFile(runway.GetDefinition()),
-                runway => runway
-            );
+            return this.sectorElements.ActiveRunways.OrderBy(runway => runway.Airfield)
+                .ThenBy(runway => runway.Identifier);
         }
     }
 }

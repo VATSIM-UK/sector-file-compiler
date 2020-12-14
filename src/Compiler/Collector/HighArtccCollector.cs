@@ -7,20 +7,15 @@ namespace Compiler.Output
     public class HighArtccCollector : ICompilableElementCollector
     {
         private readonly SectorElementCollection sectorElements;
-        private readonly OutputGroupRepository repository;
 
-        public HighArtccCollector(SectorElementCollection sectorElements, OutputGroupRepository repository)
+        public HighArtccCollector(SectorElementCollection sectorElements)
         {
             this.sectorElements = sectorElements;
-            this.repository = repository;
         }
 
-        public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements()
+        public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-            return this.sectorElements.HighArtccs.GroupBy(
-                artcc => this.repository.GetForDefinitionFile(artcc.GetDefinition()),
-                artcc => artcc
-            );
+            return this.sectorElements.HighArtccs.OrderBy(artcc => artcc.Identifier);
         }
     }
 }

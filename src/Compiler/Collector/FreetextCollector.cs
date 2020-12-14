@@ -15,12 +15,9 @@ namespace Compiler.Output
             this.repository = repository;
         }
 
-        public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements()
+        public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-            return this.sectorElements.Freetext.GroupBy(
-                freetext => this.repository.GetForDefinitionFile(freetext.GetDefinition()),
-                freetext => freetext
-            );
+            return this.sectorElements.Freetext.OrderBy(freetext => this.repository.GetForDefinitionFile(freetext.GetDefinition()));
         }
     }
 }
