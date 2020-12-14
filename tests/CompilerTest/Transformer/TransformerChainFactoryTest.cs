@@ -24,7 +24,7 @@ namespace CompilerTest.Transformer
 
             Assert.Equal(
                 expected,
-                TransformerChainFactory.Create(arguments, OutputSections.ESE_PREAMBLE).GetTransformerTypes()
+                TransformerChainFactory.Create(arguments, OutputSectionKeys.ESE_PREAMBLE).GetTransformerTypes()
             );
         }
 
@@ -36,7 +36,7 @@ namespace CompilerTest.Transformer
 
             Assert.Equal(
                 expected,
-                TransformerChainFactory.Create(arguments, OutputSections.ESE_HEADER).GetTransformerTypes()
+                TransformerChainFactory.Create(arguments, OutputSectionKeys.ESE_HEADER).GetTransformerTypes()
             );
         }
 
@@ -48,7 +48,7 @@ namespace CompilerTest.Transformer
 
             Assert.Equal(
                 expected,
-                TransformerChainFactory.Create(arguments, OutputSections.SCT_HEADER).GetTransformerTypes()
+                TransformerChainFactory.Create(arguments, OutputSectionKeys.SCT_HEADER).GetTransformerTypes()
             );
         }
 
@@ -60,7 +60,7 @@ namespace CompilerTest.Transformer
 
             Assert.Equal(
                 expected,
-                TransformerChainFactory.Create(arguments, OutputSections.ESE_PREAMBLE).GetTransformerTypes()
+                TransformerChainFactory.Create(arguments, OutputSectionKeys.ESE_PREAMBLE).GetTransformerTypes()
             );
         }
 
@@ -73,7 +73,7 @@ namespace CompilerTest.Transformer
 
             Assert.Equal(
                 expected,
-                TransformerChainFactory.Create(arguments, OutputSections.ESE_PREAMBLE).GetTransformerTypes()
+                TransformerChainFactory.Create(arguments, OutputSectionKeys.ESE_PREAMBLE).GetTransformerTypes()
             );
         }
     }

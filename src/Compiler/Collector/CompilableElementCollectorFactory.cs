@@ -16,61 +16,61 @@ namespace Compiler.Output
             this.outputGroups = outputGroups;
         }
 
-        public ICompilableElementCollector GetCollectorForOutputSection(OutputSections section)
+        public ICompilableElementCollector GetCollectorForOutputSection(OutputSectionKeys section)
         {
             switch (section)
             {
                 // Headers
-                case OutputSections.ESE_HEADER:
-                case OutputSections.SCT_HEADER:
+                case OutputSectionKeys.ESE_HEADER:
+                case OutputSectionKeys.SCT_HEADER:
                     return new HeaderCollector(this.sectorElements, this.outputGroups);
 
                 // SCT Sections
-                case OutputSections.SCT_COLOUR_DEFS:
+                case OutputSectionKeys.SCT_COLOUR_DEFS:
                     return new ColoursCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_INFO:
+                case OutputSectionKeys.SCT_INFO:
                     return new InfoCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_AIRPORT:
+                case OutputSectionKeys.SCT_AIRPORT:
                     return new AirportsCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_RUNWAY:
+                case OutputSectionKeys.SCT_RUNWAY:
                     return new RunwaysCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_VOR:
+                case OutputSectionKeys.SCT_VOR:
                     return new VorsCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_NDB:
+                case OutputSectionKeys.SCT_NDB:
                     return new NdbsCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_FIXES:
+                case OutputSectionKeys.SCT_FIXES:
                     return new FixesCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_GEO:
+                case OutputSectionKeys.SCT_GEO:
                     return new GeoCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_LOW_AIRWAY:
+                case OutputSectionKeys.SCT_LOW_AIRWAY:
                     return new HighAirwaysCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_HIGH_AIRWAY:
+                case OutputSectionKeys.SCT_HIGH_AIRWAY:
                     return new HighAirwaysCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_ARTCC:
+                case OutputSectionKeys.SCT_ARTCC:
                     return new ArtccCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_ARTCC_LOW:
+                case OutputSectionKeys.SCT_ARTCC_LOW:
                     return new LowArtccCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_ARTCC_HIGH:
+                case OutputSectionKeys.SCT_ARTCC_HIGH:
                     return new HighArtccCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_SID:
+                case OutputSectionKeys.SCT_SID:
                     return new SidsCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_STAR:
+                case OutputSectionKeys.SCT_STAR:
                     return new StarsCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_LABELS:
+                case OutputSectionKeys.SCT_LABELS:
                     return new LabelsCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.SCT_REGIONS:
+                case OutputSectionKeys.SCT_REGIONS:
                     return new RegionsCollector(this.sectorElements, this.outputGroups);
 
                 // ESE sections.
-                case OutputSections.ESE_POSITIONS:
+                case OutputSectionKeys.ESE_POSITIONS:
                     return new PositionsCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.ESE_FREETEXT:
+                case OutputSectionKeys.ESE_FREETEXT:
                     return new FreetextCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.ESE_SIDSSTARS:
+                case OutputSectionKeys.ESE_SIDSSTARS:
                     return new SidStarsCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.ESE_AIRSPACE:
+                case OutputSectionKeys.ESE_AIRSPACE:
                     return new AirspaceCollector(this.sectorElements, this.outputGroups);
-                case OutputSections.RWY_ACTIVE_RUNWAYS:
+                case OutputSectionKeys.RWY_ACTIVE_RUNWAYS:
                     return new ActiveRunwaysCollector(this.sectorElements, this.outputGroups);
                 default:
                     break;

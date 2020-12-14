@@ -26,7 +26,7 @@ namespace Compiler.Output
             List<AbstractCompilableElement> sectorlines = new List<AbstractCompilableElement>();
             sectorlines.Concat(this.sectorElements.SectorLines);
             sectorlines.Concat(this.sectorElements.CircleSectorLines);
-            elements.Concat(
+            elements = (List<IGrouping<OutputGroup, ICompilableElementProvider>>) elements.Concat(
                 sectorlines.GroupBy(
                     sectorline => this.repository.GetForDefinitionFile(sectorline.GetDefinition()),
                     sectorline => sectorline

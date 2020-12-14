@@ -10,10 +10,11 @@ namespace Compiler.Output
         
         }
 
-        public override OutputSections[] GetOutputSections()
+        public override OutputSectionKeys[] GetOutputSections()
         {
-            return new OutputSections[] {
-                OutputSections.RWY_ACTIVE_RUNWAYS
+            return new[] {
+                OutputSectionKeys.FILE_HEADER,
+                OutputSectionKeys.RWY_ACTIVE_RUNWAYS
             };
         }
     }

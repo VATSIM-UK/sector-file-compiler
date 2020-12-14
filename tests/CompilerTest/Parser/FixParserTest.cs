@@ -23,7 +23,7 @@ namespace CompilerTest.Parser
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
             this.parser = (FixParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.SCT_FIXES);
+                .GetParserForSection(OutputSectionKeys.SCT_FIXES);
         }
 
         public static IEnumerable<object[]> BadData => new List<object[]>
@@ -63,7 +63,7 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_FIXES][0]);
+            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSectionKeys.SCT_FIXES][0]);
         }
 
         [Fact]

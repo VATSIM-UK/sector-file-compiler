@@ -23,7 +23,7 @@ namespace CompilerTest.Parser
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
             this.parser = (SidStarRouteParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.SCT_SID);
+                .GetParserForSection(OutputSectionKeys.SCT_SID);
         }
 
         public static IEnumerable<object[]> BadData => new List<object[]>
@@ -72,7 +72,7 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_SID][0]);
+            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSectionKeys.SCT_SID][0]);
         }
 
         [Fact]

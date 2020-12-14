@@ -23,7 +23,7 @@ namespace CompilerTest.Parser
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
             this.parser = (InfoParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.SCT_INFO);
+                .GetParserForSection(OutputSectionKeys.SCT_INFO);
         }
 
         [Fact]

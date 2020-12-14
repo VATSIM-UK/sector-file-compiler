@@ -5,11 +5,11 @@ namespace Compiler.Transformer
 {
     public class TransformerChainFactory
     {
-        public static TransformerChain Create(CompilerArguments arguments, OutputSections section)
+        public static TransformerChain Create(CompilerArguments arguments, OutputSectionKeys section)
         {
             TransformerChain chain = new TransformerChain();
 
-            if (arguments.StripComments && section != OutputSections.ESE_HEADER && section != OutputSections.SCT_HEADER)
+            if (arguments.StripComments && section != OutputSectionKeys.ESE_HEADER && section != OutputSectionKeys.SCT_HEADER)
             {
                 chain.AddTransformer(new RemoveAllComments());
             }

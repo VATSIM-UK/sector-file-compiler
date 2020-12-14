@@ -23,7 +23,7 @@ namespace CompilerTest.Parser
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
             this.parser = (AirportParser) (new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.SCT_AIRPORT);
+                .GetParserForSection(OutputSectionKeys.SCT_AIRPORT);
         }
 
         public static IEnumerable<object[]> BadData => new List<object[]>

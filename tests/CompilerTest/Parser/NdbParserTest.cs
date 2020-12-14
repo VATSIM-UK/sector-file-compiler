@@ -23,7 +23,7 @@ namespace CompilerTest.Parser
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
             this.parser = (NdbParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.SCT_NDB);
+                .GetParserForSection(OutputSectionKeys.SCT_NDB);
         }
 
         public static IEnumerable<object[]> BadData => new List<object[]>
@@ -72,7 +72,7 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_NDB][0]);
+            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSectionKeys.SCT_NDB][0]);
         }
 
         [Fact]

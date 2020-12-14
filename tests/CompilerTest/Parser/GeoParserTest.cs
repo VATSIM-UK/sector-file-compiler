@@ -23,7 +23,7 @@ namespace CompilerTest.Parser
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
             this.parser = (GeoParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.SCT_GEO);
+                .GetParserForSection(OutputSectionKeys.SCT_GEO);
         }
 
         public static IEnumerable<object[]> BadData => new List<object[]>
@@ -87,7 +87,7 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_GEO][0]);
+            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSectionKeys.SCT_GEO][0]);
         }
 
         [Fact]

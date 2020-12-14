@@ -23,7 +23,7 @@ namespace CompilerTest.Parser
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
             this.parser = (FreetextParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.ESE_FREETEXT);
+                .GetParserForSection(OutputSectionKeys.ESE_FREETEXT);
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.ESE_FREETEXT][0]);
+            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSectionKeys.ESE_FREETEXT][0]);
         }
 
         [Fact]

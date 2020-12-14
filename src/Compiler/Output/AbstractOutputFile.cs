@@ -15,7 +15,7 @@ namespace Compiler.Output
             this.outputStream = outputStream;
         }
 
-        public abstract OutputSections[] GetOutputSections();
+        public abstract OutputSectionKeys[] GetOutputSections();
 
         public TextWriter GetOutputStream()
         {

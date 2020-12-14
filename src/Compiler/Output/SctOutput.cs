@@ -10,27 +10,27 @@ namespace Compiler.Output
 
         }
 
-        public override OutputSections[] GetOutputSections()
+        public override OutputSectionKeys[] GetOutputSections()
         {
-            return new OutputSections[] {
-                OutputSections.SCT_HEADER,
-                OutputSections.SCT_COLOUR_DEFS,
-                OutputSections.SCT_INFO,
-                OutputSections.SCT_AIRPORT,
-                OutputSections.SCT_RUNWAY,
-                OutputSections.SCT_VOR,
-                OutputSections.SCT_NDB,
-                OutputSections.SCT_FIXES,
-                OutputSections.SCT_GEO,
-                OutputSections.SCT_LOW_AIRWAY,
-                OutputSections.SCT_HIGH_AIRWAY,
-                OutputSections.SCT_ARTCC,
-                OutputSections.SCT_ARTCC_HIGH,
-                OutputSections.SCT_ARTCC_LOW,
-                OutputSections.SCT_SID,
-                OutputSections.SCT_STAR,
-                OutputSections.SCT_LABELS,
-                OutputSections.SCT_REGIONS
+            return new[] {
+                OutputSectionKeys.FILE_HEADER,
+                OutputSectionKeys.SCT_COLOUR_DEFS,
+                OutputSectionKeys.SCT_INFO,
+                OutputSectionKeys.SCT_AIRPORT,
+                OutputSectionKeys.SCT_RUNWAY,
+                OutputSectionKeys.SCT_VOR,
+                OutputSectionKeys.SCT_NDB,
+                OutputSectionKeys.SCT_FIXES,
+                OutputSectionKeys.SCT_GEO,
+                OutputSectionKeys.SCT_LOW_AIRWAY,
+                OutputSectionKeys.SCT_HIGH_AIRWAY,
+                OutputSectionKeys.SCT_ARTCC,
+                OutputSectionKeys.SCT_ARTCC_HIGH,
+                OutputSectionKeys.SCT_ARTCC_LOW,
+                OutputSectionKeys.SCT_SID,
+                OutputSectionKeys.SCT_STAR,
+                OutputSectionKeys.SCT_LABELS,
+                OutputSectionKeys.SCT_REGIONS
             };
         }
     }

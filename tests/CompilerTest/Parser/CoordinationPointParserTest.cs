@@ -23,7 +23,7 @@ namespace CompilerTest.Parser
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
             this.parser = (AirspaceParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.ESE_AIRSPACE);
+                .GetParserForSection(OutputSectionKeys.ESE_AIRSPACE);
         }
 
         public static IEnumerable<object[]> BadData => new List<object[]>
@@ -90,7 +90,7 @@ namespace CompilerTest.Parser
 
             this.parser.ParseData(data);
             Assert.IsType<BlankLine>(
-                this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]
+                this.collection.Compilables[OutputSectionKeys.ESE_AIRSPACE][0]
             );
         }
 

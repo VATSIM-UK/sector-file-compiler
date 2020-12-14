@@ -23,7 +23,7 @@ namespace CompilerTest.Parser
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
             this.parser = (ActiveRunwayParser) (new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.RWY_ACTIVE_RUNWAYS);
+                .GetParserForSection(OutputSectionKeys.RWY_ACTIVE_RUNWAYS);
         }
 
         public static IEnumerable<object[]> BadData => new List<object[]>
@@ -60,7 +60,7 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.RWY_ACTIVE_RUNWAYS][0]);
+            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSectionKeys.RWY_ACTIVE_RUNWAYS][0]);
         }
 
         [Fact]

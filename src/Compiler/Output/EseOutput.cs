@@ -9,14 +9,14 @@ namespace Compiler.Output
         { 
         }
 
-        public override OutputSections[] GetOutputSections()
+        public override OutputSectionKeys[] GetOutputSections()
         {
-            return new OutputSections[] {
-                OutputSections.ESE_HEADER,
-                OutputSections.ESE_POSITIONS,
-                OutputSections.ESE_FREETEXT,
-                OutputSections.ESE_SIDSSTARS,
-                OutputSections.ESE_AIRSPACE,
+            return new[] {
+                OutputSectionKeys.FILE_HEADER,
+                OutputSectionKeys.ESE_POSITIONS,
+                OutputSectionKeys.ESE_FREETEXT,
+                OutputSectionKeys.ESE_SIDSSTARS,
+                OutputSectionKeys.ESE_AIRSPACE,
             };
         }
     }

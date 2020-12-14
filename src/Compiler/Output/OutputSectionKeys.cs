@@ -1,9 +1,11 @@
 ﻿namespace Compiler.Output
 {
-    public enum OutputSections
+    public enum OutputSectionKeys
     {
+        // HEADERS
+        FILE_HEADER,
+
         // SCT
-        SCT_HEADER,
         SCT_COLOUR_DEFS,
         SCT_INFO,
         SCT_AIRPORT,
@@ -23,7 +25,6 @@
         SCT_REGIONS,
 
         // ESE
-        ESE_HEADER,
         ESE_POSITIONS,
         ESE_FREETEXT,
         ESE_SIDSSTARS,

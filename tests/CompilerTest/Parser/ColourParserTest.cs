@@ -23,7 +23,7 @@ namespace CompilerTest.Parser
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
             this.parser = (ColourParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.SCT_COLOUR_DEFS);
+                .GetParserForSection(OutputSectionKeys.SCT_COLOUR_DEFS);
         }
 
         public static IEnumerable<object[]> BadData => new List<object[]>
@@ -69,7 +69,7 @@ namespace CompilerTest.Parser
 
             this.parser.ParseData(data);
             Assert.IsType<BlankLine>(
-                this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][0]
+                this.collection.Compilables[OutputSectionKeys.SCT_COLOUR_DEFS][0]
             );
         }
 

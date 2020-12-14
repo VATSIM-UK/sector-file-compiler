@@ -24,14 +24,14 @@ namespace Compiler.Output
             TextWriter outputStream = outputFile.GetOutputStream();
 
             // Process each section in the output
-            foreach (OutputSections section in outputFile.GetOutputSections())
+            foreach (OutputSectionKeys section in outputFile.GetOutputSections())
             {
+                OutputSection sectionConfig = OutputSectionsConfig.sections.First(s => s.key == section);
+
                 // If the section has a header declaration, do it
-                if (SectionHeaders.headers.ContainsKey(section))
+                if (sectionConfig.header != null)
                 {
-                    outputStream.WriteLine(
-                        string.Format("[{0}]", SectionHeaders.headers[section])
-                    );
+                    outputStream.WriteLine(sectionConfig.header);
                     outputStream.WriteLine("");
                 }
 

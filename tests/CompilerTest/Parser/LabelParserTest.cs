@@ -23,7 +23,7 @@ namespace CompilerTest.Parser
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
             this.parser = (LabelParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.SCT_LABELS);
+                .GetParserForSection(OutputSectionKeys.SCT_LABELS);
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace CompilerTest.Parser
             );
 
             this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_LABELS][0]);
+            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSectionKeys.SCT_LABELS][0]);
         }
 
         [Fact]
