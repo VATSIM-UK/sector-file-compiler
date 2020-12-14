@@ -8,13 +8,16 @@ namespace Compiler.Output
     public class OutputGenerator
     {
         private readonly SectorElementCollection sectorElements;
+        private readonly OutputGroupRepository outputGroups;
         private readonly CompilableElementCollectorFactory collectorFactory;
 
         public OutputGenerator(
             SectorElementCollection sectorElements,
+            OutputGroupRepository outputGroups,
             CompilableElementCollectorFactory collectorFactory
         ) {
             this.sectorElements = sectorElements;
+            this.outputGroups = outputGroups;
             this.collectorFactory = collectorFactory;
         }
 
@@ -35,29 +38,29 @@ namespace Compiler.Output
                     outputStream.WriteLine("");
                 }
 
-                // Get the output groups
-                IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> outputGroups =
-                    this.collectorFactory.GetCollectorForOutputSection(section).GetCompilableElements();
+                // Get the element providers and compile each element
+                IEnumerable<ICompilableElementProvider> elementProviders = this.collectorFactory.GetCollectorForOutputSection(section)
+                    .GetCompilableElements();
+                OutputGroup currentDataGroup = new OutputGroup("INITIAL");
 
-                foreach (IGrouping<OutputGroup, ICompilableElementProvider> outputGroup in outputGroups)
+                foreach (ICompilableElementProvider provider in elementProviders)
                 {
-                    // Print the header for the group if there is one
-                    if (outputGroup.Key.HeaderDescription != null)
+                    foreach (ICompilableElement element in provider.GetCompilableElements())
                     {
-                        outputStream.WriteLine("; " + outputGroup.Key.HeaderDescription);
-                    }
-
-                    // For every individual compilable element (each line of output) print it
-                    foreach (ICompilableElementProvider elementProvider in outputGroup)
-                    {
-                        foreach (ICompilableElement compilableElement in elementProvider.GetCompilableElements())
-                        {
-                            compilableElement.Compile(sectorElements, outputStream);
+                        if (
+                            sectionConfig.printDataGroupings &&
+                            outputGroups.TryGetForDefinitionFile(element.GetDefinition(), out OutputGroup group) &&
+                            !group.Equals(currentDataGroup)
+                        ) {
+                            currentDataGroup = group;
+                            outputStream.WriteLine(new Comment($"Start of {@group.HeaderDescription}"));
                         }
+
+                        element.Compile(sectorElements, outputStream);
                     }
                 }
 
-                // Write a newline
+                // Write a newline at the end of a new section
                 outputStream.WriteLine();
             }
 

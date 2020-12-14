@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Compiler.Output;
 
 namespace Compiler.Model
 {
-    public abstract class AbstractCompilableElement: IDefinable, ICompilableElement, ICompilableElementProvider
+    public abstract class AbstractCompilableElement: ICompilableElement, ICompilableElementProvider
     {
         // Where the element was defined
         private readonly Definition definition;
@@ -51,6 +52,11 @@ namespace Compiler.Model
                     this.InlineComment.ToString()
                 )
             );
+        }
+
+        public OutputGroup GetDataGroup()
+        {
+            throw new System.NotImplementedException();
         }
 
         /*

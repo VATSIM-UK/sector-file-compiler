@@ -20,16 +20,15 @@
 
   <ItemGroup>
     <Compile Remove="Setting\**" />
+    <Compile Remove="Sorter\**" />
     <EmbeddedResource Remove="Setting\**" />
+    <EmbeddedResource Remove="Sorter\**" />
     <None Remove="Setting\**" />
+    <None Remove="Sorter\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Sorter\" />
   </ItemGroup>
 
 </Project>

@@ -36,8 +36,8 @@ namespace Compiler.Model
             return String.Format(
                 "{0} {1} {2}",
                 this.Identifier,
-                this.StartPoint.ToString(),
-                this.EndPoint.ToString()
+                this.StartPoint,
+                this.EndPoint
             );
         }
     }

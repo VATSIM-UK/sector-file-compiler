@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Compiler.Model;
 
@@ -27,6 +28,19 @@ namespace Compiler.Output
         public OutputGroup GetForDefinitionFile(Definition definition)
         {
            return this.outputGroups.First(group => group.FileList.Contains(definition.Filename));
+        }
+
+        public bool TryGetForDefinitionFile(Definition definition, out OutputGroup group)
+        {
+            try
+            {
+                group = this.outputGroups.First(group => group.FileList.Contains(definition.Filename));
+                return true;
+            } catch (InvalidOperationException)
+            {
+                group = null;
+                return false;
+            }
         }
     }
 }

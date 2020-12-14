@@ -2,7 +2,7 @@
 
 namespace Compiler.Model
 {
-    public class HeaderLine: IDefinable, ICompilableElement
+    public class HeaderLine: ICompilableElement
     {
         private readonly Comment line;
         private readonly Definition definition;
