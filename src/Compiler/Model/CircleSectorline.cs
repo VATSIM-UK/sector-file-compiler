@@ -58,7 +58,7 @@ namespace Compiler.Model
         /*
          * Returns the compile data for just the main definition.
          */
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return string.Format(
                 "CIRCLE_SECTORLINE:{0}:{1}:{2}",

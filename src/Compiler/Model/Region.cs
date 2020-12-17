@@ -19,7 +19,7 @@ namespace Compiler.Model
         public string Name { get; }
         public List<RegionPoint> Points { get; }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return string.Format(
                 "REGIONNAME {0}",

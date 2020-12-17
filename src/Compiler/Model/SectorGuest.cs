@@ -28,7 +28,7 @@
                 ((SectorGuest)obj).DepartureAirport == this.DepartureAirport;
         }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return string.Format(
                 "GUEST:{0}:{1}:{2}",

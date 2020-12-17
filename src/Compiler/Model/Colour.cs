@@ -17,7 +17,7 @@
         public string Name { get; }
         public int Value { get; }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return string.Format(
                 "#define {0} {1}",

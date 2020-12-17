@@ -14,7 +14,7 @@
 
         public string Longitude { get; }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return this.Longitude;
         }

@@ -20,7 +20,7 @@
         public Coordinate Position { get; }
         public string Colour { get; }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return string.Format(
                 "\"{0}\" {1} {2}",

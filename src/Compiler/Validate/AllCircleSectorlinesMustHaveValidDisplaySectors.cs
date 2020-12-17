@@ -22,7 +22,7 @@ namespace Compiler.Validate
                         string message = String.Format(
                             "Invalid controlled sector {0} for CIRCLE_SECTORLINE display rule: {1}",
                             rule.ControlledSector,
-                            rule.GetCompileData()
+                            rule.GetCompileData(sectorElements)
                         );
                         events.AddEvent(new ValidationRuleFailure(message));
                         continue;
@@ -33,7 +33,7 @@ namespace Compiler.Validate
                         string message = String.Format(
                             "Invalid first compare sector {0} for CIRCLE_SECTORLINE display rule: {1}",
                             rule.CompareSectorFirst,
-                            rule.GetCompileData()
+                            rule.GetCompileData(sectorElements)
                         );
                         events.AddEvent(new ValidationRuleFailure(message));
                         continue;
@@ -44,7 +44,7 @@ namespace Compiler.Validate
                         string message = String.Format(
                             "Invalid second compare sector {0} for CIRCLE_SECTORLINE display rule: {1}",
                             rule.CompareSectorSecond,
-                            rule.GetCompileData()
+                            rule.GetCompileData(sectorElements)
                         );
                         events.AddEvent(new ValidationRuleFailure(message));
                         continue;

@@ -10,7 +10,7 @@
 
         public string AirportIcao { get; }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return this.AirportIcao;
         }

@@ -21,7 +21,7 @@ namespace Compiler.Model
 
         public string Colour { get; }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return String.Format(
                 "{0} {1}",

@@ -46,10 +46,6 @@ namespace Compiler.Model
 
         public List<Header> FileHeaders { get; } = new List<Header>();
 
-        public SectorElementCollection()
-        {
-        }
-
         public void Add(Airport airport)
         {
             this.Airports.Add(airport);

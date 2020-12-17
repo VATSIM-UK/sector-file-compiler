@@ -33,7 +33,7 @@ namespace Compiler.Model
         /*
          * Returns the data for a single compiled line
          */
-        public abstract string GetCompileData();
+        public abstract string GetCompileData(SectorElementCollection elements);
 
         /*
          * Compiles the data, along with inline comments and docblocks
@@ -48,7 +48,7 @@ namespace Compiler.Model
             output.WriteLine(
                 string.Format(
                     "{0}{1}",
-                    this.GetCompileData(),
+                    this.GetCompileData(elements),
                     this.InlineComment.ToString()
                 )
             );

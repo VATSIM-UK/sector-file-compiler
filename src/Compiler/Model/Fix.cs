@@ -17,7 +17,7 @@
             Coordinate = coordinate;
         }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return string.Format(
                 "{0} {1}",

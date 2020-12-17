@@ -14,7 +14,7 @@
 
         public int Miles { get; }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return this.Miles.ToString();
         }

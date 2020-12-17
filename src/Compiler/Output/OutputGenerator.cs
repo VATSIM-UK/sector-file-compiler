@@ -62,6 +62,7 @@ namespace Compiler.Output
 
                 // Write a newline at the end of a new section
                 outputStream.WriteLine();
+                outputStream.Flush();
             }
 
             // Flush the file to make sure it's written

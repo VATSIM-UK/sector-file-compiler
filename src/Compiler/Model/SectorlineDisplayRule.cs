@@ -31,7 +31,7 @@ namespace Compiler.Model
                 (rule.CompareSectorSecond == this.CompareSectorSecond);
         }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return String.Format(
                 "DISPLAY:{0}:{1}:{2}",

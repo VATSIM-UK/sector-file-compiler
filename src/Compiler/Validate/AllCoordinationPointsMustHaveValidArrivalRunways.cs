@@ -14,10 +14,10 @@ namespace Compiler.Validate
             {
                 if (!RunwayValid(sectorElements, point.ArrivalRunway, point.ArrivalAiportOrFixAfter)) {
                     string message = String.Format(
-                        "Invalid arrival runway {0}/{1} for coordination point: {1}",
+                        "Invalid arrival runway {0}/{1} for coordination point: {2}",
                         point.ArrivalRunway,
                         point.ArrivalAiportOrFixAfter,
-                        point.GetCompileData()
+                        point.GetCompileData(sectorElements)
                     );
                     events.AddEvent(new ValidationRuleFailure(message));
                     continue;

@@ -20,7 +20,7 @@ namespace Compiler.Validate
                     ) {
                         string message = String.Format(
                             "Invalid segment {0} on SID Route {1}",
-                            segment.GetCompileData(),
+                            segment.GetCompileData(sectorElements),
                             sid.Identifier
                         );
                         events.AddEvent(

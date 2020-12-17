@@ -44,7 +44,7 @@ namespace Compiler.Model
         /*
          * Returns the definition lines compile data
          */
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return string.Format(
                 "{0} {1} {2} {3}",

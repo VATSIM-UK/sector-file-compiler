@@ -20,7 +20,7 @@ namespace Compiler.Validate
                     string message = String.Format(
                         "Invalid FROM sector {0} for coordination point: {1}",
                         point.FromSector,
-                        point.GetCompileData()
+                        point.GetCompileData(sectorElements)
                     );
                     events.AddEvent(new ValidationRuleFailure(message));
                     continue;

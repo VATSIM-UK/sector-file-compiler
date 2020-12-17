@@ -23,7 +23,7 @@ namespace Compiler.Model
         public string Airfield { get; }
         public int Mode { get; }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return String.Format(
                 "ACTIVE_RUNWAY:{0}:{1}:{2}",

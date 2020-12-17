@@ -10,7 +10,7 @@
 
         public string Callsign { get; }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return this.Callsign;
         }

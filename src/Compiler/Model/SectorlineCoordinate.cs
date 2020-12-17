@@ -20,7 +20,7 @@
                 (((SectorlineCoordinate)obj).Coordinate.Equals(this.Coordinate));
         }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return string.Format(
                 "COORD:{0}:{1}",

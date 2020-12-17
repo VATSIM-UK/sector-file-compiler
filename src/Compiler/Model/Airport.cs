@@ -37,13 +37,13 @@ namespace Compiler.Model
             output.WriteLine(
                 string.Format(
                     "{0} ;{1}",
-                    this.GetCompileData(),
+                    this.GetCompileData(elements),
                     this.Name
                 )
             );
         }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return string.Format(
                 "{0} {1} {2} E",

@@ -31,7 +31,7 @@ namespace Compiler.Model
         public Point StartPoint { get; }
         public Point EndPoint { get; }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return String.Format(
                 "{0} {1} {2}",

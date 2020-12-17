@@ -38,7 +38,7 @@ namespace Compiler.Model
             return compilables;
         }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return String.Format(
                 "SECTORLINE:{0}",

@@ -26,7 +26,7 @@ namespace Compiler.Model
                 ((SectorActive)obj).Runway == this.Runway;
         }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return String.Format(
                 "ACTIVE:{0}:{1}",

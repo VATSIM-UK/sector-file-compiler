@@ -41,7 +41,7 @@ namespace Compiler.Model
             return true;
         }
 
-        public override string GetCompileData()
+        public override string GetCompileData(SectorElementCollection elements)
         {
             return string.Format(
                 "ALTOWNER:{0}:{1}\r\n",
