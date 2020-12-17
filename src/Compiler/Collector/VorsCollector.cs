@@ -7,20 +7,15 @@ namespace Compiler.Output
     public class VorsCollector : ICompilableElementCollector
     {
         private readonly SectorElementCollection sectorElements;
-        private readonly OutputGroupRepository repository;
 
-        public VorsCollector(SectorElementCollection sectorElements, OutputGroupRepository repository)
+        public VorsCollector(SectorElementCollection sectorElements)
         {
             this.sectorElements = sectorElements;
-            this.repository = repository;
         }
 
-        public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements()
+        public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-            return this.sectorElements.Vors.GroupBy(
-                vor => this.repository.GetForDefinitionFile(vor.GetDefinition()),
-                vor => vor
-            );
+            return this.sectorElements.Vors.OrderBy(vor => vor.Identifier);
         }
     }
 }

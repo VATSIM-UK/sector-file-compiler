@@ -7,16 +7,16 @@ namespace Compiler.Config
     {
         public static readonly List<ConfigFileSection> configFileSections = new List<ConfigFileSection>
         {
-            new ConfigFileSection("active_runways", InputDataType.RWY_ACTIVE_RUNWAY),
+            new ConfigFileSection("active_runways", InputDataType.RWY_ACTIVE_RUNWAY, "Active Runways"),
             new ConfigFileSection("airspace", InputDataType.SCT_ARTCC_LOW, "Airspace"),
-            new ConfigFileSection("basic", InputDataType.SCT_AIRPORT_BASIC),
+            new ConfigFileSection("basic", InputDataType.SCT_AIRPORT_BASIC, "Basic"),
             new ConfigFileSection("centrelines", InputDataType.SCT_EXTENDED_CENTRELINES, "Centrelines"),
-            new ConfigFileSection("fixes", InputDataType.SCT_FIXES, null),
+            new ConfigFileSection("fixes", InputDataType.SCT_FIXES, "Fixes"),
             new ConfigFileSection("freetext", InputDataType.ESE_FREETEXT, "Freetext"),
             new ConfigFileSection("ownership", InputDataType.ESE_OWNERSHIP, "Ownership"),
-            new ConfigFileSection("positions", InputDataType.ESE_POSITIONS),
+            new ConfigFileSection("positions", InputDataType.ESE_POSITIONS, "Positions"),
             new ConfigFileSection("sid_airspace", InputDataType.SCT_SIDS, "SID Airspace"),
-            new ConfigFileSection("runways", InputDataType.SCT_RUNWAYS, null),
+            new ConfigFileSection("runways", InputDataType.SCT_RUNWAYS, "Runways`"),
             new ConfigFileSection("sectors", InputDataType.ESE_SECTORLINES, "Sectors"),
             new ConfigFileSection("sids", InputDataType.ESE_SIDS, "SIDs"),
             new ConfigFileSection("stars", InputDataType.ESE_STARS, "STARs"),

@@ -32,7 +32,7 @@ namespace Compiler.Output
                     this.sectorElements.Sectors.OrderBy(sector => this.outputGroups.GetForDefinitionFile(sector.GetDefinition()))
                 )
                 .Concat(
-                    this.sectorElements.CoordinationPoints.OrderBy(coordinationPoint => this.outputGroups.GetForDefinitionFile(coordinationPoint.GetDefinition()))
+                    this.sectorElements.CoordinationPoints.OrderBy(coordinationPoint => coordinationPoint.IsFirCopx)
                 );
         }
     }

@@ -7,20 +7,15 @@ namespace Compiler.Output
     public class NdbsCollector : ICompilableElementCollector
     {
         private readonly SectorElementCollection sectorElements;
-        private readonly OutputGroupRepository repository;
 
-        public NdbsCollector(SectorElementCollection sectorElements, OutputGroupRepository repository)
+        public NdbsCollector(SectorElementCollection sectorElements)
         {
             this.sectorElements = sectorElements;
-            this.repository = repository;
         }
 
-        public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements()
+        public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-            return this.sectorElements.Ndbs.GroupBy(
-                ndb => this.repository.GetForDefinitionFile(ndb.GetDefinition()),
-                ndb => ndb
-            );
+            return this.sectorElements.Ndbs.OrderBy(ndb => ndb.Identifier);
         }
     }
 }

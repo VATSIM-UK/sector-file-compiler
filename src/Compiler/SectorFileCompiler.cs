@@ -81,6 +81,7 @@ namespace Compiler
             // Generate the output
             OutputGenerator generator = new OutputGenerator(
                 sectorElements,
+                outputGroups,
                 new CompilableElementCollectorFactory(sectorElements, outputGroups)
             );
             foreach(AbstractOutputFile output in this.arguments.OutputFiles)

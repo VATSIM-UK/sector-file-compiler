@@ -6,7 +6,7 @@
 
         public readonly bool printDataGroupings;
 
-        public readonly string? header;
+        public readonly string header;
 
         public OutputSection(OutputSectionKeys key, bool printDataGroupings, string header)
         {

@@ -7,20 +7,15 @@ namespace Compiler.Output
     public class LowAirwaysCollector : ICompilableElementCollector
     {
         private readonly SectorElementCollection sectorElements;
-        private readonly OutputGroupRepository repository;
 
-        public LowAirwaysCollector(SectorElementCollection sectorElements, OutputGroupRepository repository)
+        public LowAirwaysCollector(SectorElementCollection sectorElements)
         {
             this.sectorElements = sectorElements;
-            this.repository = repository;
         }
 
-        public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements()
+        public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-            return this.sectorElements.LowAirways.GroupBy(
-                airway => this.repository.GetForDefinitionFile(airway.GetDefinition()),
-                airway => airway
-            );
+            return this.sectorElements.LowAirways.OrderBy(airway => airway.Identifier);
         }
     }
 }

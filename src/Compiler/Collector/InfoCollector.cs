@@ -7,22 +7,15 @@ namespace Compiler.Output
     public class InfoCollector : ICompilableElementCollector
     {
         private readonly SectorElementCollection sectorElements;
-        private readonly OutputGroupRepository repository;
 
-        public InfoCollector(SectorElementCollection sectorElements, OutputGroupRepository repository)
+        public InfoCollector(SectorElementCollection sectorElements)
         {
             this.sectorElements = sectorElements;
-            this.repository = repository;
         }
 
-        public IEnumerable<IGrouping<OutputGroup, ICompilableElementProvider>> GetCompilableElements()
+        public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-            return new List<Info>() {
-                this.sectorElements.Info
-            }.GroupBy(
-                info => new OutputGroup("sct.info"),
-                info => info
-            );
+            return new List<Info> {this.sectorElements.Info};
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Compiler.Output
         {
             return configFileSection.OutputGroupDescriptor == null 
                 ? string.Format("airport.{0}", configFileSection.DataType.ToString())
-                : string.Format("airport.{0}.{1}", airport, configFileSection.DataType.ToString());
+                : string.Format("airport.{0}.{1}", configFileSection.DataType.ToString(), airport);
         }
 
         public static string GeneratEnrouteKey(ConfigFileSection configFileSection)
