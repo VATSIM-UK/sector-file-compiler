@@ -52,7 +52,19 @@ namespace Compiler
             // Parse all the input files
             SectorElementCollection sectorElements = new SectorElementCollection();
             DataParserFactory parserFactory = new DataParserFactory(sectorElements, events);
-            foreach (AbstractSectorDataFile dataFile in InputFileListFactory.CreateFromInclusionRules(config, outputGroups))
+            InputFileList fileList;
+            try
+            {
+                fileList = InputFileListFactory.CreateFromInclusionRules(config, outputGroups);
+            }
+            catch (System.Exception exception)
+            {
+                this.events.AddEvent(new CompilationMessage(exception.Message));
+                this.events.AddEvent(new CompilationFinishedEvent(false));
+                return 1;
+            }
+            
+            foreach (AbstractSectorDataFile dataFile in fileList)
             {
                 parserFactory.GetParserForFile(dataFile).ParseData(dataFile);
             }
