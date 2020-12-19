@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Compiler.Argument;
+using Compiler.Output;
 using CompilerCli.Input;
 
 namespace CompilerCliTest.Input
@@ -15,7 +16,8 @@ namespace CompilerCliTest.Input
             RwyOutputFileParser parser = new RwyOutputFileParser();
 
             arguments = parser.Parse(new List<string>(new string[] { "test.rwy" }), arguments);
-            Assert.NotNull(arguments.OutFileRwy);
+            Assert.Single(arguments.OutputFiles);
+            Assert.IsType<RwyOutput>(arguments.OutputFiles[0]);
         }
 
         [Fact]

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Compiler.Argument;
+using Compiler.Output;
 using CompilerCli.Input;
 
 namespace CompilerCliTest.Input
@@ -15,7 +16,8 @@ namespace CompilerCliTest.Input
             SctOutputFileParser parser = new SctOutputFileParser();
 
             arguments = parser.Parse(new List<string>(new string[] { "test.sct" }), arguments);
-            Assert.NotNull(arguments.OutFileSct);
+            Assert.Single(arguments.OutputFiles);
+            Assert.IsType<SctOutput>(arguments.OutputFiles[0]);
         }
 
         [Fact]

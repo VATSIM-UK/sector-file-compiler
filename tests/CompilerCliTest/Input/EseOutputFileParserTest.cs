@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Compiler.Argument;
+using Compiler.Output;
 using CompilerCli.Input;
 
 namespace CompilerCliTest.Input
@@ -15,7 +16,8 @@ namespace CompilerCliTest.Input
             EseOutputFileParser parser = new EseOutputFileParser();
 
             arguments = parser.Parse(new List<string>(new string[] { "test.ese" }), arguments);
-            Assert.NotNull(arguments.OutFileEse);
+            Assert.Single(arguments.OutputFiles);
+            Assert.IsType<EseOutput>(arguments.OutputFiles[0]);
         }
 
         [Fact]
