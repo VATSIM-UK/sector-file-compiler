@@ -7,6 +7,7 @@ using Compiler.Validate;
 using Compiler.Parser;
 using Compiler.Config;
 using Compiler.Exception;
+using Compiler.Injector;
 
 namespace Compiler
 {
@@ -49,7 +50,7 @@ namespace Compiler
                 return 1;
             }
 
-            // Parse all the input files
+            // Parse all the input files and create elements
             SectorElementCollection sectorElements = new SectorElementCollection();
             DataParserFactory parserFactory = new DataParserFactory(sectorElements, events);
             InputFileList fileList;
@@ -74,8 +75,12 @@ namespace Compiler
                 this.events.AddEvent(new CompilationFinishedEvent(false));
                 return 1;
             }
+            
+            // There's some static data we need to inject to the collection for adjacent airports...
+            AdjacentAirportsInjector.InjectAdjacentAirportsData(sectorElements);
+            
 
-            // Validate the output files
+            // Now all the data is loaded, validate that there are no broken references etc.
             if (false)
             {
                 OutputValidator.Validate(sectorElements, this.arguments, this.events);
