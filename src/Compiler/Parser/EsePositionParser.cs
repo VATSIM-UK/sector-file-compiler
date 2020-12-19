@@ -12,6 +12,8 @@ namespace Compiler.Parser
         private readonly IFrequencyParser frequencyParser;
         private readonly SectorElementCollection sectorElements;
         private readonly IEventLogger errorLog;
+        private readonly PositionOrder order;
+        private readonly bool mentorPositions;
 
         private readonly List<string> allowedTypes = new List<string>()
         {
@@ -31,11 +33,13 @@ namespace Compiler.Parser
         public EsePositionParser(
             IFrequencyParser frequencyParser,
             SectorElementCollection sectorElements,
-            IEventLogger errorLog
+            IEventLogger errorLog,
+            PositionOrder order
         ) {
             this.frequencyParser = frequencyParser;
             this.sectorElements = sectorElements;
             this.errorLog = errorLog;
+            this.order = order;
         }
 
         public void ParseData(AbstractSectorDataFile data)
@@ -178,6 +182,7 @@ namespace Compiler.Parser
                         squawkRangeStart,
                         squawkRangeEnd,
                         parsedCoordinates,
+                        this.order,
                         line.definition,
                         line.docblock,
                         line.inlineComment

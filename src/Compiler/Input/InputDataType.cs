@@ -32,6 +32,7 @@
         ESE_OWNERSHIP,
         ESE_PRE_POSITIONS,
         ESE_POSITIONS,
+        ESE_POSITIONS_MENTOR,
         ESE_SECTORLINES,
         ESE_SIDS,
         ESE_STARS,

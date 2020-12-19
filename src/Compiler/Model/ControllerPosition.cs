@@ -15,6 +15,7 @@ namespace Compiler.Model
             string squawkRangeStart,
             string squawkRangeEnd,
             List<Coordinate> visCentres,
+            PositionOrder positionOrder,
             Definition definition,
             Docblock docblock,
             Comment inlineComment
@@ -30,6 +31,7 @@ namespace Compiler.Model
             SquawkRangeStart = squawkRangeStart;
             SquawkRangeEnd = squawkRangeEnd;
             VisCentres = visCentres;
+            PositionOrder = positionOrder;
         }
 
         public string Callsign { get; }
@@ -42,6 +44,7 @@ namespace Compiler.Model
         public string SquawkRangeStart { get; }
         public string SquawkRangeEnd { get; }
         public List<Coordinate> VisCentres { get; }
+        public PositionOrder PositionOrder { get; }
 
         public override string GetCompileData(SectorElementCollection elements)
         {

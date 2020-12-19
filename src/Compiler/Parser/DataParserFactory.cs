@@ -118,7 +118,15 @@ namespace Compiler.Parser
                     return new EsePositionParser(
                         new VatsimRtfFrequencyParser(),
                         this.sectorElements,
-                        this.logger
+                        this.logger,
+                        PositionOrder.CONTROLLER_POSITION
+                    );
+                case InputDataType.ESE_POSITIONS_MENTOR:
+                    return new EsePositionParser(
+                        new VatsimRtfFrequencyParser(),
+                        this.sectorElements,
+                        this.logger,
+                        PositionOrder.MENTOR_POSITION
                     );
                 case InputDataType.ESE_FREETEXT:
                     return new FreetextParser(
@@ -164,7 +172,8 @@ namespace Compiler.Parser
                     return new EsePositionParser(
                         new EuroscopeNoFrequencyParser(), 
                         this.sectorElements,
-                        this.logger
+                        this.logger,
+                        PositionOrder.PRE_POSITION
                     );
                 case InputDataType.ESE_VRPS:
                     return new VrpParser(

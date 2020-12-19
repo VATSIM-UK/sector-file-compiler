@@ -10,6 +10,7 @@ namespace Compiler.Input
             {
                 case InputDataType.ESE_AGREEMENTS:
                 case InputDataType.ESE_FREETEXT:
+                case InputDataType.ESE_POSITIONS_MENTOR:
                 case InputDataType.ESE_OWNERSHIP:
                 case InputDataType.ESE_POSITIONS:
                 case InputDataType.ESE_PRE_POSITIONS:

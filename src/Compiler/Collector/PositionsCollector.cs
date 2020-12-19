@@ -17,7 +17,9 @@ namespace Compiler.Output
 
         public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-            return this.sectorElements.EsePositions.OrderBy(position => this.repository.GetForDefinitionFile(position.GetDefinition()));
+            return this.sectorElements.EsePositions
+                .OrderBy(position => position.PositionOrder)
+                .ThenBy(position => this.repository.GetForDefinitionFile(position.GetDefinition()));
         }
     }
 }
