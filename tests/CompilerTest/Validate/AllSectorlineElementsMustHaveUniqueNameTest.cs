@@ -6,6 +6,7 @@ using Compiler.Event;
 using Compiler.Validate;
 using Moq;
 using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
@@ -28,66 +29,54 @@ namespace CompilerTest.Validate
             this.loggerMock = new Mock<IEventLogger>();
             this.first = new Sectorline(
                 "ONE",
-                new List<SectorlineDisplayRule>
-                {
-                    new SectorlineDisplayRule("TEST1", "TEST1", "TEST2", "comment1"),
-                    new SectorlineDisplayRule("TEST2", "TEST2", "TEST1", "comment2")
-                },
-                new List<SectorlineCoordinate>
-                {
-                    new SectorlineCoordinate(new Coordinate("abc", "def"), "comment3"),
-                    new SectorlineCoordinate(new Coordinate("ghi", "jkl"), "comment4"),
-                },
-                "commentname"
+                SectorLineDisplayRuleFactory.MakeList(2),
+                SectorlineCoordinateFactory.MakeList(2),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
             this.second = new Sectorline(
                 "ONE",
-                new List<SectorlineDisplayRule>
-                {
-                    new SectorlineDisplayRule("TEST1", "TEST1", "TEST2", "comment1"),
-                    new SectorlineDisplayRule("TEST2", "TEST2", "TEST1", "comment2")
-                },
-                new List<SectorlineCoordinate>
-                {
-                    new SectorlineCoordinate(new Coordinate("abc", "def"), "comment3"),
-                    new SectorlineCoordinate(new Coordinate("ghi", "jkl"), "comment4"),
-                },
-                "commentname"
+                SectorLineDisplayRuleFactory.MakeList(2),
+                SectorlineCoordinateFactory.MakeList(2),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
             this.third = new Sectorline(
                 "NOTONE",
-                new List<SectorlineDisplayRule>
-                {
-                    new SectorlineDisplayRule("TEST1", "TEST1", "TEST2", "comment1"),
-                    new SectorlineDisplayRule("TEST2", "TEST2", "TEST1", "comment2")
-                },
-                new List<SectorlineCoordinate>
-                {
-                    new SectorlineCoordinate(new Coordinate("abc", "def"), "comment3"),
-                    new SectorlineCoordinate(new Coordinate("ghi", "jkl"), "comment4"),
-                },
-                "commentname"
+                SectorLineDisplayRuleFactory.MakeList(2),
+                SectorlineCoordinateFactory.MakeList(2),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
             this.fourth = new CircleSectorline(
                 "ONE",
                 "EGGD",
                 5.5,
-                new List<SectorlineDisplayRule>(),
-                "commentname"
+                SectorLineDisplayRuleFactory.MakeList(3),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
             this.fifth = new CircleSectorline(
                 "NOTONEORTWO",
                 "EGGD",
                 5.5,
-                new List<SectorlineDisplayRule>(),
-                "commentname"
+                SectorLineDisplayRuleFactory.MakeList(1),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
             this.sixth = new CircleSectorline(
                 "ONE",
                 "EGGD",
                 5.5,
-                new List<SectorlineDisplayRule>(),
-                "commentname"
+                SectorLineDisplayRuleFactory.MakeList(2),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
             this.rule = new AllSectorlineElementsMustHaveUniqueName();
             this.args = new CompilerArguments();
