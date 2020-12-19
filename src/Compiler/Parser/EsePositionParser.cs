@@ -13,7 +13,6 @@ namespace Compiler.Parser
         private readonly SectorElementCollection sectorElements;
         private readonly IEventLogger errorLog;
         private readonly PositionOrder order;
-        private readonly bool mentorPositions;
 
         private readonly List<string> allowedTypes = new List<string>()
         {
