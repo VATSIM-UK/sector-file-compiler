@@ -93,6 +93,14 @@ namespace Compiler.Parser
                     // If it's not the first in the data stream, then it's a new declaration, save the previous
                     if (foundFirst)
                     {
+                        if (points.Count == 0)
+                        {
+                            this.eventLogger.AddEvent(
+                                new SyntaxError("Cannot have region with no points" + data.CurrentLine, line)
+                            );
+                            return;
+                        }
+                        
                         this.elements.Add(
                             new Region(
                                 regionName,
@@ -113,7 +121,7 @@ namespace Compiler.Parser
                     declarationLine = line;
                     regionName = string.Join(" ", line.dataSegments.Skip(1));
 
-                    // Immediately after REGIONNAME, we should expect a colour defition
+                    // Immediately after REGIONNAME, we should expect a colour definition
                     expectingColourDefinition = true;
                     continue;
                 }
