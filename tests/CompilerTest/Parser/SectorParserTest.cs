@@ -1,61 +1,14 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Moq;
-using Compiler.Parser;
 using Compiler.Error;
 using Compiler.Model;
-using Compiler.Event;
-using Compiler.Output;
-using CompilerTest.Mock;
+using Compiler.Input;
 
 namespace CompilerTest.Parser
 {
-    public class SectorParserTest
+    public class SectorParserTest : AbstractParserTestCase
     {
-        private readonly AirspaceParser parser;
-
-        private readonly SectorElementCollection collection;
-
-        private readonly Mock<IEventLogger> log;
-
-        public SectorParserTest()
-        {
-            this.log = new Mock<IEventLogger>();
-            this.collection = new SectorElementCollection();
-            this.parser = (AirspaceParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSectionKeys.ESE_AIRSPACE);
-        }
-
-        [Fact]
-        public void TestItHandlesMetadata()
-        {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] {
-                    "",
-                    ";comment",
-                    "SECTOR:Only AEAPP:0:0 ;comment15",
-                    "",
-                    "OWNER:AEA ;comment16"
-                })
-            );
-
-            this.parser.ParseData(data);
-
-            Assert.IsType<BlankLine>(
-                this.collection.Compilables[OutputSectionKeys.ESE_AIRSPACE][0]
-            );
-            Assert.IsType<Comment>(
-                this.collection.Compilables[OutputSectionKeys.ESE_AIRSPACE][1]
-            );
-            Assert.IsType<BlankLine>(
-                this.collection.Compilables[OutputSectionKeys.ESE_AIRSPACE][2]
-            );
-            Assert.IsType<Sector>(
-                this.collection.Compilables[OutputSectionKeys.ESE_AIRSPACE][3]
-            );
-        }
-
         public static IEnumerable<object[]> BadData => new List<object[]>
         {
             new object[] { new List<string>{
@@ -307,22 +260,16 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.parser.ParseData(
-                new MockSectorDataFile(
-                    "test.txt",
-                    lines
-                )
-            );
+            this.RunParserOnLines(lines);
 
-            Assert.Empty(this.collection.Sectors);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(this.sectorElementCollection.Sectors);
+            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsData()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
+            this.RunParserOnLines(
                 new List<string>(new string[] {
                     "SECTOR:AAFIN:100:6000 ;comment1",
                     "OWNER:AAF:AAR:STA ;comment2",
@@ -330,13 +277,14 @@ namespace CompilerTest.Parser
                     "ALTOWNER:AAWHAT2:S ;comment3.1",
                     "BORDER:AAFIN:AAWHAT ;comment4",
                     "ARRAPT:EGAA:EGAC ;comment5",
-                    "DEPAPT:EGAA ;comment6",
+                    "ARRAPT:EGAE ;comment5.1",
+                    "DEPAPT:EGKK:EGLL ;comment6",
+                    "DEPAPT:EGLC ;comment6.1",
                     "ACTIVE:EGLL:09R ;comment6.5",
                     "ACTIVE:EGLL:09L ;comment6.5.1",
                     "GUEST:GDR:*:EGAA ;comment7",
                     "SECTOR:TCNW:0:7000 ;comment8",
                     "OWNER:TCNE:TCN:TC ;comment9",
-                    "",
                     "ALTOWNER:Observing London FIR:L ;comment10",
                     "BORDER:TCNE1 ;comment11",
                     "ARRAPT:EGSS ;comment12",
@@ -348,69 +296,162 @@ namespace CompilerTest.Parser
                 })
             );
 
-            this.parser.ParseData(data);
-
-            // First
-            Sector result1 = this.collection.Sectors[0];
+            // First - base data
+            Sector result1 = this.sectorElementCollection.Sectors[0];
             Assert.Equal("AAFIN", result1.Name);
             Assert.Equal(100, result1.MinimumAltitude);
             Assert.Equal(6000, result1.MaximumAltitude);
-            Assert.Equal("comment1", result1.Comment);
-            Assert.Equal(new SectorOwnerHierarchy(new List<string> {"AAF", "AAR", "STA" }, "comment2"), result1.Owners);
-            Assert.Equal(
-                new SectorAlternateOwnerHierarchy("AAWHAT", new List<string> { "SW", "SWD", "S" }, "comment3"),
-                result1.AltOwners[0]
-            );
-            Assert.Equal(
-                new SectorAlternateOwnerHierarchy("AAWHAT2", new List<string> { "S" }, "comment3.1"),
-                result1.AltOwners[1]
-            );
-            Assert.Equal(2, result1.AltOwners.Count);
-            Assert.Equal(new SectorBorder(new List<string> {"AAFIN", "AAWHAT"}, "comment4"), result1.Border);
-            Assert.Equal(new SectorArrivalAirports(new List<string> { "EGAA", "EGAC" }, "comment5"), result1.ArrivalAirports);
-            Assert.Equal(new SectorDepartureAirports(new List<string> { "EGAA" }, "comment6"), result1.DepartureAirports);
-            Assert.Equal(
-                new List<SectorActive> { new SectorActive("EGLL", "09R", "comment6.5"), new SectorActive("EGLL", "09L", "comment6.5.1") },
-                result1.Active
-            );
-            Assert.Equal(2, result1.Active.Count);
-            Assert.Equal(new List<SectorGuest> { new SectorGuest("GDR", "*", "EGAA", "comment7") }, result1.Guests);
+            this.AssertExpectedMetadata(result1, 1, "comment1");
+            
+            // First - OWNER
+            Assert.Equal(3, result1.Owners.Owners.Count);
+            Assert.Equal("AAF", result1.Owners.Owners[0]);
+            Assert.Equal("AAR", result1.Owners.Owners[1]);
+            Assert.Equal("AAR", result1.Owners.Owners[2]);
+            this.AssertExpectedMetadata(result1.Owners, 2, "comment2");
 
+            // First - ALTOWNER 1
+            Assert.Equal(2, result1.AltOwners.Count);
+            Assert.Equal("AAWHAT", result1.AltOwners[0].Name);
+            Assert.Equal(3, result1.AltOwners[0].Owners.Count);
+            Assert.Equal("SW", result1.AltOwners[0].Owners[0]);
+            Assert.Equal("SWD", result1.AltOwners[0].Owners[1]);
+            Assert.Equal("S", result1.AltOwners[0].Owners[1]);
+            this.AssertExpectedMetadata(result1.AltOwners[0], 3, "comment3");
+            
+            // First - ALTOWNER 2
+            Assert.Equal("AAWHAT2", result1.AltOwners[1].Name);
+            Assert.Single(result1.AltOwners[1].Owners);
+            Assert.Equal("S", result1.AltOwners[1].Owners[0]);
+            this.AssertExpectedMetadata(result1.AltOwners[1], 4, "comment3.1");
+            
+            // First - BORDER
+            Assert.Single(result1.Borders);
+            Assert.Equal(2, result1.Borders[0].BorderLines.Count);
+            Assert.Equal("AAFIN", result1.Borders[0].BorderLines[0]);
+            Assert.Equal("AAFIN", result1.Borders[0].BorderLines[1]);
+            this.AssertExpectedMetadata(result1.Borders[0], 5, "comment4");
+
+            // First - ARRAPT 1
+            Assert.Equal(2, result1.ArrivalAirports.Count);
+            Assert.Equal(2, result1.ArrivalAirports[0].Airports.Count);
+            Assert.Equal("EGAA", result1.ArrivalAirports[0].Airports[0]);
+            Assert.Equal("EGAC", result1.ArrivalAirports[0].Airports[1]);
+            this.AssertExpectedMetadata(result1.ArrivalAirports[0], 6, "comment5");
+            
+            // First - ARRAPT 2
+            Assert.Single(result1.ArrivalAirports[1].Airports);
+            Assert.Equal("EGAE", result1.ArrivalAirports[1].Airports[0]);
+            this.AssertExpectedMetadata(result1.ArrivalAirports[0], 7, "comment5.1");
+
+            // First - DEPAPT 1
+            Assert.Equal(2, result1.DepartureAirports.Count);
+            Assert.Equal(2, result1.DepartureAirports[0].Airports.Count);
+            Assert.Equal("EGKK", result1.DepartureAirports[0].Airports[0]);
+            Assert.Equal("EGLL", result1.DepartureAirports[0].Airports[1]);
+            this.AssertExpectedMetadata(result1.DepartureAirports[0], 8, "comment6");
+            
+            // First - DEPAPT 2
+            Assert.Single(result1.DepartureAirports[1].Airports);
+            Assert.Equal("EGLC", result1.DepartureAirports[1].Airports[0]);
+            this.AssertExpectedMetadata(result1.DepartureAirports[0], 9, "comment6.1");
+            
+            // First - ACTIVE 1
+            Assert.Equal(2, result1.Active.Count);
+            Assert.Equal("EGLL", result1.Active[0].Airfield);
+            Assert.Equal("09R", result1.Active[0].Airfield);
+            this.AssertExpectedMetadata(result1.Active[0], 10, "comment 6.5");
+            
+            // First - ACTIVE 2
+            Assert.Equal("EGLL", result1.Active[1].Airfield);
+            Assert.Equal("09L", result1.Active[1].Airfield);
+            this.AssertExpectedMetadata(result1.Active[1], 11, "comment 6.5.1");
+            
+            // First - GUEST
+            Assert.Single(result1.Guests);
+            Assert.Equal("GDR", result1.Guests[0].Controller);
+            Assert.Equal("*", result1.Guests[0].DepartureAirport);
+            Assert.Equal("EGAA", result1.Guests[0].ArrivalAirport);
+            this.AssertExpectedMetadata(result1.Guests[0], 12, "comment7");
 
             // Second
-            Sector result2 = this.collection.Sectors[1];
+            Sector result2 = this.sectorElementCollection.Sectors[1];
             Assert.Equal("TCNW", result2.Name);
             Assert.Equal(0, result2.MinimumAltitude);
             Assert.Equal(7000, result2.MaximumAltitude);
-            Assert.Equal("comment8", result2.Comment);
-            Assert.Equal(new SectorOwnerHierarchy(new List<string> { "TCNE", "TCN", "TC" }, "comment9"), result2.Owners);
-            Assert.Equal(
-                new SectorAlternateOwnerHierarchy("Observing London FIR", new List<string> { "L" }, "comment10"),
-                result2.AltOwners[0]
-            );
+            this.AssertExpectedMetadata(result2, 13, "comment8");
+
+            // Second - OWNER
+            Assert.Equal(3, result2.Owners.Owners.Count);
+            Assert.Equal("TCNE", result2.Owners.Owners[0]);
+            Assert.Equal("TCN", result2.Owners.Owners[1]);
+            Assert.Equal("TC", result2.Owners.Owners[2]);
+            this.AssertExpectedMetadata(result2.Owners, 14, "comment9");
+            
+            // Second - ALTOWNER
             Assert.Single(result2.AltOwners);
-            Assert.Equal(new SectorBorder(new List<string> { "TCNE1" }, "comment11"), result2.Border);
-            Assert.Equal(new SectorArrivalAirports(new List<string> { "EGSS" }, "comment12"), result2.ArrivalAirports);
-            Assert.Equal(new SectorDepartureAirports(new List<string> { "EGSS" }, "comment13"), result2.DepartureAirports);
+            Assert.Equal("Observing London FIR", result2.AltOwners[0].Name);
+            Assert.Single(result2.AltOwners[0].Owners);
+            Assert.Equal("L", result1.AltOwners[0].Owners[0]);
+            this.AssertExpectedMetadata(result2.AltOwners[0], 15, "comment10");
+            
+            // Second - BORDER
+            Assert.Single(result2.Borders);
+            Assert.Single(result2.Borders[0].BorderLines);
+            Assert.Equal("TCNE1", result2.Borders[0].BorderLines[0]);
+            this.AssertExpectedMetadata(result2.Borders[0], 16, "comment11");
+            
+            // Second - ARRAPT
+            Assert.Single(result2.ArrivalAirports);
+            Assert.Single(result2.ArrivalAirports[0].Airports);
+            Assert.Equal("EGSS", result2.ArrivalAirports[0].Airports[0]);
+            this.AssertExpectedMetadata(result2.ArrivalAirports[0], 17, "comment12");
+            
+            // Second - DEPAPT
+            Assert.Single(result2.DepartureAirports);
+            Assert.Single(result2.DepartureAirports[0].Airports);
+            Assert.Equal("EGSS", result2.DepartureAirports[0].Airports[0]);
+            this.AssertExpectedMetadata(result2.DepartureAirports[0], 18, "comment13");
+            
+            // Second - ACTIVE
             Assert.Empty(result2.Active);
-            Assert.Equal(
-                new List<SectorGuest> { new SectorGuest("SSR", "*", "*", "comment14"), new SectorGuest("SSR", "*", "EGSS", "comment14.1") },
-                result2.Guests
-            );
+            
+            // Second - GUEST
+            Assert.Equal(2, result2.Guests.Count);
+            Assert.Equal("SSR", result2.Guests[0].Controller);
+            Assert.Equal("*", result2.Guests[0].DepartureAirport);
+            Assert.Equal("*", result2.Guests[0].ArrivalAirport);
+            this.AssertExpectedMetadata(result2.Guests[0], 19, "comment14");
+            
+            Assert.Equal("SSR", result2.Guests[1].Controller);
+            Assert.Equal("*", result2.Guests[1].DepartureAirport);
+            Assert.Equal("EGSS", result2.Guests[1].ArrivalAirport);
+            this.AssertExpectedMetadata(result2.Guests[0], 20, "comment14.1");
 
             // Third
-            Sector result3 = this.collection.Sectors[2];
+            Sector result3 = this.sectorElementCollection.Sectors[2];
             Assert.Equal("Only AEAPP", result3.Name);
             Assert.Equal(0, result3.MinimumAltitude);
             Assert.Equal(0, result3.MaximumAltitude);
-            Assert.Equal("comment15", result3.Comment);
-            Assert.Equal(new SectorOwnerHierarchy(new List<string> { "AEA" }, "comment16"), result3.Owners);
+            this.AssertExpectedMetadata(result3, 21, "comment15");
+            
+            // Third - OWNER
+            Assert.Single(result3.Owners.Owners);
+            Assert.Equal("AEA", result3.Owners.Owners[0]);
+            this.AssertExpectedMetadata(result3.Owners, 22, "comment16");
+            
+            // Third - The rest
             Assert.Empty(result3.AltOwners);
-            Assert.Empty(result3.Border.BorderLines);
-            Assert.Empty(result3.ArrivalAirports.Airports);
-            Assert.Empty(result3.DepartureAirports.Airports);
+            Assert.Empty(result3.Borders);
+            Assert.Empty(result3.DepartureAirports);
+            Assert.Empty(result3.ArrivalAirports);
             Assert.Empty(result3.Active);
             Assert.Empty(result3.Guests);
+        }
+
+        protected override InputDataType GetInputDataType()
+        {
+            return InputDataType.ESE_OWNERSHIP;
         }
     }
 }
