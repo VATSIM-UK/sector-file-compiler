@@ -56,7 +56,11 @@ namespace Compiler
             InputFileList fileList;
             try
             {
-                fileList = InputFileListFactory.CreateFromInclusionRules(config, outputGroups);
+                fileList = InputFileListFactory.CreateFromInclusionRules(
+                    new SectorDataFileFactory(new InputFileStreamFactory()),
+                    config,
+                    outputGroups
+                );
             }
             catch (System.Exception exception)
             {

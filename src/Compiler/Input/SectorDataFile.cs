@@ -6,11 +6,13 @@ namespace Compiler.Input
 {
     public class SectorDataFile: AbstractSectorDataFile
     {
+        private readonly IInputStreamFactory streamFactory;
         private readonly AbstractSectorDataReader reader;
 
-        public SectorDataFile(string fullPath, InputDataType dataType, AbstractSectorDataReader reader)
+        public SectorDataFile(string fullPath, IInputStreamFactory streamFactory, InputDataType dataType, AbstractSectorDataReader reader)
             : base(fullPath, dataType)
         {
+            this.streamFactory = streamFactory;
             this.reader = reader;
         }
 
@@ -22,32 +24,31 @@ namespace Compiler.Input
          */
         public override IEnumerator<SectorData> GetEnumerator()
         {
-            string line;
             Docblock docblock = new Docblock();
-            using (StreamReader file = new StreamReader(this.FullPath))
+            using TextReader file = this.streamFactory.GetStream(this.FullPath);
+            string line;
+            while ((line = file.ReadLine()) != null)
             {
-                while ((line = file.ReadLine()) != null)
+                this.CurrentLineNumber++;
+                if (reader.IsBlankLine(line))
                 {
-                    this.CurrentLineNumber++;
-                    if (reader.IsBlankLine(line))
-                    {
-                        continue;
-                    }
-                    else if (reader.IsCommentLine(line))
-                    {
-                        docblock.AddLine(reader.GetCommentSegment(line));
-                    }
-                    else
-                    {
-                        yield return new SectorData(
-                            docblock,
-                            reader.GetCommentSegment(line),
-                            reader.GetDataSegments(line),
-                            reader.GetRawData(line),
-                            new Definition(this.FullPath, this.CurrentLineNumber)
-                        );
-                        docblock = new Docblock();
-                    }
+                    continue;
+                }
+
+                if (reader.IsCommentLine(line))
+                {
+                    docblock.AddLine(reader.GetCommentSegment(line));
+                }
+                else
+                {
+                    yield return new SectorData(
+                        docblock,
+                        reader.GetCommentSegment(line),
+                        reader.GetDataSegments(line),
+                        reader.GetRawData(line),
+                        new Definition(this.FullPath, this.CurrentLineNumber)
+                    );
+                    docblock = new Docblock();
                 }
             }
         }

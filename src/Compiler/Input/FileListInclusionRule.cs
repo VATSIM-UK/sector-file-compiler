@@ -27,7 +27,7 @@ namespace Compiler.Input
             this.outputGroup = outputGroup;
         }
 
-        public IEnumerable<AbstractSectorDataFile> GetFilesToInclude()
+        public IEnumerable<AbstractSectorDataFile> GetFilesToInclude(SectorDataFileFactory dataFileFactory)
         {
             List<AbstractSectorDataFile> files = new List<AbstractSectorDataFile>();
             foreach (string path in this.fileList)
@@ -36,7 +36,7 @@ namespace Compiler.Input
                 {
                     if (this.exceptWhereExists == "" || !File.Exists(exceptWhereExists))
                     {
-                        files.Add(SectorDataFileFactory.Create(path, this.inputDataType));
+                        files.Add(dataFileFactory.Create(path, this.inputDataType));
                     }
                 } else if (!this.ignoreMissing)
                 {

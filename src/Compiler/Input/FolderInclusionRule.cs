@@ -44,7 +44,7 @@ namespace Compiler.Input
             this.includeExcludeFiles = new List<string>();
         }
 
-        public IEnumerable<AbstractSectorDataFile> GetFilesToInclude()
+        public IEnumerable<AbstractSectorDataFile> GetFilesToInclude(SectorDataFileFactory dataFileFactory)
         {
             if (!Directory.Exists(this.folder))
             {
@@ -61,7 +61,7 @@ namespace Compiler.Input
             {
                 if (this.ShouldInclude(path))
                 {
-                    files.Add(SectorDataFileFactory.Create(path, this.inputDataType));
+                    files.Add(dataFileFactory.Create(path, this.inputDataType));
                 }
             }
 

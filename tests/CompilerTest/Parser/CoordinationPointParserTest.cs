@@ -12,7 +12,7 @@ namespace CompilerTest.Parser
 {
     public class CoordinationPointParserTest
     {
-        private readonly AirspaceParser parser;
+        private readonly CoordinationPointParser parser;
 
         private readonly SectorElementCollection collection;
 
@@ -22,8 +22,10 @@ namespace CompilerTest.Parser
         {
             this.log = new Mock<IEventLogger>();
             this.collection = new SectorElementCollection();
-            this.parser = (AirspaceParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSectionKeys.ESE_AIRSPACE);
+            this.parser = (CoordinationPointParser)(new DataParserFactory(this.collection, this.log.Object))
+                .GetParserForFile(
+                    OutputSectionKeys.ESE_AIRSPACE
+                );
         }
 
         public static IEnumerable<object[]> BadData => new List<object[]>

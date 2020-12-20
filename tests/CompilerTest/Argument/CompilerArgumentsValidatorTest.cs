@@ -4,6 +4,7 @@ using System.IO;
 using Compiler.Argument;
 using Compiler.Event;
 using Compiler.Error;
+using Compiler.Output;
 
 namespace CompilerTest.Argument
 {
@@ -11,71 +12,39 @@ namespace CompilerTest.Argument
     {
         private readonly CompilerArguments arguments;
 
-        private readonly Mock<IFileInterface> mockConfigFile;
+        private readonly string mockConfigFile;
 
         private readonly Mock<IEventLogger> eventLogger;
 
-        private readonly Mock<TextWriter> mockOutputs;
+        private readonly Mock<AbstractOutputFile> mockOutputs;
 
         public CompilerArgumentsValidatorTest()
         {
-            this.mockConfigFile = new Mock<IFileInterface>();
-            this.mockOutputs = new Mock<TextWriter>();
+            this.mockOutputs = new Mock<AbstractOutputFile>();
             this.eventLogger = new Mock<IEventLogger>();
             this.arguments = new CompilerArguments();
-            this.arguments.ConfigFiles.Add(mockConfigFile.Object);
-            this.mockConfigFile.Setup(foo => foo.GetPath()).Returns("/foo/bar");
-            this.arguments.OutFileEse = this.mockOutputs.Object;
-            this.arguments.OutFileSct = this.mockOutputs.Object;
+            this.mockConfigFile = "/foo/bar";
         }
 
         [Fact]
         public void TestItSendsErrorEventOnMissingConfigFile()
         {
-            this.mockConfigFile.Setup(file => file.Exists()).Returns(false);
+            this.arguments.OutputFiles[0] = this.mockOutputs.Object;
+            this.arguments.OutputFiles[1] = this.mockOutputs.Object;
             CompilerArgumentsValidator.Validate(this.eventLogger.Object, this.arguments);
-            string expectedMessage = "The configuration file could not be found: /foo/bar";
+            string expectedMessage = "No config files specified";
             this.eventLogger.Verify(
                 foo => foo.AddEvent(It.Is<CompilerArgumentError>(arg => arg.GetMessage().Contains(expectedMessage)))
             );
         }
 
         [Fact]
-        public void TestItSendsErrorEventOnConfigFileNotFound()
+        public void TestItSendsErrorEventOnNoOutputFiles()
         {
-            this.mockConfigFile.Setup(file => file.Exists()).Returns(false);
-            this.mockConfigFile.Setup(file => file.GetPath()).Returns("foo/bar/baz.txt");
+            this.arguments.ConfigFiles.Add(mockConfigFile);
             CompilerArgumentsValidator.Validate(this.eventLogger.Object, this.arguments);
 
-            string expectedMessage = "The configuration file could not be found: foo/bar/baz.txt";
-            this.eventLogger.Verify(
-                foo => foo.AddEvent(It.Is<CompilerArgumentError>(arg => arg.GetMessage().Contains(expectedMessage)))
-            );
-        }
-
-        [Fact]
-        public void TestItSendsErrorEventOnEseOutputNotSet()
-        {
-            this.arguments.OutFileEse = null;
-            this.mockConfigFile.Setup(file => file.Exists()).Returns(true);
-            this.mockConfigFile.Setup(file => file.Contents()).Returns("{]");
-            CompilerArgumentsValidator.Validate(this.eventLogger.Object, this.arguments);
-
-            string expectedMessage = "ESE output file path must be specified";
-            this.eventLogger.Verify(
-                foo => foo.AddEvent(It.Is<CompilerArgumentError>(arg => arg.GetMessage().Contains(expectedMessage)))
-            );
-        }
-
-        [Fact]
-        public void TestItSendsErrorEventOnSctOutputNotSet()
-        {
-            this.arguments.OutFileSct = null;
-            this.mockConfigFile.Setup(file => file.Exists()).Returns(true);
-            this.mockConfigFile.Setup(file => file.Contents()).Returns("{]");
-            CompilerArgumentsValidator.Validate(this.eventLogger.Object, this.arguments);
-
-            string expectedMessage = "SCT output file path must be specified";
+            string expectedMessage = "No output files specified";
             this.eventLogger.Verify(
                 foo => foo.AddEvent(It.Is<CompilerArgumentError>(arg => arg.GetMessage().Contains(expectedMessage)))
             );
@@ -84,8 +53,9 @@ namespace CompilerTest.Argument
         [Fact]
         public void TestItSetsNoErrorsOnValidConfig()
         {
-            this.mockConfigFile.Setup(file => file.Exists()).Returns(true);
-            this.mockConfigFile.Setup(file => file.Contents()).Returns("{}");
+            this.arguments.OutputFiles[0] = this.mockOutputs.Object;
+            this.arguments.OutputFiles[1] = this.mockOutputs.Object;
+            this.arguments.ConfigFiles.Add(mockConfigFile);
             CompilerArgumentsValidator.Validate(this.eventLogger.Object, this.arguments);
             this.eventLogger.VerifyNoOtherCalls();
         }
