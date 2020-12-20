@@ -6,6 +6,7 @@ using Compiler.Validate;
 using Moq;
 using Compiler.Argument;
 using System.Collections.Generic;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
@@ -23,47 +24,9 @@ namespace CompilerTest.Validate
             this.rule = new AllSectorsMustHaveValidBorder();
             this.args = new CompilerArguments();
 
-            this.sectorElements.Add(
-                new Sectorline(
-                    "ONE",
-                    new List<SectorlineDisplayRule>
-                    {
-                        new SectorlineDisplayRule("WHAT", "WHAT", "WHAT", "comment1"),
-                        new SectorlineDisplayRule("WHAT", "WHAT", "WHAT", "comment2")
-                    },
-                    new List<SectorlineCoordinate>
-                    {
-                        new SectorlineCoordinate(new Coordinate("abc", "def"), "comment3"),
-                        new SectorlineCoordinate(new Coordinate("ghi", "jkl"), "comment4"),
-                    },
-                    "commentname"
-                )
-            );
-            this.sectorElements.Add(
-                new Sectorline(
-                    "TWO",
-                    new List<SectorlineDisplayRule>
-                    {
-                        new SectorlineDisplayRule("WHAT", "WHAT", "WHAT", "comment1"),
-                        new SectorlineDisplayRule("WHAT", "WHAT", "WHAT", "comment2")
-                    },
-                    new List<SectorlineCoordinate>
-                    {
-                        new SectorlineCoordinate(new Coordinate("abc", "def"), "comment3"),
-                        new SectorlineCoordinate(new Coordinate("ghi", "jkl"), "comment4"),
-                    },
-                    "commentname"
-                )
-            );
-            this.sectorElements.Add(
-                new CircleSectorline(
-                    "THREE",
-                    "TEST",
-                    5.5,
-                    new List<SectorlineDisplayRule>(),
-                    "commentname"
-                )
-            );
+            this.sectorElements.Add(SectorlineFactory.Make("ONE"));
+            this.sectorElements.Add(SectorlineFactory.Make("TWO"));
+            this.sectorElements.Add(CircleSectorlineFactory.Make("THREE"));
         }
 
         [Fact]
@@ -74,39 +37,27 @@ namespace CompilerTest.Validate
                     "COOL1",
                     5000,
                     66000,
-                    new SectorOwnerHierarchy(
-                        new List<string>()
-                        {
-                            "LS", "LC"
-                        },
-                        ""
-                    ),
-                    new List<SectorAlternateOwnerHierarchy>()
-                    {
-                        new SectorAlternateOwnerHierarchy("ALT1", new List<string>(){"LON1", "LON2"}, ""),
-                        new SectorAlternateOwnerHierarchy("ALT2", new List<string>(){"LON3", "LON4"}, ""),
+                    SectorOwnerHierarchyFactory.Make(),
+                    SectorAlternateOwnerHierarchyFactor.MakeList(2),
+                    SectorActiveFactory.MakeList(),
+                    SectorGuestFactory.MakeList(),
+                    new List<SectorBorder>() {
+                        new SectorBorder(
+                            new List<string>()
+                            {
+                                "ONE",
+                                "TWO",
+                            },
+                            DefinitionFactory.Make(),
+                            DocblockFactory.Make(),
+                            CommentFactory.Make()
+                        )
                     },
-                    new List<SectorActive>()
-                    {
-                        new SectorActive("EGLL", "09R", ""),
-                        new SectorActive("EGWU", "05", ""),
-                    },
-                    new List<SectorGuest>()
-                    {
-                        new SectorGuest("LLN", "EGLL", "EGWU", ""),
-                        new SectorGuest("LLS", "EGLL", "*", ""),
-                    },
-                    new SectorBorder(
-                    new List<string>()
-                        {
-                            "ONE",
-                            "TWO",
-                        },
-                        ""
-                    ),
-                    new SectorArrivalAirports(new List<string>() { "EGSS", "EGGW" }, ""),
-                    new SectorDepartureAirports(new List<string>() { "EGLL", "EGWU" }, ""),
-                    "comment"
+                    SectorArrivalAirportsFactory.MakeList(),
+                    SectorDepartureAirportsFactory.MakeList(),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make()
                 )
             );
 
@@ -115,39 +66,27 @@ namespace CompilerTest.Validate
                     "COOL2",
                     5000,
                     66000,
-                    new SectorOwnerHierarchy(
-                        new List<string>()
-                        {
-                            "LS", "LC", "BBR", "BBF"
-                        },
-                        ""
-                    ),
-                    new List<SectorAlternateOwnerHierarchy>()
-                    {
-                        new SectorAlternateOwnerHierarchy("ALT1", new List<string>(){"LON1", "LON2"}, ""),
-                        new SectorAlternateOwnerHierarchy("ALT2", new List<string>(){"LON3", "LON4"}, ""),
+                    SectorOwnerHierarchyFactory.Make(),
+                    SectorAlternateOwnerHierarchyFactor.MakeList(2),
+                    SectorActiveFactory.MakeList(),
+                    SectorGuestFactory.MakeList(),
+                    new List<SectorBorder>() {
+                        new SectorBorder(
+                            new List<string>()
+                            {
+                                "ONE",
+                                "THREE",
+                            },
+                            DefinitionFactory.Make(),
+                            DocblockFactory.Make(),
+                            CommentFactory.Make()
+                        )
                     },
-                    new List<SectorActive>()
-                    {
-                        new SectorActive("EGLL", "09R", ""),
-                        new SectorActive("EGWU", "05", ""),
-                    },
-                    new List<SectorGuest>()
-                    {
-                        new SectorGuest("LLN", "EGLL", "EGWU", ""),
-                        new SectorGuest("LLS", "EGLL", "*", ""),
-                    },
-                    new SectorBorder(
-                    new List<string>()
-                        {
-                            "ONE",
-                            "THREE",
-                        },
-                        ""
-                    ),
-                    new SectorArrivalAirports(new List<string>() { "EGSS", "EGGW" }, ""),
-                    new SectorDepartureAirports(new List<string>() { "EGLL", "EGWU" }, ""),
-                    "comment"
+                    SectorArrivalAirportsFactory.MakeList(),
+                    SectorDepartureAirportsFactory.MakeList(),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make()
                 )
             );
 
@@ -166,39 +105,27 @@ namespace CompilerTest.Validate
                     "COOL1",
                     5000,
                     66000,
-                    new SectorOwnerHierarchy(
-                        new List<string>()
-                        {
-                            "LS"
-                        },
-                        ""
-                    ),
-                    new List<SectorAlternateOwnerHierarchy>()
-                    {
-                        new SectorAlternateOwnerHierarchy("ALT1", new List<string>(){"LON1", "LON2"}, ""),
-                        new SectorAlternateOwnerHierarchy("ALT2", new List<string>(){"LON3", "LON4"}, ""),
+                    SectorOwnerHierarchyFactory.Make(),
+                    SectorAlternateOwnerHierarchyFactor.MakeList(2),
+                    SectorActiveFactory.MakeList(),
+                    SectorGuestFactory.MakeList(),
+                    new List<SectorBorder>() {
+                        new SectorBorder(
+                            new List<string>()
+                            {
+                                first,
+                                second,
+                            },
+                            DefinitionFactory.Make(),
+                            DocblockFactory.Make(),
+                            CommentFactory.Make()
+                        )
                     },
-                    new List<SectorActive>()
-                    {
-                        new SectorActive("EGLL", "09R", ""),
-                        new SectorActive("EGWU", "05", ""),
-                    },
-                    new List<SectorGuest>()
-                    {
-                        new SectorGuest("LLN", "EGLL", "EGWU", ""),
-                        new SectorGuest("LLS", "EGLL", "*", ""),
-                    },
-                    new SectorBorder(
-                    new List<string>()
-                        {
-                            first,
-                            second
-                        },
-                        ""
-                    ),
-                    new SectorArrivalAirports(new List<string>() { "EGSS", "EGGW" }, ""),
-                    new SectorDepartureAirports(new List<string>() { "EGLL", "EGWU" }, ""),
-                    "comment"
+                    SectorArrivalAirportsFactory.MakeList(),
+                    SectorDepartureAirportsFactory.MakeList(),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make()
                 )
             );
 
@@ -207,38 +134,28 @@ namespace CompilerTest.Validate
                     "COOL2",
                     5000,
                     66000,
-                    new SectorOwnerHierarchy(
-                        new List<string>()
-                        {
-                            "LS"
-                        },
-                        ""
-                    ),
-                    new List<SectorAlternateOwnerHierarchy>()
-                    {
-                        new SectorAlternateOwnerHierarchy("ALT1", new List<string>(){"LON1", "LON2"}, ""),
-                        new SectorAlternateOwnerHierarchy("ALT2", new List<string>(){"LON3", "LON4"}, ""),
+                    SectorOwnerHierarchyFactory.Make(),
+                    SectorAlternateOwnerHierarchyFactor.MakeList(2),
+                    SectorActiveFactory.MakeList(),
+                    SectorGuestFactory.MakeList(),
+                    new List<SectorBorder>() {
+                        new SectorBorder(
+                            new List<string>()
+                            {
+                                first,
+                                second,
+                                bad
+                            },
+                            DefinitionFactory.Make(),
+                            DocblockFactory.Make(),
+                            CommentFactory.Make()
+                        )
                     },
-                    new List<SectorActive>()
-                    {
-                        new SectorActive("EGLL", "09R", ""),
-                        new SectorActive("EGWU", "05", ""),
-                    },
-                    new List<SectorGuest>()
-                    {
-                        new SectorGuest("LLN", "EGLL", "EGWU", ""),
-                        new SectorGuest("LLS", "EGLL", "*", ""),
-                    },
-                    new SectorBorder(
-                    new List<string>()
-                        {
-                            first, second, bad
-                        },
-                        ""
-                    ),
-                    new SectorArrivalAirports(new List<string>() { "EGSS", "EGGW" }, ""),
-                    new SectorDepartureAirports(new List<string>() { "EGLL", "EGWU" }, ""),
-                    "comment"
+                    SectorArrivalAirportsFactory.MakeList(),
+                    SectorDepartureAirportsFactory.MakeList(),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make()
                 )
             );
 

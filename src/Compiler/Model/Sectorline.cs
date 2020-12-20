@@ -31,11 +31,9 @@ namespace Compiler.Model
          */
         public override IEnumerable<ICompilableElement> GetCompilableElements()
         {
-            List<ICompilableElement> compilables = new List<ICompilableElement>();
-            compilables.Add(this);
-            compilables.Concat(this.DisplayRules);
-            compilables.Concat(this.Coordinates);
-            return compilables;
+            List<ICompilableElement> compilables = new List<ICompilableElement> {this};
+            return compilables.Concat(this.DisplayRules)
+                .Concat(this.Coordinates);
         }
 
         public override string GetCompileData(SectorElementCollection elements)

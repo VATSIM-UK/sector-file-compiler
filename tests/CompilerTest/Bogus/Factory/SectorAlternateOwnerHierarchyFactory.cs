@@ -5,21 +5,20 @@ using Compiler.Model;
 
 namespace CompilerTest.Bogus.Factory
 {
-    static class SectorLineDisplayRuleFactory
+    static class SectorAlternateOwnerHierarchyFactor
     {
-        public static SectorlineDisplayRule Make()
+        public static SectorAlternateOwnerHierarchy Make()
         {
             return GetGenerator().Generate();
         }
 
-        private static Faker<SectorlineDisplayRule> GetGenerator()
+        private static Faker<SectorAlternateOwnerHierarchy> GetGenerator()
         {
-            return new Faker<SectorlineDisplayRule>()
+            return new Faker<SectorAlternateOwnerHierarchy>()
                 .CustomInstantiator(
-                    f => new SectorlineDisplayRule(
+                    f => new SectorAlternateOwnerHierarchy(
                         f.Random.String2(4),
-                        f.Random.String2(4),
-                        f.Random.String2(4),
+                        ControllerPositionFactory.GetIdentifierList(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
@@ -27,10 +26,10 @@ namespace CompilerTest.Bogus.Factory
                 );
 
         }
-
-        public static List<SectorlineDisplayRule> MakeList(int count)
+        
+        public static List<SectorAlternateOwnerHierarchy> MakeList(int count)
         {
-            return GetGenerator().Generate(count).ToList();
+            return GetGenerator().Generate(count);
         }
     }
 }

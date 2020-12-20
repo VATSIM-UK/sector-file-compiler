@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bogus;
+﻿using Bogus;
 using Compiler.Model;
 
 namespace CompilerTest.Bogus
 {
     static class CoordinateFactory
     {
-        private static string[] latitudes =
+        private static readonly string[] latitudes =
         {
             "N052.28.42.000",
             "N053.24.22.000",
@@ -23,7 +18,7 @@ namespace CompilerTest.Bogus
             "N051.22.15.000"
         };
 
-        private static string[] longitudes =
+        private static readonly string[] longitudes =
         {
             "E002.34.14.000",
             "W003.26.43.000",

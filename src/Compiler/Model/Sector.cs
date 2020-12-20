@@ -47,16 +47,13 @@ namespace Compiler.Model
 
         public override IEnumerable<ICompilableElement> GetCompilableElements()
         {
-            List<ICompilableElement> elements = new List<ICompilableElement>();
-            elements.Add(this);
-            elements.Add(this.Owners);
-            elements.Concat(this.AltOwners);
-            elements.Concat(this.Active);
-            elements.Concat(this.Guests);
-            elements.Concat(this.Borders);
-            elements.Concat(this.ArrivalAirports);
-            elements.Concat(this.DepartureAirports);
-            return elements;
+            List<ICompilableElement> elements = new List<ICompilableElement> {this, this.Owners};
+            return elements.Concat(this.AltOwners)
+                .Concat(this.Active)
+                .Concat(this.Guests)
+                .Concat(this.Borders)
+                .Concat(this.ArrivalAirports)
+                .Concat(this.DepartureAirports);
         }
 
         public override string GetCompileData(SectorElementCollection elements)

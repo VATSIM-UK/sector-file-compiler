@@ -49,10 +49,8 @@ namespace Compiler.Model
          */
         public override IEnumerable<ICompilableElement> GetCompilableElements()
         {
-            List<ICompilableElement> elements = new List<ICompilableElement>();
-            elements.Add(this);
-            elements.Concat(this.DisplayRules);
-            return elements;
+            List<ICompilableElement> elements = new List<ICompilableElement> {this};
+            return elements.Concat(this.DisplayRules);
         }
 
         /*

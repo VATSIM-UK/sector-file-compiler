@@ -6,44 +6,40 @@ namespace Compiler.Input
     {
         public static AbstractSectorDataReader Create(InputDataType dataType)
         {
-            switch (dataType)
+            return dataType switch
             {
-                case InputDataType.ESE_AGREEMENTS:
-                case InputDataType.ESE_FREETEXT:
-                case InputDataType.ESE_POSITIONS_MENTOR:
-                case InputDataType.ESE_OWNERSHIP:
-                case InputDataType.ESE_POSITIONS:
-                case InputDataType.ESE_PRE_POSITIONS:
-                case InputDataType.ESE_SECTORLINES:
-                case InputDataType.ESE_SIDS:
-                case InputDataType.ESE_STARS:
-                case InputDataType.ESE_VRPS:
-                case InputDataType.RWY_ACTIVE_RUNWAY:
-                    return new EseSectorDataReader();
-                case InputDataType.SCT_AIRPORT_BASIC:
-                case InputDataType.SCT_ARTCC:
-                case InputDataType.SCT_ARTCC_HIGH:
-                case InputDataType.SCT_ARTCC_LOW:
-                case InputDataType.SCT_COLOUR_DEFINITIONS:
-                case InputDataType.SCT_EXTENDED_CENTRELINES:
-                case InputDataType.SCT_FIXES:
-                case InputDataType.SCT_GEO:
-                case InputDataType.SCT_INFO:
-                case InputDataType.SCT_LABELS:
-                case InputDataType.SCT_NDBS:
-                case InputDataType.SCT_REGIONS:
-                case InputDataType.SCT_RUNWAYS:
-                case InputDataType.SCT_SIDS:
-                case InputDataType.SCT_STARS:
-                case InputDataType.SCT_LOWER_AIRWAYS:
-                case InputDataType.SCT_UPPER_AIRWAYS:
-                case InputDataType.SCT_VORS:
-                    return new SctSectorDataReader();
-                case InputDataType.FILE_HEADERS:
-                    return new FileHeaderDataReader();
-                default:
-                    throw new ArgumentException("Unknown data type for SectorDataReaderFactory");
-            }
+                InputDataType.ESE_AGREEMENTS => new EseSectorDataReader(),
+                InputDataType.ESE_FREETEXT => new EseSectorDataReader(),
+                InputDataType.ESE_POSITIONS_MENTOR => new EseSectorDataReader(),
+                InputDataType.ESE_OWNERSHIP => new EseSectorDataReader(),
+                InputDataType.ESE_POSITIONS => new EseSectorDataReader(),
+                InputDataType.ESE_PRE_POSITIONS => new EseSectorDataReader(),
+                InputDataType.ESE_SECTORLINES => new EseSectorDataReader(),
+                InputDataType.ESE_SIDS => new EseSectorDataReader(),
+                InputDataType.ESE_STARS => new EseSectorDataReader(),
+                InputDataType.ESE_VRPS => new EseSectorDataReader(),
+                InputDataType.RWY_ACTIVE_RUNWAY => new EseSectorDataReader(),
+                InputDataType.SCT_AIRPORT_BASIC => new SctSectorDataReader(),
+                InputDataType.SCT_ARTCC => new SctSectorDataReader(),
+                InputDataType.SCT_ARTCC_HIGH => new SctSectorDataReader(),
+                InputDataType.SCT_ARTCC_LOW => new SctSectorDataReader(),
+                InputDataType.SCT_COLOUR_DEFINITIONS => new SctSectorDataReader(),
+                InputDataType.SCT_EXTENDED_CENTRELINES => new SctSectorDataReader(),
+                InputDataType.SCT_FIXES => new SctSectorDataReader(),
+                InputDataType.SCT_GEO => new SctSectorDataReader(),
+                InputDataType.SCT_INFO => new SctSectorDataReader(),
+                InputDataType.SCT_LABELS => new SctSectorDataReader(),
+                InputDataType.SCT_NDBS => new SctSectorDataReader(),
+                InputDataType.SCT_REGIONS => new SctSectorDataReader(),
+                InputDataType.SCT_RUNWAYS => new SctSectorDataReader(),
+                InputDataType.SCT_SIDS => new SctSectorDataReader(),
+                InputDataType.SCT_STARS => new SctSectorDataReader(),
+                InputDataType.SCT_LOWER_AIRWAYS => new SctSectorDataReader(),
+                InputDataType.SCT_UPPER_AIRWAYS => new SctSectorDataReader(),
+                InputDataType.SCT_VORS => new SctSectorDataReader(),
+                InputDataType.FILE_HEADERS => new FileHeaderDataReader(),
+                _ => throw new ArgumentException("Unknown data type for SectorDataReaderFactory")
+            };
         }
     }
 }
