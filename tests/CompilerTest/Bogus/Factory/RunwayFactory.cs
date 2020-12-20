@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Compiler.Model;
 
 namespace CompilerTest.Bogus.Factory
 {
@@ -18,6 +19,25 @@ namespace CompilerTest.Bogus.Factory
         public static string GetRandomDesignator()
         {
             return new Randomizer().ArrayElement(designators);
+        }
+
+        public static Runway Make(string airfieldIcao = null)
+        {
+            return new Faker<Runway>()
+                .CustomInstantiator(
+                    f => new Runway(
+                        airfieldIcao ?? AirportFactory.GetRandomDesignator(),
+                        f.Random.ArrayElement(designators),
+                        000,
+                        CoordinateFactory.Make(),
+                        f.Random.ArrayElement(designators),
+                        000,
+                        CoordinateFactory.Make(),
+                        DefinitionFactory.Make(),
+                        DocblockFactory.Make(),
+                        CommentFactory.Make()
+                    )
+                );
         }
     }
 }

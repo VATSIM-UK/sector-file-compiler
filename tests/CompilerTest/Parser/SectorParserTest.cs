@@ -270,7 +270,7 @@ namespace CompilerTest.Parser
         public void TestItAddsData()
         {
             this.RunParserOnLines(
-                new List<string>(new string[] {
+                new List<string>(new[] {
                     "SECTOR:AAFIN:100:6000 ;comment1",
                     "OWNER:AAF:AAR:STA ;comment2",
                     "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",

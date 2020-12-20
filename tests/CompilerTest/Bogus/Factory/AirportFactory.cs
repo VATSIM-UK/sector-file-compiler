@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Bogus;
+using Compiler.Model;
 
 namespace CompilerTest.Bogus.Factory
 {
@@ -16,6 +17,22 @@ namespace CompilerTest.Bogus.Factory
             "EGGD",
             "EGJJ"
         };
+
+        public static Airport Make()
+        {
+            return new Faker<Airport>()
+                .CustomInstantiator(
+                    f => new Airport(
+                        f.Random.String2(10),
+                        GetRandomDesignator(),
+                        CoordinateFactory.Make(),
+                        "123.450",
+                        DefinitionFactory.Make(),
+                        DocblockFactory.Make(),
+                        CommentFactory.Make()
+                    )    
+                );
+        }
         
         public static string GetRandomDesignator()
         {

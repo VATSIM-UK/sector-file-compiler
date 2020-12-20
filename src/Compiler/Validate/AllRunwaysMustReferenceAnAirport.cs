@@ -15,7 +15,7 @@ namespace Compiler.Validate
             List<string> airports = sectorElements.Airports
                 .Select(airport => airport.Icao)
                 .ToList();
-            airports.Add("000A");
+            
             foreach (Runway runway in sectorElements.Runways)
             {
                 if (!airports.Contains(runway.AirfieldIcao))
