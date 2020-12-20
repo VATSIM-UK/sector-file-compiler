@@ -2,8 +2,8 @@
 using Xunit;
 using Moq;
 using Compiler.Error;
+using Compiler.Input;
 using Compiler.Model;
-using Compiler.Output;
 
 namespace CompilerTest.Parser
 {
@@ -159,6 +159,11 @@ namespace CompilerTest.Parser
                 result.Colour
             );
             this.AssertExpectedMetadata(result, 1, "comment");
+        }
+
+        protected override InputDataType GetInputDataType()
+        {
+            return InputDataType.SCT_GEO;
         }
     }
 }
