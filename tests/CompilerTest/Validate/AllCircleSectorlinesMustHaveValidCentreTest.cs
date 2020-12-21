@@ -5,7 +5,7 @@ using Compiler.Event;
 using Compiler.Validate;
 using Moq;
 using Compiler.Argument;
-using System.Collections.Generic;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
@@ -21,10 +21,10 @@ namespace CompilerTest.Validate
             this.sectorElements = new SectorElementCollection();
             this.loggerMock = new Mock<IEventLogger>();
 
-            this.sectorElements.Add(new Fix("testfix", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Vor("testvor", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Ndb("testndb", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Airport("testairport", "testairport", new Coordinate("abc", "def"), "123.456", "test"));
+            this.sectorElements.Add(FixFactory.Make("testfix"));
+            this.sectorElements.Add(VorFactory.Make("testvor"));
+            this.sectorElements.Add(NdbFactory.Make("testndb"));
+            this.sectorElements.Add(AirportFactory.Make("testairport"));
 
             this.rule = new AllCircleSectorlinesMustHaveValidCentre();
             this.args = new CompilerArguments();
@@ -37,24 +37,8 @@ namespace CompilerTest.Validate
         [InlineData("testairport")]
         public void TestItPassesOnValidFix(string fix)
         {
-            this.sectorElements.Add(
-                new CircleSectorline(
-                    "ONE",
-                    fix,
-                    5.5,
-                    new List<SectorlineDisplayRule>(),
-                    "commentname"
-                )
-            );
-            this.sectorElements.Add(
-                new CircleSectorline(
-                    "TWO",
-                    fix,
-                    5.5,
-                    new List<SectorlineDisplayRule>(),
-                    "commentname"
-                )
-            );
+            this.sectorElements.Add(CircleSectorlineFactory.Make(centre: fix));
+            this.sectorElements.Add(CircleSectorlineFactory.Make(centre: fix));
 
             // This one is ignored by the rule
             this.sectorElements.Add(
@@ -62,8 +46,10 @@ namespace CompilerTest.Validate
                     "ONE",
                     new Coordinate("abc", "def"),
                     5.5,
-                    new List<SectorlineDisplayRule>(),
-                    "commentname"
+                    SectorLineDisplayRuleFactory.MakeList(2),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make()
                 )
             );
 
@@ -78,24 +64,8 @@ namespace CompilerTest.Validate
         [InlineData("testairport", "nottestairport")]
         public void TestItFailsOnInvalidFix(string firstFix, string secondFix)
         {
-            this.sectorElements.Add(
-                new CircleSectorline(
-                    "ONE",
-                    firstFix,
-                    5.5,
-                    new List<SectorlineDisplayRule>(),
-                    "commentname"
-                )
-            );
-            this.sectorElements.Add(
-                new CircleSectorline(
-                    "TWO",
-                    secondFix,
-                    5.5,
-                    new List<SectorlineDisplayRule>(),
-                    "commentname"
-                )
-            );
+            this.sectorElements.Add(CircleSectorlineFactory.Make(centre: firstFix));
+            this.sectorElements.Add(CircleSectorlineFactory.Make(centre: secondFix));
 
             // This one is ignored by the rule
             this.sectorElements.Add(
@@ -103,8 +73,10 @@ namespace CompilerTest.Validate
                     "ONE",
                     new Coordinate("abc", "def"),
                     5.5,
-                    new List<SectorlineDisplayRule>(),
-                    "commentname"
+                    SectorLineDisplayRuleFactory.MakeList(2),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make()
                 )
             );
 

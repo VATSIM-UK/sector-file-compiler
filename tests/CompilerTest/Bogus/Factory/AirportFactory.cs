@@ -18,13 +18,13 @@ namespace CompilerTest.Bogus.Factory
             "EGJJ"
         };
 
-        public static Airport Make()
+        public static Airport Make(string icao = null)
         {
             return new Faker<Airport>()
                 .CustomInstantiator(
                     f => new Airport(
                         f.Random.String2(10),
-                        GetRandomDesignator(),
+                        icao ?? GetRandomDesignator(),
                         CoordinateFactory.Make(),
                         "123.450",
                         DefinitionFactory.Make(),

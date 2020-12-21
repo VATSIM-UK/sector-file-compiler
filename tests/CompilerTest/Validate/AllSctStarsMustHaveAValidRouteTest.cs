@@ -6,6 +6,7 @@ using Compiler.Event;
 using Compiler.Validate;
 using Moq;
 using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
@@ -19,11 +20,11 @@ namespace CompilerTest.Validate
         public AllSctStarsMustHaveAValidRouteTest()
         {
             this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.sectorElements.Add(new Fix("testfix", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Vor("testvor", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Ndb("testndb", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Airport("testairport", "testairport", new Coordinate("abc", "def"), "123.456", "test"));
+            this.loggerMock = new Mock<IEventLogger>(); 
+            this.sectorElements.Add(FixFactory.Make("testfix"));
+            this.sectorElements.Add(VorFactory.Make("testvor"));
+            this.sectorElements.Add(NdbFactory.Make("testndb"));
+            this.sectorElements.Add(AirportFactory.Make("testairport"));
             this.rule = new AllSctStarsMustHaveAValidRoute();
             this.args = new CompilerArguments();
         }
@@ -33,17 +34,20 @@ namespace CompilerTest.Validate
         {
             List<RouteSegment> segments = new List<RouteSegment>
             {
-                new RouteSegment(new Point("testfix"), new Point("testvor"), null),
-                new RouteSegment(new Point("testvor"), new Point("testndb"), null),
-                new RouteSegment(new Point("testndb"), new Point("testairport"), null),
-                new RouteSegment(new Point("testairport"), new Point(new Coordinate("abc", "def")), null),
-                new RouteSegment(new Point(new Coordinate("abc", "def")), new Point("testfix"), null),
+                RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
+                RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
+                RouteSegmentFactory.MakePointCoordinate("testairport"),
+                RouteSegmentFactory.MakeCoordinatePoint("testfix"),
             };
 
             SidStarRoute route = new SidStarRoute(
                 SidStarType.STAR,
                 "EGKK TEST",
-                segments
+                RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
+                segments,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
 
             this.sectorElements.Add(route);
@@ -57,17 +61,20 @@ namespace CompilerTest.Validate
         {
             List<RouteSegment> segments = new List<RouteSegment>
             {
-                new RouteSegment(new Point("testfix"), new Point("testvor"), null),
-                new RouteSegment(new Point("testvor"), new Point("testndb"), null),
-                new RouteSegment(new Point("testndb"), new Point("testairport"), null),
-                new RouteSegment(new Point("testairport"), new Point(new Coordinate("abc", "def")), null),
-                new RouteSegment(new Point(new Coordinate("abc", "def")), new Point("testfix"), null),
+                RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
+                RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
+                RouteSegmentFactory.MakePointCoordinate("testairport"),
+                RouteSegmentFactory.MakeCoordinatePoint("testfix"),
             };
 
             SidStarRoute route = new SidStarRoute(
                 SidStarType.STAR,
                 "EGKK TEST",
-                segments
+                RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
+                segments,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
 
             this.sectorElements.Add(route);
@@ -83,17 +90,20 @@ namespace CompilerTest.Validate
         {
             List<RouteSegment> segments = new List<RouteSegment>
             {
-                new RouteSegment(new Point("testfix"), new Point("testvor"), null),
-                new RouteSegment(new Point("testvor"), new Point("testndb"), null),
-                new RouteSegment(new Point("testndb"), new Point("testairport"), null),
-                new RouteSegment(new Point("testairport"), new Point(new Coordinate("abc", "def")), null),
-                new RouteSegment(new Point(new Coordinate("abc", "def")), new Point("testfix"), null),
+                RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
+                RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
+                RouteSegmentFactory.MakePointCoordinate("testairport"),
+                RouteSegmentFactory.MakeCoordinatePoint("testfix"),
             };
 
             SidStarRoute route = new SidStarRoute(
                 SidStarType.STAR,
                 "EGKK TEST",
-                segments
+                RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
+                segments,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
 
             this.sectorElements.Add(route);
@@ -109,17 +119,20 @@ namespace CompilerTest.Validate
         {
             List<RouteSegment> segments = new List<RouteSegment>
             {
-                new RouteSegment(new Point("testfix"), new Point("testvor"), null),
-                new RouteSegment(new Point("testvor"), new Point("testndb"), null),
-                new RouteSegment(new Point("testndb"), new Point("testairport"), null),
-                new RouteSegment(new Point("testairport"), new Point(new Coordinate("abc", "def")), null),
-                new RouteSegment(new Point(new Coordinate("abc", "def")), new Point("testfix"), null),
+                RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
+                RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
+                RouteSegmentFactory.MakePointCoordinate("testairport"),
+                RouteSegmentFactory.MakeCoordinatePoint("testfix"),
             };
 
             SidStarRoute route = new SidStarRoute(
                 SidStarType.STAR,
                 "EGKK TEST",
-                segments
+                RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
+                segments,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
 
             this.sectorElements.Add(route);
@@ -135,17 +148,20 @@ namespace CompilerTest.Validate
         {
             List<RouteSegment> segments = new List<RouteSegment>
             {
-                new RouteSegment(new Point("testfix"), new Point("testvor"), null),
-                new RouteSegment(new Point("testvor"), new Point("testndb"), null),
-                new RouteSegment(new Point("testndb"), new Point("testairport"), null),
-                new RouteSegment(new Point("testairport"), new Point(new Coordinate("abc", "def")), null),
-                new RouteSegment(new Point(new Coordinate("abc", "def")), new Point("testfix"), null),
+                RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
+                RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
+                RouteSegmentFactory.MakePointCoordinate("testairport"),
+                RouteSegmentFactory.MakeCoordinatePoint("testfix"),
             };
 
             SidStarRoute route = new SidStarRoute(
                 SidStarType.STAR,
                 "EGKK TEST",
-                segments
+                RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
+                segments,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
 
             this.sectorElements.Add(route);
