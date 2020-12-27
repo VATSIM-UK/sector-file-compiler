@@ -1,81 +1,162 @@
-﻿using Xunit;
+﻿using System.Collections.Generic;
+using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
     public class InfoTest
     {
         private readonly Info model;
+        private InfoName infoName;
+        private InfoCallsign infoCallsign;
+        private InfoAirport infoAirport;
+        private InfoLatitude infoLatitude;
+        private InfoLongitude infoLongitude;
+        private InfoMilesPerDegreeLatitude infoPerDegreeLatitude;
+        private InfoMilesPerDegreeLongitude infoPerDegreeLongitude;
+        private InfoMagneticVariation infoMagVar;
+        private InfoScale infoScale;
 
         public InfoTest()
         {
-            this.model = new Info(
+            this.infoName = new InfoName(
                 "Super Cool Sector",
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
+            this.infoCallsign = new InfoCallsign(
                 "LON_CTR",
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
+            this.infoAirport = new InfoAirport(
                 "EGLL",
-                new Coordinate("123", "456"),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
+            this.infoLatitude = new InfoLatitude(
+                "123",
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
+            this.infoLongitude = new InfoLongitude(
+                "456",
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
+            this.infoPerDegreeLatitude = new InfoMilesPerDegreeLatitude(
                 60,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
+            this.infoPerDegreeLongitude = new InfoMilesPerDegreeLongitude(
                 40.24,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
+            this.infoMagVar = new InfoMagneticVariation(
                 2.1,
-                1
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
+            this.infoScale = new InfoScale(
+                1,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
+            this.model = new Info(
+                this.infoName,
+                this.infoCallsign,
+                this.infoAirport,
+                this.infoLatitude,
+                this.infoLongitude,
+                this.infoPerDegreeLatitude,
+                this.infoPerDegreeLongitude,
+                this.infoMagVar,
+                this.infoScale
             );
         }
 
         [Fact]
         public void TestItSetsName()
         {
-            Assert.Equal("Super Cool Sector", this.model.Name);
+            Assert.Equal(this.infoName, this.model.Name);
         }
 
         [Fact]
         public void TestItSetsCallsign()
         {
-            Assert.Equal("LON_CTR", this.model.Callsign);
+            Assert.Equal(this.infoCallsign, this.model.Callsign);
         }
 
         [Fact]
         public void TestItSetsAirport()
         {
-            Assert.Equal("EGLL", this.model.Airport);
+            Assert.Equal(this.infoAirport, this.model.Airport);
         }
 
         [Fact]
-        public void TestItSetsCoordinate()
+        public void TestItSetsLatitude()
         {
-            Assert.Equal(new Coordinate("123", "456"), this.model.Coordinate);
+            Assert.Equal(this.infoLatitude, this.model.Latitude);
+        }
+        
+        [Fact]
+        public void TestItSetsLongitude()
+        {
+            Assert.Equal(this.infoLongitude, this.model.Longitude);
         }
 
         [Fact]
         public void TestItSetsMilesPerDegreeLatitude()
         {
-            Assert.Equal(60, this.model.MilesPerDegreeLatitude);
+            Assert.Equal(this.infoPerDegreeLatitude, this.model.MilesPerDegreeLatitude);
         }
 
         [Fact]
         public void TestItSetsMilesPerDegreeLongitude()
         {
-            Assert.Equal(40.24, this.model.MilesPerDegreeLongitude);
+            Assert.Equal(this.infoPerDegreeLongitude, this.model.MilesPerDegreeLongitude);
         }
 
         [Fact]
         public void TestItSetsMagneticVariation()
         {
-            Assert.Equal(2.1, this.model.MagneticVariation);
+            Assert.Equal(this.infoMagVar, this.model.MagneticVariation);
         }
 
         [Fact]
         public void TestItSetsScale()
         {
-            Assert.Equal(1, this.model.Scale);
+            Assert.Equal(this.infoScale, this.model.Scale);
         }
 
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal(
-                "Super Cool Sector\r\nLON_CTR\r\nEGLL\r\n123\r\n456\r\n60\r\n40.24\r\n2.1\r\n1\r\n",
-                this.model.Compile()
-            );
+            IEnumerable<ICompilableElement> expected = new List<ICompilableElement>()
+            {
+                this.infoName,
+                this.infoCallsign,
+                this.infoAirport,
+                this.infoLatitude,
+                this.infoLongitude,
+                this.infoPerDegreeLatitude,
+                this.infoPerDegreeLongitude,
+                this.infoMagVar,
+                this.infoScale
+            };
+            Assert.Equal(expected, this.model.GetCompilableElements());
         }
     }
 }

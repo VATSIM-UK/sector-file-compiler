@@ -1,19 +1,20 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
-    public class InfoMilesPerDegreLongitudeTest : AbstractModelTestCase
+    public class InfoMilesPerDegreeLongitudeTest
     {
         private readonly InfoMilesPerDegreeLongitude model;
 
-        public InfoMilesPerDegreLongitudeTest()
+        public InfoMilesPerDegreeLongitudeTest()
         {
             this.model = new InfoMilesPerDegreeLongitude(
                 12.1254,
-                this.GetDefinition(),
-                this.GetDocbock(),
-                this.GetInlineComment()
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -24,17 +25,11 @@ namespace CompilerTest.Model
         }
 
         [Fact]
-        public void TestItSetsDefinition()
-        {
-            Assert.Equal(this.GetDefinition(), this.model.GetDefinition());
-        }
-
-        [Fact]
         public void TestItCompiles()
         {
             Assert.Equal(
                 "12.13",
-                this.model.GetCompileData()
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

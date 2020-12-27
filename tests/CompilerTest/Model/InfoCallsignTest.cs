@@ -1,9 +1,10 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
-    public class InfoCallsignTest : AbstractModelTestCase
+    public class InfoCallsignTest
     {
         private readonly InfoCallsign model;
 
@@ -11,9 +12,9 @@ namespace CompilerTest.Model
         {
             this.model = new InfoCallsign(
                 "LON_CTR",
-                this.GetDefinition(),
-                this.GetDocbock(),
-                this.GetInlineComment()
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -24,17 +25,11 @@ namespace CompilerTest.Model
         }
 
         [Fact]
-        public void TestItSetsDefinition()
-        {
-            Assert.Equal(this.GetDefinition(), this.model.GetDefinition());
-        }
-
-        [Fact]
         public void TestItCompiles()
         {
             Assert.Equal(
                 "LON_CTR",
-                this.model.GetCompileData()
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

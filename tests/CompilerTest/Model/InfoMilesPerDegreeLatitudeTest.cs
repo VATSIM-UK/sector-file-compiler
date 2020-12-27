@@ -1,9 +1,10 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
-    public class InfoMilesPerDegreeLatitudeTest : AbstractModelTestCase
+    public class InfoMilesPerDegreeLatitudeTest
     {
         private readonly InfoMilesPerDegreeLatitude model;
 
@@ -11,9 +12,9 @@ namespace CompilerTest.Model
         {
             this.model = new InfoMilesPerDegreeLatitude(
                 12,
-                this.GetDefinition(),
-                this.GetDocbock(),
-                this.GetInlineComment()
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -22,19 +23,13 @@ namespace CompilerTest.Model
         {
             Assert.Equal(12, this.model.Miles);
         }
-
-        [Fact]
-        public void TestItSetsDefinition()
-        {
-            Assert.Equal(this.GetDefinition(), this.model.GetDefinition());
-        }
-
+        
         [Fact]
         public void TestItCompiles()
         {
             Assert.Equal(
                 "12",
-                this.model.GetCompileData()
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }
