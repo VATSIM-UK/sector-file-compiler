@@ -42,10 +42,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "BORDER:{0}",
-                string.Join(':', this.BorderLines)
-            );
+            return $"BORDER:{string.Join(':', this.BorderLines)}";
         }
 
         public override int GetHashCode()

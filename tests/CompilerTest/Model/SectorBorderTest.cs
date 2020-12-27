@@ -1,13 +1,14 @@
 ﻿using Xunit;
 using Compiler.Model;
 using System.Collections.Generic;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
     public class SectorBorderTest
     {
         private readonly SectorBorder model;
-        private List<string> borders = new List<string>
+        private List<string> borders = new()
         {
             "ONE",
             "TWO",
@@ -18,7 +19,9 @@ namespace CompilerTest.Model
         {
             this.model = new SectorBorder(
                 this.borders,
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -32,18 +35,8 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "BORDER:ONE:TWO:THREE ;comment\r\n",
-                this.model.Compile()
-            );
-        }
-
-        [Fact]
-        public void TestItCompilesNoData()
-        {
-            SectorBorder emptyModel = new SectorBorder();
-            Assert.Equal(
-                "",
-                emptyModel.Compile()
+                "BORDER:ONE:TWO:THREE",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

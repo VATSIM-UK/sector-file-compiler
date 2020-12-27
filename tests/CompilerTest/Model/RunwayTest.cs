@@ -1,23 +1,30 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
     public class RunwayTest
     {
         private readonly Runway runway;
-
+        private readonly Airport airport;
+        private readonly SectorElementCollection sectorElements = new SectorElementCollection();
+        
         public RunwayTest()
         {
+            this.airport = AirportFactory.Make();
+            this.sectorElements.Add(this.airport);
             this.runway = new Runway(
-                "EGGD",
+                this.airport.Icao,
                 "09",
                 90,
                 new Coordinate("abc", "def"),
                 "27",
                 270,
                 new Coordinate("ghi", "jkl"),
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -60,7 +67,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsAirfieldIcao()
         {
-            Assert.Equal("EGGD", this.runway.AirfieldIcao);
+            Assert.Equal(this.airport.Icao, this.runway.AirfieldIcao);
         }
 
 
@@ -68,8 +75,8 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "09 27 090 270 abc def ghi jkl EGGD - Bristol ;comment\r\n",
-                this.runway.Compile()
+                $"09 27 090 270 abc def ghi jkl {this.airport.Icao} - {this.airport.Name}",
+                this.runway.GetCompileData(this.sectorElements)
             );
         }
     }

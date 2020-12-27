@@ -48,10 +48,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "ARRAPT:{0}",
-                string.Join(":", this.Airports)
-            );
+            return $"ARRAPT:{string.Join(":", this.Airports)}";
         }
     }
 }

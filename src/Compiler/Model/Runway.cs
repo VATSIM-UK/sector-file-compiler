@@ -38,17 +38,8 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "{0} {1} {2} {3} {4} {5} {6} {7}",
-                this.FirstIdentifier,
-                this.ReverseIdentifier,
-                this.FormatHeading(this.FirstHeading),
-                this.FormatHeading(this.ReverseHeading),
-                this.FirstThreshold.ToString(),
-                this.ReverseThreshold.ToString(),
-                this.AirfieldIcao,
-                elements.Airports.First(airport => airport.Icao == AirfieldIcao).Name
-            );
+            return
+                $"{this.FirstIdentifier} {this.ReverseIdentifier} {this.FormatHeading(this.FirstHeading)} {this.FormatHeading(this.ReverseHeading)} {this.FirstThreshold.ToString()} {this.ReverseThreshold.ToString()} {this.AirfieldIcao} {elements.Airports.First(airport => airport.Icao == AirfieldIcao).Name}";
         }
 
         private string FormatHeading(int heading)

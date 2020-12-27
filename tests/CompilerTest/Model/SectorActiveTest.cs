@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -12,7 +13,9 @@ namespace CompilerTest.Model
             this.model = new SectorActive(
                 "EGLL",
                 "09R",
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -32,8 +35,8 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "ACTIVE:EGLL:09R ;comment\r\n",
-                this.model.Compile()
+                "ACTIVE:EGLL:09R",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

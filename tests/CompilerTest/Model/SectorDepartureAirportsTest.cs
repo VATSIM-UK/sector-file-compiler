@@ -1,13 +1,14 @@
 ﻿using Xunit;
 using Compiler.Model;
 using System.Collections.Generic;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
     public class SectorDepartureAirportsTest
     {
         private readonly SectorDepartureAirports model;
-        private readonly List<string> airports = new List<string>
+        private readonly List<string> airports = new()
         {
             "EGKK",
             "EGLL"
@@ -17,7 +18,9 @@ namespace CompilerTest.Model
         {
             this.model = new SectorDepartureAirports(
                 this.airports,
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -31,18 +34,8 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "DEPAPT:EGKK:EGLL ;comment\r\n",
-                this.model.Compile()
-            );
-        }
-
-        [Fact]
-        public void TestItCompilesNoData()
-        {
-            SectorDepartureAirports emptyModel = new SectorDepartureAirports();
-            Assert.Equal(
-                "",
-                emptyModel.Compile()
+                "DEPAPT:EGKK:EGLL",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

@@ -16,7 +16,7 @@ namespace CompilerTest.Model
         public void TestItCompilesIdentifier()
         {
             Point point = new Point("TESTF");
-            Assert.Equal("TESTF TESTF", point.Compile());
+            Assert.Equal("TESTF TESTF", point.ToString());
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace CompilerTest.Model
         public void TestItCompilesCoordinate()
         {
             Point point = new Point(new Coordinate("abc", "def"));
-            Assert.Equal("abc def", point.Compile());
+            Assert.Equal("abc def", point.ToString());
         }
     }
 }

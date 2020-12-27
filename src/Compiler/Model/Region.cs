@@ -21,10 +21,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "REGIONNAME {0}",
-                this.Name
-            );
+            return $"REGIONNAME {this.Name}";
         }
 
         public override IEnumerable<ICompilableElement> GetCompilableElements()

@@ -23,11 +23,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return String.Format(
-                "{0} {1}",
-                this.Colour ?? "",
-                this.Point.ToString()
-            ).Trim();
+            return $"{this.Colour ?? ""} {this.Point.ToString()}".Trim();
         }
     }
 }

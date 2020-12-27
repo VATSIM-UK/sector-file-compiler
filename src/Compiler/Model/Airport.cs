@@ -35,11 +35,7 @@ namespace Compiler.Model
         public override void Compile(SectorElementCollection elements, TextWriter output)
         {
             output.WriteLine(
-                string.Format(
-                    "{0} ;{1}",
-                    this.GetCompileData(elements),
-                    this.Name
-                )
+                $"{this.GetCompileData(elements)} ;{this.Name}"
             );
         }
 

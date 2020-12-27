@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -10,9 +11,12 @@ namespace CompilerTest.Model
         public RouteSegmentTest()
         {
             this.segment = new RouteSegment(
+                "FOO",
                 new Point("BIG"),
                 new Point("LAM"),
-                null,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make(),
                 null
             );
         }
@@ -33,8 +37,8 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "BIG BIG LAM LAM\r\n",
-                this.segment.Compile()
+                "FOO                        BIG BIG LAM LAM",
+                this.segment.GetCompileData(new SectorElementCollection())
             );
         }
 
@@ -42,30 +46,18 @@ namespace CompilerTest.Model
         public void TestItCompilesWithColour()
         {
             RouteSegment segment = new RouteSegment(
+                "FOO",
                 new Point("BIG"),
                 new Point("LAM"),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make(),
                 "FooColour"
             );
 
             Assert.Equal(
-                "BIG BIG LAM LAM FooColour\r\n",
-                segment.Compile()
-            );
-        }
-
-        [Fact]
-        public void TestItCompilesWithComment()
-        {
-            RouteSegment segment = new RouteSegment(
-                new Point("BIG"),
-                new Point("LAM"),
-                null,
-                "Foo"
-            );
-
-            Assert.Equal(
-                "BIG BIG LAM LAM ;Foo\r\n",
-                segment.Compile()
+                "FOO                        BIG BIG LAM LAM FooColour",
+                segment.GetCompileData(new SectorElementCollection())
             );
         }
     }

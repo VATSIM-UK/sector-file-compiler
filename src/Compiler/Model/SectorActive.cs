@@ -28,11 +28,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return String.Format(
-                "ACTIVE:{0}:{1}",
-                this.Airfield,
-                this.Runway
-            );
+            return $"ACTIVE:{this.Airfield}:{this.Runway}";
         }
 
         public override int GetHashCode()
