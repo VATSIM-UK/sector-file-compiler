@@ -1,4 +1,5 @@
 ﻿using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 using Xunit;
 
 namespace CompilerTest.Model
@@ -9,7 +10,13 @@ namespace CompilerTest.Model
 
         public FixTest()
         {
-            this.fix = new Fix("ADMAG", new Coordinate("abc", "def"), "comment");
+            this.fix = new Fix(
+                "ADMAG",
+                new Coordinate("abc", "def"),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
         }
 
         [Fact]
@@ -27,7 +34,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("ADMAG abc def ;comment\r\n", this.fix.Compile());
+            Assert.Equal("ADMAG abc def", this.fix.GetCompileData(new SectorElementCollection()));
         }
     }
 }

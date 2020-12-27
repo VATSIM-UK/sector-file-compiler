@@ -40,18 +40,14 @@ namespace Compiler.Model
          */
         public virtual void Compile(SectorElementCollection elements, TextWriter output)
         {
+            // Process each line in the docblock
             foreach (Comment line in this.Docblock)
             {
                 output.WriteLine(line.ToString().Trim());
             }
 
-            output.WriteLine(
-                string.Format(
-                    "{0}{1}",
-                    this.GetCompileData(elements),
-                    this.InlineComment.ToString()
-                )
-            );
+            // Compile each data item along with its inline comment
+            output.WriteLine($"{this.GetCompileData(elements)} {this.InlineComment.ToString()}".Trim());
         }
 
         public OutputGroup GetDataGroup()

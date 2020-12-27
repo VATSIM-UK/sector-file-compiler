@@ -13,6 +13,7 @@ namespace CompilerTest.Input
         {
             this.file = new SectorDataFile(
                 "_TestData/StreamTest.txt",
+                new InputFileStreamFactory(),
                 InputDataType.ESE_AGREEMENTS,
                 new EseSectorDataReader()
             );

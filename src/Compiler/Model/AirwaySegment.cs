@@ -33,12 +33,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return String.Format(
-                "{0} {1} {2}",
-                this.Identifier,
-                this.StartPoint,
-                this.EndPoint
-            );
+            return $"{this.Identifier} {this.StartPoint} {this.EndPoint}";
         }
     }
 }

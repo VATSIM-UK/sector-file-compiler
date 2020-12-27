@@ -58,12 +58,8 @@ namespace Compiler.Model
          */
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "CIRCLE_SECTORLINE:{0}:{1}:{2}",
-                this.Name,
-                this.CentrePoint ?? this.CentreCoordinate.latitude + ":" + this.CentreCoordinate.longitude,
-                this.Radius
-            );
+            return
+                $"CIRCLE_SECTORLINE:{this.Name}:{this.CentrePoint ?? this.CentreCoordinate.latitude + ":" + this.CentreCoordinate.longitude}:{this.Radius}";
         }
     }
 }

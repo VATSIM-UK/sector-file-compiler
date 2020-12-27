@@ -1,14 +1,20 @@
 ﻿using Xunit;
 using Compiler.Error;
+using Compiler.Input;
+using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Error
 {
     public class SyntaxErrorTest
     {
+        private readonly SectorData data;
         private readonly SyntaxError error;
+
         public SyntaxErrorTest()
         {
-            this.error = new SyntaxError("Fooproblem", "Foofile", 5);
+            this.data = SectorDataFactory.Make();
+            this.error = new SyntaxError("Fooproblem", this.data);
         }
 
         [Fact]
@@ -20,7 +26,10 @@ namespace CompilerTest.Error
         [Fact]
         public void TestItHasAMessage()
         {
-            Assert.Equal("Syntax Error: Fooproblem in Foofile at position 5", this.error.GetMessage());
+            Assert.Equal(
+                $"Syntax Error: Fooproblem in {this.data.definition.LineNumber} at position {this.data.definition.Filename}",
+                this.error.GetMessage()
+            );
         }
     }
 }

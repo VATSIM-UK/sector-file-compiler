@@ -19,11 +19,7 @@
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "{0} {1}",
-                this.Identifier,
-                this.Coordinate.ToString()
-            );
+            return $"{this.Identifier} {this.Coordinate.ToString()}";
         }
     }
 }

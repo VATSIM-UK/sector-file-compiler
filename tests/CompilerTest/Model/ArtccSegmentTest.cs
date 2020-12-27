@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -12,9 +13,11 @@ namespace CompilerTest.Model
             this.artcc = new ArtccSegment(
                 "EGTT",
                 ArtccType.HIGH,
-                new Point("ABCDE"),
-                new Point("FGHIJ"),
-                "comment"
+                new Point("abc"),
+                new Point("def"),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -33,19 +36,22 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsStartPoint()
         {
-            Assert.Equal(new Point("ABCDE"), this.artcc.StartPoint);
+            Assert.Equal(new Point("abc"), this.artcc.StartPoint);
         }
 
         [Fact]
         public void TestItSetsEndCoordinate()
         {
-            Assert.Equal(new Point("FGHIJ"), this.artcc.EndPoint);
+            Assert.Equal(new Point("def"), this.artcc.EndPoint);
         }
 
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("EGTT ABCDE ABCDE FGHIJ FGHIJ ;comment\r\n", this.artcc.Compile());
+            Assert.Equal(
+                "EGTT abc abc def def", 
+                this.artcc.GetCompileData(new SectorElementCollection())
+            );
         }
     }
 }

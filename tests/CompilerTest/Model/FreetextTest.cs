@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -13,7 +14,9 @@ namespace CompilerTest.Model
                 "Freetext",
                 "Some text",
                 new Coordinate("abc", "def"),
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -38,7 +41,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("abc:def:Freetext:Some text ;comment\r\n", this.model.Compile());
+            Assert.Equal("abc:def:Freetext:Some text", this.model.GetCompileData(new SectorElementCollection()));
         }
     }
 }

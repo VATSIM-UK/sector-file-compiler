@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -21,7 +22,9 @@ namespace CompilerTest.Model
                 "*",
                 "14000",
                 "ABTUMDES",
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -95,8 +98,8 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "COPX:*:*:ABTUM:EGKK:26L:TCE:TCSW:*:14000:ABTUMDES ;comment\r\n",
-                this.model.Compile()
+                "COPX:*:*:ABTUM:EGKK:26L:TCE:TCSW:*:14000:ABTUMDES",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
 
@@ -115,12 +118,14 @@ namespace CompilerTest.Model
                 "*",
                 "14000",
                 "ABTUMDES",
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
 
             Assert.Equal(
-                "FIR_COPX:*:*:ABTUM:EGKK:26L:TCE:TCSW:*:14000:ABTUMDES ;comment\r\n",
-                model2.Compile()
+                "FIR_COPX:*:*:ABTUM:EGKK:26L:TCE:TCSW:*:14000:ABTUMDES",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

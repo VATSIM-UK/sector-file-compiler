@@ -5,17 +5,16 @@ namespace CompilerTest.Model
 {
     public class CommentTest
     {
-        private readonly Comment comment;
-
-        public CommentTest()
-        {
-            this.comment = new Comment("test comment");
-        }
-
         [Fact]
-        public void TestItCompiles()
+        public void TestItConvertsToStringWhenEmpty()
         {
-            Assert.Equal("; test comment\r\n", this.comment.Compile());
+            Assert.Equal("", new Comment("").ToString());
+        }
+        
+        [Fact]
+        public void TestItConvertsToString()
+        {
+            Assert.Equal("; foo bar", new Comment("foo bar").ToString());
         }
     }
 }

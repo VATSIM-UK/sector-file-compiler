@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -14,7 +15,9 @@ namespace CompilerTest.Model
                 "EGTT",
                 new Coordinate("abc", "def"),
                 "123.456",
-                null
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -46,25 +49,8 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "EGTT 123.456 abc def E ;Testville\r\n",
-                this.airport.Compile()
-            );
-        }
-
-        [Fact]
-        public void TestItCompilesWithComment()
-        {
-            Airport airport = new Airport(
-                "Testville",
-                "EGTT",
-                new Coordinate("abc", "def"),
-                "123.456",
-                "comment"
-            );
-
-            Assert.Equal(
-                "EGTT 123.456 abc def E ;comment - Testville\r\n",
-                airport.Compile()
+                "EGTT 123.456 abc def E",
+                this.airport.GetCompileData(new SectorElementCollection())
             );
         }
     }

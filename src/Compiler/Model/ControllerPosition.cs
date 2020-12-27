@@ -48,19 +48,8 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "{0}:{1}:{2}:{3}:{4}:{5}:{6}:-:-:{7}:{8}{9}",
-                this.Callsign,
-                this.RtfCallsign,
-                this.Frequency,
-                this.Identifier,
-                this.MiddleLetter,
-                this.Prefix,
-                this.Suffix,
-                this.SquawkRangeStart,
-                this.SquawkRangeEnd,
-                this.CompileVisCenters()
-            );
+            return
+                $"{this.Callsign}:{this.RtfCallsign}:{this.Frequency}:{this.Identifier}:{this.MiddleLetter}:{this.Prefix}:{this.Suffix}:-:-:{this.SquawkRangeStart}:{this.SquawkRangeEnd}{this.CompileVisCenters()}";
         }
 
         private string CompileVisCenters()
@@ -68,11 +57,7 @@ namespace Compiler.Model
             string compiledString = "";
             foreach (Coordinate coordinate in this.VisCentres)
             {
-                compiledString += string.Format(
-                    ":{0}:{1}",
-                    coordinate.latitude,
-                    coordinate.longitude
-                );
+                compiledString += $":{coordinate.latitude}:{coordinate.longitude}";
             }
 
             return compiledString;

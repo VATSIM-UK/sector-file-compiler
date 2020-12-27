@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -13,7 +14,9 @@ namespace CompilerTest.Model
                 new Point(new Coordinate("abc", "def")),
                 new Point(new Coordinate("ghi", "jkl")),
                 "red",
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -36,21 +39,23 @@ namespace CompilerTest.Model
         }
 
         [Fact]
-        public void TestItCompilesWithComment()
+        public void TestItCompiles()
         {
-            Assert.Equal("abc def ghi jkl red ;comment\r\n", this.segment.Compile());
+            Assert.Equal("abc def ghi jkl red", this.segment.GetCompileData(new SectorElementCollection()));
         }
 
         [Fact]
-        public void TestItCompilesWithNoComment()
+        public void TestItCompilesWithNoColour()
         {
             GeoSegment segment = new GeoSegment(
                 new Point(new Coordinate("abc", "def")),
                 new Point(new Coordinate("ghi", "jkl")),
-                "red",
-                ""
+                null,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
-            Assert.Equal("abc def ghi jkl red\r\n", segment.Compile());
+            Assert.Equal("abc def ghi jkl", segment.GetCompileData(new SectorElementCollection()));
         }
     }
 }

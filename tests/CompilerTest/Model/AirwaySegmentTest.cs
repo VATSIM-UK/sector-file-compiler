@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -14,7 +15,9 @@ namespace CompilerTest.Model
                 AirwayType.HIGH,
                 new Point("ABCDE"),
                 new Point("FGHIJ"),
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -45,7 +48,10 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("UN864 ABCDE ABCDE FGHIJ FGHIJ ;comment\r\n", this.airway.Compile());
+            Assert.Equal(
+                "UN864 ABCDE ABCDE FGHIJ FGHIJ",
+                this.airway.GetCompileData(new SectorElementCollection())
+            );
         }
     }
 }

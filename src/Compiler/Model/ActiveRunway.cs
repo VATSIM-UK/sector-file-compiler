@@ -25,12 +25,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return String.Format(
-                "ACTIVE_RUNWAY:{0}:{1}:{2}",
-                this.Airfield,
-                this.Identifier,
-                this.Mode
-            );
+            return $"ACTIVE_RUNWAY:{this.Airfield}:{this.Identifier}:{this.Mode}";
         }
     }
 }

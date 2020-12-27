@@ -14,7 +14,7 @@
 
         public override string ToString()
         {
-            return this.CommentString == "" ? "" : " ;" + this.CommentString;
+            return this.CommentString == "" ? "" : $"; {this.CommentString}";
         }
     }
 }

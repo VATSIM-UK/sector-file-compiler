@@ -46,13 +46,9 @@ namespace Compiler.Model
          */
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "{0} {1} {2} {3}",
-                this.Name.PadRight(27, ' '),
-                this.FirstPoint.ToString(),
-                this.SecondPoint.ToString(),
-                this.Colour ?? ""
-            ).Trim();
+            return
+                $"{this.Name.PadRight(27, ' ')} {this.FirstPoint.ToString()} {this.SecondPoint.ToString()} {this.Colour ?? ""}"
+                    .Trim();
         }
     }
 }

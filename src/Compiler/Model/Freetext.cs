@@ -22,13 +22,7 @@
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "{0}:{1}:{2}:{3}",
-                this.Coordinate.latitude,
-                this.Coordinate.longitude,
-                this.Title,
-                this.Text
-            );
+            return $"{this.Coordinate.latitude}:{this.Coordinate.longitude}:{this.Title}:{this.Text}";
         }
     }
 }

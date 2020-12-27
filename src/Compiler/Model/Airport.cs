@@ -45,12 +45,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "{0} {1} {2} E",
-                this.Icao,
-                this.Frequency,
-                this.LatLong.ToString()
-            );
+            return $"{this.Icao} {this.Frequency} {this.LatLong.ToString()} E";
         }
     }
 }

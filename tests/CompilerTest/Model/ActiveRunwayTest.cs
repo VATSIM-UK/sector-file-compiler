@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -13,7 +14,9 @@ namespace CompilerTest.Model
                 "33",
                 "EGBB",
                 1,
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -39,8 +42,8 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "ACTIVE_RUNWAY:EGBB:33:1 ;comment\r\n",
-                this.activeRunway.Compile()
+                "ACTIVE_RUNWAY:EGBB:33:1",
+                this.activeRunway.GetCompileData(new SectorElementCollection())
             );
         }
     }

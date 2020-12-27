@@ -1,6 +1,8 @@
 ﻿using Xunit;
 using Compiler.Model;
 using System.Collections.Generic;
+using System.Linq;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -10,8 +12,8 @@ namespace CompilerTest.Model
         private readonly CircleSectorline model2;
         private readonly List<SectorlineDisplayRule> displayRules = new List<SectorlineDisplayRule>
         {
-            new SectorlineDisplayRule("TEST1", "TEST1", "TEST2", "comment1"),
-            new SectorlineDisplayRule("TEST2", "TEST2", "TEST1", "comment2")
+            SectorLineDisplayRuleFactory.Make(),
+            SectorLineDisplayRuleFactory.Make(),
         };
 
         public CircleSectorlineTest()
@@ -21,7 +23,9 @@ namespace CompilerTest.Model
                 "EGGD",
                 5.5,
                 this.displayRules,
-                "commentname"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
 
             this.model2 = new CircleSectorline(
@@ -29,7 +33,9 @@ namespace CompilerTest.Model
                 new Coordinate("abc", "def"),
                 5.5,
                 this.displayRules,
-                "commentname"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -82,12 +88,21 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItReturnsCompilableElements()
+        {
+            IEnumerable<ICompilableElement> expected = new List<ICompilableElement>()
+            {
+                this.model1,
+            }.Concat(this.displayRules);
+            Assert.Equal(expected, this.model1.GetCompilableElements());
+        }
+
+        [Fact]
         public void TestPointVersionCompiles()
         {
             Assert.Equal(
-                "CIRCLE_SECTORLINE:Test Sectorline:EGGD:5.5 ;commentname\r\nDISPLAY:TEST1:TEST1:TEST2 ;comment1\r\n" +
-                    "DISPLAY:TEST2:TEST2:TEST1 ;comment2\r\n\r\n",
-                this.model1.Compile()
+                "CIRCLE_SECTORLINE:Test Sectorline:EGGD:5.5",
+                this.model1.GetCompileData(new SectorElementCollection())
             );
         }
 
@@ -95,9 +110,8 @@ namespace CompilerTest.Model
         public void TestCoordinateVersionCompiles()
         {
             Assert.Equal(
-                "CIRCLE_SECTORLINE:Test Sectorline:abc:def:5.5 ;commentname\r\nDISPLAY:TEST1:TEST1:TEST2 ;comment1\r\n" +
-                    "DISPLAY:TEST2:TEST2:TEST1 ;comment2\r\n\r\n",
-                this.model2.Compile()
+                "CIRCLE_SECTORLINE:Test Sectorline:abc:def:5.5",
+                this.model2.GetCompileData(new SectorElementCollection())
             );
         }
     }
