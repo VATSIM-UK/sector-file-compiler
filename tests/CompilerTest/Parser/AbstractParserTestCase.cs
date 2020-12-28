@@ -10,7 +10,8 @@ namespace CompilerTest.Parser
 {
     public abstract class AbstractParserTestCase
     {
-        protected const string INPUT_FILE_NAME = "TEST/test.txt";
+        protected const string INPUT_FILE_NAME = "TESTFOLDER/TEST.txt";
+        
         protected readonly SectorElementCollection sectorElementCollection;
         protected readonly Moq.Mock<IEventLogger> logger;
         protected abstract InputDataType GetInputDataType();
@@ -34,7 +35,7 @@ namespace CompilerTest.Parser
             new DataParserFactory(this.sectorElementCollection, this.logger.Object).GetParserForFile(file).ParseData(file);
         }
 
-        protected void AssertExpectedComment(string expected, Comment actual)
+        private static void AssertExpectedComment(string expected, Comment actual)
         {
             Assert.Equal(expected, actual.CommentString);
         }
@@ -49,17 +50,17 @@ namespace CompilerTest.Parser
             List<string> docblockLines = null
         )
         {
-            this.AssertExpectedComment(commentString, element.InlineComment);
-            this.AssertExpectedDefinition(element.GetDefinition(), definitionLineNumber);
-            this.AssertExpectedDocblockLines(element.Docblock, docblockLines);
+            AssertExpectedComment(commentString, element.InlineComment);
+            AssertExpectedDefinition(element.GetDefinition(), definitionLineNumber);
+            AssertExpectedDocblockLines(element.Docblock, docblockLines);
         }
         
-        protected void AssertExpectedDefinition(Definition definition, int lineNumber)
+        private static void AssertExpectedDefinition(Definition definition, int lineNumber)
         {
             Assert.Equal(new Definition(INPUT_FILE_NAME, lineNumber), definition);
         }
 
-        protected void AssertExpectedDocblockLines(Docblock docblock, List<string> docblockLines)
+        private static void AssertExpectedDocblockLines(Docblock docblock, List<string> docblockLines)
         {
             Docblock expectedDocblock = new Docblock();
             docblockLines?.ForEach(line => docblock.AddLine(new Comment(line)));
