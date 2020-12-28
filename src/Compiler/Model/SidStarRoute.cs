@@ -39,8 +39,8 @@ namespace Compiler.Model
             return string.Format(
                 "{0} {1}{2}{3}",
                 this.Identifier.PadRight(26, ' '),
-                this.InitialSegment.Start.ToString(),
-                this.InitialSegment.End.ToString(),
+                this.InitialSegment.Start,
+                this.InitialSegment.End,
                 this.InitialSegment.Colour == null ? "" : " " + this.InitialSegment.Colour
             );
         }

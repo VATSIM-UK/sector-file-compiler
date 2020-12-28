@@ -33,12 +33,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return String.Format(
-                "DISPLAY:{0}:{1}:{2}",
-                this.ControlledSector,
-                this.CompareSectorFirst,
-                this.CompareSectorSecond
-            );
+            return $"DISPLAY:{this.ControlledSector}:{this.CompareSectorFirst}:{this.CompareSectorSecond}";
         }
 
         public override int GetHashCode()

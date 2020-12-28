@@ -1,31 +1,28 @@
 ﻿using Xunit;
 using Compiler.Model;
 using System.Collections.Generic;
+using System.Linq;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
     public class SectorlineTest
     {
         private readonly Sectorline model;
-        private readonly List<SectorlineDisplayRule> displayRules = new List<SectorlineDisplayRule>
-        {
-            new SectorlineDisplayRule("TEST1", "TEST1", "TEST2", "comment1"),
-            new SectorlineDisplayRule("TEST2", "TEST2", "TEST1", "comment2")
-        };
-
-        private readonly List<SectorlineCoordinate> coordinates = new List<SectorlineCoordinate>
-        {
-            new SectorlineCoordinate(new Coordinate("abc", "def"), "comment3"),
-            new SectorlineCoordinate(new Coordinate("ghi", "jkl"), "comment4"),
-        };
+        private readonly List<SectorlineDisplayRule> displayRules;
+        private readonly List<SectorlineCoordinate> coordinates;
 
         public SectorlineTest()
         {
+            this.displayRules = SectorLineDisplayRuleFactory.MakeList();
+            this.coordinates = SectorlineCoordinateFactory.MakeList();
             this.model = new Sectorline(
                 "Test Sectorline",
                 this.displayRules,
                 this.coordinates,
-                "commentname"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -48,12 +45,24 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItReturnsCompilableElements()
+        {
+            IEnumerable<ICompilableElement> expected = new List<ICompilableElement>
+            {
+                this.model
+            }
+                .Concat(this.displayRules)
+                .Concat(this.coordinates);
+            
+            Assert.Equal(expected, this.model.GetCompilableElements());
+        }
+
+        [Fact]
         public void TestItCompiles()
         {
             Assert.Equal(
-                "SECTORLINE:Test Sectorline ;commentname\r\nDISPLAY:TEST1:TEST1:TEST2 ;comment1\r\n" +
-                    "DISPLAY:TEST2:TEST2:TEST1 ;comment2\r\nCOORD:abc:def ;comment3\r\nCOORD:ghi:jkl ;comment4\r\n\r\n",
-                this.model.Compile()
+                "SECTORLINE:Test Sectorline",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

@@ -22,11 +22,7 @@
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "COORD:{0}:{1}",
-                this.Coordinate.latitude,
-                this.Coordinate.longitude
-            );
+            return $"COORD:{this.Coordinate.latitude}:{this.Coordinate.longitude}";
         }
 
         public override int GetHashCode()

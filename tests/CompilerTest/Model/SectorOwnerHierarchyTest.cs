@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using Compiler.Model;
 using System.Collections.Generic;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -18,7 +19,9 @@ namespace CompilerTest.Model
         {
             this.model = new SectorOwnerHierarchy(
                 this.owners,
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -32,8 +35,8 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "OWNER:ONE:TWO:THREE ;comment\r\n",
-                this.model.Compile()
+                "OWNER:ONE:TWO:THREE",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

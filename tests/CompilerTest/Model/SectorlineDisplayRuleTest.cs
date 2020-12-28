@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -13,7 +14,9 @@ namespace CompilerTest.Model
                 "Deancross",
                 "Deancross",
                 "East",
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -39,8 +42,8 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "DISPLAY:Deancross:Deancross:East ;comment\r\n",
-                this.model.Compile()
+                "DISPLAY:Deancross:Deancross:East",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

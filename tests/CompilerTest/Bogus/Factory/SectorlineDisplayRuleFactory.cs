@@ -28,7 +28,7 @@ namespace CompilerTest.Bogus.Factory
 
         }
 
-        public static List<SectorlineDisplayRule> MakeList(int count)
+        public static List<SectorlineDisplayRule> MakeList(int count = 1)
         {
             return GetGenerator().Generate(count).ToList();
         }

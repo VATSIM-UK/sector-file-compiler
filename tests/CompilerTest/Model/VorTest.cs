@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -9,7 +10,14 @@ namespace CompilerTest.Model
 
         public VorTest()
         {
-            this.model = new Vor("BHD", "123.456", new Coordinate("abc", "def"), "comment");
+            this.model = new Vor(
+                "BHD",
+                "123.456",
+                new Coordinate("abc", "def"),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
         }
 
         [Fact]
@@ -33,7 +41,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("BHD 123.456 abc def ;comment\r\n", this.model.Compile());
+            Assert.Equal("BHD 123.456 abc def", this.model.GetCompileData(new SectorElementCollection()));
         }
     }
 }

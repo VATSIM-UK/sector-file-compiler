@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -13,7 +14,9 @@ namespace CompilerTest.Model
                 "MWAL",
                 "EGBB",
                 "*",
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -39,8 +42,8 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "GUEST:MWAL:EGBB:* ;comment\r\n",
-                this.model.Compile()
+                "GUEST:MWAL:EGBB:*",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

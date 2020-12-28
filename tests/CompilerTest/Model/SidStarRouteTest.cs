@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -10,16 +11,24 @@ namespace CompilerTest.Model
 
         private List<RouteSegment> segments;
 
+        private RouteSegment initialSegment;
+
         public SidStarRouteTest()
         {
+            this.initialSegment = RouteSegmentFactory.MakeDoublePoint();
+            this.segments.Add(RouteSegmentFactory.MakeDoublePoint());
+            this.segments.Add(RouteSegmentFactory.MakeDoublePoint());
+            this.segments.Add(RouteSegmentFactory.MakeDoublePoint());
             this.segments = new List<RouteSegment>();
             this.sidStar = new SidStarRoute(
                 SidStarType.SID,
                 "EGKK - ADMAG2X",
-                this.segments
+                this.initialSegment,
+                this.segments,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
-            this.segments.Add(new RouteSegment(new Point("LAM"), new Point("BIG"), null));
-            this.segments.Add(new RouteSegment(new Point("BIG"), new Point("OCK"), null));
         }
 
         [Fact]
@@ -37,12 +46,11 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompilesWithPadding()
         {
-            string expected = "EGKK - ADMAG2X             LAM LAM BIG BIG\r\n";
-            expected += "                           BIG BIG OCK OCK\r\n";
+            string expected = "EGKK - ADMAG2X             LAM LAM BIG BIG";
 
             Assert.Equal(
                 expected,
-                this.sidStar.Compile()
+                this.sidStar.GetCompileData(new SectorElementCollection())
             );
         }
 
@@ -52,15 +60,18 @@ namespace CompilerTest.Model
             SidStarRoute longSidStar = new SidStarRoute(
                 SidStarType.SID,
                 "This is a long name which needs extra padding",
-                this.segments
+                this.initialSegment,
+                this.segments,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
 
-            string expected = "This is a long name which needs extra padding LAM LAM BIG BIG\r\n";
-            expected += "                                              BIG BIG OCK OCK\r\n";
+            string expected = "This is a long name which needs extra padding LAM LAM BIG BIG";
 
             Assert.Equal(
                 expected,
-                longSidStar.Compile()
+                longSidStar.GetCompileData(new SectorElementCollection())
             );
         }
     }
