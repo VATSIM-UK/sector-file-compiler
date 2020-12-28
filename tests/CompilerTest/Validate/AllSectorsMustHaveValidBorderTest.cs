@@ -38,7 +38,7 @@ namespace CompilerTest.Validate
                     5000,
                     66000,
                     SectorOwnerHierarchyFactory.Make(),
-                    SectorAlternateOwnerHierarchyFactor.MakeList(2),
+                    SectorAlternateOwnerHierarchyFactory.MakeList(2),
                     SectorActiveFactory.MakeList(),
                     SectorGuestFactory.MakeList(),
                     new List<SectorBorder>() {
@@ -67,7 +67,7 @@ namespace CompilerTest.Validate
                     5000,
                     66000,
                     SectorOwnerHierarchyFactory.Make(),
-                    SectorAlternateOwnerHierarchyFactor.MakeList(2),
+                    SectorAlternateOwnerHierarchyFactory.MakeList(2),
                     SectorActiveFactory.MakeList(),
                     SectorGuestFactory.MakeList(),
                     new List<SectorBorder>() {
@@ -106,7 +106,7 @@ namespace CompilerTest.Validate
                     5000,
                     66000,
                     SectorOwnerHierarchyFactory.Make(),
-                    SectorAlternateOwnerHierarchyFactor.MakeList(2),
+                    SectorAlternateOwnerHierarchyFactory.MakeList(2),
                     SectorActiveFactory.MakeList(),
                     SectorGuestFactory.MakeList(),
                     new List<SectorBorder>() {
@@ -135,7 +135,7 @@ namespace CompilerTest.Validate
                     5000,
                     66000,
                     SectorOwnerHierarchyFactory.Make(),
-                    SectorAlternateOwnerHierarchyFactor.MakeList(2),
+                    SectorAlternateOwnerHierarchyFactory.MakeList(2),
                     SectorActiveFactory.MakeList(),
                     SectorGuestFactory.MakeList(),
                     new List<SectorBorder>() {

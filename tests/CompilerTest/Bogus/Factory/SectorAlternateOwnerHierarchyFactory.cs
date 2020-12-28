@@ -5,7 +5,7 @@ using Compiler.Model;
 
 namespace CompilerTest.Bogus.Factory
 {
-    static class SectorAlternateOwnerHierarchyFactor
+    static class SectorAlternateOwnerHierarchyFactory
     {
         public static SectorAlternateOwnerHierarchy Make()
         {

@@ -1,4 +1,6 @@
-﻿using Bogus;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Bogus;
 using Compiler.Model;
 
 namespace CompilerTest.Bogus.Factory
@@ -28,6 +30,16 @@ namespace CompilerTest.Bogus.Factory
                         CommentFactory.Make()
                     )
                 );
+        }
+
+        public static List<string> RandomIdentifiers(int count = 1)
+        {
+            return new Randomizer().ArrayElements(identifiers, count).ToList();
+        }
+
+        public static string RandomIdentifier()
+        {
+            return RandomIdentifiers().ElementAt(0);
         }
     }
 }

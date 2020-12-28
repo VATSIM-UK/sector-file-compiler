@@ -30,14 +30,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "{0}:{1}:{2}:{3}:{4}",
-                this.Type,
-                this.Airport,
-                this.Runway,
-                this.Identifier,
-                string.Join(' ', this.Route)
-            );
+            return $"{this.Type}:{this.Airport}:{this.Runway}:{this.Identifier}:{string.Join(' ', this.Route)}";
         }
     }
 }

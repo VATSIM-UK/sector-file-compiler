@@ -19,11 +19,7 @@
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "#define {0} {1}",
-                this.Name,
-                this.Value
-            );
+            return $"#define {this.Name} {this.Value}";
         }
     }
 }

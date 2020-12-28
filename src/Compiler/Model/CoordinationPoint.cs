@@ -50,20 +50,8 @@
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "{0}:{1}:{2}:{3}:{4}:{5}:{6}:{7}:{8}:{9}:{10}",
-                this.IsFirCopx ? "FIR_COPX" : "COPX",
-                this.DepartureAirportOrFixBefore,
-                this.DepartureRunway,
-                this.CoordinationFix,
-                this.ArrivalAiportOrFixAfter,
-                this.ArrivalRunway,
-                this.FromSector,
-                this.ToSector,
-                this.ClimbLevel,
-                this.DescendLevel,
-                this.Name
-            );
+            return
+                $"{(this.IsFirCopx ? "FIR_COPX" : "COPX")}:{this.DepartureAirportOrFixBefore}:{this.DepartureRunway}:{this.CoordinationFix}:{this.ArrivalAiportOrFixAfter}:{this.ArrivalRunway}:{this.FromSector}:{this.ToSector}:{this.ClimbLevel}:{this.DescendLevel}:{this.Name}";
         }
     }
 }

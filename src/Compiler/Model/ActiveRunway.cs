@@ -21,6 +21,10 @@ namespace Compiler.Model
 
         public string Identifier { get; }
         public string Airfield { get; }
+        
+        /*
+         * 0 for active for arrival, 1 for active for departure
+         */
         public int Mode { get; }
 
         public override string GetCompileData(SectorElementCollection elements)
