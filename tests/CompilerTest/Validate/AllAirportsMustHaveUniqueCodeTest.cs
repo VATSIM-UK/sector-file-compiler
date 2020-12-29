@@ -13,7 +13,6 @@ namespace CompilerTest.Validate
 
         public AllAirportsMustHaveUniqueCodeTest()
         {
-            this.elements = new SectorElementCollection();
             this.airfield1 = AirportFactory.Make("EGKK");
             this.airfield2 = AirportFactory.Make("EGLL");
             this.airfield3 = AirportFactory.Make("EGKK");
@@ -22,8 +21,8 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItPassesOnNoDuplicates()
         {
-            this.elements.Add(airfield1);
-            this.elements.Add(airfield2);
+            this.sectorElements.Add(airfield1);
+            this.sectorElements.Add(airfield2);
 
             this.AssertNoValidationError();
         }
@@ -31,9 +30,9 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsOnDuplicates()
         {
-            this.elements.Add(airfield1);
-            this.elements.Add(airfield2);
-            this.elements.Add(airfield3);
+            this.sectorElements.Add(airfield1);
+            this.sectorElements.Add(airfield2);
+            this.sectorElements.Add(airfield3);
 
             this.AssertValidationErrors();
         }

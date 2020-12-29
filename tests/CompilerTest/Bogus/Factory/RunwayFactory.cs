@@ -21,16 +21,16 @@ namespace CompilerTest.Bogus.Factory
             return new Randomizer().ArrayElement(designators);
         }
 
-        public static Runway Make(string airfieldIcao = null)
+        public static Runway Make(string airfieldIcao = null, string designator1 = null, string designator2 = null)
         {
             return new Faker<Runway>()
                 .CustomInstantiator(
                     f => new Runway(
                         airfieldIcao ?? AirportFactory.GetRandomDesignator(),
-                        f.Random.ArrayElement(designators),
+                        designator1 ?? f.Random.ArrayElement(designators),
                         000,
                         CoordinateFactory.Make(),
-                        f.Random.ArrayElement(designators),
+                        designator2 ?? f.Random.ArrayElement(designators),
                         000,
                         CoordinateFactory.Make(),
                         DefinitionFactory.Make(),

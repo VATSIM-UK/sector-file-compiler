@@ -17,9 +17,9 @@ namespace CompilerTest.Bogus.Factory
             return new Faker<SectorlineDisplayRule>()
                 .CustomInstantiator(
                     f => new SectorlineDisplayRule(
-                        f.Random.String2(4),
-                        f.Random.String2(4),
-                        f.Random.String2(4),
+                        controlledSector ?? f.Random.String2(4),
+                        firstCompare ?? f.Random.String2(4),
+                        secondCompare ?? f.Random.String2(4),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()

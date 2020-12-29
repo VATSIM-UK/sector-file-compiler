@@ -55,7 +55,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsArrivalAirportOrFixAfter()
         {
-            Assert.Equal("EGKK", this.model.ArrivalAiportOrFixAfter);
+            Assert.Equal("EGKK", this.model.ArrivalAirportOrFixAfter);
         }
 
         [Fact]

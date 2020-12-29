@@ -9,25 +9,14 @@ using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllCircleSectorlinesMustHaveValidCentreTest
+    public class AllCircleSectorlinesMustHaveValidCentreTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection sectorElements;
-        private readonly Mock<IEventLogger> loggerMock;
-        private readonly AllCircleSectorlinesMustHaveValidCentre rule;
-        private readonly CompilerArguments args;
-
         public AllCircleSectorlinesMustHaveValidCentreTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-
             this.sectorElements.Add(FixFactory.Make("testfix"));
             this.sectorElements.Add(VorFactory.Make("testvor"));
             this.sectorElements.Add(NdbFactory.Make("testndb"));
             this.sectorElements.Add(AirportFactory.Make("testairport"));
-
-            this.rule = new AllCircleSectorlinesMustHaveValidCentre();
-            this.args = new CompilerArguments();
         }
 
         [Theory]
@@ -53,8 +42,7 @@ namespace CompilerTest.Validate
                 )
             );
 
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.AssertNoValidationError();
         }
 
         [Theory]
@@ -80,8 +68,12 @@ namespace CompilerTest.Validate
                 )
             );
 
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            this.AssertValidationErrors();
+        }
+
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllCircleSectorlinesMustHaveValidCentre();
         }
     }
 }

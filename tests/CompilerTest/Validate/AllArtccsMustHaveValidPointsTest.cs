@@ -19,7 +19,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
-        private ArtccSegment GetArtcc(ArtccType type, string startPointIdentifier, string endPointIdentifier)
+        private static ArtccSegment GetArtcc(ArtccType type, string startPointIdentifier, string endPointIdentifier)
         {
             return new(
                 "test",
@@ -35,63 +35,63 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItPassesOnValidPointRegular()
         {
-            this.sectorElements.Add(this.GetArtcc(ArtccType.REGULAR, "testfix", "testvor"));
+            this.sectorElements.Add(GetArtcc(ArtccType.REGULAR, "testfix", "testvor"));
             this.AssertNoValidationError();
         }
 
         [Fact]
         public void TestItFailsOnInvalidStartPointRegular()
         {
-            this.sectorElements.Add(this.GetArtcc(ArtccType.REGULAR, "nottestfix", "testvor"));
+            this.sectorElements.Add(GetArtcc(ArtccType.REGULAR, "nottestfix", "testvor"));
             this.AssertValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidEndPointRegular()
         {
-            this.sectorElements.Add(this.GetArtcc(ArtccType.REGULAR, "testfix", "nottestvor"));
+            this.sectorElements.Add(GetArtcc(ArtccType.REGULAR, "testfix", "nottestvor"));
             this.AssertValidationErrors();
         }
 
         [Fact]
         public void TestItPassesOnValidPointLow()
         {
-            this.sectorElements.Add(this.GetArtcc(ArtccType.LOW, "testfix", "testvor"));
+            this.sectorElements.Add(GetArtcc(ArtccType.LOW, "testfix", "testvor"));
             this.AssertNoValidationError();
         }
 
         [Fact]
         public void TestItFailsOnInvalidStartPointLow()
         {
-            this.sectorElements.Add(this.GetArtcc(ArtccType.LOW, "nottestfix", "testvor"));
+            this.sectorElements.Add(GetArtcc(ArtccType.LOW, "nottestfix", "testvor"));
             this.AssertValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidEndPointLow()
         {
-            this.sectorElements.Add(this.GetArtcc(ArtccType.LOW, "testfix", "nottestvor"));
+            this.sectorElements.Add(GetArtcc(ArtccType.LOW, "testfix", "nottestvor"));
             this.AssertValidationErrors();
         }
 
         [Fact]
         public void TestItPassesOnValidPointHigh()
         {
-            this.sectorElements.Add(this.GetArtcc(ArtccType.HIGH, "testfix", "testvor"));
+            this.sectorElements.Add(GetArtcc(ArtccType.HIGH, "testfix", "testvor"));
             this.AssertNoValidationError();
         }
 
         [Fact]
         public void TestItFailsOnInvalidStartPointHigh()
         {
-            this.sectorElements.Add(this.GetArtcc(ArtccType.HIGH, "nottestfix", "testvor"));
+            this.sectorElements.Add(GetArtcc(ArtccType.HIGH, "nottestfix", "testvor"));
             this.AssertValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidEndPointHigh()
         {
-            this.sectorElements.Add(this.GetArtcc(ArtccType.HIGH, "testfix", "nottestvor"));
+            this.sectorElements.Add(GetArtcc(ArtccType.HIGH, "testfix", "nottestvor"));
             this.AssertValidationErrors();
         }
 

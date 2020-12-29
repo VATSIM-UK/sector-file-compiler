@@ -11,7 +11,7 @@
             string departureAirportOrFixBefore,
             string departureRunway,
             string coordinationFix,
-            string arrivalAiportOrFixAfter,
+            string arrivalAirportOrFixAfter,
             string arrivalRunway,
             string fromSector,
             string toSector,
@@ -27,7 +27,7 @@
             DepartureAirportOrFixBefore = departureAirportOrFixBefore;
             DepartureRunway = departureRunway;
             CoordinationFix = coordinationFix;
-            ArrivalAiportOrFixAfter = arrivalAiportOrFixAfter;
+            ArrivalAirportOrFixAfter = arrivalAirportOrFixAfter;
             ArrivalRunway = arrivalRunway;
             FromSector = fromSector;
             ToSector = toSector;
@@ -40,7 +40,7 @@
         public string DepartureAirportOrFixBefore { get; }
         public string DepartureRunway { get; }
         public string CoordinationFix { get; }
-        public string ArrivalAiportOrFixAfter { get; }
+        public string ArrivalAirportOrFixAfter { get; }
         public string ArrivalRunway { get; }
         public string FromSector { get; }
         public string ToSector { get; }
@@ -51,7 +51,7 @@
         public override string GetCompileData(SectorElementCollection elements)
         {
             return
-                $"{(this.IsFirCopx ? "FIR_COPX" : "COPX")}:{this.DepartureAirportOrFixBefore}:{this.DepartureRunway}:{this.CoordinationFix}:{this.ArrivalAiportOrFixAfter}:{this.ArrivalRunway}:{this.FromSector}:{this.ToSector}:{this.ClimbLevel}:{this.DescendLevel}:{this.Name}";
+                $"{(this.IsFirCopx ? "FIR_COPX" : "COPX")}:{this.DepartureAirportOrFixBefore}:{this.DepartureRunway}:{this.CoordinationFix}:{this.ArrivalAirportOrFixAfter}:{this.ArrivalRunway}:{this.FromSector}:{this.ToSector}:{this.ClimbLevel}:{this.DescendLevel}:{this.Name}";
         }
     }
 }

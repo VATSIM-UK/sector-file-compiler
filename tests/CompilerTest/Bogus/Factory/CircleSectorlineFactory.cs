@@ -9,7 +9,7 @@ namespace CompilerTest.Bogus.Factory
     {
         public static CircleSectorline Make(string name = null, string centre = null, List<SectorlineDisplayRule> displayRules = null)
         {
-            return GetGenerator(name).Generate();
+            return GetGenerator(name, centre, displayRules).Generate();
         }
 
         private static Faker<CircleSectorline> GetGenerator(string name = null, string centre = null, List<SectorlineDisplayRule> displayRules = null)
