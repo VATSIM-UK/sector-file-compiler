@@ -36,7 +36,7 @@ namespace CompilerTest.Parser
             Point point = PointParser.Parse("ABCDE", "ABCDE");
 
             Assert.Equal(Point.TYPE_IDENTIFIER, point.Type());
-            Assert.Equal("ABCDE ABCDE", point.Compile());
+            Assert.Equal("ABCDE ABCDE", point.ToString());
         }
     }
 }

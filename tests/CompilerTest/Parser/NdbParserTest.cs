@@ -5,27 +5,14 @@ using Compiler.Parser;
 using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
+using Compiler.Input;
 using Compiler.Output;
 using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
-    public class NdbParserTest
+    public class NdbParserTest: AbstractParserTestCase
     {
-        private readonly NdbParser parser;
-
-        private readonly SectorElementCollection collection;
-
-        private readonly Mock<IEventLogger> log;
-
-        public NdbParserTest()
-        {
-            this.log = new Mock<IEventLogger>();
-            this.collection = new SectorElementCollection();
-            this.parser = (NdbParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSectionKeys.SCT_NDB);
-        }
-
         public static IEnumerable<object[]> BadData => new List<object[]>
         {
             new object[] { new List<string>{
@@ -52,43 +39,27 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.parser.ParseData(
-                new MockSectorDataFile(
-                    "test.txt",
-                    lines
-                )
-            );
+            this.RunParserOnLines(lines);
 
-            Assert.Empty(this.collection.Ndbs);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItHandlesMetadata()
-        {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "" })
-            );
-
-            this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSectionKeys.SCT_NDB][0]);
+            Assert.Empty(this.sectorElementCollection.Ndbs);
+            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsNdbData()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "CDF 388.500 N050.57.00.000 W001.21.24.490;comment" })
-            );
-            this.parser.ParseData(data);
+            this.RunParserOnLines(new List<string>(new[] { "CDF 388.500 N050.57.00.000 W001.21.24.490;comment" }));
 
-            Ndb result = this.collection.Ndbs[0];
+            Ndb result = this.sectorElementCollection.Ndbs[0];
             Assert.Equal("CDF", result.Identifier);
             Assert.Equal("388.500", result.Frequency);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.Coordinate);
-            Assert.Equal("comment", result.Comment);
+            this.AssertExpectedMetadata(result);
+        }
+
+        protected override InputDataType GetInputDataType()
+        {
+            return InputDataType.SCT_NDBS;
         }
     }
 }

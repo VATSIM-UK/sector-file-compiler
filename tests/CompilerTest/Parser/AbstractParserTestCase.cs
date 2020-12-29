@@ -45,8 +45,8 @@ namespace CompilerTest.Parser
          */
         protected void AssertExpectedMetadata(
             AbstractCompilableElement element,
-            int definitionLineNumber,
-            string commentString = "",
+            int definitionLineNumber = 1,
+            string commentString = "comment",
             List<string> docblockLines = null
         )
         {

@@ -5,27 +5,15 @@ using Compiler.Parser;
 using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
+using Compiler.Input;
 using Compiler.Output;
+using CompilerTest.Bogus.Factory;
 using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
-    public class SidStarRouteParserTest
+    public class SidStarRouteParserTest: AbstractParserTestCase
     {
-        private readonly SidStarRouteParser parser;
-        
-        private readonly SectorElementCollection collection;
-
-        private readonly Mock<IEventLogger> log;
-
-        public SidStarRouteParserTest()
-        {
-            this.log = new Mock<IEventLogger>();
-            this.collection = new SectorElementCollection();
-            this.parser = (SidStarRouteParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSectionKeys.SCT_SID);
-        }
-
         public static IEnumerable<object[]> BadData => new List<object[]>
         {
             new object[] { new List<string>{
@@ -51,146 +39,207 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.parser.ParseData(
-                new MockSectorDataFile(
-                    "test.txt",
-                    lines
-                )
-            );
+            this.RunParserOnLines(lines);
 
-            Assert.Empty(this.collection.StarRoutes);
-            Assert.Empty(this.collection.SidRoutes);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItHandlesMetadata()
-        {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "" })
-            );
-
-            this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSectionKeys.SCT_SID][0]);
+            Assert.Empty(this.sectorElementCollection.StarRoutes);
+            Assert.Empty(this.sectorElementCollection.SidRoutes);
+            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsSingleRowElements()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "Test                       abc abc def def" })
-            );
-
-            this.parser.ParseData(data);
-
-            List<RouteSegment> expectedSegments = new List<RouteSegment>
-            {
-                new RouteSegment(new Point("abc"), new Point("def"), null, null)
-            };
-
-            SidStarRoute result = this.collection.SidRoutes[0];
+            this.RunParserOnLines(new List<string>(new[] { "Test                       abc abc def def ;comment" }));
+            
+            SidStarRoute result = this.sectorElementCollection.SidRoutes[0];
             Assert.Equal("Test", result.Identifier);
-            Assert.Equal(expectedSegments, result.Segments);
+            Assert.Equal(
+                new(
+                    "Test",
+                    new Point("abc"),
+                    new Point("def"),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make()
+                ),
+                result.InitialSegment
+            );
+            Assert.Empty(result.Segments);
+            
+            this.AssertExpectedMetadata(result);
+            this.AssertExpectedMetadata(result.InitialSegment);
         }
 
         [Fact]
         public void TestItAddsMultiRowElements()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(
-                    new string[] {
-                        "Test                       abc abc def def",
-                        "                           def def ghi ghi ;comment"
-                    }
-                )
-            );
+            this.RunParserOnLines(new List<string>(
+                new string[] {
+                    "Test                       abc abc def def ;comment",
+                    "                           def def ghi ghi ;comment"
+                }
+            ));
 
-            this.parser.ParseData(data);
 
-            List<RouteSegment> expectedSegments = new List<RouteSegment>
+            List<RouteSegment> expectedAdditionalSegments = new List<RouteSegment>
             {
-                new RouteSegment(new Point("abc"), new Point("def"), null, null),
-                new RouteSegment(new Point("def"), new Point("ghi"), null, "comment")
+                new(
+                    "Test",
+                    new Point("def"),
+                    new Point("ghi"),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make()
+                ),
             };
 
-            SidStarRoute result = this.collection.SidRoutes[0];
+            SidStarRoute result = this.sectorElementCollection.SidRoutes[0];
             Assert.Equal("Test", result.Identifier);
-            Assert.Equal(expectedSegments, result.Segments);
+            Assert.Equal(
+                new(
+                    "Test",
+                    new Point("abc"),
+                    new Point("def"),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make()
+                ),
+                result.InitialSegment
+            );
+            Assert.Equal(expectedAdditionalSegments, result.Segments);
+            
+            this.AssertExpectedMetadata(result);
+            this.AssertExpectedMetadata(result.InitialSegment);
+            this.AssertExpectedMetadata(result.Segments[0], 2);
         }
 
         [Fact]
         public void TestItAddsMultipleElements()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
+            this.RunParserOnLines(new List<string>(
                 new List<string>(
                     new string[] {
-                        "Test                       abc abc def def",
+                        "Test                       abc abc def def;comment",
                         "                           def def ghi ghi ;comment",
                         "Test 2                     jkl jkl mno mno;comment"
                     }
                 )
-            );
+            ));
 
-            this.parser.ParseData(data);
-
-            List<RouteSegment> expectedSegments1 = new List<RouteSegment>
+            List<RouteSegment> expectedAdditionalSegments1 = new List<RouteSegment>
             {
-                new RouteSegment(new Point("abc"), new Point("def"), null, null),
-                new RouteSegment(new Point("def"), new Point("ghi"), null, "comment")
+                new(
+                    "Test",
+                    new Point("def"),
+                    new Point("ghi"),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make()
+                )
             };
 
-            List<RouteSegment> expectedSegments2 = new List<RouteSegment>
-            {
-                new RouteSegment(new Point("jkl"), new Point("mno"), null, "comment"),
-            };
-
-            SidStarRoute result = this.collection.SidRoutes[0];
+            SidStarRoute result = this.sectorElementCollection.SidRoutes[0];
             Assert.Equal("Test", result.Identifier);
-            Assert.Equal(expectedSegments1, result.Segments);
+            Assert.Equal(
+                new(
+                    "Test",
+                    new Point("abc"),
+                    new Point("def"),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make()
+                ),
+                result.InitialSegment
+            );
+            Assert.Equal(expectedAdditionalSegments1, result.Segments);
+            this.AssertExpectedMetadata(result);
+            this.AssertExpectedMetadata(result.InitialSegment);
+            this.AssertExpectedMetadata(result.Segments[0], 2);
 
-            SidStarRoute result2 = this.collection.SidRoutes[1];
+            SidStarRoute result2 = this.sectorElementCollection.SidRoutes[1];
             Assert.Equal("Test 2", result2.Identifier);
-            Assert.Equal(expectedSegments2, result2.Segments);
+            Assert.Equal(
+                new(
+                    "Test",
+                    new Point("jkl"),
+                    new Point("mno"),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make()
+                ),
+                result2.InitialSegment
+            );
+            Assert.Empty(result2.Segments);
+            this.AssertExpectedMetadata(result2, 3);
+            this.AssertExpectedMetadata(result2.InitialSegment, 3);
         }
 
         [Fact]
         public void TestItAddsMultipleElementsWithColour()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(
-                    new string[] {
-                        "Test                       abc abc def def Red",
-                        "                           def def ghi ghi Yellow ;comment",
-                        "Test 2                     jkl jkl mno mno Blue;comment"
-                    }
+            this.RunParserOnLines(new List<string>(
+                new string[] {
+                    "Test                       abc abc def def Red",
+                    "                           def def ghi ghi Yellow ;comment",
+                    "Test 2                     jkl jkl mno mno Blue;comment"
+                }
+            ));
+            
+            List<RouteSegment> expectedAdditionalSegments1 = new List<RouteSegment>
+            {
+                new(
+                    "Test",
+                    new Point("def"),
+                    new Point("ghi"),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make(),
+                    "Yellow"
                 )
-            );
-
-            this.parser.ParseData(data);
-
-            List<RouteSegment> expectedSegments1 = new List<RouteSegment>
-            {
-                new RouteSegment(new Point("abc"), new Point("def"), "Red", null),
-                new RouteSegment(new Point("def"), new Point("ghi"), "Yellow", "comment")
             };
+            
 
-            List<RouteSegment> expectedSegments2 = new List<RouteSegment>
-            {
-                new RouteSegment(new Point("jkl"), new Point("mno"), "Blue", "comment"),
-            };
-
-            SidStarRoute result = this.collection.SidRoutes[0];
+            SidStarRoute result = this.sectorElementCollection.SidRoutes[0];
             Assert.Equal("Test", result.Identifier);
-            Assert.Equal(expectedSegments1, result.Segments);
+            Assert.Equal(
+                new(
+                    "Test",
+                    new Point("abc"),
+                    new Point("def"),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make(),
+                    "Red"
+                ),
+                result.InitialSegment
+            );
+            Assert.Equal(expectedAdditionalSegments1, result.Segments);
+            this.AssertExpectedMetadata(result);
+            this.AssertExpectedMetadata(result.InitialSegment);
+            this.AssertExpectedMetadata(result.Segments[0], 2);
 
-            SidStarRoute result2 = this.collection.SidRoutes[1];
+            SidStarRoute result2 = this.sectorElementCollection.SidRoutes[1];
             Assert.Equal("Test 2", result2.Identifier);
-            Assert.Equal(expectedSegments2, result2.Segments);
+            Assert.Equal(
+                new(
+                    "Test",
+                    new Point("jkl"),
+                    new Point("mno"),
+                    DefinitionFactory.Make(),
+                    DocblockFactory.Make(),
+                    CommentFactory.Make(),
+                    "Blue"
+                ),
+                result2.InitialSegment
+            );
+            Assert.Empty(result2.Segments);
+            this.AssertExpectedMetadata(result2, 3);
+            this.AssertExpectedMetadata(result2.InitialSegment, 3);
+        }
+
+        protected override InputDataType GetInputDataType()
+        {
+            return InputDataType.SCT_SIDS;
         }
     }
 }

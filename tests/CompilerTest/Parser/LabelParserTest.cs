@@ -5,77 +5,47 @@ using Compiler.Parser;
 using Compiler.Error;
 using Compiler.Model;
 using Compiler.Event;
+using Compiler.Input;
 using Compiler.Output;
 using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
-    public class LabelParserTest
+    public class LabelParserTest: AbstractParserTestCase
     {
-        private readonly LabelParser parser;
-
-        private readonly SectorElementCollection collection;
-
-        private readonly Mock<IEventLogger> log;
-
-        public LabelParserTest()
-        {
-            this.log = new Mock<IEventLogger>();
-            this.collection = new SectorElementCollection();
-            this.parser = (LabelParser)(new DataParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSectionKeys.SCT_LABELS);
-        }
-
         [Fact]
         public void TestItRaisesASyntaxErrorIfIncorrectNumberOfSegments()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "\"test label\" N050.57.00.000 W001.21.24.490" })
-            );
-            this.parser.ParseData(data);
+            this.RunParserOnLines(new List<string>(new[] { "\"test label\" N050.57.00.000 W001.21.24.490" }));
 
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(this.sectorElementCollection.Labels);
+            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItRaisesASyntaxErrorIfCoordinateNotvalid()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "\"test label\" N050.57.00.000 N001.21.24.490 red" })
-            );
-            this.parser.ParseData(data);
-
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItHandlesMetadata()
-        {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "" })
-            );
-
-            this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSectionKeys.SCT_LABELS][0]);
+            this.RunParserOnLines(new List<string>(new[] { "\"test label\" N050.57.00.000 N001.21.24.490 red" }));
+            
+            Assert.Empty(this.sectorElementCollection.Labels);
+            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsLabelData()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "\"test label\" N050.57.00.000 W001.21.24.490 red ;comment" })
-            );
-            this.parser.ParseData(data);
+            this.RunParserOnLines(new List<string>(new[] { "\"test label\" N050.57.00.000 W001.21.24.490 red ;comment" }));
 
-            Label result = this.collection.Labels[0];
+            Label result = this.sectorElementCollection.Labels[0];
             Assert.Equal("test label", result.Text);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.Position);
             Assert.Equal("red", result.Colour);
-            Assert.Equal("comment", result.Comment);
+            this.AssertExpectedMetadata(result);
+        }
+
+        protected override InputDataType GetInputDataType()
+        {
+            return InputDataType.SCT_LABELS;
         }
     }
 }
