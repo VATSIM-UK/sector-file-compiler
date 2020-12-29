@@ -6,154 +6,122 @@ using Compiler.Event;
 using Compiler.Validate;
 using Moq;
 using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllSctSidsMustHaveAValidRouteTest
+    public class AllSctSidsMustHaveAValidRouteTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection sectorElements;
-        private readonly Mock<IEventLogger> loggerMock;
-        private readonly AllSctSidsMustHaveAValidRoute rule;
-        private readonly CompilerArguments args;
-
         public AllSctSidsMustHaveAValidRouteTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.sectorElements.Add(new Fix("testfix", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Vor("testvor", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Ndb("testndb", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Airport("testairport", "testairport", new Coordinate("abc", "def"), "123.456", "test"));
-            this.rule = new AllSctSidsMustHaveAValidRoute();
-            this.args = new CompilerArguments();
+            this.sectorElements.Add(FixFactory.Make("testfix"));
+            this.sectorElements.Add(VorFactory.Make("testvor"));
+            this.sectorElements.Add(NdbFactory.Make("testndb"));
+            this.sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
         [Fact]
         public void TestItPassesOnValidRoute()
         {
-            List<RouteSegment> segments = new List<RouteSegment>
-            {
-                new RouteSegment(new Point("testfix"), new Point("testvor"), null),
-                new RouteSegment(new Point("testvor"), new Point("testndb"), null),
-                new RouteSegment(new Point("testndb"), new Point("testairport"), null),
-                new RouteSegment(new Point("testairport"), new Point(new Coordinate("abc", "def")), null),
-                new RouteSegment(new Point(new Coordinate("abc", "def")), new Point("testfix"), null),
-            };
-
-            SidStarRoute route = new SidStarRoute(
-                SidStarType.SID,
-                "EGKK TEST",
-                segments
+            this.sectorElements.Add(
+                SidStarRouteFactory.Make(
+                    segments: new List<RouteSegment>()
+                    {
+                        RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
+                        RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
+                        RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
+                        RouteSegmentFactory.MakePointCoordinate("testairport", new Coordinate("abc", "def")),
+                        RouteSegmentFactory.MakeCoordinatePoint("testvor", new Coordinate("abc", "def")),
+                    }
+                )
             );
-
-            this.sectorElements.Add(route);
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+           
+            this.AssertNoValidationError();
         }
 
         [Fact]
         public void TestItFailsOnBadFix()
         {
-            List<RouteSegment> segments = new List<RouteSegment>
-            {
-                new RouteSegment(new Point("testfix"), new Point("testvor"), null),
-                new RouteSegment(new Point("testvor"), new Point("testndb"), null),
-                new RouteSegment(new Point("testndb"), new Point("testairport"), null),
-                new RouteSegment(new Point("testairport"), new Point(new Coordinate("abc", "def")), null),
-                new RouteSegment(new Point(new Coordinate("abc", "def")), new Point("testfix"), null),
-            };
-
-            SidStarRoute route = new SidStarRoute(
-                SidStarType.SID,
-                "EGKK TEST",
-                segments
+            this.sectorElements.Add(
+                SidStarRouteFactory.Make(
+                    segments: new List<RouteSegment>()
+                    {
+                        RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
+                        RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
+                        RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
+                        RouteSegmentFactory.MakePointCoordinate("testairport", new Coordinate("abc", "def")),
+                        RouteSegmentFactory.MakeCoordinatePoint("testvor", new Coordinate("abc", "def")),
+                    }
+                )
             );
-
-            this.sectorElements.Add(route);
+            
             this.sectorElements.Fixes.Clear();
-
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(2));
+            this.AssertValidationErrors(2);
         }
 
         [Fact]
         public void TestItFailsOnBadVor()
         {
-            List<RouteSegment> segments = new List<RouteSegment>
-            {
-                new RouteSegment(new Point("testfix"), new Point("testvor"), null),
-                new RouteSegment(new Point("testvor"), new Point("testndb"), null),
-                new RouteSegment(new Point("testndb"), new Point("testairport"), null),
-                new RouteSegment(new Point("testairport"), new Point(new Coordinate("abc", "def")), null),
-                new RouteSegment(new Point(new Coordinate("abc", "def")), new Point("testfix"), null),
-            };
-
-            SidStarRoute route = new SidStarRoute(
-                SidStarType.SID,
-                "EGKK TEST",
-                segments
+            this.sectorElements.Add(
+                SidStarRouteFactory.Make(
+                    segments: new List<RouteSegment>()
+                    {
+                        RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
+                        RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
+                        RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
+                        RouteSegmentFactory.MakePointCoordinate("testairport", new Coordinate("abc", "def")),
+                        RouteSegmentFactory.MakeCoordinatePoint("testvor", new Coordinate("abc", "def")),
+                    }
+                )
             );
-
-            this.sectorElements.Add(route);
+            
             this.sectorElements.Vors.Clear();
-
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(2));
+            this.AssertValidationErrors(2);
         }
 
         [Fact]
         public void TestItFailsOnBadNdb()
         {
-            List<RouteSegment> segments = new List<RouteSegment>
-            {
-                new RouteSegment(new Point("testfix"), new Point("testvor"), null),
-                new RouteSegment(new Point("testvor"), new Point("testndb"), null),
-                new RouteSegment(new Point("testndb"), new Point("testairport"), null),
-                new RouteSegment(new Point("testairport"), new Point(new Coordinate("abc", "def")), null),
-                new RouteSegment(new Point(new Coordinate("abc", "def")), new Point("testfix"), null),
-            };
-
-            SidStarRoute route = new SidStarRoute(
-                SidStarType.SID,
-                "EGKK TEST",
-                segments
+            this.sectorElements.Add(
+                SidStarRouteFactory.Make(
+                    segments: new List<RouteSegment>()
+                    {
+                        RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
+                        RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
+                        RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
+                        RouteSegmentFactory.MakePointCoordinate("testairport", new Coordinate("abc", "def")),
+                        RouteSegmentFactory.MakeCoordinatePoint("testvor", new Coordinate("abc", "def")),
+                    }
+                )
             );
-
-            this.sectorElements.Add(route);
+            
             this.sectorElements.Ndbs.Clear();
-
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(2));
+            this.AssertValidationErrors(2);
         }
 
         [Fact]
         public void TestItFailsOnBadAirport()
         {
-            List<RouteSegment> segments = new List<RouteSegment>
-            {
-                new RouteSegment(new Point("testfix"), new Point("testvor"), null),
-                new RouteSegment(new Point("testvor"), new Point("testndb"), null),
-                new RouteSegment(new Point("testndb"), new Point("testairport"), null),
-                new RouteSegment(new Point("testairport"), new Point(new Coordinate("abc", "def")), null),
-                new RouteSegment(new Point(new Coordinate("abc", "def")), new Point("testfix"), null),
-            };
-
-            SidStarRoute route = new SidStarRoute(
-                SidStarType.SID,
-                "EGKK TEST",
-                segments
+            this.sectorElements.Add(
+                SidStarRouteFactory.Make(
+                    segments: new List<RouteSegment>()
+                    {
+                        RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
+                        RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
+                        RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
+                        RouteSegmentFactory.MakePointCoordinate("testairport", new Coordinate("abc", "def")),
+                        RouteSegmentFactory.MakeCoordinatePoint("testvor", new Coordinate("abc", "def")),
+                    }
+                )
             );
-
-            this.sectorElements.Add(route);
+            
             this.sectorElements.Airports.Clear();
+            this.AssertValidationErrors(2);
+        }
 
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(2));
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllSctSidsMustHaveAValidRoute();
         }
     }
 }

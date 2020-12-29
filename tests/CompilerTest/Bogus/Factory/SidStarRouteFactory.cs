@@ -18,7 +18,7 @@ namespace CompilerTest.Bogus.Factory
             "ATSIX"
         };
 
-        public static SidStarRoute Make(SidStarType type = SidStarType.SID)
+        public static SidStarRoute Make(SidStarType type = SidStarType.SID, List<RouteSegment> segments = null)
         {
             return new Faker<SidStarRoute>()
                 .CustomInstantiator(
@@ -26,7 +26,7 @@ namespace CompilerTest.Bogus.Factory
                         type,
                         "SID STAR ROUTE",
                         RouteSegmentFactory.MakeDoublePoint(),
-                        new List<RouteSegment>()
+                        segments ?? new List<RouteSegment>()
                         {
                             RouteSegmentFactory.MakeDoublePoint(),
                             RouteSegmentFactory.MakePointCoordinate(),

@@ -16,7 +16,7 @@ namespace CompilerTest.Bogus.Factory
             "ATSIX"
         };
 
-        public static RouteSegment MakeDoublePoint(string identifier1 = null, string identifier2 = null)
+        public static RouteSegment MakeDoublePoint(string identifier1 = null, string identifier2 = null, string colour = null)
         {
             return new Faker<RouteSegment>()
                 .CustomInstantiator(
@@ -26,19 +26,20 @@ namespace CompilerTest.Bogus.Factory
                         new Point(identifier2 ?? f.Random.ArrayElement(identifiers)),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
-                        CommentFactory.Make()
+                        CommentFactory.Make(),
+                        colour ?? ColourFactory.RandomIdentifier()
                     )
                 );
         }
         
-        public static RouteSegment MakePointCoordinate(string pointIdentifier = null)
+        public static RouteSegment MakePointCoordinate(string pointIdentifier = null, Coordinate? coordinate = null)
         {
             return new Faker<RouteSegment>()
                 .CustomInstantiator(
                     f => new RouteSegment(
                         f.Random.String2(4),
                         new Point(pointIdentifier ?? f.Random.ArrayElement(identifiers)),
-                        new Point(CoordinateFactory.Make()),
+                        coordinate == null ? new Point(CoordinateFactory.Make()) : new Point((Coordinate) coordinate),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
@@ -46,13 +47,13 @@ namespace CompilerTest.Bogus.Factory
                 );
         }
         
-        public static RouteSegment MakeCoordinatePoint(string pointIdentifier = null)
+        public static RouteSegment MakeCoordinatePoint(string pointIdentifier = null, Coordinate? coordinate = null)
         {
             return new Faker<RouteSegment>()
                 .CustomInstantiator(
                     f => new RouteSegment(
                         f.Random.String2(4),
-                        new Point(CoordinateFactory.Make()),
+                        coordinate == null ? new Point(CoordinateFactory.Make()) : new Point((Coordinate) coordinate),
                         new Point(pointIdentifier ?? f.Random.ArrayElement(identifiers)),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
