@@ -20,7 +20,6 @@ namespace Compiler.Validate
             new AllSidsMustHaveAValidRoute(),
             new AllSctSidsMustHaveAValidRoute(),
             new AllSctStarsMustHaveAValidRoute(),
-            new AllSctStarsMustHaveContiguousRoute(),
             new AllSctSidsMustHaveValidColours(),
             new AllSctStarsMustHaveValidColours(),
             new AllGeoMustHaveValidColours(),

@@ -7,18 +7,18 @@ namespace CompilerTest.Bogus.Factory
 {
     static class SectorAlternateOwnerHierarchyFactory
     {
-        public static SectorAlternateOwnerHierarchy Make()
+        public static SectorAlternateOwnerHierarchy Make(List<string> positions = null)
         {
-            return GetGenerator().Generate();
+            return GetGenerator(positions).Generate();
         }
 
-        private static Faker<SectorAlternateOwnerHierarchy> GetGenerator()
+        private static Faker<SectorAlternateOwnerHierarchy> GetGenerator(List<string> positions = null)
         {
             return new Faker<SectorAlternateOwnerHierarchy>()
                 .CustomInstantiator(
                     f => new SectorAlternateOwnerHierarchy(
                         f.Random.String2(4),
-                        ControllerPositionFactory.GetIdentifierList(),
+                        positions ?? ControllerPositionFactory.GetIdentifierList(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()

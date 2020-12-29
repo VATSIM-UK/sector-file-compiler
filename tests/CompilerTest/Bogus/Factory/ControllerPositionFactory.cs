@@ -57,14 +57,14 @@ namespace CompilerTest.Bogus.Factory
             return new Randomizer().ArrayElements(identifiers).ToList();
         }
 
-        public static ControllerPosition Make()
+        public static ControllerPosition Make(string identifier = null)
         {
             return new Faker<ControllerPosition>().CustomInstantiator(
                 f => new ControllerPosition(
                     f.Random.ArrayElement(callsigns),
                     "London Control",
                     "123.456",
-                    f.Random.ArrayElement(identifiers),
+                    identifier ?? f.Random.ArrayElement(identifiers),
                     "L",
                     "L",
                     "L",
