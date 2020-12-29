@@ -11,16 +11,22 @@ namespace CompilerTest.Bogus.Factory
             string name = null,
             List<SectorActive> active = null,
             List<SectorAlternateOwnerHierarchy> alternate = null,
-            List<SectorArrivalAirports> arrivalAirports = null
+            List<SectorArrivalAirports> arrivalAirports = null,
+            List<SectorDepartureAirports> departureAirports = null,
+            List<SectorGuest> guests = null,
+            SectorOwnerHierarchy owners = null
         ) {
-            return GetGenerator(name, active, alternate, arrivalAirports).Generate();
+            return GetGenerator(name, active, alternate, arrivalAirports, departureAirports, guests, owners).Generate();
         }
 
         private static Faker<Sector> GetGenerator(
             string name = null,
             List<SectorActive> active = null,
             List<SectorAlternateOwnerHierarchy> alternate = null,
-            List<SectorArrivalAirports> arrivalAirports = null
+            List<SectorArrivalAirports> arrivalAirports = null,
+            List<SectorDepartureAirports> departureAirports = null,
+            List<SectorGuest> guests = null,
+            SectorOwnerHierarchy owners = null
         ) {
             return new Faker<Sector>()
                 .CustomInstantiator(
@@ -28,13 +34,13 @@ namespace CompilerTest.Bogus.Factory
                         name ?? f.Random.String2(5),
                         0,
                         66000,
-                        SectorOwnerHierarchyFactory.Make(),
+                        owners ?? SectorOwnerHierarchyFactory.Make(),
                         alternate ?? SectorAlternateOwnerHierarchyFactory.MakeList(2),
                         active ?? SectorActiveFactory.MakeList(1),
-                        SectorGuestFactory.MakeList(2),
+                        guests ?? SectorGuestFactory.MakeList(2),
                         SectorBorderFactory.MakeList(2),
                         arrivalAirports ?? SectorArrivalAirportsFactory.MakeList(),
-                        SectorDepartureAirportsFactory.MakeList(),
+                        departureAirports ?? SectorDepartureAirportsFactory.MakeList(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()

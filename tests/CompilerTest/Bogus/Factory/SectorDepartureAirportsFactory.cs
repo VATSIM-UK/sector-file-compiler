@@ -6,17 +6,17 @@ namespace CompilerTest.Bogus.Factory
 {
     static class SectorDepartureAirportsFactory
     {
-        public static SectorDepartureAirports Make()
+        public static SectorDepartureAirports Make(List<string> airports = null)
         {
-            return GetGenerator().Generate();
+            return GetGenerator(airports).Generate();
         }
 
-        private static Faker<SectorDepartureAirports> GetGenerator()
+        private static Faker<SectorDepartureAirports> GetGenerator(List<string> airports = null)
         {
             return new Faker<SectorDepartureAirports>()
                 .CustomInstantiator(
                     f => new SectorDepartureAirports(
-                        AirportFactory.GetListOfDesignators(),
+                        airports ?? AirportFactory.GetListOfDesignators(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
