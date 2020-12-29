@@ -18,15 +18,15 @@ namespace Compiler.Validate
             foreach (CoordinationPoint point in sectorElements.CoordinationPoints)
             {
                 if (
-                    point.ArrivalAiportOrFixAfter != "*" &&
-                    !AirportValidator.IcaoValid(point.ArrivalAiportOrFixAfter) &&
-                    !fixes.Contains(point.ArrivalAiportOrFixAfter) &&
-                    !vors.Contains(point.ArrivalAiportOrFixAfter) &&
-                    !ndbs.Contains(point.ArrivalAiportOrFixAfter)
+                    point.ArrivalAirportOrFixAfter != "*" &&
+                    !AirportValidator.IcaoValid(point.ArrivalAirportOrFixAfter) &&
+                    !fixes.Contains(point.ArrivalAirportOrFixAfter) &&
+                    !vors.Contains(point.ArrivalAirportOrFixAfter) &&
+                    !ndbs.Contains(point.ArrivalAirportOrFixAfter)
                 ) {
                     string message = String.Format(
                         "Invalid next fix or arrival airport {0} on coordination point: {1}",
-                        point.ArrivalAiportOrFixAfter,
+                        point.ArrivalAirportOrFixAfter,
                         point.GetCompileData(sectorElements)
                     );
                     events.AddEvent(new ValidationRuleFailure(message));

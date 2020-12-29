@@ -1,22 +1,24 @@
-﻿using Bogus;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Bogus;
 using Compiler.Model;
 
 namespace CompilerTest.Bogus.Factory
 {
     static class RegionFactory
     {
-        public static Region Make()
+        public static Region Make(string colour = null, List<Point> points = null)
         {
-            return GetGenerator().Generate();
+            return GetGenerator(colour, points).Generate();
         }
 
-        private static Faker<Region> GetGenerator()
+        private static Faker<Region> GetGenerator(string colour = null, List<Point> points = null)
         {
             return new Faker<Region>()
                 .CustomInstantiator(
                     f => new Region(
                         "REGION TEST",
-                        RegionPointFactory.MakeList(2),
+                        points == null ? RegionPointFactory.MakeList(2, colour) : points.Select(p => RegionPointFactory.Make(colour, p)).ToList(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()

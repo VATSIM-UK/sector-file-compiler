@@ -11,7 +11,7 @@ namespace CompilerTest.Bogus.Factory
                 .CustomInstantiator(
                     f => new CoordinationPoint(
                         firCopx,
-                        FixFactory.RandomIdentifier(),
+                        priorPoint ?? FixFactory.RandomIdentifier(),
                         "",
                         coordinationPoint ?? FixFactory.RandomIdentifier(),
                         nextPoint ?? FixFactory.RandomIdentifier(),

@@ -5,45 +5,38 @@ using Compiler.Error;
 using Compiler.Validate;
 using Moq;
 using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllLabelsMustHaveAValidColourTest
+    public class AllLabelsMustHaveAValidColourTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection sectorElements;
-        private readonly Mock<IEventLogger> loggerMock;
-        private readonly Colour definedColour;
-        private readonly AllLabelsMustHaveAValidColour rule;
-        private readonly CompilerArguments args;
-
         public AllLabelsMustHaveAValidColourTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.definedColour = new Colour("colour1", -1, "test");
-            this.rule = new AllLabelsMustHaveAValidColour();
-            this.args = new CompilerArguments();
-            this.sectorElements.Add(this.definedColour);
+            this.sectorElements.Add(ColourFactory.Make("colour1"));
         }
 
         [Fact]
         public void TestItPassesOnValidColours()
         {
-            this.sectorElements.Add(new Label("test", new Coordinate("abc", "def"), "colour1", "comment"));
-            this.sectorElements.Add(new Label("test", new Coordinate("abc", "def"), "123", "comment"));
+            this.sectorElements.Labels.Add(LabelFactory.Make(colour: "colour1"));
+            this.sectorElements.Labels.Add(LabelFactory.Make(colour: "123"));
 
-            this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.AssertNoValidationError();
         }
 
         [Fact]
         public void TestItFailsOnInvalidColours()
         {
-            this.sectorElements.Add(new Label("test", new Coordinate("abc", "def"), "colour2", "comment"));
-            this.sectorElements.Add(new Label("test", new Coordinate("abc", "def"), "-123", "comment"));
+            this.sectorElements.Labels.Add(LabelFactory.Make(colour: "colour2"));
+            this.sectorElements.Labels.Add(LabelFactory.Make(colour: "-123"));
 
-            this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(2));
+            this.AssertValidationErrors(2);
+        }
+
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllLabelsMustHaveAValidColour();
         }
     }
 }

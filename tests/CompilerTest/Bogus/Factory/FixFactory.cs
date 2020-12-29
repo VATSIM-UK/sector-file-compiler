@@ -18,13 +18,13 @@ namespace CompilerTest.Bogus.Factory
             "ATSIX"
         };
 
-        public static Fix Make(string identifier = null)
+        public static Fix Make(string identifier = null, Coordinate? coordinate = null)
         {
             return new Faker<Fix>()
                 .CustomInstantiator(
                     f => new Fix(
                         identifier ?? f.Random.ArrayElement(identifiers),
-                        CoordinateFactory.Make(),
+                        coordinate ?? CoordinateFactory.Make(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()

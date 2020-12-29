@@ -8,27 +8,27 @@ namespace CompilerTest.Bogus
     static class RegionPointFactory
     {
        
-        public static RegionPoint Make()
+        public static RegionPoint Make(string colour = null, Point point = null)
         {
-            return GetGenerator().Generate();
+            return GetGenerator(colour, point).Generate();
         }
 
-        public static Faker<RegionPoint> GetGenerator()
+        public static Faker<RegionPoint> GetGenerator(string colour = null, Point point = null)
         {
             return new Faker<RegionPoint>().CustomInstantiator(
                 f => new RegionPoint(
-                    PointFactory.Make(),
+                    point ?? PointFactory.Make(),
                     DefinitionFactory.Make(),
                     DocblockFactory.Make(),
                     CommentFactory.Make(),
-                    "red"
+                    colour ?? "red"
                 )
             );
         }
         
-        public static List<RegionPoint> MakeList(int count = 1)
+        public static List<RegionPoint> MakeList(int count = 1, string colour = null, Point point = null)
         {
-            return GetGenerator().Generate(count);
+            return GetGenerator(colour).Generate(count);
         }
     }
 }

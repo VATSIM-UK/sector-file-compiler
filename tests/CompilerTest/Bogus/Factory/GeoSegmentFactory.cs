@@ -6,19 +6,19 @@ namespace CompilerTest.Bogus.Factory
 {
     static class GeoSegmentFactory
     {
-        public static GeoSegment Make()
+        public static GeoSegment Make(string colour = null, Point firstPoint = null, Point secondPoint = null)
         {
-            return GetGenerator().Generate();
+            return GetGenerator(colour, firstPoint, secondPoint).Generate();
         }
 
-        private static Faker<GeoSegment> GetGenerator()
+        private static Faker<GeoSegment> GetGenerator(string colour = null, Point firstPoint = null, Point secondPoint = null)
         {
             return new Faker<GeoSegment>()
                 .CustomInstantiator(
                     f => new GeoSegment(
-                        PointFactory.Make(),
-                        PointFactory.Make(),
-                        "red",
+                        firstPoint ?? PointFactory.Make(),
+                        secondPoint ?? PointFactory.Make(),
+                        colour ?? "red",
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
@@ -27,9 +27,9 @@ namespace CompilerTest.Bogus.Factory
 
         }
         
-        public static List<GeoSegment> MakeList(int count = 1)
+        public static List<GeoSegment> MakeList(int count = 1, string colour = null, Point firstPoint = null, Point secondPoint = null)
         {
-            return GetGenerator().Generate(count);
+            return GetGenerator(colour, firstPoint, secondPoint).Generate(count);
         }
     }
 }

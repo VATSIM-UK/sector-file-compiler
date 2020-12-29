@@ -125,7 +125,7 @@ namespace CompilerTest.Model
 
             Assert.Equal(
                 "FIR_COPX:*:*:ABTUM:EGKK:26L:TCE:TCSW:*:14000:ABTUMDES",
-                this.model.GetCompileData(new SectorElementCollection())
+                model2.GetCompileData(new SectorElementCollection())
             );
         }
     }

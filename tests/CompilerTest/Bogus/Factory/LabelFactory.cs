@@ -5,14 +5,14 @@ namespace CompilerTest.Bogus.Factory
 {
     static class LabelFactory
     {
-        public static Label Make(string identifier = null)
+        public static Label Make(string text = null, string colour = null)
         {
             return new Faker<Label>()
                 .CustomInstantiator(
                     f => new Label(
-                        "Test Label",
+                        text ?? "Test Label",
                         CoordinateFactory.Make(),
-                        ColourFactory.RandomIdentifier(),
+                        colour ?? ColourFactory.RandomIdentifier(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()

@@ -16,15 +16,15 @@ namespace Compiler.Validate
         {
             foreach (Geo geo in sectorElements.GeoElements)
             {
-                this.ValidateBaseGeo(geo, sectorElements, events);
+                ValidateBaseGeo(geo, sectorElements, events);
                 foreach (GeoSegment segment in geo.AdditionalSegments)
                 {
-                    this.ValidateGeoSegment(segment, sectorElements, events);
+                    ValidateGeoSegment(segment, sectorElements, events);
                 }
             }
         }
 
-        private void ValidateBaseGeo(Geo geo, SectorElementCollection sectorElements, IEventLogger events)
+        private static void ValidateBaseGeo(Geo geo, SectorElementCollection sectorElements, IEventLogger events)
         {
             if (!PointsValid(geo.FirstPoint, geo.SecondPoint, sectorElements))
             {
@@ -38,7 +38,7 @@ namespace Compiler.Validate
             }
         }
 
-        private void ValidateGeoSegment(GeoSegment segment, SectorElementCollection sectorElements, IEventLogger events)
+        private static void ValidateGeoSegment(GeoSegment segment, SectorElementCollection sectorElements, IEventLogger events)
         {
             if (!PointsValid(segment.FirstPoint, segment.SecondPoint, sectorElements))
             {
@@ -52,7 +52,7 @@ namespace Compiler.Validate
             }
         }
 
-        private bool PointsValid(Point point1, Point point2, SectorElementCollection sectorElements)
+        private static bool PointsValid(Point point1, Point point2, SectorElementCollection sectorElements)
         {
             return RoutePointValidator.ValidatePoint(point1, sectorElements) && 
                    RoutePointValidator.ValidatePoint(point2, sectorElements);

@@ -6,7 +6,7 @@ namespace Compiler.Validate
 {
     public abstract class AbstractCoordinationPointRunwayChecker
     {
-        protected bool RunwayValid(SectorElementCollection sectorElements, string runwayIdentifier, string airportCode)
+        protected static bool RunwayValid(SectorElementCollection sectorElements, string runwayIdentifier, string airportCode)
         {
             if (airportCode == "*" || airportCode.Length != 4 || runwayIdentifier == "*")
             {
@@ -24,7 +24,7 @@ namespace Compiler.Validate
                 .Where(runway => runway.AirfieldIcao == airport[0].Icao)
                 .Where(runway => runway.FirstIdentifier == runwayIdentifier || runway.ReverseIdentifier == runwayIdentifier)
                 .ToList()
-                .Count() != 0;
+                .Count != 0;
         }
     }
 }

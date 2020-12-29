@@ -12,11 +12,11 @@ namespace Compiler.Validate
         {
             foreach (CoordinationPoint point in sectorElements.CoordinationPoints)
             {
-                if (!RunwayValid(sectorElements, point.ArrivalRunway, point.ArrivalAiportOrFixAfter)) {
+                if (!RunwayValid(sectorElements, point.ArrivalRunway, point.ArrivalAirportOrFixAfter)) {
                     string message = String.Format(
                         "Invalid arrival runway {0}/{1} for coordination point: {2}",
                         point.ArrivalRunway,
-                        point.ArrivalAiportOrFixAfter,
+                        point.ArrivalAirportOrFixAfter,
                         point.GetCompileData(sectorElements)
                     );
                     events.AddEvent(new ValidationRuleFailure(message));

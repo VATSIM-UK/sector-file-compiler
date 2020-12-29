@@ -6,68 +6,41 @@ using Compiler.Event;
 using Compiler.Validate;
 using Moq;
 using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllRegionsMustHaveValidPointsTest
+    public class AllRegionsMustHaveValidPointsTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection sectorElements;
-        private readonly Mock<IEventLogger> loggerMock;
-        private readonly AllRegionsMustHaveValidPoints rule;
-        private readonly CompilerArguments args;
-
         public AllRegionsMustHaveValidPointsTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.sectorElements.Add(new Fix("testfix", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Vor("testvor", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Ndb("testndb", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Airport("testairport", "testairport", new Coordinate("abc", "def"), "123.456", "test"));
-            this.rule = new AllRegionsMustHaveValidPoints();
-            this.args = new CompilerArguments();
+            this.sectorElements.Add(FixFactory.Make("testfix"));
+            this.sectorElements.Add(VorFactory.Make("testvor"));
+            this.sectorElements.Add(NdbFactory.Make("testndb"));
+            this.sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
         [Fact]
         public void TestItPassesOnValidPoints()
         {
-            List<Point> points1 = new List<Point>();
-            points1.Add(new Point("testfix"));
-            points1.Add(new Point("testndb"));
+            this.sectorElements.Add(RegionFactory.Make(points: new List<Point>() {new("testfix"), new("testndb")}));
+            this.sectorElements.Add(RegionFactory.Make(points: new List<Point>() {new("testvor"), new("testairport")}));
 
-            List<Point> points2 = new List<Point>();
-            points2.Add(new Point("testvor"));
-            points2.Add(new Point("testairport"));
-
-            Region region1 = new Region("Region1", "Red", points1, "comment");
-            Region region2 = new Region("Region2", "Red", points2, "comment");
-
-            this.sectorElements.Add(region1);
-            this.sectorElements.Add(region2);
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.AssertNoValidationError();
         }
 
         [Fact]
         public void TestItFailsOnInvalidPoint()
         {
-            List<Point> points1 = new List<Point>();
-            points1.Add(new Point("nottestfix"));
-            points1.Add(new Point("nottestndb"));
+            this.sectorElements.Add(RegionFactory.Make(points: new List<Point>() {new("nottestfix"), new("nottestndb")}));
+            this.sectorElements.Add(RegionFactory.Make(points: new List<Point>() {new("nottestvor"), new("nottestairport")}));
 
-            List<Point> points2 = new List<Point>();
-            points2.Add(new Point("nottestvor"));
-            points2.Add(new Point("nottestairport"));
+            this.AssertValidationErrors(4);
+        }
 
-            Region region1 = new Region("Region1", "Red", points1, "comment");
-            Region region2 = new Region("Region2", "Red", points2, "comment");
-
-            this.sectorElements.Add(region1);
-            this.sectorElements.Add(region2);
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(4));
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllRegionsMustHaveValidPoints();
         }
     }
 }

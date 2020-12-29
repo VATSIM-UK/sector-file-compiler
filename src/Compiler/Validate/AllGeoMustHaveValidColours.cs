@@ -11,17 +11,17 @@ namespace Compiler.Validate
         {
             foreach (Geo geo in sectorElements.GeoElements)
             {
-                this.ValidateBaseGeo(geo, sectorElements, events);
+                ValidateBaseGeo(geo, sectorElements, events);
                 foreach (GeoSegment segment in geo.AdditionalSegments)
                 {
-                    this.ValidateGeoSegment(segment, sectorElements, events);
+                    ValidateGeoSegment(segment, sectorElements, events);
                 }
             }
         }
 
-        private void ValidateBaseGeo(Geo geo, SectorElementCollection sectorElements, IEventLogger events)
+        private static void ValidateBaseGeo(Geo geo, SectorElementCollection sectorElements, IEventLogger events)
         {
-            if (!this.ColourValid(geo.Colour, sectorElements))
+            if (!ColourValid(geo.Colour, sectorElements))
             {
                 string errorMessage = string.Format(
                     "Invalid colour value {0} in GEO declaration {1}",
@@ -32,9 +32,9 @@ namespace Compiler.Validate
             }
         }
 
-        private void ValidateGeoSegment(GeoSegment segment, SectorElementCollection sectorElements, IEventLogger events)
+        private static void ValidateGeoSegment(GeoSegment segment, SectorElementCollection sectorElements, IEventLogger events)
         {
-            if (!this.ColourValid(segment.Colour, sectorElements))
+            if (!ColourValid(segment.Colour, sectorElements))
             {
                 string errorMessage = string.Format(
                     "Invalid colour value {0} in GEO segment {1}",
@@ -45,7 +45,7 @@ namespace Compiler.Validate
             }
         }
 
-        private bool ColourValid(string colour, SectorElementCollection sectorElements)
+        private static bool ColourValid(string colour, SectorElementCollection sectorElements)
         {
             return colour == null || ColourValidator.ColourValid(sectorElements, colour);
         }

@@ -35,10 +35,8 @@ namespace Compiler.Model
 
         public override IEnumerable<ICompilableElement> GetCompilableElements()
         {
-            List<ICompilableElement> elements = new List<ICompilableElement>();
-            elements.Add(this);
-            elements.Concat(this.AdditionalSegments);
-            return elements;
+            List<ICompilableElement> elements = new List<ICompilableElement> {this};
+            return elements.Concat(this.AdditionalSegments);
         }
 
         /*
@@ -47,7 +45,7 @@ namespace Compiler.Model
         public override string GetCompileData(SectorElementCollection elements)
         {
             return
-                $"{this.Name.PadRight(27, ' ')} {this.FirstPoint.ToString()} {this.SecondPoint.ToString()} {this.Colour ?? ""}"
+                $"{this.Name?.PadRight(27, ' ')} {this.FirstPoint} {this.SecondPoint} {this.Colour ?? ""}"
                     .Trim();
         }
     }

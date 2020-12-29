@@ -6,27 +6,21 @@ namespace CompilerTest.Bogus.Factory
 {
     static class GeoFactory
     {
-        public static Geo Make()
-        {
-            return GetGenerator().Generate();
-        }
-
-        private static Faker<Geo> GetGenerator()
+        public static Geo Make(string colour = null, List<GeoSegment> additionalSegments = null, Point firstPoint = null, Point secondPoint = null)
         {
             return new Faker<Geo>()
                 .CustomInstantiator(
                     f => new Geo(
                         "GEO TEST",
-                        PointFactory.Make(),
-                        PointFactory.Make(),
-                        "red",
-                        GeoSegmentFactory.MakeList(2),
+                        firstPoint ?? PointFactory.Make(),
+                        secondPoint ?? PointFactory.Make(),
+                        colour ?? "red",
+                        additionalSegments ?? GeoSegmentFactory.MakeList(2),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
                     )
                 );
-
         }
     }
 }

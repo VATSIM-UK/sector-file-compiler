@@ -90,7 +90,7 @@ namespace CompilerTest.Parser
             Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.DepartureAirportOrFixBefore);
             Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.DepartureRunway);
             Assert.Equal("HEMEL", result.CoordinationFix);
-            Assert.Equal("EGBB", result.ArrivalAiportOrFixAfter);
+            Assert.Equal("EGBB", result.ArrivalAirportOrFixAfter);
             Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.ArrivalRunway);
             Assert.Equal("London AC Worthing", result.FromSector);
             Assert.Equal("London AC Dover", result.ToSector);
@@ -112,7 +112,7 @@ namespace CompilerTest.Parser
             Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.DepartureAirportOrFixBefore);
             Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.DepartureRunway);
             Assert.Equal("HEMEL", result.CoordinationFix);
-            Assert.Equal("EGBB", result.ArrivalAiportOrFixAfter);
+            Assert.Equal("EGBB", result.ArrivalAirportOrFixAfter);
             Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.ArrivalRunway);
             Assert.Equal("London AC Worthing", result.FromSector);
             Assert.Equal("London AC Dover", result.ToSector);

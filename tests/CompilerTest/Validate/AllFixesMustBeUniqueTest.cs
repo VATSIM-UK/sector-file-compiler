@@ -5,30 +5,23 @@ using Compiler.Event;
 using Compiler.Validate;
 using Moq;
 using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllFixesMustBeUniqueTest
+    public class AllFixesMustBeUniqueTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection sectorElements;
-        private readonly Mock<IEventLogger> loggerMock;
         private readonly Fix first;
         private readonly Fix second;
         private readonly Fix third;
         private readonly Fix fourth;
-        private readonly AllFixesMustBeUnique rule;
-        private readonly CompilerArguments args;
 
         public AllFixesMustBeUniqueTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.first = new Fix("DIKAS", new Coordinate("abc", "def"), "test");
-            this.second = new Fix("DIKAS", new Coordinate("abd", "cef"), "test");
-            this.third = new Fix("DIKAP", new Coordinate("abc", "def"), "test");
-            this.fourth = new Fix("DIKAS", new Coordinate("abc", "def"), "test");
-            this.rule = new AllFixesMustBeUnique();
-            this.args = new CompilerArguments();
+            this.first = FixFactory.Make("DIKAS", new Coordinate("abc", "def"));
+            this.second = FixFactory.Make("DIKAS", new Coordinate("abd", "cef"));
+            this.third = FixFactory.Make("DIKAP", new Coordinate("abc", "def"));
+            this.fourth = FixFactory.Make("DIKAS", new Coordinate("abc", "def"));
         }
 
         [Fact]
@@ -36,9 +29,8 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.second);
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            
+            this.AssertNoValidationError();
         }
 
         [Fact]
@@ -46,9 +38,8 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.third);
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            
+            this.AssertNoValidationError();
         }
 
         [Fact]
@@ -56,8 +47,13 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.fourth);
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            
+            this.AssertValidationErrors();
+        }
+
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllFixesMustBeUnique();
         }
     }
 }
