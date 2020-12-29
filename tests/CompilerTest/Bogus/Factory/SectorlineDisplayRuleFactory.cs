@@ -7,12 +7,12 @@ namespace CompilerTest.Bogus.Factory
 {
     static class SectorLineDisplayRuleFactory
     {
-        public static SectorlineDisplayRule Make()
+        public static SectorlineDisplayRule Make(string controlledSector = null, string firstCompare = null, string secondCompare = null)
         {
-            return GetGenerator().Generate();
+            return GetGenerator(controlledSector, firstCompare, secondCompare).Generate();
         }
 
-        private static Faker<SectorlineDisplayRule> GetGenerator()
+        private static Faker<SectorlineDisplayRule> GetGenerator(string controlledSector = null, string firstCompare = null, string secondCompare = null)
         {
             return new Faker<SectorlineDisplayRule>()
                 .CustomInstantiator(
@@ -28,9 +28,9 @@ namespace CompilerTest.Bogus.Factory
 
         }
 
-        public static List<SectorlineDisplayRule> MakeList(int count = 1)
+        public static List<SectorlineDisplayRule> MakeList(int count = 1, string controlledSector = null, string firstCompare = null, string secondCompare = null)
         {
-            return GetGenerator().Generate(count).ToList();
+            return GetGenerator(controlledSector, firstCompare, secondCompare).Generate(count).ToList();
         }
     }
 }

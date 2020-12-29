@@ -5,32 +5,25 @@ using Compiler.Error;
 using Compiler.Validate;
 using Moq;
 using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllColoursMustBeValidTest
+    public class AllColoursMustBeValidTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection sectorElements;
-        private readonly Mock<IEventLogger> loggerMock;
         private readonly Colour first;
         private readonly Colour second;
         private readonly Colour third;
         private readonly Colour fourth;
         private readonly Colour fifth;
-        private readonly AllColoursMustBeValid rule;
-        private readonly CompilerArguments args;
 
         public AllColoursMustBeValidTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.first = new Colour("colour1", -1, "test");
-            this.second = new Colour("colour2", 0, "test");
-            this.third = new Colour("colour3", 255, "test");
-            this.fourth = new Colour("colour4", 16777215, "test");
-            this.fifth = new Colour("colour5", 16777216, "test");
-            this.rule = new AllColoursMustBeValid();
-            this.args = new CompilerArguments();
+            this.first = ColourFactory.Make("colour1", -1);
+            this.second = ColourFactory.Make("colour2", 0);
+            this.third = ColourFactory.Make("colour3", 255);
+            this.fourth = ColourFactory.Make("colour4", 16777215);
+            this.fifth = ColourFactory.Make("colour5", 16777216);
         }
 
         [Fact]
@@ -39,24 +32,26 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(this.second);
             this.sectorElements.Add(this.third);
             this.sectorElements.Add(this.fourth);
-            this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.AssertNoValidationError();;
         }
 
         [Fact]
         public void TestItFailsOnNegativeValues()
         {
             this.sectorElements.Add(this.first);
-            this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            this.AssertValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnValuesOverMaximum()
         {
             this.sectorElements.Add(this.fifth);
-            this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            this.AssertValidationErrors();
+        }
+
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllColoursMustBeValid();
         }
     }
 }

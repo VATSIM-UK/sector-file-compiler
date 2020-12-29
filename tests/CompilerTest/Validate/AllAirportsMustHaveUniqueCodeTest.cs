@@ -1,32 +1,22 @@
 ﻿using Xunit;
-using Moq;
 using Compiler.Model;
 using Compiler.Validate;
-using Compiler.Event;
-using Compiler.Error;
-using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllAirportsMustHaveUniqueCodeTest
+    public class AllAirportsMustHaveUniqueCodeTest: AbstractValidatorTestCase
     {
         private readonly Airport airfield1;
         private readonly Airport airfield2;
         private readonly Airport airfield3;
-        private readonly SectorElementCollection elements;
-        private readonly AllAirportsMustHaveUniqueCode validator;
-        private readonly Mock<IEventLogger> loggerMock;
-        private readonly CompilerArguments args;
 
         public AllAirportsMustHaveUniqueCodeTest()
         {
             this.elements = new SectorElementCollection();
-            this.airfield1 = new Airport("a", "EGKK", new Coordinate("a", "b"), "a", "c");
-            this.airfield2 = new Airport("a", "EGLL", new Coordinate("a", "b"), "a", "c");
-            this.airfield3 = new Airport("a", "EGKK", new Coordinate("a", "b"), "a", "c");
-            this.loggerMock = new Mock<IEventLogger>();
-            this.validator = new AllAirportsMustHaveUniqueCode();
-            this.args = new CompilerArguments();
+            this.airfield1 = AirportFactory.Make("EGKK");
+            this.airfield2 = AirportFactory.Make("EGLL");
+            this.airfield3 = AirportFactory.Make("EGKK");
         }
 
         [Fact]
@@ -35,8 +25,7 @@ namespace CompilerTest.Validate
             this.elements.Add(airfield1);
             this.elements.Add(airfield2);
 
-            this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.AssertNoValidationError();
         }
 
         [Fact]
@@ -46,8 +35,12 @@ namespace CompilerTest.Validate
             this.elements.Add(airfield2);
             this.elements.Add(airfield3);
 
-            this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            this.AssertValidationErrors();
+        }
+
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllAirportsMustHaveUniqueCode();
         }
     }
 }

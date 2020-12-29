@@ -24,31 +24,19 @@ namespace CompilerTest.Transformer
 
             Assert.Equal(
                 expected,
-                TransformerChainFactory.Create(arguments, OutputSectionKeys.ESE_PREAMBLE).GetTransformerTypes()
+                TransformerChainFactory.Create(arguments, OutputSectionKeys.SCT_VOR).GetTransformerTypes()
             );
         }
 
         [Fact]
-        public void TestItDoesntAddCommentStripperOnEseHeader()
+        public void TestItDoesntAddCommentStripperOnHeader()
         {
             this.arguments.StripComments = true;
             List<Type> expected = new List<Type>(new Type[] { typeof(ReplaceTokens) });
 
             Assert.Equal(
                 expected,
-                TransformerChainFactory.Create(arguments, OutputSectionKeys.ESE_HEADER).GetTransformerTypes()
-            );
-        }
-
-        [Fact]
-        public void TestItDoesntAddCommentStripperOnSctHeader()
-        {
-            this.arguments.StripComments = true;
-            List<Type> expected = new List<Type>(new Type[] { typeof(ReplaceTokens) });
-
-            Assert.Equal(
-                expected,
-                TransformerChainFactory.Create(arguments, OutputSectionKeys.SCT_HEADER).GetTransformerTypes()
+                TransformerChainFactory.Create(arguments, OutputSectionKeys.FILE_HEADER).GetTransformerTypes()
             );
         }
 
@@ -60,7 +48,7 @@ namespace CompilerTest.Transformer
 
             Assert.Equal(
                 expected,
-                TransformerChainFactory.Create(arguments, OutputSectionKeys.ESE_PREAMBLE).GetTransformerTypes()
+                TransformerChainFactory.Create(arguments, OutputSectionKeys.SCT_VOR).GetTransformerTypes()
             );
         }
 
@@ -73,7 +61,7 @@ namespace CompilerTest.Transformer
 
             Assert.Equal(
                 expected,
-                TransformerChainFactory.Create(arguments, OutputSectionKeys.ESE_PREAMBLE).GetTransformerTypes()
+                TransformerChainFactory.Create(arguments, OutputSectionKeys.SCT_VOR).GetTransformerTypes()
             );
         }
     }

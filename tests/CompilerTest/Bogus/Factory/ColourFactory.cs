@@ -12,13 +12,13 @@ namespace CompilerTest.Bogus.Factory
             "blue"
         };
 
-        public static Colour Make(string identifier = null)
+        public static Colour Make(string identifier = null, int? value = null)
         {
             return new Faker<Colour>()
                 .CustomInstantiator(
                     f => new Colour(
                         identifier ?? f.Random.ArrayElement(identifiers),
-                        f.Random.Int(0, 16777215),
+                        value ?? f.Random.Int(0, 16777215),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
