@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using Compiler.Model;
 using Compiler.Validate;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
@@ -11,10 +12,10 @@ namespace CompilerTest.Validate
         public RoutePointValidatorTest()
         {
             this.sectorElements = new SectorElementCollection();
-            this.sectorElements.Add(new Fix("testfix", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Vor("testvor", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Ndb("testndb", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Airport("testairport", "testairport", new Coordinate("abc", "def"), "123.456", "test"));
+            this.sectorElements.Add(FixFactory.Make("testfix"));
+            this.sectorElements.Add(VorFactory.Make("testvor"));
+            this.sectorElements.Add(NdbFactory.Make("testndb"));
+            this.sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
         [Fact]

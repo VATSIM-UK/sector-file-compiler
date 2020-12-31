@@ -4,7 +4,7 @@ namespace CompilerTest.Bogus.Factory
 {
     static class InfoFactory
     {
-        public static Info Make()
+        public static Info Make(string airport = null)
         {
             return new(
                 new InfoName(
@@ -20,7 +20,7 @@ namespace CompilerTest.Bogus.Factory
                     CommentFactory.Make()
                 ),
                 new InfoAirport(
-                    "EGLL",
+                    airport ?? "EGLL",
                     DefinitionFactory.Make(),
                     DocblockFactory.Make(),
                     CommentFactory.Make()

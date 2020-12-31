@@ -2,6 +2,7 @@
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Validate;
+using CompilerTest.Bogus.Factory;
 using Moq;
 
 namespace CompilerTest.Validate
@@ -9,18 +10,12 @@ namespace CompilerTest.Validate
     public class ColourValidatorTest
     {
         private readonly SectorElementCollection sectorElements;
-        private readonly Mock<IEventLogger> loggerMock;
-        private readonly Colour first;
-        private readonly Colour second;
 
         public ColourValidatorTest()
         {
             this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.first = new Colour("colour1", 1, "test");
-            this.second = new Colour("colour2", 555, "test");
-            this.sectorElements.Add(this.first);
-            this.sectorElements.Add(this.second);
+            this.sectorElements.Add(ColourFactory.Make("colour1"));
+            this.sectorElements.Add(ColourFactory.Make("colour2"));
         }
 
         [Theory]

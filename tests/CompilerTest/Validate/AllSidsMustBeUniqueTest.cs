@@ -6,30 +6,23 @@ using Compiler.Event;
 using Compiler.Validate;
 using Moq;
 using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllSidsMustBeUniqueTest
+    public class AllSidsMustBeUniqueTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection sectorElements;
-        private readonly Mock<IEventLogger> loggerMock;
         private readonly SidStar first;
         private readonly SidStar second;
         private readonly SidStar third;
         private readonly SidStar fourth;
-        private readonly AllSidsMustBeUnique rule;
-        private readonly CompilerArguments args; 
 
         public AllSidsMustBeUniqueTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.first = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>(), "test");
-            this.second = new SidStar("STAR", "EGKK", "26L", "ADMAG2X", new List<string>(), "test");
-            this.third = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>(), "test");
-            this.fourth = new SidStar("SID", "EGKK", "26L", "ADMAG2X", new List<string>(new string[] { "a" }), "test");
-            this.rule = new AllSidsMustBeUnique();
-            this.args = new CompilerArguments();
+            this.first = SidStarFactory.Make(true, "EGKK", "26L", "ADMAG2X", new List<string>());
+            this.second = SidStarFactory.Make(false, "EGKK", "26L", "ADMAG2X", new List<string>());
+            this.third = SidStarFactory.Make(true, "EGKK", "26L", "ADMAG2X", new List<string>());
+            this.fourth = SidStarFactory.Make(true, "EGKK", "26L", "ADMAG2X", new List<string>() {"a"});
         }
 
         [Fact]
@@ -37,10 +30,7 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.second);
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
-
+            this.AssertNoValidationError();
         }
 
         [Fact]
@@ -48,8 +38,7 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.fourth);
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.AssertNoValidationError();
         }
 
         [Fact]
@@ -58,8 +47,12 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.second);
             this.sectorElements.Add(this.third);
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            this.AssertValidationErrors();
+        }
+
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllSidsMustBeUnique();
         }
     }
 }

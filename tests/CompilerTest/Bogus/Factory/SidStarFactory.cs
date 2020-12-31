@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Bogus;
 using Compiler.Model;
 
@@ -15,16 +16,16 @@ namespace CompilerTest.Bogus.Factory
             "LISTO1S"
         };
         
-        public static SidStar Make(bool isSid = true)
+        public static SidStar Make(bool isSid = true, string airport = null, string runway = null, string identifier = null, List<string> route = null)
         {   
             return new Faker<SidStar>()
                 .CustomInstantiator(
                     f => new SidStar(
                         isSid ? "SID" : "STAR",
-                        AirportFactory.GetRandomDesignator(),
-                        RunwayFactory.GetRandomDesignator(),
-                        f.Random.ArrayElement(identifiers),
-                        FixFactory.RandomIdentifiers(3),
+                        airport ?? AirportFactory.GetRandomDesignator(),
+                        runway ?? RunwayFactory.GetRandomDesignator(),
+                        identifier ?? f.Random.ArrayElement(identifiers),
+                        route ?? FixFactory.RandomIdentifiers(3),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
