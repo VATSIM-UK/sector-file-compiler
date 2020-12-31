@@ -28,7 +28,7 @@ namespace Compiler.Input
         public Comment GetCommentSegment(string line)
         {
             int commentIndex = line.IndexOf(this.GetCommentDelimiter());
-            return new Comment(commentIndex == -1 ? "" : line.Substring(commentIndex + 1));
+            return new Comment(commentIndex == -1 ? "" : line.Substring(commentIndex + 1).Trim());
         }
 
         /**
@@ -70,12 +70,12 @@ namespace Compiler.Input
             int commentIndex = preparedLine.IndexOf(this.GetCommentDelimiter());
             return commentIndex == -1
                 ? preparedLine
-                : preparedLine.Substring(0, commentIndex).Trim();
+                : preparedLine.Substring(0, commentIndex);
         }
 
         private string PrepareLine(string line)
         {
-            return line.Trim().Replace('\t', ' ');
+            return line.Replace('\t', ' ');
         }
     }
 }

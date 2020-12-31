@@ -53,7 +53,7 @@ namespace Compiler.Output
                             !group.Equals(currentDataGroup)
                         ) {
                             currentDataGroup = group;
-                            outputStream.WriteLine(new Comment($"Start of {@group.HeaderDescription}"));
+                            outputStream.WriteLine(new Comment(group.HeaderDescription));
                         }
 
                         element.Compile(sectorElements, outputStream);

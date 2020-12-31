@@ -21,7 +21,7 @@ namespace CompilerTest.Validate
             this.sectorElements = new SectorElementCollection();
             this.loggerMock = new Mock<IEventLogger>();
             this.first = SectorFactory.Make("ONE");
-            this.first = SectorFactory.Make("ONE");
+            this.second = SectorFactory.Make("ONE");
             this.third = SectorFactory.Make("NOTONE");
         }
 
