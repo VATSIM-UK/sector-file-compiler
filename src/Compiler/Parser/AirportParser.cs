@@ -2,6 +2,7 @@
 using Compiler.Error;
 using Compiler.Model;
 using Compiler.Input;
+using Compiler.Validate;
 
 namespace Compiler.Parser
 {
@@ -20,11 +21,21 @@ namespace Compiler.Parser
 
         public void ParseData(AbstractSectorDataFile data)
         {
+            // Validate the folder name
+            if (!AirportValidator.ValidEuroscopeAirport(data.GetParentDirectoryName()))
+            {
+                this.eventLogger.AddEvent(
+                    new SyntaxError("Invalid airport ICAO", data.FullPath)
+                );
+                return;
+            }
+            
             int linesParsed = 0;
 
             SectorData nameLine = new SectorData();
             SectorData coordinateLine = new SectorData();
             SectorData frequencyLine = new SectorData();
+
 
             // Loop the lines to get the data out
             foreach (SectorData line in data)

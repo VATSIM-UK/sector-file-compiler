@@ -10,7 +10,7 @@ namespace CompilerTest.Parser
 {
     public abstract class AbstractParserTestCase
     {
-        protected const string INPUT_FILE_NAME = "TESTFOLDER/TEST.txt";
+        protected string INPUT_FILE_NAME = "TESTFOLDER/TEST.txt";
         
         protected readonly SectorElementCollection sectorElementCollection;
         protected readonly Moq.Mock<IEventLogger> logger;
@@ -26,7 +26,7 @@ namespace CompilerTest.Parser
         {
             return new SectorDataFileFactory(
                 new MockInputStreamFactory(lines)
-            ).Create(INPUT_FILE_NAME, GetInputDataType());
+            ).Create(this.INPUT_FILE_NAME, GetInputDataType());
         }
 
         protected void RunParserOnLines(List<string> lines)
@@ -55,9 +55,9 @@ namespace CompilerTest.Parser
             AssertExpectedDocblockLines(element.Docblock, docblockLines);
         }
         
-        private static void AssertExpectedDefinition(Definition definition, int lineNumber)
+        private void AssertExpectedDefinition(Definition definition, int lineNumber)
         {
-            Assert.Equal(new Definition(INPUT_FILE_NAME, lineNumber), definition);
+            Assert.Equal(new Definition(this.INPUT_FILE_NAME, lineNumber), definition);
         }
 
         private static void AssertExpectedDocblockLines(Docblock docblock, List<string> docblockLines)
@@ -66,6 +66,11 @@ namespace CompilerTest.Parser
             docblockLines?.ForEach(line => docblock.AddLine(new Comment(line)));
 
             Assert.Equal(expectedDocblock, docblock);
+        }
+
+        protected void SetInputFileName(string filename)
+        {
+            this.INPUT_FILE_NAME = filename;
         }
     }
 }

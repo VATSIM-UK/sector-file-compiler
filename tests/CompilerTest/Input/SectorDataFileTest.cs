@@ -42,7 +42,7 @@ namespace CompilerTest.Input
         {
             Assert.Equal(
                 "StreamTest",
-                this.file.GetParentDirectoryName()
+                this.file.GetFileName()
             );
         }
 
@@ -67,26 +67,23 @@ namespace CompilerTest.Input
         [Fact]
         public void TestItIteratesTheInputFile()
         {
-            int expectedLine = 1;
+            int expectedLine = 3;
             foreach (SectorData dataLine in this.file)
             {
                 Assert.Equal(new List<string> { "Line", expectedLine.ToString() }, dataLine.dataSegments);
 
                 Docblock expectedDocblock = new Docblock();
-                if(expectedLine == 1)
-                {
-                    expectedDocblock.AddLine(new Comment("Initial docblock"));
-                }
-
-                expectedDocblock.AddLine(new Comment("Docblock " + expectedLine.ToString()));
-                expectedDocblock.AddLine(new Comment("Docblock " + expectedLine.ToString() + "a"));
+                expectedDocblock.AddLine(new Comment("Docblock " + (expectedLine - 2)));
+                expectedDocblock.AddLine(new Comment("Docblock " + (expectedLine - 1)));
                 Assert.Equal(expectedDocblock, dataLine.docblock);
-                Assert.Equal(new Comment("Inline " + expectedLine.ToString()), dataLine.inlineComment);
-                Assert.Equal(expectedLine++, this.file.CurrentLineNumber);
+                Assert.Equal(new Comment("Inline " + expectedLine), dataLine.inlineComment);
+                Assert.Equal(expectedLine, this.file.CurrentLineNumber);
                 Assert.Equal(new Definition("_TestData/StreamTest.txt", expectedLine), dataLine.definition);
+
+                expectedLine += 4;
             }
 
-            Assert.Equal(8, this.file.CurrentLineNumber);
+            Assert.Equal(33, this.file.CurrentLineNumber);
         }
     }
 }

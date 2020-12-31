@@ -66,7 +66,7 @@ namespace CompilerTest.Input
                     new object[] { "a b c", new List<string> { "a", "b", "c" } },
                     new object[] { "a b;c", new List<string> { "a", "b"} },
                     new object[] { "a b   c", new List<string> { "a", "b", "c"} },
-                    new object[] { "a:b  ;c", new List<string> { "a", "b", "", ""} },
+                    new object[] { "a:b  ;c", new List<string> { "a:b" } },
             };
 
         [Theory]

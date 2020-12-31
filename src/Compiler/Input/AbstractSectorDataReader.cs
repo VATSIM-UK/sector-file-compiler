@@ -69,8 +69,8 @@ namespace Compiler.Input
             string preparedLine = this.PrepareLine(line);
             int commentIndex = preparedLine.IndexOf(this.GetCommentDelimiter());
             return commentIndex == -1
-                ? preparedLine
-                : preparedLine.Substring(0, commentIndex);
+                ? preparedLine.Trim()
+                : preparedLine.Substring(0, commentIndex).Trim();
         }
 
         private string PrepareLine(string line)
