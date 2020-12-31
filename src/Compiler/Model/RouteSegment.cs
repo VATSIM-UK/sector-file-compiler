@@ -51,8 +51,8 @@ namespace Compiler.Model
         public override string GetCompileData(SectorElementCollection elements)
         {
             return string.Format(
-                "{0}{1}{2}{3}",
-                "".PadRight(this.SegmentIdentifier.PadRight(26, ' ').Length + 1),
+                "{0} {1} {2}{3}",
+                "".PadRight(this.SegmentIdentifier.PadRight(26, ' ').Length),
                 this.Start,
                 this.End,
                 this.Colour == null ? "" : " " + this.Colour

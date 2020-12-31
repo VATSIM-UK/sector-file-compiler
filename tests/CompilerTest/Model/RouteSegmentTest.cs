@@ -37,7 +37,7 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "FOO                        BIG BIG LAM LAM",
+                "                           BIG BIG LAM LAM",
                 this.segment.GetCompileData(new SectorElementCollection())
             );
         }
@@ -56,7 +56,7 @@ namespace CompilerTest.Model
             );
 
             Assert.Equal(
-                "FOO                        BIG BIG LAM LAM FooColour",
+                "                           BIG BIG LAM LAM FooColour",
                 segment.GetCompileData(new SectorElementCollection())
             );
         }

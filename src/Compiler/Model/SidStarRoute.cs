@@ -34,7 +34,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return $"{this.Identifier?.PadRight(26, ' ')} {this.InitialSegment.Start}{this.InitialSegment.End}{(this.InitialSegment.Colour == null ? "" : " " + this.InitialSegment.Colour)}";
+            return $"{this.Identifier?.PadRight(26, ' ')} {this.InitialSegment.Start} {this.InitialSegment.End}{(this.InitialSegment.Colour == null ? "" : " " + this.InitialSegment.Colour)}";
         }
     }
 }

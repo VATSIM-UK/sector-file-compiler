@@ -75,7 +75,7 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                $"09 27 090 270 abc def ghi jkl {this.airport.Icao} - {this.airport.Name}",
+                $"09 27 090 270 abc def ghi jkl {this.airport.Icao} {this.airport.Name}",
                 this.runway.GetCompileData(this.sectorElements)
             );
         }

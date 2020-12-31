@@ -32,6 +32,22 @@ namespace CompilerTest.Bogus.Factory
                 );
         }
         
+        public static RouteSegment MakeDoublePointWithNoColour(string identifier1 = null, string identifier2 = null)
+        {
+            return new Faker<RouteSegment>()
+                .CustomInstantiator(
+                    f => new RouteSegment(
+                        f.Random.String2(4),
+                        new Point(identifier1 ?? f.Random.ArrayElement(identifiers)),
+                        new Point(identifier2 ?? f.Random.ArrayElement(identifiers)),
+                        DefinitionFactory.Make(),
+                        DocblockFactory.Make(),
+                        CommentFactory.Make(),
+                        null
+                    )
+                );
+        }
+        
         public static RouteSegment MakePointCoordinate(string pointIdentifier = null, Coordinate? coordinate = null)
         {
             return new Faker<RouteSegment>()

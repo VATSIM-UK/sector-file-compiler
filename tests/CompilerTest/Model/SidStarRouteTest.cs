@@ -9,14 +9,14 @@ namespace CompilerTest.Model
     {
         private readonly SidStarRoute sidStar;
 
-        private List<RouteSegment> segments;
+        private List<RouteSegment> segments = new();
 
         private RouteSegment initialSegment;
 
         public SidStarRouteTest()
         {
-            this.initialSegment = RouteSegmentFactory.MakeDoublePoint();
-            this.segments.Add(RouteSegmentFactory.MakeDoublePoint());
+            this.initialSegment = RouteSegmentFactory.MakeDoublePoint("LAM", "BIG");
+            this.segments.Add(RouteSegmentFactory.MakeDoublePoint(""));
             this.segments.Add(RouteSegmentFactory.MakeDoublePoint());
             this.segments.Add(RouteSegmentFactory.MakeDoublePoint());
             this.segments = new List<RouteSegment>();
@@ -42,15 +42,42 @@ namespace CompilerTest.Model
         {
             Assert.Equal(this.segments, this.sidStar.Segments);
         }
+        
+        [Fact]
+        public void TestItSetsInitialSegment()
+        {
+            Assert.Equal(this.initialSegment, this.sidStar.InitialSegment);
+        }
 
         [Fact]
         public void TestItCompilesWithPadding()
         {
-            string expected = "EGKK - ADMAG2X             LAM LAM BIG BIG";
+            string expected = $"EGKK - ADMAG2X             LAM LAM BIG BIG {this.initialSegment.Colour}";
 
             Assert.Equal(
                 expected,
                 this.sidStar.GetCompileData(new SectorElementCollection())
+            );
+        }
+        
+        [Fact]
+        public void TestItCompilesWithNoInitialSegmentColour()
+        {
+            SidStarRoute route = new(
+                SidStarType.SID,
+                "EGKK - ADMAG2X",
+                RouteSegmentFactory.MakeDoublePointWithNoColour("BNN", "OCK"),
+                this.segments,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
+            
+            string expected = "EGKK - ADMAG2X             BNN BNN OCK OCK";
+
+            Assert.Equal(
+                expected,
+                route.GetCompileData(new SectorElementCollection())
             );
         }
 
@@ -67,7 +94,7 @@ namespace CompilerTest.Model
                 CommentFactory.Make()
             );
 
-            string expected = "This is a long name which needs extra padding LAM LAM BIG BIG";
+            string expected = $"This is a long name which needs extra padding LAM LAM BIG BIG {this.initialSegment.Colour}";
 
             Assert.Equal(
                 expected,

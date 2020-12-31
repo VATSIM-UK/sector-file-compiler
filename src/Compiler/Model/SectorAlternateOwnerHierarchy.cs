@@ -43,7 +43,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return $"ALTOWNER:{this.Name}:{string.Join(':', this.Owners)}\r\n";
+            return $"ALTOWNER:{this.Name}:{string.Join(':', this.Owners)}";
         }
 
         public override int GetHashCode()

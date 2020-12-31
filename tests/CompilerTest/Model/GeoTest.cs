@@ -76,7 +76,7 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "TestGeo                     abc def ghi jkl red",
+                $"TestGeo                     {this.firstPoint} {this.secondPoint} red",
                 this.model.GetCompileData(new SectorElementCollection())
             );
         }

@@ -125,7 +125,7 @@ namespace CompilerTest.Model
             );
             Assert.Equal(
                 "EGBB_APP:Birmingham Radar:123.970:BBR:B:EGBB:APP:-:-:0401:0407",
-                this.model.GetCompileData(new SectorElementCollection())
+                newModel.GetCompileData(new SectorElementCollection())
             );
         }
     }
