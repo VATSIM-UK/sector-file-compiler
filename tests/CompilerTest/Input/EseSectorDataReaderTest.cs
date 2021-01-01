@@ -66,7 +66,7 @@ namespace CompilerTest.Input
                     new object[] { "a:b:c", new List<string> { "a", "b", "c" } },
                     new object[] { "a:b;c", new List<string> { "a", "b"} },
                     new object[] { "a:b   c", new List<string> { "a", "b   c"} },
-                    new object[] { "a:b    ;c", new List<string> { "a", "b    "} },
+                    new object[] { "a:b    ;c", new List<string> { "a", "b"} },
             };
 
         [Theory]
@@ -77,10 +77,10 @@ namespace CompilerTest.Input
         }
 
         [Theory]
-        [InlineData("abc ; ", "abc ")]
+        [InlineData("abc ; ", "abc")]
         [InlineData("abc", "abc")]
         [InlineData(";abc", "")]
-        [InlineData(" abc ", " abc ")]
+        [InlineData(" abc ", "abc")]
         public void ItReturnsRawData(string line, string expected)
         {
             Assert.Equal(expected, this.reader.GetRawData(line));
