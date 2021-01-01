@@ -24,7 +24,7 @@ namespace Compiler.Output
         {
 
             return this.sectorElements.SectorLines.Cast<AbstractCompilableElement>()
-                .Concat(this.sectorElements.Sectors)
+                .Concat(this.sectorElements.CircleSectorLines)
                 .OrderBy(
                     sectorline => this.outputGroups.GetForDefinitionFile(sectorline.GetDefinition())
                 )
