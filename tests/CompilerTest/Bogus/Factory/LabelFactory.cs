@@ -5,7 +5,11 @@ namespace CompilerTest.Bogus.Factory
 {
     static class LabelFactory
     {
-        public static Label Make(string text = null, string colour = null)
+        public static Label Make(
+            string text = null,
+            string colour = null,
+            Definition definition = null
+        )
         {
             return new Faker<Label>()
                 .CustomInstantiator(
@@ -13,7 +17,7 @@ namespace CompilerTest.Bogus.Factory
                         text ?? "Test Label",
                         CoordinateFactory.Make(),
                         colour ?? ColourFactory.RandomIdentifier(),
-                        DefinitionFactory.Make(),
+                        definition ?? DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
                     )

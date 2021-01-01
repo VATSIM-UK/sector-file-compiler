@@ -6,8 +6,13 @@ namespace CompilerTest.Bogus.Factory
 {
     static class GeoFactory
     {
-        public static Geo Make(string colour = null, List<GeoSegment> additionalSegments = null, Point firstPoint = null, Point secondPoint = null)
-        {
+        public static Geo Make(
+            string colour = null,
+            List<GeoSegment> additionalSegments = null,
+            Point firstPoint = null,
+            Point secondPoint = null,
+            Definition definition = null
+        ) {
             return new Faker<Geo>()
                 .CustomInstantiator(
                     f => new Geo(
@@ -16,7 +21,7 @@ namespace CompilerTest.Bogus.Factory
                         secondPoint ?? PointFactory.Make(),
                         colour ?? "red",
                         additionalSegments ?? GeoSegmentFactory.MakeList(2),
-                        DefinitionFactory.Make(),
+                        definition ?? DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
                     )

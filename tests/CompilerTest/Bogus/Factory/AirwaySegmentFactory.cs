@@ -14,12 +14,12 @@ namespace CompilerTest.Bogus.Factory
             "M185"
         };
         
-        public static AirwaySegment Make(AirwayType type = AirwayType.LOW)
+        public static AirwaySegment Make(AirwayType type = AirwayType.LOW, string identifier = null)
         {
             return new Faker<AirwaySegment>()
                 .CustomInstantiator(
                     f => new AirwaySegment(
-                        $"{(type == AirwayType.HIGH ? "U" : "")}{f.Random.ArrayElement(identifiers)}",
+                        identifier ?? $"{(type == AirwayType.HIGH ? "U" : "")}{f.Random.ArrayElement(identifiers)}",
                         type,
                         PointFactory.Make(),
                         PointFactory.Make(),

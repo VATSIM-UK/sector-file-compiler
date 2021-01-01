@@ -57,7 +57,11 @@ namespace CompilerTest.Bogus.Factory
             return new Randomizer().ArrayElements(identifiers).ToList();
         }
 
-        public static ControllerPosition Make(string identifier = null)
+        public static ControllerPosition Make(
+            string identifier = null,
+            PositionOrder? order = null,
+            Definition definition = null
+        )
         {
             return new Faker<ControllerPosition>().CustomInstantiator(
                 f => new ControllerPosition(
@@ -71,8 +75,8 @@ namespace CompilerTest.Bogus.Factory
                     f.Random.ArrayElement(squawksRangeStarts),
                     f.Random.ArrayElement(squawksRangeEnds),
                     new List<Coordinate>() {CoordinateFactory.Make()},
-                    PositionOrder.CONTROLLER_POSITION,
-                    DefinitionFactory.Make(),
+                    order ?? PositionOrder.CONTROLLER_POSITION,
+                    definition ?? DefinitionFactory.Make(),
                     DocblockFactory.Make(),
                     CommentFactory.Make()
                 )

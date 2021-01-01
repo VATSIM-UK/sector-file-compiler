@@ -5,12 +5,12 @@ namespace CompilerTest.Bogus.Factory
 {
     static class ArtccSegmentFactory
     {
-        public static ArtccSegment Make(ArtccType type = ArtccType.REGULAR)
+        public static ArtccSegment Make(ArtccType type = ArtccType.REGULAR, string identifier = null)
         {
             return new Faker<ArtccSegment>()
                 .CustomInstantiator(
                     f => new ArtccSegment(
-                        "EGTT",
+                        identifier ?? "EGTT",
                         type,
                         PointFactory.Make(),
                         PointFactory.Make(),

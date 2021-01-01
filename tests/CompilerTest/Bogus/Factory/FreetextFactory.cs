@@ -5,7 +5,7 @@ namespace CompilerTest.Bogus.Factory
 {
     static class FreetextFactory
     {
-        public static Freetext Make(string identifier = null)
+        public static Freetext Make(Definition definition = null)
         {
             return new Faker<Freetext>()
                 .CustomInstantiator(
@@ -13,7 +13,7 @@ namespace CompilerTest.Bogus.Factory
                         "Test Title",
                         "Test Freetext",
                         CoordinateFactory.Make(),
-                        DefinitionFactory.Make(),
+                        definition ?? DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
                     )
