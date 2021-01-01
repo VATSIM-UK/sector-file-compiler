@@ -12,16 +12,16 @@ namespace CompilerTest.Parser
         public static IEnumerable<object[]> BadData => new List<object[]>
         {
             new object[] { new List<string>{
-                "BHD BHD DIKAS DIKAS"
+                "BHD DIKAS DIKAS"
             }}, // Too few segments
             new object[] { new List<string>{
-                "N864 BHD BHD DIKAS DIKAS EXMOR"
+                "BHD BHD DIKAS DIKAS EXMOR"
             }}, // Too many segments
             new object[] { new List<string>{
-                "N864 N050.57.00.000 W001.21.24.490 N050.57.00.000 N001.21.24.490"
+                "N050.57.00.000 W001.21.24.490 N050.57.00.000 N001.21.24.490"
             }}, // Invalid end point
             new object[] { new List<string>{
-                "N864 N050.57.00.000 N001.21.24.490 N050.57.00.000 W001.21.24.490"
+                "N050.57.00.000 N001.21.24.490 N050.57.00.000 W001.21.24.490"
             }}, // Invalid start point
         };
 

@@ -23,27 +23,6 @@ namespace CompilerTest.Parser
             new object[] { new List<string>{
                 "TestGeo                     N050.57.00.000 W001.21.24.490 N050.57.00.000 N050.57.00.001 test"
             }}, // Second point invalid
-            new object[] { new List<string>{
-                "COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:-5:*:|HEMEL20 ;comment"
-            }}, // Climb level negative
-            new object[] { new List<string>{
-                "COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:*:abc:|HEMEL20 ;comment"
-            }}, // Descend level not integer
-            new object[] { new List<string>{
-                "COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:*:-5:|HEMEL20 ;comment"
-            }}, // Descend level negative
-            new object[] { new List<string>{
-                "FIR_COPX:*:*:HEMEL:*:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment"
-            }}, // Arrival airport any, but runway set
-            new object[] { new List<string>{
-                "FIR_COPX:*:*:HEMEL:DIKAS:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment"
-            }}, // Next fix is a fix (not an airport) but arrival runway is specified
-            new object[] { new List<string>{
-                "FIR_COPX:*:09R:HEMEL:EGKK:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment"
-            }}, // Any departure airport, but runway specified
-            new object[] { new List<string>{
-                "FIR_COPX:IBROD:09R:HEMEL:EGKK:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment"
-            }}, // Next fix is a fix (not an airport) but departure runway is specified
         };
 
         [Theory]
@@ -104,7 +83,7 @@ namespace CompilerTest.Parser
                 "test",
                 result.Colour
             );
-            this.AssertExpectedMetadata(result, 1, "comment");
+            this.AssertExpectedMetadata(result);
             
             // Segment 1
             Assert.Equal(2, result.AdditionalSegments.Count);
@@ -135,14 +114,14 @@ namespace CompilerTest.Parser
                 "test3",
                 result.AdditionalSegments[1].Colour
             );
-            this.AssertExpectedMetadata(result.AdditionalSegments[1], 2, "comment2");
+            this.AssertExpectedMetadata(result.AdditionalSegments[1], 3, "comment2");
         }
 
         [Fact]
         public void TestItAddsFakePoint()
         {
             this.RunParserOnLines(
-                new List<string>(new string[] { "TestGeo                     S999.00.00.000 E999.00.00.000 S999.00.00.000 E999.00.00.000" })
+                new List<string>(new string[] { "TestGeo                     S999.00.00.000 E999.00.00.000 S999.00.00.000 E999.00.00.000 ;comment" })
             );
             
             Geo result = this.sectorElementCollection.GeoElements[0];
@@ -154,11 +133,8 @@ namespace CompilerTest.Parser
                 new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
                 result.SecondPoint
             );
-            Assert.Equal(
-                "0",
-                result.Colour
-            );
-            this.AssertExpectedMetadata(result, 1, "comment");
+            Assert.Null(result.Colour);
+            this.AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

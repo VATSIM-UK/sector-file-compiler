@@ -132,7 +132,8 @@ namespace Compiler.Parser
                         PointParser.Parse(lines[i].dataSegments[2], lines[i].dataSegments[3]),
                         lines[i].definition,
                         lines[i].docblock,
-                        lines[i].inlineComment
+                        lines[i].inlineComment,
+                        lines[i].dataSegments.Count == 5 ? lines[i].dataSegments[4] : null
                     )
                 );
             }

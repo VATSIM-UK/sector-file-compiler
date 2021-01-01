@@ -82,6 +82,7 @@ namespace Compiler.Parser
                 this.errorLog.AddEvent(
                     new SyntaxError("SECTOR minimum altitude must be an integer", declarationLine)
                 );
+                return;
             }
 
             if (!int.TryParse(declarationLine.dataSegments[3], out maximumAltitude))
@@ -89,6 +90,7 @@ namespace Compiler.Parser
                 this.errorLog.AddEvent(
                     new SyntaxError("SECTOR maximum altitude must be an integer", declarationLine)
                 );
+                return;
             }
 
             SectorOwnerHierarchy ownerHierarchy = null;
@@ -293,7 +295,7 @@ namespace Compiler.Parser
 
             if (!AirportValidator.ValidSectorGuestAirport(line.dataSegments[2]))
             {
-                throw new ArgumentOutOfRangeException("Invalid departure airport designator in GUEST segement ");
+                throw new ArgumentOutOfRangeException("Invalid departure airport designator in GUEST segement");
             }
 
             if (!AirportValidator.ValidSectorGuestAirport(line.dataSegments[3]))

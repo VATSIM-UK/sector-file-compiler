@@ -42,7 +42,7 @@ namespace Compiler.Parser
 
                 // Get the name out and take the name segments off
                 int endOfNameIndex = this.GetEndOfNameIndex(line);
-                string name = string.Join(' ', line.dataSegments.GetRange(0, endOfNameIndex));
+                string name = string.Join(' ', line.dataSegments.GetRange(0, endOfNameIndex)).Trim('"');
                 line.dataSegments.RemoveRange(0, endOfNameIndex);
 
                 if (line.dataSegments.Count != 3)

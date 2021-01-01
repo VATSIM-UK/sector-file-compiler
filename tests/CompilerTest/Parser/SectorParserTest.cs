@@ -89,19 +89,6 @@ namespace CompilerTest.Parser
                 "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
                 "ALTOWNER:AAWHAT2:S ;comment3.1",
                 "BORDER:AAFIN:AAWHAT ;comment4",
-                "BORDER:AAFIN2:AAWHAT ;comment4",
-                "ARRAPT:EGAA:EGAC ;comment5",
-                "DEPAPT:EGAA ;comment6",
-                "ACTIVE:EGLL:09R ;comment6.5",
-                "ACTIVE:EGLL:09L ;comment6.5.1",
-                "GUEST:GDR:*:EGAA ;comment7",
-            }}, // Duplicate border
-            new object[] { new List<string>{
-                "SECTOR:AAFIN:100:6000 ;comment1",
-                "OWNER:AAF:AAR:STA ;comment2",
-                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                "ALTOWNER:AAWHAT2:S ;comment3.1",
-                "BORDER:AAFIN:AAWHAT ;comment4",
                 "ARRAPT:EGAA:EGAC ;comment5",
                 "DEPAPT:EGAA ;comment6",
                 "ACTIVE:EGLL ;comment6.5",
@@ -175,19 +162,6 @@ namespace CompilerTest.Parser
                 "ALTOWNER:AAWHAT2:S ;comment3.1",
                 "BORDER:AAFIN:AAWHAT ;comment4",
                 "ARRAPT:EGAA:EGAC ;comment5",
-                "DEPAPT:EGAA ;comment6",
-                "DEPAPT:EGAA ;comment6",
-                "ACTIVE:EGLL:09R ;comment6.5",
-                "ACTIVE:EGLL:09L ;comment6.5.1",
-                "GUEST:GDR:*:EGAA ;comment7",
-            }}, // Duplicate DEPAPT
-            new object[] { new List<string>{
-                "SECTOR:AAFIN:100:6000 ;comment1",
-                "OWNER:AAF:AAR:STA ;comment2",
-                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                "ALTOWNER:AAWHAT2:S ;comment3.1",
-                "BORDER:AAFIN:AAWHAT ;comment4",
-                "ARRAPT:EGAA:EGAC ;comment5",
                 "DEPAPT ;comment6",
                 "ACTIVE:EGLL:09R ;comment6.5",
                 "ACTIVE:EGLL:09L ;comment6.5.1",
@@ -205,20 +179,7 @@ namespace CompilerTest.Parser
                 "ACTIVE:EGLL:09L ;comment6.5.1",
                 "GUEST:GDR:*:EGAA ;comment7",
             }}, // Invalid DEPAPT code
-            new object[] { new List<string>{
-                "SECTOR:AAFIN:100:6000 ;comment1",
-                "OWNER:AAF:AAR:STA ;comment2",
-                "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
-                "ALTOWNER:AAWHAT2:S ;comment3.1",
-                "BORDER:AAFIN:AAWHAT ;comment4",
-                "ARRAPT:EGAA:EGAC ;comment5",
-                "ARRAPT:EGAA:EGAC ;comment5",
-                "DEPAPT:EGAA ;comment6",
-                "ACTIVE:EGLL:09R ;comment6.5",
-                "ACTIVE:EGLL:09L ;comment6.5.1",
-                "GUEST:GDR:*:EGAA ;comment7",
-            }}, // Duplicate ARRAPT
-            new object[] { new List<string>{
+             new object[] { new List<string>{
                 "SECTOR:AAFIN:100:6000 ;comment1",
                 "OWNER:AAF:AAR:STA ;comment2",
                 "ALTOWNER:AAWHAT:SW:SWD:S ;comment3",
@@ -307,7 +268,7 @@ namespace CompilerTest.Parser
             Assert.Equal(3, result1.Owners.Owners.Count);
             Assert.Equal("AAF", result1.Owners.Owners[0]);
             Assert.Equal("AAR", result1.Owners.Owners[1]);
-            Assert.Equal("AAR", result1.Owners.Owners[2]);
+            Assert.Equal("STA", result1.Owners.Owners[2]);
             this.AssertExpectedMetadata(result1.Owners, 2, "comment2");
 
             // First - ALTOWNER 1
@@ -316,7 +277,7 @@ namespace CompilerTest.Parser
             Assert.Equal(3, result1.AltOwners[0].Owners.Count);
             Assert.Equal("SW", result1.AltOwners[0].Owners[0]);
             Assert.Equal("SWD", result1.AltOwners[0].Owners[1]);
-            Assert.Equal("S", result1.AltOwners[0].Owners[1]);
+            Assert.Equal("S", result1.AltOwners[0].Owners[2]);
             this.AssertExpectedMetadata(result1.AltOwners[0], 3, "comment3");
             
             // First - ALTOWNER 2
@@ -329,7 +290,7 @@ namespace CompilerTest.Parser
             Assert.Single(result1.Borders);
             Assert.Equal(2, result1.Borders[0].BorderLines.Count);
             Assert.Equal("AAFIN", result1.Borders[0].BorderLines[0]);
-            Assert.Equal("AAFIN", result1.Borders[0].BorderLines[1]);
+            Assert.Equal("AAWHAT", result1.Borders[0].BorderLines[1]);
             this.AssertExpectedMetadata(result1.Borders[0], 5, "comment4");
 
             // First - ARRAPT 1
@@ -342,7 +303,7 @@ namespace CompilerTest.Parser
             // First - ARRAPT 2
             Assert.Single(result1.ArrivalAirports[1].Airports);
             Assert.Equal("EGAE", result1.ArrivalAirports[1].Airports[0]);
-            this.AssertExpectedMetadata(result1.ArrivalAirports[0], 7, "comment5.1");
+            this.AssertExpectedMetadata(result1.ArrivalAirports[1], 7, "comment5.1");
 
             // First - DEPAPT 1
             Assert.Equal(2, result1.DepartureAirports.Count);
@@ -354,18 +315,18 @@ namespace CompilerTest.Parser
             // First - DEPAPT 2
             Assert.Single(result1.DepartureAirports[1].Airports);
             Assert.Equal("EGLC", result1.DepartureAirports[1].Airports[0]);
-            this.AssertExpectedMetadata(result1.DepartureAirports[0], 9, "comment6.1");
+            this.AssertExpectedMetadata(result1.DepartureAirports[1], 9, "comment6.1");
             
             // First - ACTIVE 1
             Assert.Equal(2, result1.Active.Count);
             Assert.Equal("EGLL", result1.Active[0].Airfield);
-            Assert.Equal("09R", result1.Active[0].Airfield);
-            this.AssertExpectedMetadata(result1.Active[0], 10, "comment 6.5");
+            Assert.Equal("09R", result1.Active[0].Runway);
+            this.AssertExpectedMetadata(result1.Active[0], 10, "comment6.5");
             
             // First - ACTIVE 2
             Assert.Equal("EGLL", result1.Active[1].Airfield);
-            Assert.Equal("09L", result1.Active[1].Airfield);
-            this.AssertExpectedMetadata(result1.Active[1], 11, "comment 6.5.1");
+            Assert.Equal("09L", result1.Active[1].Runway);
+            this.AssertExpectedMetadata(result1.Active[1], 11, "comment6.5.1");
             
             // First - GUEST
             Assert.Single(result1.Guests);
@@ -392,7 +353,7 @@ namespace CompilerTest.Parser
             Assert.Single(result2.AltOwners);
             Assert.Equal("Observing London FIR", result2.AltOwners[0].Name);
             Assert.Single(result2.AltOwners[0].Owners);
-            Assert.Equal("L", result1.AltOwners[0].Owners[0]);
+            Assert.Equal("L", result2.AltOwners[0].Owners[0]);
             this.AssertExpectedMetadata(result2.AltOwners[0], 15, "comment10");
             
             // Second - BORDER
@@ -426,7 +387,7 @@ namespace CompilerTest.Parser
             Assert.Equal("SSR", result2.Guests[1].Controller);
             Assert.Equal("*", result2.Guests[1].DepartureAirport);
             Assert.Equal("EGSS", result2.Guests[1].ArrivalAirport);
-            this.AssertExpectedMetadata(result2.Guests[0], 20, "comment14.1");
+            this.AssertExpectedMetadata(result2.Guests[1], 20, "comment14.1");
 
             // Third
             Sector result3 = this.sectorElementCollection.Sectors[2];

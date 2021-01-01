@@ -44,6 +44,7 @@ namespace Compiler.Parser
                         this.eventLogger.AddEvent(
                             new SyntaxError("Invalid start to geo segment, expected a name", line)
                         );
+                        return;
                     }
 
                     foundFirst = true;
@@ -171,7 +172,7 @@ namespace Compiler.Parser
         private GeoSegment ParseGeoSegment(SectorData line)
         {
 
-            if (line.dataSegments.Count < 4)
+            if (line.dataSegments.Count < 4 || line.dataSegments.Count > 5)
             {
                 this.eventLogger.AddEvent(
                     new SyntaxError("Incorrect number parts for GEO segment", line)

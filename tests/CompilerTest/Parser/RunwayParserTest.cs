@@ -60,7 +60,7 @@ namespace CompilerTest.Parser
             Assert.Equal("33", result.ReverseIdentifier);
             Assert.Equal(328, result.ReverseHeading);
             Assert.Equal(new Coordinate("N052.26.46.580", "W001.44.22.560"), result.ReverseThreshold);
-            Assert.Equal("EGBB", result.AirfieldIcao);
+            Assert.Equal("TESTFOLDER", result.AirfieldIcao);
             this.AssertExpectedMetadata(result);
         }
 

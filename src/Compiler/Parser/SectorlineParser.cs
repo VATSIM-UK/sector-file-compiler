@@ -68,7 +68,6 @@ namespace Compiler.Parser
             catch
             {
                 // Logging done higher up
-                return;
             }
         }
 
@@ -164,9 +163,6 @@ namespace Compiler.Parser
                 {
                     displayRules.Add(this.ParseDisplayRule(displayData));
                 } catch (ArgumentException exception) {
-                    this.errorLog.AddEvent(
-                        new SyntaxError(exception.Message, displayData)
-                    );
                     throw exception;
                 }
 
@@ -240,9 +236,6 @@ namespace Compiler.Parser
                     }
                 } catch (ArgumentException exception)
                 {
-                    this.errorLog.AddEvent(
-                        new SyntaxError(exception.Message, dataLine)
-                    );
                     throw exception;
                 }
 

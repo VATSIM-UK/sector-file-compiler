@@ -208,7 +208,7 @@ namespace CompilerTest.Parser
             this.RunParserOnLines(
                 new List<string>(new string[] {
                     "SECTORLINE:JJCTR - LS ;comment6",
-                    "DISPLAY:London AC Worthing:JJCTR:London S6 ;comment7",
+                    "DISPLAY:London AC Worthing:JJCTR:JJCTR ;comment7",
                     "DISPLAY:JJCTR:JJCTR:London AC Worthing ;comment8",
                     "COORD:N049.59.59.000:W002.29.35.000 ;comment9",
                     "COORD:N050.00.00.000:W001.47.00.000 ;comment10",
@@ -224,7 +224,7 @@ namespace CompilerTest.Parser
             Assert.Equal("BBTWR", result1.Name);
             Assert.Equal("EGBB", result1.CentrePoint);
             Assert.Equal(2.5, result1.Radius);
-            this.AssertExpectedMetadata(result1, 7, "comment");
+            this.AssertExpectedMetadata(result1, 7);
 
             Assert.Equal(2, result1.DisplayRules.Count);
             Assert.Equal("BBAPP", result1.DisplayRules[0].ControlledSector);
@@ -239,7 +239,7 @@ namespace CompilerTest.Parser
 
 
             // Second
-            Sectorline result2 = this.sectorElementCollection.SectorLines[1];
+            Sectorline result2 = this.sectorElementCollection.SectorLines[0];
             Assert.Equal("JJCTR - LS", result2.Name);
             this.AssertExpectedMetadata(result2, 1, "comment6");
 
@@ -247,7 +247,7 @@ namespace CompilerTest.Parser
             Assert.Equal(2, result2.DisplayRules.Count);
             Assert.Equal("London AC Worthing", result2.DisplayRules[0].ControlledSector);
             Assert.Equal("JJCTR", result2.DisplayRules[0].CompareSectorFirst);
-            Assert.Equal("London AC Worthing", result2.DisplayRules[0].CompareSectorSecond);
+            Assert.Equal("JJCTR", result2.DisplayRules[0].CompareSectorSecond);
             this.AssertExpectedMetadata(result2.DisplayRules[0], 2, "comment7");
             
             Assert.Equal("JJCTR", result2.DisplayRules[1].ControlledSector);

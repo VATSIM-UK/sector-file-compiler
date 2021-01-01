@@ -70,7 +70,7 @@ namespace CompilerTest.Parser
             Assert.Equal("LON", position.Prefix);
             Assert.Equal("CTR", position.Suffix);
             Assert.Equal("", position.SquawkRangeStart);
-            Assert.Equal("-", position.SquawkRangeEnd);
+            Assert.Equal("", position.SquawkRangeEnd);
             Assert.Equal(coordinateList, position.VisCentres);
         }
 

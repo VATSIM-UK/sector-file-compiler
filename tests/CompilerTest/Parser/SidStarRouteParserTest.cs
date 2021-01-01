@@ -214,8 +214,8 @@ namespace CompilerTest.Parser
                 result.InitialSegment
             );
             Assert.Equal(expectedAdditionalSegments1, result.Segments);
-            this.AssertExpectedMetadata(result);
-            this.AssertExpectedMetadata(result.InitialSegment);
+            this.AssertExpectedMetadata(result, commentString: "");
+            this.AssertExpectedMetadata(result.InitialSegment, commentString: "");
             this.AssertExpectedMetadata(result.Segments[0], 2);
 
             SidStarRoute result2 = this.sectorElementCollection.SidRoutes[1];
