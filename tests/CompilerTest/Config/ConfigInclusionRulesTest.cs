@@ -54,6 +54,7 @@ namespace CompilerTest.Config
         public void TestItEnumeratesMergedRules()
         {
             using IEnumerator<IInclusionRule> enumerator = this.ruleset.GetEnumerator();
+            enumerator.MoveNext();
             Assert.Same(this.rule3, enumerator.Current);
             enumerator.MoveNext();
             Assert.Same(this.rule1, enumerator.Current);
