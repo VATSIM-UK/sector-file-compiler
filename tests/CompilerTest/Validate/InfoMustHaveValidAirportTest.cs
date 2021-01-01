@@ -21,7 +21,7 @@ namespace CompilerTest.Validate
         public void TestItPassesOnValidAirport()
         {
             this.sectorElements.Add(InfoFactory.Make("EGLL"));
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]

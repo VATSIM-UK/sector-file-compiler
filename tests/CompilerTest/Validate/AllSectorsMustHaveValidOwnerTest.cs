@@ -34,7 +34,7 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Theory]

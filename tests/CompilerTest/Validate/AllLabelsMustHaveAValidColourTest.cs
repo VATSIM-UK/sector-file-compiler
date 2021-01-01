@@ -22,7 +22,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Labels.Add(LabelFactory.Make(colour: "colour1"));
             this.sectorElements.Labels.Add(LabelFactory.Make(colour: "123"));
 
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]

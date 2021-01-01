@@ -35,7 +35,7 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(CoordinationPointFactory.MakeAirport(departureAirport: airport, departureRunway: runway));
 
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Theory]

@@ -33,7 +33,7 @@ namespace CompilerTest.Validate
         public void TestItPassesOnValidPointLow()
         {
             this.sectorElements.Add(GetAirway(AirwayType.LOW, "testfix", "testvor"));
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace CompilerTest.Validate
         public void TestItPassesOnValidPointHigh()
         {
             this.sectorElements.Add(GetAirway(AirwayType.HIGH, "testfix", "testvor"));
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]

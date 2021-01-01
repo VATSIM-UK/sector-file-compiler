@@ -32,7 +32,7 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]

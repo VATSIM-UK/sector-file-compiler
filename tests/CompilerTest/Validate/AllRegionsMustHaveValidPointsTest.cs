@@ -26,7 +26,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(RegionFactory.Make(points: new List<Point>() {new("testfix"), new("testndb")}));
             this.sectorElements.Add(RegionFactory.Make(points: new List<Point>() {new("testvor"), new("testairport")}));
 
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]

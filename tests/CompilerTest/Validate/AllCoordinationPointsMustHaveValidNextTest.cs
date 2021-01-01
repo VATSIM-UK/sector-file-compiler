@@ -30,7 +30,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(CoordinationPointFactory.Make(nextPoint: fix));
             this.sectorElements.Add(CoordinationPointFactory.Make(nextPoint: fix));
             
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Theory]

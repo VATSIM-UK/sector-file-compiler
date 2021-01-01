@@ -23,7 +23,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(RegionFactory.Make("colour1"));
             this.sectorElements.Add(RegionFactory.Make("123"));
 
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]

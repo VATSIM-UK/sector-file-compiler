@@ -30,7 +30,7 @@ namespace CompilerTest.Validate
         public void TestItPassesOnValidRoute()
         {
             this.sectorElements.Add(this.first);
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]

@@ -43,7 +43,7 @@ namespace CompilerTest.Validate
 
             this.sectorElements.Add(route);
             
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]

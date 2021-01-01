@@ -36,7 +36,7 @@ namespace CompilerTest.Validate
         public void TestItPassesOnValidPointRegular()
         {
             this.sectorElements.Add(GetArtcc(ArtccType.REGULAR, "testfix", "testvor"));
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace CompilerTest.Validate
         public void TestItPassesOnValidPointLow()
         {
             this.sectorElements.Add(GetArtcc(ArtccType.LOW, "testfix", "testvor"));
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace CompilerTest.Validate
         public void TestItPassesOnValidPointHigh()
         {
             this.sectorElements.Add(GetArtcc(ArtccType.HIGH, "testfix", "testvor"));
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]

@@ -26,7 +26,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(CoordinationPointFactory.Make(fromSector: sector));
             this.sectorElements.Add(CoordinationPointFactory.Make(fromSector: sector));
             
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Theory]

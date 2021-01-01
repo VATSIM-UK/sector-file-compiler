@@ -33,7 +33,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(sid1);
             this.sectorElements.Add(sid2);
 
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]

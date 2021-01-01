@@ -32,7 +32,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(this.second);
             this.sectorElements.Add(this.third);
             this.sectorElements.Add(this.fourth);
-            this.AssertNoValidationError();;
+            this.AssertNoValidationErrors();;
         }
 
         [Fact]

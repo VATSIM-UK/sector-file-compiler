@@ -24,7 +24,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(airfield1);
             this.sectorElements.Add(airfield2);
 
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]

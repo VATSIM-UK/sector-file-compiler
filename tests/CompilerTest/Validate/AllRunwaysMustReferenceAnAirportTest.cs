@@ -26,7 +26,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(RunwayFactory.Make("EGLL"));
             this.sectorElements.Add(RunwayFactory.Make("000A"));
             
-            this.AssertNoValidationError();
+            this.AssertNoValidationErrors();
         }
 
         [Fact]

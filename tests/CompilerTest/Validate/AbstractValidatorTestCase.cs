@@ -15,7 +15,7 @@ namespace CompilerTest.Validate
 
         protected CompilerArguments args = new();
 
-        protected void AssertNoValidationError()
+        protected void AssertNoValidationErrors()
         {
             this.AssertValidationErrors(0);
         }
