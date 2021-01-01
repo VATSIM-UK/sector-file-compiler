@@ -27,6 +27,12 @@ namespace CompilerTest.Collector
             }
         }
 
-        abstract protected ICompilableElementCollector GetCollector();
+        protected ICompilableElementCollector GetCollector()
+        {
+            return new CompilableElementCollectorFactory(this.sectorElements, this.outputGroups)
+                .GetCollectorForOutputSection(this.GetOutputSection());
+        }
+
+        abstract protected OutputSectionKeys GetOutputSection();
     }
 }

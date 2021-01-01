@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Compiler.Model;
 using Compiler.Output;
 using CompilerTest.Bogus.Factory;
@@ -38,9 +34,9 @@ namespace CompilerTest.Collector
             this.AssertCollectedItems(expected);
         }
 
-        protected override ICompilableElementCollector GetCollector()
+        protected override OutputSectionKeys GetOutputSection()
         {
-            return new ActiveRunwaysCollector(this.sectorElements);
+            return OutputSectionKeys.RWY_ACTIVE_RUNWAYS;
         }
     }
 }

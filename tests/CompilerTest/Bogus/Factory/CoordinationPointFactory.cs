@@ -5,7 +5,15 @@ namespace CompilerTest.Bogus.Factory
 {
     static class CoordinationPointFactory
     {
-        public static CoordinationPoint Make(bool firCopx = false, string coordinationPoint = null, string priorPoint = null, string nextPoint = null, string fromSector = null, string toSector = null)
+        public static CoordinationPoint Make(
+            bool firCopx = false,
+            string coordinationPoint = null,
+            string priorPoint = null,
+            string nextPoint = null,
+            string fromSector = null,
+            string toSector = null,
+            Definition definition = null
+        )
         {
             return new Faker<CoordinationPoint>()
                 .CustomInstantiator(
@@ -21,14 +29,20 @@ namespace CompilerTest.Bogus.Factory
                         "6000",
                         null,
                         "TEST",
-                        DefinitionFactory.Make(),
+                        definition ?? DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
                     )
                 );
         }
         
-        public static CoordinationPoint MakeAirport(bool firCopx = false, string departureAirport = null, string departureRunway = null, string arrivalAirport = null, string arrivalRunway = null)
+        public static CoordinationPoint MakeAirport(
+            bool firCopx = false,
+            string departureAirport = null,
+            string departureRunway = null,
+            string arrivalAirport = null,
+            string arrivalRunway = null
+        )
         {
             return new Faker<CoordinationPoint>()
                 .CustomInstantiator(

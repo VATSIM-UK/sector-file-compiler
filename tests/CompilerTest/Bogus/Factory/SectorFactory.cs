@@ -14,9 +14,10 @@ namespace CompilerTest.Bogus.Factory
             List<SectorArrivalAirports> arrivalAirports = null,
             List<SectorDepartureAirports> departureAirports = null,
             List<SectorGuest> guests = null,
-            SectorOwnerHierarchy owners = null
+            SectorOwnerHierarchy owners = null,
+            Definition definition = null
         ) {
-            return GetGenerator(name, active, alternate, arrivalAirports, departureAirports, guests, owners).Generate();
+            return GetGenerator(name, active, alternate, arrivalAirports, departureAirports, guests, owners, definition).Generate();
         }
 
         private static Faker<Sector> GetGenerator(
@@ -26,7 +27,8 @@ namespace CompilerTest.Bogus.Factory
             List<SectorArrivalAirports> arrivalAirports = null,
             List<SectorDepartureAirports> departureAirports = null,
             List<SectorGuest> guests = null,
-            SectorOwnerHierarchy owners = null
+            SectorOwnerHierarchy owners = null,
+            Definition definition = null
         ) {
             return new Faker<Sector>()
                 .CustomInstantiator(
@@ -41,7 +43,7 @@ namespace CompilerTest.Bogus.Factory
                         SectorBorderFactory.MakeList(2),
                         arrivalAirports ?? SectorArrivalAirportsFactory.MakeList(),
                         departureAirports ?? SectorDepartureAirportsFactory.MakeList(),
-                        DefinitionFactory.Make(),
+                        definition ?? DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
                     )

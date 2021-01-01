@@ -7,12 +7,12 @@ namespace CompilerTest.Bogus.Factory
 {
     static class CircleSectorlineFactory
     {
-        public static CircleSectorline Make(string name = null, string centre = null, List<SectorlineDisplayRule> displayRules = null)
+        public static CircleSectorline Make(string name = null, string centre = null, List<SectorlineDisplayRule> displayRules = null, Definition definition = null)
         {
-            return GetGenerator(name, centre, displayRules).Generate();
+            return GetGenerator(name, centre, displayRules, definition).Generate();
         }
 
-        private static Faker<CircleSectorline> GetGenerator(string name = null, string centre = null, List<SectorlineDisplayRule> displayRules = null)
+        private static Faker<CircleSectorline> GetGenerator(string name = null, string centre = null, List<SectorlineDisplayRule> displayRules = null, Definition definition = null)
         {
             return new Faker<CircleSectorline>()
                 .CustomInstantiator(
@@ -21,7 +21,7 @@ namespace CompilerTest.Bogus.Factory
                         centre ?? f.Random.String2(4),
                         f.Random.Double(0.5D, 10D),
                         displayRules ?? SectorLineDisplayRuleFactory.MakeList(2),
-                        DefinitionFactory.Make(),
+                        definition ?? DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
                     )
