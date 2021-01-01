@@ -33,8 +33,7 @@ namespace CompilerTest.Validate
 
         public void TestItPassesOnValidArrivalRunway(string airport, string runway)
         {
-            CoordinationPointFactory.MakeAirport(arrivalAirport: airport, arrivalRunway: runway);
-            CoordinationPointFactory.MakeAirport(arrivalAirport: airport, arrivalRunway: runway);
+            this.sectorElements.Add(CoordinationPointFactory.MakeAirport(arrivalAirport: airport, arrivalRunway: runway));
             
             this.AssertNoValidationError();
         }
@@ -47,10 +46,9 @@ namespace CompilerTest.Validate
         [InlineData("EGSS", "04")] // Doesn't match up on the descriptions
         public void TestItFailsOnInvalidArrivalRunway(string airport, string runway)
         {
-            CoordinationPointFactory.MakeAirport(arrivalAirport: airport, arrivalRunway: runway);
-            CoordinationPointFactory.MakeAirport(arrivalAirport: airport, arrivalRunway: runway);
+            this.sectorElements.Add(CoordinationPointFactory.MakeAirport(arrivalAirport: airport, arrivalRunway: runway));
             
-            this.AssertValidationErrors(2);
+            this.AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

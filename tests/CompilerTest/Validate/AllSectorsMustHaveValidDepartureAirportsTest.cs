@@ -16,7 +16,7 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(AirportFactory.Make("EGKK"));
             this.sectorElements.Add(AirportFactory.Make("EGLL"));
-            this.sectorElements.Add(AirportFactory.Make("EGLC"));
+            this.sectorElements.Add(AirportFactory.Make("EGCC"));
         }
 
         [Theory]

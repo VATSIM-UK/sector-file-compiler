@@ -50,7 +50,7 @@ namespace CompilerTest.Validate
                         RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
                         RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
                         RouteSegmentFactory.MakePointCoordinate("testairport", new Coordinate("abc", "def")),
-                        RouteSegmentFactory.MakeCoordinatePoint("testvor", new Coordinate("abc", "def")),
+                        RouteSegmentFactory.MakeCoordinatePoint("testfix", new Coordinate("abc", "def")),
                     }
                 )
             );
@@ -76,7 +76,7 @@ namespace CompilerTest.Validate
             );
             
             this.sectorElements.Vors.Clear();
-            this.AssertValidationErrors(2);
+            this.AssertValidationErrors(3);
         }
 
         [Fact]

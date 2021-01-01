@@ -32,7 +32,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(RegionFactory.Make("colour2"));
             this.sectorElements.Add(RegionFactory.Make("-123"));
 
-            this.AssertValidationErrors(2);
+            this.AssertValidationErrors(4);
         }
 
         protected override IValidationRule GetValidationRule()

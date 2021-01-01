@@ -58,9 +58,9 @@ namespace CompilerTest.Validate
                 SidStarRouteFactory.Make(
                     segments: new List<RouteSegment>()
                     {
-                        RouteSegmentFactory.MakeDoublePoint(),
-                        RouteSegmentFactory.MakeDoublePoint(),
-                        RouteSegmentFactory.MakeDoublePoint(),
+                        RouteSegmentFactory.MakeDoublePointWithNoColour(),
+                        RouteSegmentFactory.MakeDoublePointWithNoColour(),
+                        RouteSegmentFactory.MakeDoublePointWithNoColour(),
                     }
                 )
             );

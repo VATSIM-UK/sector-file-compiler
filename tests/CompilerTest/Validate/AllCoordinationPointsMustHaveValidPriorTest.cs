@@ -43,7 +43,7 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(CoordinationPointFactory.Make(priorPoint: firstFix));
             this.sectorElements.Add(CoordinationPointFactory.Make(priorPoint: secondFix));
             
-            this.AssertNoValidationError();
+            this.AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

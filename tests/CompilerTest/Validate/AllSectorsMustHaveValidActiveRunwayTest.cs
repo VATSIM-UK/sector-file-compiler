@@ -18,9 +18,9 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(AirportFactory.Make("EGLL"));
             this.sectorElements.Add(AirportFactory.Make("EGCC"));
             this.sectorElements.Add(RunwayFactory.Make("EGKK", "26L", "09"));
-            this.sectorElements.Add(RunwayFactory.Make("EGKK", "27L", "09"));
-            this.sectorElements.Add(RunwayFactory.Make("EGKK", "27R", "09"));
-            this.sectorElements.Add(RunwayFactory.Make("EGKK", "23L", "09"));
+            this.sectorElements.Add(RunwayFactory.Make("EGLL", "27L", "09"));
+            this.sectorElements.Add(RunwayFactory.Make("EGLL", "27R", "09"));
+            this.sectorElements.Add(RunwayFactory.Make("EGCC", "23L", "09"));
         }
 
         [Theory]

@@ -9,43 +9,39 @@ using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllRunwaysMustReferenceAnAirportTest
+    public class AllRunwaysMustReferenceAnAirportTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection elements;
-        private readonly AllRunwaysMustReferenceAnAirport validator;
-        private readonly Mock<IEventLogger> loggerMock;
-        private readonly CompilerArguments args;
-
         public AllRunwaysMustReferenceAnAirportTest()
         {
-            this.elements = new SectorElementCollection();
             this.loggerMock = new Mock<IEventLogger>();
-            this.validator = new AllRunwaysMustReferenceAnAirport();
-            this.args = new CompilerArguments();
-            this.elements.Add(AirportFactory.Make());
-            this.elements.Add(AirportFactory.Make());
+            this.sectorElements.Add(AirportFactory.Make("EGKK"));
+            this.sectorElements.Add(AirportFactory.Make("EGLL"));
+            this.sectorElements.Add(AirportFactory.Make("000A"));
         }
 
         [Fact]
         public void TestItPassesOnValidReferences()
         {
-            this.elements.Add(RunwayFactory.Make("EGKK"));
-            this.elements.Add(RunwayFactory.Make("EGLL"));
-            this.elements.Add(RunwayFactory.Make("000A"));
+            this.sectorElements.Add(RunwayFactory.Make("EGKK"));
+            this.sectorElements.Add(RunwayFactory.Make("EGLL"));
+            this.sectorElements.Add(RunwayFactory.Make("000A"));
             
-            this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.AssertNoValidationError();
         }
 
         [Fact]
         public void TestItFailsOnInvalidReferences()
         {
-            this.elements.Add(RunwayFactory.Make("EGSS"));
-            this.elements.Add(RunwayFactory.Make("EGGW"));
-            this.elements.Add(RunwayFactory.Make("000A"));
+            this.sectorElements.Add(RunwayFactory.Make("EGSS"));
+            this.sectorElements.Add(RunwayFactory.Make("EGGW"));
+            this.sectorElements.Add(RunwayFactory.Make("000A"));
 
-            this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(2));
+            this.AssertValidationErrors(2);
+        }
+
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllRunwaysMustReferenceAnAirport();
         }
     }
 }

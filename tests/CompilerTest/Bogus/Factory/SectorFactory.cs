@@ -36,7 +36,7 @@ namespace CompilerTest.Bogus.Factory
                         66000,
                         owners ?? SectorOwnerHierarchyFactory.Make(),
                         alternate ?? SectorAlternateOwnerHierarchyFactory.MakeList(2),
-                        active ?? SectorActiveFactory.MakeList(1),
+                        active ?? SectorActiveFactory.MakeList(),
                         guests ?? SectorGuestFactory.MakeList(2),
                         SectorBorderFactory.MakeList(2),
                         arrivalAirports ?? SectorArrivalAirportsFactory.MakeList(),
@@ -47,11 +47,6 @@ namespace CompilerTest.Bogus.Factory
                     )
                 );
 
-        }
-
-        public static List<Sector> MakeList(int count, string name = null, List<SectorActive> active = null)
-        {
-            return GetGenerator(name, active).Generate(count).ToList();
         }
     }
 }

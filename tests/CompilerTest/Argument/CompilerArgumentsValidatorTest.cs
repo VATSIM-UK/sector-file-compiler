@@ -16,11 +16,11 @@ namespace CompilerTest.Argument
 
         private readonly Mock<IEventLogger> eventLogger;
 
-        private readonly Mock<AbstractOutputFile> mockOutputs;
+        private readonly Mock<TextWriter> mockOutputWriter;
 
         public CompilerArgumentsValidatorTest()
         {
-            this.mockOutputs = new Mock<AbstractOutputFile>();
+            this.mockOutputWriter = new Mock<TextWriter>();
             this.eventLogger = new Mock<IEventLogger>();
             this.arguments = new CompilerArguments();
             this.mockConfigFile = "/foo/bar";
@@ -29,8 +29,8 @@ namespace CompilerTest.Argument
         [Fact]
         public void TestItSendsErrorEventOnMissingConfigFile()
         {
-            this.arguments.OutputFiles[0] = this.mockOutputs.Object;
-            this.arguments.OutputFiles[1] = this.mockOutputs.Object;
+            this.arguments.OutputFiles.Add(new RwyOutput(this.mockOutputWriter.Object));
+            this.arguments.OutputFiles.Add(new RwyOutput(this.mockOutputWriter.Object));
             CompilerArgumentsValidator.Validate(this.eventLogger.Object, this.arguments);
             string expectedMessage = "No config files specified";
             this.eventLogger.Verify(
@@ -53,8 +53,8 @@ namespace CompilerTest.Argument
         [Fact]
         public void TestItSetsNoErrorsOnValidConfig()
         {
-            this.arguments.OutputFiles[0] = this.mockOutputs.Object;
-            this.arguments.OutputFiles[1] = this.mockOutputs.Object;
+            this.arguments.OutputFiles.Add(new RwyOutput(this.mockOutputWriter.Object));
+            this.arguments.OutputFiles.Add(new RwyOutput(this.mockOutputWriter.Object));
             this.arguments.ConfigFiles.Add(mockConfigFile);
             CompilerArgumentsValidator.Validate(this.eventLogger.Object, this.arguments);
             this.eventLogger.VerifyNoOtherCalls();

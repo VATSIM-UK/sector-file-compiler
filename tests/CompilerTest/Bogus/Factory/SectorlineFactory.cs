@@ -18,7 +18,7 @@ namespace CompilerTest.Bogus.Factory
                 .CustomInstantiator(
                     f => new Sectorline(
                         name ?? f.Random.String2(5),
-                        SectorLineDisplayRuleFactory.MakeList(2),
+                        displayRules ?? SectorLineDisplayRuleFactory.MakeList(2),
                         SectorlineCoordinateFactory.MakeList(4),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
