@@ -7,19 +7,11 @@ namespace CompilerTest.Bogus.Factory
 {
     static class SidStarRouteFactory
     {
-        private static readonly string[] identifiers = new[] {
-            "DIKAS",
-            "PENIL",
-            "UPGAS",
-            "MONTY",
-            "KONAN",
-            "PEDIG",
-            "NORBO",
-            "ATSIX"
-        };
-
-        public static SidStarRoute Make(SidStarType type = SidStarType.SID, List<RouteSegment> segments = null)
-        {
+        public static SidStarRoute Make(
+            SidStarType type = SidStarType.SID,
+            List<RouteSegment> segments = null,
+            Definition definition = null
+        ) {
             return new Faker<SidStarRoute>()
                 .CustomInstantiator(
                     f => new SidStarRoute(
@@ -32,7 +24,7 @@ namespace CompilerTest.Bogus.Factory
                             RouteSegmentFactory.MakePointCoordinate(),
                             RouteSegmentFactory.MakeCoordinatePoint()
                         },
-                        DefinitionFactory.Make(),
+                        definition ?? DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
                     )

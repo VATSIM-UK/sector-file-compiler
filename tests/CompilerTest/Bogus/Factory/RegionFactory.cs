@@ -7,19 +7,27 @@ namespace CompilerTest.Bogus.Factory
 {
     static class RegionFactory
     {
-        public static Region Make(string colour = null, List<Point> points = null)
+        public static Region Make(
+            string colour = null,
+            List<Point> points = null,
+            Definition definition = null
+        )
         {
-            return GetGenerator(colour, points).Generate();
+            return GetGenerator(colour, points, definition).Generate();
         }
 
-        private static Faker<Region> GetGenerator(string colour = null, List<Point> points = null)
+        private static Faker<Region> GetGenerator(
+            string colour = null,
+            List<Point> points = null,
+            Definition definition = null
+        )
         {
             return new Faker<Region>()
                 .CustomInstantiator(
                     f => new Region(
                         "REGION TEST",
                         points == null ? RegionPointFactory.MakeList(2, colour) : points.Select(p => RegionPointFactory.Make(colour, p)).ToList(),
-                        DefinitionFactory.Make(),
+                        definition ?? DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
                     )
