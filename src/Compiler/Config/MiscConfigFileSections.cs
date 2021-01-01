@@ -26,6 +26,5 @@ namespace Compiler.Config
             new("geo", InputDataType.SCT_GEO, "Geo"),
             new("regions", InputDataType.SCT_REGIONS, "Regions"),
         };
-
     }
 }

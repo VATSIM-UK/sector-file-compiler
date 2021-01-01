@@ -7,20 +7,12 @@ namespace Compiler.Config
      */
     public struct ConfigFileSection
     {
-        public ConfigFileSection(string jsonPath, InputDataType dataType, string outputGroupDescriptor)
+        public ConfigFileSection(string jsonPath, InputDataType dataType, string outputGroupDescriptor = null)
         {
             this.JsonPath = jsonPath;
             this.DataType = dataType;
             this.OutputGroupDescriptor = outputGroupDescriptor;
         }
-
-        public ConfigFileSection(string jsonPath, InputDataType dataType)
-        {
-            this.JsonPath = jsonPath;
-            this.DataType = dataType;
-            this.OutputGroupDescriptor = null;
-        }
-
 
         /*
          * The path in the JSON to the section

@@ -11,6 +11,5 @@ namespace Compiler.Config
             new("ownership", InputDataType.ESE_OWNERSHIP, "Ownership"),
             new("positions", InputDataType.ESE_POSITIONS, "Positions"),
         };
-
     }
 }
