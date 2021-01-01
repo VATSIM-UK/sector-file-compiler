@@ -16,7 +16,8 @@ namespace Compiler.Output
         public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
             return this.sectorElements.ActiveRunways.OrderBy(runway => runway.Airfield)
-                .ThenBy(runway => runway.Identifier);
+                .ThenBy(runway => runway.Identifier)
+                .ThenBy(runway => runway.Mode);
         }
     }
 }

@@ -32,7 +32,6 @@
 
   <ItemGroup>
     <Folder Include="Config\" />
-    <Folder Include="Collector\" />
     <Folder Include="_TestData\" />
   </ItemGroup>
 
