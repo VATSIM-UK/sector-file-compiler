@@ -47,6 +47,7 @@ namespace Compiler.Output
                 {
                     foreach (ICompilableElement element in provider.GetCompilableElements())
                     {
+                        // TODO: This bit is _really_ slow, we should think about how we can improve performance
                         if (
                             sectionConfig.printDataGroupings &&
                             outputGroups.TryGetForDefinitionFile(element.GetDefinition(), out OutputGroup group) &&

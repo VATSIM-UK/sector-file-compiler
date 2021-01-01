@@ -7,11 +7,11 @@ namespace Compiler.Output
 {
     public class OutputGroupRepository
     {
-        private SortedSet<OutputGroup> outputGroups;
+        private HashSet<OutputGroup> outputGroups;
 
         public OutputGroupRepository()
         {
-            this.outputGroups = new SortedSet<OutputGroup>();
+            this.outputGroups = new HashSet<OutputGroup>();
         }
 
         /*
