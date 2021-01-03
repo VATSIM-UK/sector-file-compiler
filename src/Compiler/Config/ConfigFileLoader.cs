@@ -417,8 +417,8 @@ namespace Compiler.Config
                     new FolderInclusionRule(
                         this.NormaliseFilePath(rootPath, (string)folder),
                         recursive,
-                        outputGroup,
-                        configFileSection.DataType
+                        configFileSection.DataType,
+                        outputGroup
                     )
                 );
                 return;

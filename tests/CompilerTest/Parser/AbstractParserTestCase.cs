@@ -3,6 +3,7 @@ using Compiler.Event;
 using Compiler.Input;
 using Compiler.Model;
 using Compiler.Parser;
+using CompilerTest.Bogus.Factory;
 using CompilerTest.Mock;
 using Xunit;
 
@@ -24,9 +25,8 @@ namespace CompilerTest.Parser
         
         private AbstractSectorDataFile GetInputFile(List<string> lines)
         {
-            return new SectorDataFileFactory(
-                new MockInputStreamFactory(lines)
-            ).Create(this.INPUT_FILE_NAME, GetInputDataType());
+            return SectorDataFileFactoryFactory.Make(lines)
+                .Create(this.INPUT_FILE_NAME, GetInputDataType());
         }
 
         protected void RunParserOnLines(List<string> lines)

@@ -19,29 +19,15 @@ namespace Compiler.Input
             bool recursive,
             InputDataType inputDataType,
             OutputGroup outputGroup,
-            bool excludeList,
-            List<string> includeExcludeFiles
+            bool excludeList = true,
+            List<string> includeExcludeFiles = null
         ) {
             this.folder = folder;
             this.recursive = recursive;
             this.inputDataType = inputDataType;
             this.outputGroup = outputGroup;
             this.excludeList = excludeList;
-            this.includeExcludeFiles = includeExcludeFiles;
-        }
-
-        public FolderInclusionRule(
-            string folder,
-            bool recursive,
-            OutputGroup outputGroup,
-            InputDataType inputDataType
-        ) {
-            this.folder = folder;
-            this.recursive = recursive;
-            this.outputGroup = outputGroup;
-            this.inputDataType = inputDataType;
-            this.excludeList = true;
-            this.includeExcludeFiles = new List<string>();
+            this.includeExcludeFiles = includeExcludeFiles ?? new List<string>();
         }
 
         public IEnumerable<AbstractSectorDataFile> GetFilesToInclude(SectorDataFileFactory dataFileFactory)
