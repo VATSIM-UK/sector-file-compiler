@@ -5,16 +5,15 @@ using Xunit;
 
 namespace CompilerTest.Input
 {
-    public class SectorDataFileTest
+    public class HeaderDataFileTest
     {
-        private readonly SectorDataFile file;
+        private readonly HeaderDataFile file;
 
-        public SectorDataFileTest()
+        public HeaderDataFileTest()
         {
-            this.file = new SectorDataFile(
-                "_TestData/SectorDataFileTest/StreamTest.txt",
+            this.file = new HeaderDataFile(
+                "_TestData/HeaderDataFileTest/StreamTest.txt",
                 new InputFileStreamFactory(),
-                InputDataType.ESE_AGREEMENTS,
                 new EseSectorDataReader()
             );
         }
@@ -23,7 +22,7 @@ namespace CompilerTest.Input
         public void ItSetsFullPath()
         {
             Assert.Equal(
-                "_TestData/SectorDataFileTest/StreamTest.txt",
+                "_TestData/HeaderDataFileTest/StreamTest.txt",
                 this.file.FullPath
             );
         }
@@ -32,7 +31,7 @@ namespace CompilerTest.Input
         public void ItGetsParentDirectory()
         {
             Assert.Equal(
-                "SectorDataFileTest",
+                "HeaderDataFileTest",
                 this.file.GetParentDirectoryName()
             );
         }
@@ -61,29 +60,33 @@ namespace CompilerTest.Input
         [Fact]
         public void ItHasADataType()
         {
-            Assert.Equal(InputDataType.ESE_AGREEMENTS, this.file.DataType);
+            Assert.Equal(InputDataType.FILE_HEADERS, this.file.DataType);
         }
 
         [Fact]
         public void TestItIteratesTheInputFile()
         {
-            int expectedLine = 3;
+            int expectedLine = 1;
             foreach (SectorData dataLine in this.file)
             {
-                Assert.Equal(new List<string> { "Line", expectedLine.ToString() }, dataLine.dataSegments);
+                Assert.Equal(new List<string>(), dataLine.dataSegments);
+                Assert.Equal(new Docblock(), dataLine.docblock);
 
-                Docblock expectedDocblock = new Docblock();
-                expectedDocblock.AddLine(new Comment("Docblock " + (expectedLine - 2)));
-                expectedDocblock.AddLine(new Comment("Docblock " + (expectedLine - 1)));
-                Assert.Equal(expectedDocblock, dataLine.docblock);
-                Assert.Equal(new Comment("Inline " + expectedLine), dataLine.inlineComment);
+                if (expectedLine % 2 == 0)
+                {
+                    Assert.Equal(new Comment(""), dataLine.inlineComment);
+                } else
+                {
+                    Assert.Equal(new Comment("Line " + expectedLine), dataLine.inlineComment);
+                }
+                
                 Assert.Equal(expectedLine, this.file.CurrentLineNumber);
-                Assert.Equal(new Definition("_TestData/SectorDataFileTest/StreamTest.txt", expectedLine), dataLine.definition);
+                Assert.Equal(new Definition("_TestData/HeaderDataFileTest/StreamTest.txt", expectedLine), dataLine.definition);
 
-                expectedLine += 4;
+                expectedLine++;
             }
 
-            Assert.Equal(33, this.file.CurrentLineNumber);
+            Assert.Equal(9, this.file.CurrentLineNumber);
         }
     }
 }

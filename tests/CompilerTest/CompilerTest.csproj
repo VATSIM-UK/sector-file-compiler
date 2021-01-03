@@ -45,7 +45,7 @@
     <None Update="_TestData\FileListInclusionRule\File3.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="_TestData\StreamTest.txt">
+    <None Update="_TestData\SectorDataFileTest\StreamTest.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
