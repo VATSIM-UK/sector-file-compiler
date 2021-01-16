@@ -27,7 +27,6 @@ namespace Compiler.Output
         public void GenerateOutput(AbstractOutputFile outputFile)
         {
             Console.WriteLine($"Starting file {outputFile.GetType()}");
-            Stopwatch timer = Stopwatch.StartNew();
             TextWriter outputStream = outputFile.GetOutputStream();
 
             // Process each section in the output
@@ -43,14 +42,10 @@ namespace Compiler.Output
                 }
 
                 // Get the element providers and compile each element
-                Stopwatch sectionTimer = Stopwatch.StartNew();
                 IEnumerable<ICompilableElementProvider> elementProviders = this.collectorFactory.GetCollectorForOutputSection(section)
                     .GetCompilableElements();
-                sectionTimer.Stop();
-                Console.WriteLine($"Collection time for section {Enum.GetName(typeof(OutputSectionKeys), section)}: {sectionTimer.ElapsedMilliseconds}ms");
                 OutputGroup currentDataGroup = new OutputGroup("INITIAL");
 
-                Stopwatch sectionWriteTimer = Stopwatch.StartNew();
                 foreach (ICompilableElementProvider provider in elementProviders)
                 {
                     foreach (ICompilableElement element in provider.GetCompilableElements())
@@ -68,8 +63,6 @@ namespace Compiler.Output
                         element.Compile(sectorElements, outputStream);
                     }
                 }
-                sectionWriteTimer.Stop();
-                Console.WriteLine($"Write time for section {Enum.GetName(typeof(OutputSectionKeys), section)}: {sectionWriteTimer.ElapsedMilliseconds}ms");
 
                 // Write a newline at the end of a new section
                 outputStream.WriteLine();
@@ -78,8 +71,6 @@ namespace Compiler.Output
 
             // Flush the file to make sure it's written
             outputStream.Flush();
-            timer.Stop();
-            Console.WriteLine($"Total time for file {outputFile.GetType()}: {timer.ElapsedMilliseconds}ms");
         }
     }
 }
