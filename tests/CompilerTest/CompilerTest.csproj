@@ -36,22 +36,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="_TestData\FileListInclusionRule\File1.txt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="_TestData\FileListInclusionRule\File2.txt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="_TestData\FileListInclusionRule\File3.txt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="_TestData\SectorDataFile\StreamTest.txt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
+    <TestDataFiles Include="$(ProjectDir)_TestData\\**\*.*" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="XCOPY &quot;$(ProjectDir)_TestData&quot; &quot;$(TargetDir)_TestData&quot; /S /Y /I" />
+    <Copy SourceFiles="@(TestDataFiles)" DestinationFiles="@(TestDataFiles->'$(TargetDir)_TestData\\%(RecursiveDir)%(Filename)%(Extension)')"/>
   </Target>
 
 </Project>
