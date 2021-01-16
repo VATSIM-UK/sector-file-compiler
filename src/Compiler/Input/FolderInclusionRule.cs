@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using Compiler.Exception;
@@ -44,6 +45,7 @@ namespace Compiler.Input
                 this.Folder, "*.*",
                 this.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
             );
+            Array.Sort(allFiles, StringComparer.InvariantCulture);
 
             List<AbstractSectorDataFile> files = new List<AbstractSectorDataFile>();
             foreach (string path in allFiles)

@@ -43,4 +43,6 @@
     <Copy SourceFiles="@(TestDataFiles)" DestinationFiles="@(TestDataFiles->'$(TargetDir)_TestData\\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 
+  <ProjectExtensions><VisualStudio><UserProperties _3testdata_4configfileloader_4invalidjson_4config_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>
