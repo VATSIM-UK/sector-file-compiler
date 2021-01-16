@@ -4,7 +4,6 @@ using Compiler.Input;
 using Compiler.Model;
 using Compiler.Parser;
 using CompilerTest.Bogus.Factory;
-using CompilerTest.Mock;
 using Xunit;
 
 namespace CompilerTest.Parser

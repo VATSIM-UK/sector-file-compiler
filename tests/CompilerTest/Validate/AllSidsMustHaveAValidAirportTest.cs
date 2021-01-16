@@ -1,11 +1,6 @@
-﻿using System.Collections.Generic;
-using Xunit;
-using Moq;
+﻿using Xunit;
 using Compiler.Model;
 using Compiler.Validate;
-using Compiler.Event;
-using Compiler.Error;
-using Compiler.Argument;
 using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Compiler.Model
+﻿namespace Compiler.Model
 {
     /*
      * Similarly to Airways, the SCT2 format doesn't recognise ARTCCs as a single entity with many points, rather

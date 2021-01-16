@@ -1,9 +1,7 @@
 ﻿using Xunit;
 using Compiler.Model;
-using Compiler.Event;
 using Compiler.Validate;
 using CompilerTest.Bogus.Factory;
-using Moq;
 
 namespace CompilerTest.Validate
 {

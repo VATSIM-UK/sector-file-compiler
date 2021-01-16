@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Compiler.Output;
 
 namespace Compiler.Model
 {

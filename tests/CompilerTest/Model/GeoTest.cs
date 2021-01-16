@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Xunit;
+﻿using Xunit;
 using Compiler.Model;
 using System.Collections.Generic;
 using System.Linq;

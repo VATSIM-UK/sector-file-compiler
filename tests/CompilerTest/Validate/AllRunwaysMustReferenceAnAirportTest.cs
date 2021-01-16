@@ -1,9 +1,6 @@
 ﻿using Xunit;
 using Moq;
-using Compiler.Model;
 using Compiler.Event;
-using Compiler.Error;
-using Compiler.Argument;
 using Compiler.Validate;
 using CompilerTest.Bogus.Factory;
 

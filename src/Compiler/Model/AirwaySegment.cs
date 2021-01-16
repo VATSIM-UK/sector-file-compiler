@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Compiler.Model
+﻿namespace Compiler.Model
 {
     /*
      * Represents a single segment of an Airway. Although in the UKSF we have an entire file of coordinates

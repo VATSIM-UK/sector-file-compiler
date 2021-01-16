@@ -1,14 +1,10 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Moq;
-using Compiler.Parser;
 using Compiler.Error;
 using Compiler.Model;
-using Compiler.Event;
 using Compiler.Input;
-using Compiler.Output;
 using CompilerTest.Bogus.Factory;
-using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {

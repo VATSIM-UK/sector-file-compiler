@@ -1,7 +1,6 @@
 ﻿using Xunit;
 using Compiler.Error;
 using Compiler.Input;
-using Compiler.Model;
 using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Error

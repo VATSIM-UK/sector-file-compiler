@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Compiler.Model
+﻿namespace Compiler.Model
 {
     public class ActiveRunway : AbstractCompilableElement
     {

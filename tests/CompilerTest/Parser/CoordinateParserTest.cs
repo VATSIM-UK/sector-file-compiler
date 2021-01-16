@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Compiler.Parser;
 using Compiler.Model;
-using CompilerTest.Bogus;
 
 namespace CompilerTest.Parser
 {
