@@ -1,0 +1,11 @@
+{
+  "enroute": {
+    "ownership": [
+      {
+        "type": "folder",
+        "folder": "test", 
+        "include" : [123]
+      }
+    ]
+  }
+}

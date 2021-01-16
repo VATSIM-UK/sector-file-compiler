@@ -110,7 +110,7 @@ namespace Compiler.Config
 
         private string GetInvalidIncludeExcludeFileMessage(bool include, string section)
         {
-            return $"{(include ? "Include" : "Exclude")} file must be a string section {section}";
+            return $"{(include ? "Include" : "Exclude")} file must be a string in section {section}";
         }
 
         private string GetInvalidIgnoreMissingMessage(string section)
@@ -253,14 +253,13 @@ namespace Compiler.Config
             JObject configObject = (JObject)jsonConfig;
 
             // Check the type field to see what we're dealing with
-            JToken typeToken;
             if (
-                !configObject.TryGetValue("type", out typeToken) ||
+                !configObject.TryGetValue("type", out var typeToken) ||
                 typeToken.Type != JTokenType.String ||
                 ((string) typeToken != "files" && (string) typeToken != "folder")
             ) {
                 throw new ConfigFileInvalidException(
-                    GetMissingTypeMessage("misc." + configFileSection.JsonPath)
+                    GetMissingTypeMessage($"{sectionRootString}.{configFileSection.JsonPath}")
                 );
             }
 
@@ -305,20 +304,19 @@ namespace Compiler.Config
                 folder.Type != JTokenType.String
             ) {
                 throw new ConfigFileInvalidException(
-                    GetInvalidFolderMessage(sectionRootString + configFileSection.JsonPath)
+                    GetInvalidFolderMessage($"{sectionRootString}.{configFileSection.JsonPath}")
                 );
             }
 
             // Check if it's recursive
             bool recursive = false;
-            JToken recursiveToken;
-            bool hasRecursiveToken = folderObject.TryGetValue("recursive", out recursiveToken);
+            bool hasRecursiveToken = folderObject.TryGetValue("recursive", out var recursiveToken);
             if (hasRecursiveToken)
             {
                 if (recursiveToken.Type != JTokenType.Boolean)
                 {
                     throw new ConfigFileInvalidException(
-                        GetRecursiveMessage(sectionRootString + configFileSection.JsonPath)
+                        GetRecursiveMessage($"{sectionRootString}.{configFileSection.JsonPath}")
                     );
                 }
 
@@ -336,7 +334,7 @@ namespace Compiler.Config
             if (isInclude && isExclude)
             {
                 throw new ConfigFileInvalidException(
-                    GetIncludeAndExcludeMessage(sectionRootString + configFileSection.JsonPath)
+                    GetIncludeAndExcludeMessage($"{sectionRootString}.{configFileSection.JsonPath}")
                 );
             }
 
@@ -359,7 +357,7 @@ namespace Compiler.Config
             if (fileList.Type != JTokenType.Array)
             {
                 throw new ConfigFileInvalidException(
-                    GetInvalidIncludeExcludeListMessage(isInclude, sectionRootString + configFileSection.JsonPath)
+                    GetInvalidIncludeExcludeListMessage(isInclude, $"{sectionRootString}.{configFileSection.JsonPath}")
                 );
             }
 
@@ -368,7 +366,7 @@ namespace Compiler.Config
                 if (file.Type != JTokenType.String)
                 {
                     throw new ConfigFileInvalidException(
-                        GetInvalidIncludeExcludeFileMessage(isInclude, sectionRootString + configFileSection.JsonPath)
+                        GetInvalidIncludeExcludeFileMessage(isInclude, $"{sectionRootString}.{configFileSection.JsonPath}")
                     );
                 }
 
@@ -406,7 +404,7 @@ namespace Compiler.Config
                 filesList.Type != JTokenType.Array
             ) {
                 throw new ConfigFileInvalidException(
-                    InvalidFilesListMessage(sectionRootString + configFileSection.JsonPath)
+                    InvalidFilesListMessage($"{sectionRootString}.{configFileSection.JsonPath}")
                 );
             }
 
@@ -417,7 +415,7 @@ namespace Compiler.Config
                 if (ignoreMissingToken.Type != JTokenType.Boolean)
                 {
                     throw new ConfigFileInvalidException(
-                        GetInvalidIgnoreMissingMessage(sectionRootString + configFileSection.JsonPath)
+                        GetInvalidIgnoreMissingMessage($"{sectionRootString}.{configFileSection.JsonPath}")
                     );
                 }
 
@@ -431,7 +429,7 @@ namespace Compiler.Config
                 if (exceptWhereExistsToken.Type != JTokenType.String)
                 {
                     throw new ConfigFileInvalidException(
-                        GetInvalidExceptWhereExistsMessage(sectionRootString + configFileSection.JsonPath)
+                        GetInvalidExceptWhereExistsMessage($"{sectionRootString}.{configFileSection.JsonPath}")
                     );
                 }
 
@@ -445,7 +443,7 @@ namespace Compiler.Config
                 if (file.Type != JTokenType.String)
                 {
                     throw new ConfigFileInvalidException(
-                        GetInvalidFilePathMessage(sectionRootString + configFileSection.JsonPath)
+                        GetInvalidFilePathMessage($"{sectionRootString}.{configFileSection.JsonPath}")
                     );
                 }
 

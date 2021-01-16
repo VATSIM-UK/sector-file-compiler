@@ -39,10 +39,6 @@
     <TestDataFiles Include="$(ProjectDir)_TestData\\**\*.*" />
   </ItemGroup>
 
-  <ItemGroup>
-    <TestDataFiles Remove="_TestData\ConfigFileLoader\ValidConfig\Airports\EGLL\.gitignore" />
-  </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="@(TestDataFiles)" DestinationFiles="@(TestDataFiles->'$(TargetDir)_TestData\\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>

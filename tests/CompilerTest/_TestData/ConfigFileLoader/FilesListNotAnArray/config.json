@@ -1,0 +1,8 @@
+{
+  "misc": {
+    "regions": {
+      "type": "files",
+      "files": "Foo"
+    }
+  }
+}

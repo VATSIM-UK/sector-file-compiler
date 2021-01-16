@@ -1,0 +1,36 @@
+{
+  "airports": [],
+  "enroute": {
+    "ownership": [
+      {
+        "type": "folder",
+        "folder": "Ownership/Alternate",
+        "recursive": true
+      },
+      {
+        "type": "folder",
+        "folder": "Ownership/Foo",
+        "include": [
+          "Foo.txt"
+        ]
+      },
+      {
+        "type": "folder",
+        "folder": "Ownership/Non-UK",
+        "exclude": [
+          "EUR Islands.txt"
+        ]
+      }
+    ]
+  },
+  "misc": {
+    "regions": {
+      "type": "files",
+      "files": [
+        "Misc/Regions_LTMA Airfield CAS.txt",
+        "Misc/Regions_Severn Buffers.txt",
+        "Misc/Regions_Uncontrolled airspace.txt"
+      ]
+    }
+  }
+}
