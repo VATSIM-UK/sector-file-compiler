@@ -40,5 +40,10 @@ namespace Compiler.Output
         {
             return this.Key.CompareTo(obj.Key);
         }
+
+        public int CountFiles()
+        {
+            return this.FileList.Count;
+        }
     }
 }

@@ -14,18 +14,18 @@ namespace Compiler.Output
         public static string GenerateAirportKey(ConfigFileSection configFileSection, string airport)
         {
             return configFileSection.OutputGroupDescriptor == null 
-                ? string.Format("airport.{0}", configFileSection.DataType.ToString())
-                : string.Format("airport.{0}.{1}", configFileSection.DataType.ToString(), airport);
+                ? $"airport.{configFileSection.DataType}"
+                : $"airport.{configFileSection.DataType}.{airport}";
         }
 
         public static string GeneratEnrouteKey(ConfigFileSection configFileSection)
         {
-            return string.Format("enroute.{0}", configFileSection.DataType.ToString());
+            return $"enroute.{configFileSection.DataType}";
         }
 
         public static string GenerateMiscKey(ConfigFileSection configFileSection)
         {
-            return string.Format("misc.{0}", configFileSection.DataType.ToString());
+            return $"misc.{configFileSection.DataType}";
         }
     }
 }

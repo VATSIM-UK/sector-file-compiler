@@ -42,5 +42,10 @@ namespace Compiler.Output
                 return false;
             }
         }
+
+        public int Count()
+        {
+            return this.outputGroups.Count;
+        }
     }
 }
