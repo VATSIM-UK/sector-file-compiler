@@ -30,7 +30,7 @@ namespace Compiler.Input
             this.outputGroup = outputGroup;
             this.ExcludeList = excludeList;
             this.IncludeExcludeFiles = includeExcludeFiles != null 
-                ? includeExcludeFiles.Select(file => file.ToLower()).ToList()
+                ? includeExcludeFiles.ToList()
                 : new List<string>();
         }
 
