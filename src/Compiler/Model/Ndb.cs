@@ -22,12 +22,7 @@
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "{0} {1} {2}",
-                this.Identifier,
-                this.Frequency,
-                this.Coordinate.ToString()
-            );
+            return $"{this.Identifier} {this.Frequency} {this.Coordinate.ToString()}";
         }
     }
 }

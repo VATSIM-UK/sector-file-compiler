@@ -23,11 +23,8 @@ namespace Compiler.Validate
         {
             if (!ColourValid(geo.Colour, sectorElements))
             {
-                string errorMessage = string.Format(
-                    "Invalid colour value {0} in GEO declaration {1}",
-                    geo.Colour,
-                    geo.GetCompileData(sectorElements)
-                );
+                string errorMessage =
+                    $"Invalid colour value {geo.Colour} in GEO declaration {geo.GetCompileData(sectorElements)}";
                 events.AddEvent(new ValidationRuleFailure(errorMessage));
             }
         }
@@ -36,11 +33,8 @@ namespace Compiler.Validate
         {
             if (!ColourValid(segment.Colour, sectorElements))
             {
-                string errorMessage = string.Format(
-                    "Invalid colour value {0} in GEO segment {1}",
-                    segment.Colour,
-                    segment.GetCompileData(sectorElements)
-                );
+                string errorMessage =
+                    $"Invalid colour value {segment.Colour} in GEO segment {segment.GetCompileData(sectorElements)}";
                 events.AddEvent(new ValidationRuleFailure(errorMessage));
             }
         }

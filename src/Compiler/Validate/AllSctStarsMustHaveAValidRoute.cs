@@ -18,11 +18,8 @@ namespace Compiler.Validate
                         !RoutePointValidator.ValidatePoint(segment.Start, sectorElements) ||
                         !RoutePointValidator.ValidatePoint(segment.End, sectorElements)
                     ) {
-                        string message = String.Format(
-                            "Invalid segment {0} on SID Route {1}",
-                            segment.GetCompileData(sectorElements),
-                            star.Identifier
-                        );
+                        string message =
+                            $"Invalid segment {segment.GetCompileData(sectorElements)} on SID Route {star.Identifier}";
                         events.AddEvent(
                             new ValidationRuleFailure(message)
                         );

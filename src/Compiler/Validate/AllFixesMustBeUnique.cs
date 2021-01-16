@@ -25,7 +25,7 @@ namespace Compiler.Validate
 
         private static string GetFixKey(Fix fix)
         {
-            return fix.Identifier + "." + fix.Coordinate.ToString();
+            return fix.Identifier + "." + fix.Coordinate;
         }
     }
 }

@@ -58,12 +58,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "SECTOR:{0}:{1}:{2}",
-                this.Name,
-                this.MinimumAltitude.ToString(),
-                this.MaximumAltitude.ToString()
-            );
+            return $"SECTOR:{this.Name}:{this.MinimumAltitude.ToString()}:{this.MaximumAltitude.ToString()}";
         }
     }
 }

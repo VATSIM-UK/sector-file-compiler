@@ -13,7 +13,7 @@ namespace Compiler.Event
 
         public string GetMessage()
         {
-            return String.Format("INFO: {0}", this.message);
+            return $"INFO: {this.message}";
         }
 
         public bool IsFatal()

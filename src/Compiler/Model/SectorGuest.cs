@@ -30,12 +30,7 @@
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "GUEST:{0}:{1}:{2}",
-                this.Controller,
-                this.DepartureAirport,
-                this.ArrivalAirport
-            );
+            return $"GUEST:{this.Controller}:{this.DepartureAirport}:{this.ArrivalAirport}";
         }
 
         public override int GetHashCode()

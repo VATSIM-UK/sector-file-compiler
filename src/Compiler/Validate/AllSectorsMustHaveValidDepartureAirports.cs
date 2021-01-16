@@ -21,11 +21,7 @@ namespace Compiler.Validate
                     {
                         if (!airports.Contains(airport))
                         {
-                            string message = String.Format(
-                                "Invalid DEPAPT {0} on sector {1}",
-                                airport,
-                                sector.Name
-                            );
+                            string message = $"Invalid DEPAPT {airport} on sector {sector.Name}";
                             events.AddEvent(new ValidationRuleFailure(message));
                             break;
                         }

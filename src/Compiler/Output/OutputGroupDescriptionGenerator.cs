@@ -10,17 +10,17 @@ namespace Compiler.Output
     {
         public static string GenerateAirportDescription(ConfigFileSection configSection, string airport)
         {
-            return string.Format("Start {0} {1}", airport, configSection.OutputGroupDescriptor);
+            return $"Start {airport} {configSection.OutputGroupDescriptor}";
         }
 
         public static string GeneratEnrouteDescription(ConfigFileSection configSection)
         {
-            return string.Format("Start enroute {0}", configSection.OutputGroupDescriptor);
+            return $"Start enroute {configSection.OutputGroupDescriptor}";
         }
 
         public static string GenerateMiscDescription(ConfigFileSection configSection)
         {
-            return string.Format("Start misc {0}", configSection.OutputGroupDescriptor);
+            return $"Start misc {configSection.OutputGroupDescriptor}";
         }
     }
 }

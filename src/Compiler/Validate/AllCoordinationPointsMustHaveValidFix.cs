@@ -25,11 +25,8 @@ namespace Compiler.Validate
                     !vors.Contains(point.CoordinationFix) &&
                     !ndbs.Contains(point.CoordinationFix)
                 ) {
-                    string message = String.Format(
-                        "Invalid fix {0} for coordination point: {1}",
-                        point.CoordinationFix,
-                        point.GetCompileData(sectorElements)
-                    );
+                    string message =
+                        $"Invalid fix {point.CoordinationFix} for coordination point: {point.GetCompileData(sectorElements)}";
                     events.AddEvent(new ValidationRuleFailure(message));
                     continue;
                 }

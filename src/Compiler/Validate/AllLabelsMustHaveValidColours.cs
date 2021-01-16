@@ -13,11 +13,7 @@ namespace Compiler.Validate
             {
                 if (!ColourValidator.ColourValid(sectorElements, label.Colour))
                 {
-                    string errorMessage = string.Format(
-                        "Invalid colour value {0} in label {1}",
-                        label.Colour,
-                        label.Text
-                    );
+                    string errorMessage = $"Invalid colour value {label.Colour} in label {label.Text}";
                     events.AddEvent(new ValidationRuleFailure(errorMessage));
                 }
             }

@@ -13,12 +13,8 @@ namespace Compiler.Validate
             foreach (CoordinationPoint point in sectorElements.CoordinationPoints)
             {
                 if (!RunwayValid(sectorElements, point.DepartureRunway, point.DepartureAirportOrFixBefore)) {
-                    string message = String.Format(
-                        "Invalid departure runway {0}/{1} for coordination point: {2}",
-                        point.DepartureRunway,
-                        point.DepartureAirportOrFixBefore,
-                        point.GetCompileData(sectorElements)
-                    );
+                    string message =
+                        $"Invalid departure runway {point.DepartureRunway}/{point.DepartureAirportOrFixBefore} for coordination point: {point.GetCompileData(sectorElements)}";
                     events.AddEvent(new ValidationRuleFailure(message));
                     continue;
                 }

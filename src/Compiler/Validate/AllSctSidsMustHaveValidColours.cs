@@ -15,11 +15,8 @@ namespace Compiler.Validate
                 {
                     if (segment.Colour != null && !ColourValidator.ColourValid(sectorElements, segment.Colour))
                     {
-                        string errorMessage = string.Format(
-                            "Invalid colour value {0} in route segment for SID {1}",
-                            segment.Colour,
-                            sid.Identifier
-                        );
+                        string errorMessage =
+                            $"Invalid colour value {segment.Colour} in route segment for SID {sid.Identifier}";
                         events.AddEvent(new ValidationRuleFailure(errorMessage));
                     }
                 }

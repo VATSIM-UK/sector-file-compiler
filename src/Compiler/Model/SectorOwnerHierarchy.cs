@@ -38,10 +38,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "OWNER:{0}",
-                string.Join(':', this.Owners)
-            );
+            return $"OWNER:{string.Join(':', this.Owners)}";
         }
 
         public override int GetHashCode()

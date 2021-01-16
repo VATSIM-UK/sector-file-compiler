@@ -21,11 +21,7 @@ namespace Compiler.Validate
                     {
                         if (!airports.Contains(airport))
                         {
-                            string message = String.Format(
-                                "Invalid ARRAPT {0} on sector {1}",
-                                airport,
-                                sector.Name
-                            );
+                            string message = $"Invalid ARRAPT {airport} on sector {sector.Name}";
                             events.AddEvent(new ValidationRuleFailure(message));
                             break;
                         }

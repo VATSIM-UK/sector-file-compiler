@@ -21,7 +21,7 @@
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return $"{this.Colour ?? ""} {this.Point.ToString()}".Trim();
+            return $"{this.Colour ?? ""} {this.Point}".Trim();
         }
     }
 }

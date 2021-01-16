@@ -14,10 +14,7 @@ namespace Compiler.Error
 
         public string GetMessage()
         {
-            return String.Format(
-                "Validation rule not met: {0}",
-                this.error
-            );
+            return $"Validation rule not met: {this.error}";
         }
 
         public bool IsFatal()

@@ -20,12 +20,8 @@ namespace Compiler.Validate
             {
                 if (!airports.Contains(runway.AirfieldIcao))
                 {
-                    string message = String.Format(
-                        "Runway {0}/{1} ({2}) does not match up to a defined airport",
-                        runway.FirstIdentifier,
-                        runway.ReverseIdentifier,
-                        runway.AirfieldIcao
-                    );
+                    string message =
+                        $"Runway {runway.FirstIdentifier}/{runway.ReverseIdentifier} ({runway.AirfieldIcao}) does not match up to a defined airport";
 
                     events.AddEvent(
                         new ValidationRuleFailure(message)

@@ -19,33 +19,24 @@ namespace Compiler.Validate
                 {
                     if (!sectors.Contains(rule.ControlledSector))
                     {
-                        string message = String.Format(
-                            "Invalid controlled sector {0} for SECTORLINE display rule: {1}",
-                            rule.ControlledSector,
-                            rule.GetCompileData(sectorElements)
-                        );
+                        string message =
+                            $"Invalid controlled sector {rule.ControlledSector} for SECTORLINE display rule: {rule.GetCompileData(sectorElements)}";
                         events.AddEvent(new ValidationRuleFailure(message));
                         continue;
                     }
 
                     if (!sectors.Contains(rule.CompareSectorFirst))
                     {
-                        string message = String.Format(
-                            "Invalid first compare sector {0} for SECTORLINE display rule: {1}",
-                            rule.CompareSectorFirst,
-                            rule.GetCompileData(sectorElements)
-                        );
+                        string message =
+                            $"Invalid first compare sector {rule.CompareSectorFirst} for SECTORLINE display rule: {rule.GetCompileData(sectorElements)}";
                         events.AddEvent(new ValidationRuleFailure(message));
                         continue;
                     }
 
                     if (!sectors.Contains(rule.CompareSectorSecond))
                     {
-                        string message = String.Format(
-                            "Invalid second compare sector {0} for SECTORLINE display rule: {1}",
-                            rule.CompareSectorSecond,
-                            rule.GetCompileData(sectorElements)
-                        );
+                        string message =
+                            $"Invalid second compare sector {rule.CompareSectorSecond} for SECTORLINE display rule: {rule.GetCompileData(sectorElements)}";
                         events.AddEvent(new ValidationRuleFailure(message));
                         continue;
                     }

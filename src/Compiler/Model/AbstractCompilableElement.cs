@@ -47,7 +47,7 @@ namespace Compiler.Model
             }
 
             // Compile each data item along with its inline comment
-            output.WriteLine($"{this.GetCompileData(elements)} {this.InlineComment.ToString()}".Trim());
+            output.WriteLine($"{this.GetCompileData(elements)} {this.InlineComment}".Trim());
         }
 
         public OutputGroup GetDataGroup()

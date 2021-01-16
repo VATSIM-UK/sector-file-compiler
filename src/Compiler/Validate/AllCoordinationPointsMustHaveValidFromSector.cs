@@ -17,11 +17,8 @@ namespace Compiler.Validate
             {
                 if (!sectors.Contains(point.FromSector))
                 {
-                    string message = String.Format(
-                        "Invalid FROM sector {0} for coordination point: {1}",
-                        point.FromSector,
-                        point.GetCompileData(sectorElements)
-                    );
+                    string message =
+                        $"Invalid FROM sector {point.FromSector} for coordination point: {point.GetCompileData(sectorElements)}";
                     events.AddEvent(new ValidationRuleFailure(message));
                     continue;
                 }

@@ -38,10 +38,7 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return String.Format(
-                "SECTORLINE:{0}",
-                this.Name
-            );
+            return $"SECTORLINE:{this.Name}";
         }
     }
 }

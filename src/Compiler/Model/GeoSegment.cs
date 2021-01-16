@@ -23,7 +23,7 @@
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return $"{this.FirstPoint.ToString()} {this.SecondPoint.ToString()} {Colour ?? ""}".Trim();
+            return $"{this.FirstPoint} {this.SecondPoint} {Colour ?? ""}".Trim();
         }
     }
 }

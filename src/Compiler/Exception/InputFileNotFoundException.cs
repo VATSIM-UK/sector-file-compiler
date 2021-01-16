@@ -5,7 +5,7 @@ namespace Compiler.Exception
     public class InputFileNotFoundException: ArgumentException
     {
         public InputFileNotFoundException(string filename)
-            : base(string.Format("Input file not found: {0}", filename))
+            : base($"Input file not found: {filename}")
         {
 
         }

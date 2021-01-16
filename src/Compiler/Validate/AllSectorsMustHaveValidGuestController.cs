@@ -19,11 +19,7 @@ namespace Compiler.Validate
                 {
                     if (!controllers.Contains(guest.Controller))
                     {
-                        string message = String.Format(
-                            "Invalid GUEST position {0} on sector {1}",
-                            guest.Controller,
-                            sector.Name
-                        );
+                        string message = $"Invalid GUEST position {guest.Controller} on sector {sector.Name}";
                         events.AddEvent(new ValidationRuleFailure(message));
                         break;
                     }

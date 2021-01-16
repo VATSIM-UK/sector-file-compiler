@@ -22,11 +22,7 @@ namespace Compiler.Validate
                     {
                         if (!circleSectorlines.Contains(borderLine) && !sectorlines.Contains(borderLine))
                         {
-                            string message = String.Format(
-                                "Invalid BORDER line {0} on sector {1}",
-                                borderLine,
-                                sector.Name
-                            );
+                            string message = $"Invalid BORDER line {borderLine} on sector {sector.Name}";
                             events.AddEvent(new ValidationRuleFailure(message));
                             break;
                         }

@@ -70,7 +70,7 @@ namespace Compiler.Parser
                 ),
                 InputDataType.ESE_VRPS => new VrpParser(this.sectorElements, this.logger),
                 _ => throw new NotImplementedException(
-                    string.Format("Parser not not implemented for input data type {0}", file.DataType.ToString()))
+                    $"Parser not not implemented for input data type {file.DataType.ToString()}")
             };
         }
     }

@@ -28,10 +28,7 @@ namespace Compiler.Validate
         {
             if (!PointsValid(geo.FirstPoint, geo.SecondPoint, sectorElements))
             {
-                string message = String.Format(
-                    "Invalid waypoint on GEO declaration: {0}",
-                    geo.GetCompileData(sectorElements)
-                );
+                string message = $"Invalid waypoint on GEO declaration: {geo.GetCompileData(sectorElements)}";
                 events.AddEvent(
                     new ValidationRuleFailure(message)
                 );
@@ -42,10 +39,7 @@ namespace Compiler.Validate
         {
             if (!PointsValid(segment.FirstPoint, segment.SecondPoint, sectorElements))
             {
-                string message = String.Format(
-                    "Invalid waypoint on GEO segment: {0}",
-                    segment.GetCompileData(sectorElements)
-                );
+                string message = $"Invalid waypoint on GEO segment: {segment.GetCompileData(sectorElements)}";
                 events.AddEvent(
                     new ValidationRuleFailure(message)
                 );

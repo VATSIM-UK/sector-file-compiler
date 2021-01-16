@@ -26,11 +26,8 @@ namespace Compiler.Validate
                 {
                     if (this.InvalidPoint(airway.StartPoint.Identifier, sectorElements))
                     {
-                        string message = String.Format(
-                            "Invalid end point {0} on Airway segment for {1}",
-                            airway.StartPoint.Identifier,
-                            airway.Identifier
-                        );
+                        string message =
+                            $"Invalid end point {airway.StartPoint.Identifier} on Airway segment for {airway.Identifier}";
                         events.AddEvent(
                             new ValidationRuleFailure(message)
                         );
@@ -41,11 +38,8 @@ namespace Compiler.Validate
                 {
                     if (this.InvalidPoint(airway.EndPoint.Identifier, sectorElements))
                     {
-                        string message = String.Format(
-                            "Invalid start point {0} on Airway segment for {1}",
-                            airway.EndPoint.Identifier,
-                            airway.Identifier
-                        );
+                        string message =
+                            $"Invalid start point {airway.EndPoint.Identifier} on Airway segment for {airway.Identifier}";
                         events.AddEvent(
                             new ValidationRuleFailure(message)
                         );

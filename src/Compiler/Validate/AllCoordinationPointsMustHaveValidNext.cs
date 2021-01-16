@@ -24,11 +24,8 @@ namespace Compiler.Validate
                     !vors.Contains(point.ArrivalAirportOrFixAfter) &&
                     !ndbs.Contains(point.ArrivalAirportOrFixAfter)
                 ) {
-                    string message = String.Format(
-                        "Invalid next fix or arrival airport {0} on coordination point: {1}",
-                        point.ArrivalAirportOrFixAfter,
-                        point.GetCompileData(sectorElements)
-                    );
+                    string message =
+                        $"Invalid next fix or arrival airport {point.ArrivalAirportOrFixAfter} on coordination point: {point.GetCompileData(sectorElements)}";
                     events.AddEvent(new ValidationRuleFailure(message));
                     continue;
                 }

@@ -19,22 +19,16 @@ namespace Compiler.Validate
                 {
                     if (guest.DepartureAirport != "*" && !airports.Contains(guest.DepartureAirport))
                     {
-                        string message = String.Format(
-                            "Invalid departure GUEST airport {0} on sector {1}",
-                            guest.DepartureAirport,
-                            sector.Name
-                        );
+                        string message =
+                            $"Invalid departure GUEST airport {guest.DepartureAirport} on sector {sector.Name}";
                         events.AddEvent(new ValidationRuleFailure(message));
                         break;
                     }
 
                     if (guest.ArrivalAirport != "*" && !airports.Contains(guest.ArrivalAirport))
                     {
-                        string message = String.Format(
-                            "Invalid arrival GUEST airport {0} on sector {1}",
-                            guest.ArrivalAirport,
-                            sector.Name
-                        );
+                        string message =
+                            $"Invalid arrival GUEST airport {guest.ArrivalAirport} on sector {sector.Name}";
                         events.AddEvent(new ValidationRuleFailure(message));
                         break;
                     }

@@ -23,11 +23,7 @@ namespace Compiler.Validate
         {
             if (!RoutePointValidator.ValidatePoint(point.Point, sectorElements))
             {
-                string message = String.Format(
-                    "Invalid waypoint {0} on region {1}",
-                    point.Point.ToString(),
-                    region.Name
-                );
+                string message = $"Invalid waypoint {point.Point} on region {region.Name}";
                 events.AddEvent(
                     new ValidationRuleFailure(message)
                 );

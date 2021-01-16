@@ -25,11 +25,8 @@ namespace Compiler.Validate
                     !vors.Contains(circle.CentrePoint) &&
                     !ndbs.Contains(circle.CentrePoint)
                 ) {
-                    string message = String.Format(
-                        "Invalid fix {0} for CIRCLE_SECTORLINE: {1}",
-                        circle.CentrePoint,
-                        circle.GetCompileData(sectorElements)
-                    );
+                    string message =
+                        $"Invalid fix {circle.CentrePoint} for CIRCLE_SECTORLINE: {circle.GetCompileData(sectorElements)}";
                     events.AddEvent(new ValidationRuleFailure(message));
                     continue;
                 }

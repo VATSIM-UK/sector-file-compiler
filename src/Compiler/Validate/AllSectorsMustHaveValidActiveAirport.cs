@@ -20,11 +20,7 @@ namespace Compiler.Validate
                 {
                     if (!airports.Contains(active.Airfield))
                     {
-                        string message = String.Format(
-                            "Invalid ACTIVE airport {0} on sector {1}",
-                            active.Airfield,
-                            sector.Name
-                        );
+                        string message = $"Invalid ACTIVE airport {active.Airfield} on sector {sector.Name}";
                         events.AddEvent(new ValidationRuleFailure(message));
                         break;
                     }

@@ -18,12 +18,8 @@ namespace Compiler.Validate
 
                 if (!airportExists)
                 {
-                    string errorMessage = String.Format(
-                        "Airport {0} is not valid for {1}/{2}",
-                        sidStar.Airport,
-                        sidStar.Type,
-                        sidStar.Identifier
-                    );
+                    string errorMessage =
+                        $"Airport {sidStar.Airport} is not valid for {sidStar.Type}/{sidStar.Identifier}";
 
                     events.AddEvent(new ValidationRuleFailure(errorMessage));
                 }

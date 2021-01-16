@@ -20,10 +20,7 @@ namespace Compiler.Validate
 
             foreach (string duplicate in duplicates)
             {
-                string message = String.Format(
-                    "Duplicate SECTORLINE or CIRCLE_SECTORLINE for {0}",
-                    duplicate
-                );
+                string message = $"Duplicate SECTORLINE or CIRCLE_SECTORLINE for {duplicate}";
                 events.AddEvent(new ValidationRuleFailure(message));
                 continue;
             }

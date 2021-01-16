@@ -14,10 +14,7 @@ namespace Compiler.Error
 
         public string GetMessage()
         {
-            return String.Format(
-                "Unconfigured configuration section {0}",
-                section
-            );
+            return $"Unconfigured configuration section {section}";
         }
 
         public bool IsFatal()

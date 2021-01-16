@@ -30,7 +30,7 @@
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return $"{this.Identifier} {this.StartPoint.ToString()} {this.EndPoint.ToString()}";
+            return $"{this.Identifier} {this.StartPoint} {this.EndPoint}";
         }
     }
 }

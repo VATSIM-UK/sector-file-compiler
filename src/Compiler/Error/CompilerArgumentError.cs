@@ -13,10 +13,7 @@ namespace Compiler.Error
 
         public string GetMessage()
         {
-            return String.Format(
-                "Argument error: {0}",
-                this.message
-            );
+            return $"Argument error: {this.message}";
         }
 
         public bool IsFatal()

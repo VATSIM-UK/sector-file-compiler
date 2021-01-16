@@ -42,7 +42,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsFrequency()
         {
-            Assert.Equal("123.456", this.airport.Frequency.ToString());
+            Assert.Equal("123.456", this.airport.Frequency);
         }
 
         [Fact]

@@ -75,100 +75,62 @@ namespace Compiler.Config
 
         private string GetInvalidConfigSectionFormatMessage(string section)
         {
-            return string.Format(
-                "Invalid config section for {0} - must be the path to a file, or an array of paths",
-                section
-            );
+            return $"Invalid config section for {section} - must be the path to a file, or an array of paths";
         }
 
         private string GetMissingTypeMessage(string section)
         {
-            return string.Format(
-                "Invalid type field for section {0} - must be \"files\" or \"folders\"",
-                section
-            );
+            return $"Invalid type field for section {section} - must be \"files\" or \"folders\"";
         }
 
         private string InvalidFilesListMessage(string section)
         {
-            return string.Format(
-                "Files list invalid in section {0} - must be array under key \"files\"",
-                section
-            );
+            return $"Files list invalid in section {section} - must be array under key \"files\"";
         }
 
         private string GetInvalidFolderMessage(string section)
         {
-            return string.Format(
-                "Folder invalid in section {0} - must be string under key \"folder\"",
-                section
-            );
+            return $"Folder invalid in section {section} - must be string under key \"folder\"";
         }
 
         private string GetRecursiveMessage(string section)
         {
-            return string.Format(
-                "Recursive must be a boolean in section {0}",
-                section
-            );
+            return $"Recursive must be a boolean in section {section}";
         }
 
         private string GetIncludeAndExcludeMessage(string section)
         {
-            return string.Format(
-                "Cannot specify both include and exclude for folders in section {0}",
-                section
-            );
+            return $"Cannot specify both include and exclude for folders in section {section}";
         }
 
         private string GetInvalidFilePathMessage(string section)
         {
-            return string.Format(
-                "Invalid file path in section {0} - must be a string",
-                section
-            );
+            return $"Invalid file path in section {section} - must be a string";
         }
 
         private string GetInvalidIncludeExcludeListMessage(bool include, string section)
         {
-            return string.Format(
-                "{0} list must be an array in section {1}",
-                include ? "Include" : "Exclude",
-                section
-            );
+            return $"{(include ? "Include" : "Exclude")} list must be an array in section {section}";
         }
 
         private string GetInvalidIncludeExcludeFileMessage(bool include, string section)
         {
-            return string.Format(
-                "{0} file must be a string section {1}",
-                include ? "Include" : "Exclude",
-                section
-            );
+            return $"{(include ? "Include" : "Exclude")} file must be a string section {section}";
         }
 
         private string GetInvalidIgnoreMissingMessage(string section)
         {
-            return string.Format(
-                "Invalid ignore_missing value in section {0} - must be a boolean",
-                section
-            );
+            return $"Invalid ignore_missing value in section {section} - must be a boolean";
         }
 
         private string GetInvalidExceptWhereExistsMessage(string section)
         {
-            return string.Format(
-                "Invalid except_where_exists value in section {0} - must be a string",
-                section
-            );
+            return $"Invalid except_where_exists value in section {section} - must be a string";
         }
 
         private string GetInvalidConfigParentSectionFormatMessage(string section)
         {
-            return string.Format(
-                "Invalid config section for {0} - must be an object or array of objects",
-                section
-            );
+            return $"Invalid config section for {section} - must be an object or array of objects";
         }
 
         private bool IsValidConfigSectionFormat(JToken section)
@@ -213,7 +175,7 @@ namespace Compiler.Config
             if (airportConfig.Type != JTokenType.Object)
             {
                 throw new ConfigFileInvalidException(
-                    string.Format("Invalid airport config in {0} must be an object", configFilePath)
+                    $"Invalid airport config in {configFilePath} must be an object"
                 );
             }
 
@@ -222,7 +184,7 @@ namespace Compiler.Config
                 if (configItem.Value.Type != JTokenType.Object)
                 {
                     throw new ConfigFileInvalidException(
-                        string.Format("Invalid airport config[{0}] in {1} must be an object", configItem.Key, configFilePath)
+                        $"Invalid airport config[{configItem.Key}] in {configFilePath} must be an object"
                     );
                 }
 

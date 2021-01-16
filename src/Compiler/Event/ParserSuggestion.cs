@@ -17,7 +17,7 @@ namespace Compiler.Event
 
         public string GetMessage()
         {
-            return String.Format("SUGGESTION: {0}", this.message);
+            return $"SUGGESTION: {this.message}";
         }
 
         public bool IsFatal()
