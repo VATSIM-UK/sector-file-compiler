@@ -66,8 +66,8 @@ namespace Compiler.Parser
 
             SectorData declarationLine = lines[0];
 
-            int minimumAltitude = 0;
-            int maximumAltitude = 0;
+            int minimumAltitude;
+            int maximumAltitude;
             if (declarationLine.dataSegments[0] != "SECTOR")
             {
                 this.errorLog.AddEvent(
@@ -295,7 +295,7 @@ namespace Compiler.Parser
 
             if (!AirportValidator.ValidSectorGuestAirport(line.dataSegments[2]))
             {
-                throw new ArgumentOutOfRangeException("Invalid departure airport designator in GUEST segement");
+                throw new ArgumentException("Invalid departure airport designator in GUEST segement");
             }
 
             if (!AirportValidator.ValidSectorGuestAirport(line.dataSegments[3]))

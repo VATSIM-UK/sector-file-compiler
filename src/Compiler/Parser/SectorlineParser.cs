@@ -49,7 +49,7 @@ namespace Compiler.Parser
                 {
                     try
                     {
-                        this.ProcessLines(ref linesToProcess, data);
+                        this.ProcessLines(ref linesToProcess);
                     } catch
                     {
                         // Logging done higher up
@@ -63,7 +63,7 @@ namespace Compiler.Parser
 
             try
             {
-                this.ProcessLines(ref linesToProcess, data);
+                this.ProcessLines(ref linesToProcess);
             }
             catch
             {
@@ -71,7 +71,7 @@ namespace Compiler.Parser
             }
         }
 
-        private void ProcessLines(ref List<SectorData> lines, AbstractSectorDataFile file)
+        private void ProcessLines(ref List<SectorData> lines)
         {
             if (lines.Count == 0)
             {
@@ -80,10 +80,10 @@ namespace Compiler.Parser
 
             if (this.IsNewCircleSectorlineDeclaration(lines[0]))
             {
-                this.ParseCircleSectorline(ref lines, file);
+                this.ParseCircleSectorline(ref lines);
             } else
             {
-                this.ParseStandardSectorline(ref lines, file);
+                this.ParseStandardSectorline(ref lines);
             }
         }
         
@@ -111,7 +111,7 @@ namespace Compiler.Parser
             return line.dataSegments[0] == "SECTORLINE";
         }
 
-        private void ParseCircleSectorline(ref List<SectorData> lines, AbstractSectorDataFile file)
+        private void ParseCircleSectorline(ref List<SectorData> lines)
         {
             // Deal with the declaration line
             SectorData declarationLine = lines[0];
@@ -158,14 +158,7 @@ namespace Compiler.Parser
             while (i < lines.Count)
             {
                 SectorData displayData = lines[i];
-
-                try
-                {
-                    displayRules.Add(this.ParseDisplayRule(displayData));
-                } catch (ArgumentException exception) {
-                    throw exception;
-                }
-
+                displayRules.Add(this.ParseDisplayRule(displayData));
                 i++;
             }
 
@@ -199,7 +192,7 @@ namespace Compiler.Parser
 
         }
 
-        private void ParseStandardSectorline(ref List<SectorData> lines, AbstractSectorDataFile file)
+        private void ParseStandardSectorline(ref List<SectorData> lines)
         {
             // Deal with the declaration line
             SectorData declarationLine = lines[0];
@@ -218,25 +211,18 @@ namespace Compiler.Parser
             while (i < lines.Count)
             {
                 SectorData dataLine = lines[i];
-
-                try
+                if (IsCoordDeclaration(dataLine))
                 {
-                    if (IsCoordDeclaration(dataLine))
-                    {
-                        coordinates.Add(ParseCoordinate(dataLine));
-                    }
-                    else if (IsDiplayDeclaration(dataLine))
-                    {
-                        displayRules.Add(ParseDisplayRule(dataLine));
-                    }
-                    else
-                    {
-                        this.errorLog.AddEvent(new SyntaxError("Invalid declaration in SECTORLINE declaration", dataLine));
-                        throw new ArgumentException("Invalid declaration in SECTORLINE declaration");
-                    }
-                } catch (ArgumentException exception)
+                    coordinates.Add(ParseCoordinate(dataLine));
+                }
+                else if (IsDiplayDeclaration(dataLine))
                 {
-                    throw exception;
+                    displayRules.Add(ParseDisplayRule(dataLine));
+                }
+                else
+                {
+                    this.errorLog.AddEvent(new SyntaxError("Invalid declaration in SECTORLINE declaration", dataLine));
+                    throw new ArgumentException("Invalid declaration in SECTORLINE declaration");
                 }
 
                 i++;

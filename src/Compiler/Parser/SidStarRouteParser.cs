@@ -28,7 +28,6 @@ namespace Compiler.Parser
         {
             List<SectorData> linesToProcess = new List<SectorData>();
             bool foundFirst = false;
-            int newSegmentStartLine = 0;
             foreach (SectorData line in data)
             {
                 // We haven't yet started a SID/STAR route, so make sure we have a new declaration
@@ -44,7 +43,6 @@ namespace Compiler.Parser
                     return;
                 } else if (!foundFirst) {
                     linesToProcess.Add(line);
-                    newSegmentStartLine = data.CurrentLineNumber;
                     foundFirst = true;
                     continue;
                 }
@@ -60,7 +58,7 @@ namespace Compiler.Parser
                     return;
                 } else if (firstPointIndex != 0)
                 {
-                    this.ProcessSidStar(linesToProcess, data, newSegmentStartLine);
+                    this.ProcessSidStar(linesToProcess);
                     linesToProcess.Clear();
                     linesToProcess.Add(line);
                     continue;
@@ -73,7 +71,7 @@ namespace Compiler.Parser
             // If we've got some lines left over, process them now
             if (linesToProcess.Count != 0)
             {
-                this.ProcessSidStar(linesToProcess, data, newSegmentStartLine);
+                this.ProcessSidStar(linesToProcess);
             }
         }
 
@@ -106,7 +104,7 @@ namespace Compiler.Parser
         /**
          * Process an individual SID/STARs worth of lines
          */
-        private void ProcessSidStar(List<SectorData> lines, AbstractSectorDataFile data, int startLine)
+        private void ProcessSidStar(List<SectorData> lines)
         {
             // Get the name out and remove it from the array
             int firstLineFirstCoordinateIndex = this.GetFirstPointIndex(lines[0]);

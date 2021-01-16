@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Compiler.Event;
 using Compiler.Error;
 using Compiler.Model;

@@ -17,7 +17,7 @@
             return this.CommentString == "" ? "" : $"; {this.CommentString}";
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return obj is Comment compareComment &&
                    compareComment.CommentString == this.CommentString;

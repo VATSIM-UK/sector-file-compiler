@@ -24,14 +24,14 @@ namespace Compiler.Model
         {
             if (
                 !(obj is SectorArrivalAirports) ||
-                ((SectorDepartureAirports)obj).Airports.Count != this.Airports.Count
+                (obj as SectorDepartureAirports).Airports.Count != this.Airports.Count
             ) {
                 return false;
             }
 
             for (int i = 0; i < this.Airports.Count; i++)
             {
-                if (this.Airports[i] != ((SectorDepartureAirports)obj).Airports[i])
+                if (this.Airports[i] != (obj as SectorDepartureAirports).Airports[i])
                 {
                     return false;
                 }

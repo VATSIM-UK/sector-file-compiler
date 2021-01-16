@@ -17,7 +17,6 @@ namespace Compiler.Validate
                     {
                         string errorMessage = $"Invalid colour value {point.Colour} for region {region.Name}";
                         events.AddEvent(new ValidationRuleFailure(errorMessage));
-                        continue;
                     }
                 }
             }

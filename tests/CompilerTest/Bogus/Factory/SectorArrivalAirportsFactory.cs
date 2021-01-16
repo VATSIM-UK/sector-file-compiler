@@ -15,7 +15,7 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<SectorArrivalAirports>()
                 .CustomInstantiator(
-                    f => new SectorArrivalAirports(
+                    _ => new SectorArrivalAirports(
                         airports ?? AirportFactory.GetListOfDesignators(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),

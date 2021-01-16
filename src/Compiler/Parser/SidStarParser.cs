@@ -35,7 +35,7 @@ namespace Compiler.Parser
                 {
                     this.errorLog.AddEvent(
                         new SyntaxError("Unknown SIDSTAR type " + line.dataSegments[0], line)
-                    ); ;
+                    );
                     continue;
                 }
 

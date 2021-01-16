@@ -9,7 +9,7 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<ArtccSegment>()
                 .CustomInstantiator(
-                    f => new ArtccSegment(
+                    _ => new ArtccSegment(
                         identifier ?? "EGTT",
                         type,
                         PointFactory.Make(),

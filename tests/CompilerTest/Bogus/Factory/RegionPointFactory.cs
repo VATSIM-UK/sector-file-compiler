@@ -15,7 +15,7 @@ namespace CompilerTest.Bogus.Factory
         public static Faker<RegionPoint> GetGenerator(string colour = null, Point point = null)
         {
             return new Faker<RegionPoint>().CustomInstantiator(
-                f => new RegionPoint(
+                _ => new RegionPoint(
                     point ?? PointFactory.Make(),
                     DefinitionFactory.Make(),
                     DocblockFactory.Make(),

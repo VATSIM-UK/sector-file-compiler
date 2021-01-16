@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -35,7 +34,7 @@ namespace Compiler.Validate
                 return true;
             }
 
-            List<Airport> airport = sectorElements.Airports.Where(airport => airport.Icao == airportCode).ToList();
+            List<Airport> airport = sectorElements.Airports.Where(airportElement => airportElement.Icao == airportCode).ToList();
 
             return airport.Count != 0 && sectorElements.Runways
                 .Where(runway => runway.AirfieldIcao == airport[0].Icao)

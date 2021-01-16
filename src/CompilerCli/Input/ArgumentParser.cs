@@ -6,7 +6,7 @@ namespace CompilerCli.Input
 {
     public static class ArgumentParser
     {
-        private static readonly Dictionary<string, IInputParser> availableArguments = new()
+        private static readonly Dictionary<string, IInputParser> AvailableArguments = new()
         {
             { "--config-file", new ConfigFileParser() },
             { "--out-file-ese", new EseOutputFileParser() },
@@ -18,7 +18,7 @@ namespace CompilerCli.Input
             { "--build-version", new BuildVersionParser() },
             { "--force-contiguous-routes", new BuildVersionParser() },
             { "--display-input-files", new DisplayInputFilesParser() },
-            { "--test-arg", new TestArgumentParser() },
+            { "--test-arg", new DefaultArgumentParser() },
         };
 
         public static CompilerArguments CreateFromCommandLine(string[] args)
@@ -28,7 +28,7 @@ namespace CompilerCli.Input
             int i = 0;
             while (i < args.Length)
             {
-                if (!availableArguments.ContainsKey(args[i]))
+                if (!AvailableArguments.ContainsKey(args[i]))
                 {
                     throw new ArgumentException("Unknown argument: " + args[i]);
                 }
@@ -38,7 +38,7 @@ namespace CompilerCli.Input
                 while (nextArgument < args.Length)
                 {
                     if (args[nextArgument].StartsWith("--")) {
-                        if (!availableArguments.ContainsKey(args[nextArgument]))
+                        if (!AvailableArguments.ContainsKey(args[nextArgument]))
                         {
                             throw new ArgumentException("Unknown argument: " + args[i]);
                         }
@@ -50,7 +50,7 @@ namespace CompilerCli.Input
                     nextArgument++;
                 }
 
-                arguments = availableArguments[args[i]].Parse(values, arguments);
+                arguments = AvailableArguments[args[i]].Parse(values, arguments);
                 i = nextArgument;
             }
 

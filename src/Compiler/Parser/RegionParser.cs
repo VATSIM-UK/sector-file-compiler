@@ -127,7 +127,7 @@ namespace Compiler.Parser
                 }
 
                 Point parsedPoint = PointParser.Parse(line.dataSegments[0], line.dataSegments[1]);
-                if (parsedPoint == PointParser.InvalidPoint)
+                if (Equals(parsedPoint, PointParser.InvalidPoint))
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid region point format: " + data.CurrentLine, line)

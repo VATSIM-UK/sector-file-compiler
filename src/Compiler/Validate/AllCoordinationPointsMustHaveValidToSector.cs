@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -20,7 +19,6 @@ namespace Compiler.Validate
                     string message =
                         $"Invalid TO sector {point.ToSector} for coordination point: {point.GetCompileData(sectorElements)}";
                     events.AddEvent(new ValidationRuleFailure(message));
-                    continue;
                 }
             }
         }

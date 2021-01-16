@@ -28,7 +28,7 @@ namespace Compiler.Input
          */
         public Comment GetCommentSegment(string line)
         {
-            int commentIndex = line.IndexOf(this.GetCommentDelimiter());
+            int commentIndex = line.IndexOf(this.GetCommentDelimiter(), StringComparison.Ordinal);
             return new Comment(commentIndex == -1 ? "" : line.Substring(commentIndex + 1).Trim());
         }
 

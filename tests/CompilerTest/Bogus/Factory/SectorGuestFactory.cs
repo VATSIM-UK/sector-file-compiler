@@ -21,7 +21,7 @@ namespace CompilerTest.Bogus.Factory
         ) {
             return new Faker<SectorGuest>()
                 .CustomInstantiator(
-                    f => new SectorGuest(
+                    _ => new SectorGuest(
                         controllerIdentifier ?? ControllerPositionFactory.GetIdentifier(),
                         firstAirport ?? AirportFactory.GetRandomDesignator(),
                         secondAirport ?? AirportFactory.GetRandomDesignator(),

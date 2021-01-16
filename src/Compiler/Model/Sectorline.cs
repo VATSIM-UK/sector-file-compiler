@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Compiler.Model
@@ -19,8 +18,6 @@ namespace Compiler.Model
             DisplayRules = displayRules;
             Coordinates = coordinates;
         }
-
-        public Coordinate Corodinate { get; }
         public string Name { get; }
         public List<SectorlineDisplayRule> DisplayRules { get; }
         public List<SectorlineCoordinate> Coordinates { get; }

@@ -17,7 +17,7 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<CoordinationPoint>()
                 .CustomInstantiator(
-                    f => new CoordinationPoint(
+                    _ => new CoordinationPoint(
                         firCopx,
                         priorPoint ?? FixFactory.RandomIdentifier(),
                         "",
@@ -46,7 +46,7 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<CoordinationPoint>()
                 .CustomInstantiator(
-                    f => new CoordinationPoint(
+                    _ => new CoordinationPoint(
                         firCopx,
                         departureAirport ?? AirportFactory.GetRandomDesignator(),
                         departureRunway ?? RunwayFactory.GetRandomDesignator(),

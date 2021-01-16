@@ -7,24 +7,21 @@ using Xunit;
 
 namespace CompilerTest.Collector
 {
-    abstract public class AbstractCollectorTestCase
+    public abstract class AbstractCollectorTestCase
     {
-        protected SectorElementCollection sectorElements = new();
+        protected readonly SectorElementCollection sectorElements = new();
 
-        protected OutputGroupRepository outputGroups = new();
+        protected readonly OutputGroupRepository outputGroups = new();
 
         protected void AssertCollectedItems(IEnumerable<ICompilableElementProvider> expected)
         {
-            IEnumerable<ICompilableElementProvider> actual = this.GetCollector().GetCompilableElements();
-            Assert.Equal(expected.Count(), actual.Count());
+            List<ICompilableElementProvider> actual = this.GetCollector().GetCompilableElements().ToList();
+            List<ICompilableElementProvider> expectedList = expected.ToList();
+            Assert.Equal(expectedList.Count, actual.Count);
 
-            using IEnumerator<ICompilableElementProvider> expectedEnumerator = expected.GetEnumerator();
-            using IEnumerator<ICompilableElementProvider> actualEnumerator = actual.GetEnumerator();
-            for (int i = 0; i < expected.Count(); i++)
+            for (int i = 0; i < expectedList.Count(); i++)
             {
-                Assert.Same(expectedEnumerator.Current, actualEnumerator.Current);
-                expectedEnumerator.MoveNext();
-                actualEnumerator.MoveNext();
+                Assert.Same(expectedList[i], actual[i]);
             }
         }
 

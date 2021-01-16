@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Compiler.Event
+﻿namespace Compiler.Event
 {
     public class CompilationMessage : ICompilerEvent
     {

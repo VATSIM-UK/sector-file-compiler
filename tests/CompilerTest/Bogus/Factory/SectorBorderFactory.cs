@@ -16,7 +16,7 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<SectorBorder>()
                 .CustomInstantiator(
-                    f => new SectorBorder(
+                    _ => new SectorBorder(
                         new List<string>() {"abc", "def", "ghi"},
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),

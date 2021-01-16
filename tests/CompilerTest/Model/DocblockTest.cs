@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using Compiler.Model;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CompilerTest.Model
 {
@@ -19,15 +20,12 @@ namespace CompilerTest.Model
             docblock.AddLine(line3);
             docblock.AddLine(line4);
 
-            IEnumerator<Comment> enumerator = docblock.GetEnumerator();
-            enumerator.MoveNext();
-            Assert.Equal(line1, enumerator.Current);
-            enumerator.MoveNext();
-            Assert.Equal(line2, enumerator.Current);
-            enumerator.MoveNext();
-            Assert.Equal(line3, enumerator.Current);
-            enumerator.MoveNext();
-            Assert.Equal(line4, enumerator.Current);
+            List<Comment> comments = docblock.ToList();
+            Assert.Equal(4, comments.Count);
+            Assert.Equal(line1, comments[0]);
+            Assert.Equal(line2, comments[1]);
+            Assert.Equal(line3, comments[2]);
+            Assert.Equal(line4, comments[3]);
         }
     }
 }

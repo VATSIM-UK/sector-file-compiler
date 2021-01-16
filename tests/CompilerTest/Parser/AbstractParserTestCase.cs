@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Compiler.Event;
 using Compiler.Input;
 using Compiler.Model;
@@ -34,6 +35,7 @@ namespace CompilerTest.Parser
             new DataParserFactory(this.sectorElementCollection, this.logger.Object).GetParserForFile(file).ParseData(file);
         }
 
+        [SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Local")]
         private static void AssertExpectedComment(string expected, Comment actual)
         {
             Assert.Equal(expected, actual.CommentString);
@@ -54,6 +56,7 @@ namespace CompilerTest.Parser
             AssertExpectedDocblockLines(element.Docblock, docblockLines);
         }
         
+        // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
         private void AssertExpectedDefinition(Definition definition, int lineNumber)
         {
             Assert.Equal(new Definition(this.inputFileName, lineNumber), definition);

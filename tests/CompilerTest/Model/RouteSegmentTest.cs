@@ -44,7 +44,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompilesWithColour()
         {
-            RouteSegment segment = new(
+            RouteSegment routeSegment = new(
                 "FOO",
                 new Point("BIG"),
                 new Point("LAM"),
@@ -56,7 +56,7 @@ namespace CompilerTest.Model
 
             Assert.Equal(
                 "                           BIG BIG LAM LAM FooColour",
-                segment.GetCompileData(new SectorElementCollection())
+                routeSegment.GetCompileData(new SectorElementCollection())
             );
         }
     }

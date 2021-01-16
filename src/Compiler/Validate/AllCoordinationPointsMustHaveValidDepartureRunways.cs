@@ -1,5 +1,4 @@
-﻿using System;
-using Compiler.Event;
+﻿using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
 using Compiler.Argument;
@@ -16,7 +15,6 @@ namespace Compiler.Validate
                     string message =
                         $"Invalid departure runway {point.DepartureRunway}/{point.DepartureAirportOrFixBefore} for coordination point: {point.GetCompileData(sectorElements)}";
                     events.AddEvent(new ValidationRuleFailure(message));
-                    continue;
                 }
             }
         }

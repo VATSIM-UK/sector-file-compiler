@@ -13,7 +13,7 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<Label>()
                 .CustomInstantiator(
-                    f => new Label(
+                    _ => new Label(
                         text ?? "Test Label",
                         CoordinateFactory.Make(),
                         colour ?? ColourFactory.RandomIdentifier(),

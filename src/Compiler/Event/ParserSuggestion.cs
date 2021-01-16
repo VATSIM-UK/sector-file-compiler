@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Compiler.Event
+﻿namespace Compiler.Event
 {
     /**
      * An event for when the parser wants to suggest a change or

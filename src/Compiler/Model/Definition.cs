@@ -16,7 +16,7 @@ namespace Compiler.Model
         public string Filename { get; }
         public int LineNumber { get; }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return obj is Definition compareDefinition && this.Equals(compareDefinition);
         }

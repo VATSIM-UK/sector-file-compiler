@@ -9,7 +9,7 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<Freetext>()
                 .CustomInstantiator(
-                    f => new Freetext(
+                    _ => new Freetext(
                         "Test Title",
                         "Test Freetext",
                         CoordinateFactory.Make(),

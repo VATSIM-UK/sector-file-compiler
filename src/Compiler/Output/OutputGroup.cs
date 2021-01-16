@@ -38,7 +38,7 @@ namespace Compiler.Output
 
         public int CompareTo(OutputGroup obj)
         {
-            return this.Key.CompareTo(obj.Key);
+            return string.Compare(this.Key, obj.Key, StringComparison.Ordinal);
         }
 
         public int CountFiles()

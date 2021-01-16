@@ -34,7 +34,7 @@ namespace Compiler.Output
         {
             try
             {
-                group = this.outputGroups.First(group => group.FileList.Contains(definition.Filename));
+                group = this.outputGroups.First(outputGroup => outputGroup.FileList.Contains(definition.Filename));
                 return true;
             } catch (InvalidOperationException)
             {

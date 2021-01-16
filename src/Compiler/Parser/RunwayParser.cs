@@ -87,11 +87,10 @@ namespace Compiler.Parser
                 }
 
                 // Compile together the airfield description
-                string runwayDialogDescription = "";
                 if (line.dataSegments.Count > 8)
                 {
 
-                    runwayDialogDescription = string.Join(
+                    string.Join(
                         " ",
                         line.dataSegments
                             .Skip(8)

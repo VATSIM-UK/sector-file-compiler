@@ -15,7 +15,7 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<GeoSegment>()
                 .CustomInstantiator(
-                    f => new GeoSegment(
+                    _ => new GeoSegment(
                         firstPoint ?? PointFactory.Make(),
                         secondPoint ?? PointFactory.Make(),
                         colour ?? "red",

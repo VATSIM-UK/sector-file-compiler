@@ -1,5 +1,4 @@
-﻿using System;
-using Compiler.Event;
+﻿using Compiler.Event;
 
 namespace Compiler.Error
 {

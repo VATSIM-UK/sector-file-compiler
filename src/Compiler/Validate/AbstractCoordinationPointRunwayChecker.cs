@@ -13,7 +13,7 @@ namespace Compiler.Validate
                 return true;
             }
 
-            List<Airport> airport = sectorElements.Airports.Where(airport => airport.Icao == airportCode).ToList();
+            List<Airport> airport = sectorElements.Airports.Where(airportElement => airportElement.Icao == airportCode).ToList();
 
             if (airport.Count == 0)
             {

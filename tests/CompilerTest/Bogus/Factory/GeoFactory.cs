@@ -15,7 +15,7 @@ namespace CompilerTest.Bogus.Factory
         ) {
             return new Faker<Geo>()
                 .CustomInstantiator(
-                    f => new Geo(
+                    _ => new Geo(
                         "GEO TEST",
                         firstPoint ?? PointFactory.Make(),
                         secondPoint ?? PointFactory.Make(),

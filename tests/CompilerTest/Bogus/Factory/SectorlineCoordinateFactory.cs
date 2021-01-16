@@ -16,7 +16,7 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<SectorlineCoordinate>()
                 .CustomInstantiator(
-                    f => new SectorlineCoordinate(
+                    _ => new SectorlineCoordinate(
                         CoordinateFactory.Make(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),

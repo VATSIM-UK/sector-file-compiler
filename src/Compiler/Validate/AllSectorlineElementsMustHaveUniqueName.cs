@@ -1,5 +1,4 @@
-﻿using System;
-using Compiler.Event;
+﻿using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
 using Compiler.Argument;
@@ -22,7 +21,6 @@ namespace Compiler.Validate
             {
                 string message = $"Duplicate SECTORLINE or CIRCLE_SECTORLINE for {duplicate}";
                 events.AddEvent(new ValidationRuleFailure(message));
-                continue;
             }
         }
     }

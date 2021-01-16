@@ -15,7 +15,7 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<SectorOwnerHierarchy>()
                 .CustomInstantiator(
-                    f => new SectorOwnerHierarchy(
+                    _ => new SectorOwnerHierarchy(
                         controllers ?? ControllerPositionFactory.GetIdentifierList(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),

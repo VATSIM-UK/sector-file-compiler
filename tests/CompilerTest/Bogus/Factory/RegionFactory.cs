@@ -24,7 +24,7 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<Region>()
                 .CustomInstantiator(
-                    f => new Region(
+                    _ => new Region(
                         "REGION TEST",
                         points == null ? RegionPointFactory.MakeList(2, colour) : points.Select(p => RegionPointFactory.Make(colour, p)).ToList(),
                         definition ?? DefinitionFactory.Make(),

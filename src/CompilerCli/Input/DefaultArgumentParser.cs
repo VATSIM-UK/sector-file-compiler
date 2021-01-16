@@ -3,7 +3,7 @@ using Compiler.Argument;
 
 namespace CompilerCli.Input
 {
-    class TestArgumentParser : IInputParser
+    class DefaultArgumentParser : IInputParser
     {
         public CompilerArguments Parse(List<string> values, CompilerArguments compilerSettings)
         {

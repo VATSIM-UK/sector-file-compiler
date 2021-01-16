@@ -13,7 +13,7 @@ namespace CompilerTest.Bogus.Factory
         ) {
             return new Faker<SidStarRoute>()
                 .CustomInstantiator(
-                    f => new SidStarRoute(
+                    _ => new SidStarRoute(
                         type,
                         "SID STAR ROUTE",
                         RouteSegmentFactory.MakeDoublePoint(),

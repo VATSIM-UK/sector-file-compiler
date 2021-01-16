@@ -47,7 +47,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompilesWithNoColour()
         {
-            GeoSegment segment = new(
+            GeoSegment geoSegment = new(
                 new Point(new Coordinate("abc", "def")),
                 new Point(new Coordinate("ghi", "jkl")),
                 null,
@@ -55,7 +55,7 @@ namespace CompilerTest.Model
                 DocblockFactory.Make(),
                 CommentFactory.Make()
             );
-            Assert.Equal("abc def ghi jkl", segment.GetCompileData(new SectorElementCollection()));
+            Assert.Equal("abc def ghi jkl", geoSegment.GetCompileData(new SectorElementCollection()));
         }
     }
 }

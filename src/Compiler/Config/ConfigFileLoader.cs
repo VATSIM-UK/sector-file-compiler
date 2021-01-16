@@ -73,11 +73,6 @@ namespace Compiler.Config
             return config;
         }
 
-        private string GetInvalidConfigSectionFormatMessage(string section)
-        {
-            return $"Invalid config section for {section} - must be the path to a file, or an array of paths";
-        }
-
         private string GetMissingTypeMessage(string section)
         {
             return $"Invalid type field for section {section} - must be \"files\" or \"folders\"";
@@ -131,34 +126,6 @@ namespace Compiler.Config
         private string GetInvalidConfigParentSectionFormatMessage(string section)
         {
             return $"Invalid config section for {section} - must be an object or array of objects";
-        }
-
-        private bool IsValidConfigSectionFormat(JToken section)
-        {
-            if (section.Type != JTokenType.Array && section.Type != JTokenType.String)
-            {
-                return false;
-            }
-
-            if (section.Type == JTokenType.String)
-            {
-                return true;
-            }
-
-            foreach (JToken item in section)
-            {
-                if (item.Type != JTokenType.String)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private bool IsValidConfigSectionSubitemFormat(JToken section)
-        {
-            return section.Type == JTokenType.String;
         }
 
         /**
@@ -506,7 +473,7 @@ namespace Compiler.Config
 
         private string GetFolderForConfigFile(string pathToConfigFile)
         {
-            return Path.GetFullPath(Path.GetDirectoryName(pathToConfigFile));
+            return Path.GetFullPath(Path.GetDirectoryName(pathToConfigFile) ?? string.Empty);
         }
     }
 }
