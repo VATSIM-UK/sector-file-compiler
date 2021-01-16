@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Compiler.Config;
 using Xunit;
-using Compiler.Exception;;
+using Compiler.Exception;
 
 namespace CompilerTest.Config
 {
