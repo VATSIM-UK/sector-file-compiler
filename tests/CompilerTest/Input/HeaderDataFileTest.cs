@@ -12,7 +12,7 @@ namespace CompilerTest.Input
         public HeaderDataFileTest()
         {
             this.file = new HeaderDataFile(
-                "_TestData/HeaderDataFileTest/StreamTest.txt",
+                "_TestData/HeaderDataFile/StreamTest.txt",
                 new InputFileStreamFactory(),
                 new EseSectorDataReader()
             );
@@ -22,7 +22,7 @@ namespace CompilerTest.Input
         public void ItSetsFullPath()
         {
             Assert.Equal(
-                "_TestData/HeaderDataFileTest/StreamTest.txt",
+                "_TestData/HeaderDataFile/StreamTest.txt",
                 this.file.FullPath
             );
         }
@@ -31,7 +31,7 @@ namespace CompilerTest.Input
         public void ItGetsParentDirectory()
         {
             Assert.Equal(
-                "HeaderDataFileTest",
+                "HeaderDataFile",
                 this.file.GetParentDirectoryName()
             );
         }
@@ -81,7 +81,7 @@ namespace CompilerTest.Input
                 }
                 
                 Assert.Equal(expectedLine, this.file.CurrentLineNumber);
-                Assert.Equal(new Definition("_TestData/HeaderDataFileTest/StreamTest.txt", expectedLine), dataLine.definition);
+                Assert.Equal(new Definition("_TestData/HeaderDataFile/StreamTest.txt", expectedLine), dataLine.definition);
 
                 expectedLine++;
             }

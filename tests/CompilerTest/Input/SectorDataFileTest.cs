@@ -12,7 +12,7 @@ namespace CompilerTest.Input
         public SectorDataFileTest()
         {
             this.file = new SectorDataFile(
-                "_TestData/SectorDataFileTest/StreamTest.txt",
+                "_TestData/SectorDataFile/StreamTest.txt",
                 new InputFileStreamFactory(),
                 InputDataType.ESE_AGREEMENTS,
                 new EseSectorDataReader()
@@ -23,7 +23,7 @@ namespace CompilerTest.Input
         public void ItSetsFullPath()
         {
             Assert.Equal(
-                "_TestData/SectorDataFileTest/StreamTest.txt",
+                "_TestData/SectorDataFile/StreamTest.txt",
                 this.file.FullPath
             );
         }
@@ -32,7 +32,7 @@ namespace CompilerTest.Input
         public void ItGetsParentDirectory()
         {
             Assert.Equal(
-                "SectorDataFileTest",
+                "SectorDataFile",
                 this.file.GetParentDirectoryName()
             );
         }
@@ -78,7 +78,7 @@ namespace CompilerTest.Input
                 Assert.Equal(expectedDocblock, dataLine.docblock);
                 Assert.Equal(new Comment("Inline " + expectedLine), dataLine.inlineComment);
                 Assert.Equal(expectedLine, this.file.CurrentLineNumber);
-                Assert.Equal(new Definition("_TestData/SectorDataFileTest/StreamTest.txt", expectedLine), dataLine.definition);
+                Assert.Equal(new Definition("_TestData/SectorDataFile/StreamTest.txt", expectedLine), dataLine.definition);
 
                 expectedLine += 4;
             }
