@@ -86,7 +86,7 @@ namespace Compiler
             
 
             // Now all the data is loaded, validate that there are no broken references etc.
-            if (false)
+            if (this.arguments.ValidateOutput)
             {
                 OutputValidator.Validate(sectorElements, this.arguments, this.events);
                 if (this.events.HasFatalError())

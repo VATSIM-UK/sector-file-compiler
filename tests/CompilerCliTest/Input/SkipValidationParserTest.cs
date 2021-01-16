@@ -5,13 +5,13 @@ using CompilerCli.Input;
 
 namespace CompilerCliTest.Input
 {
-    public class IgnoreValidationParserTest
+    public class SkipValidationParserTest
     {
         [Fact]
         public void TestItSetsCompilerArgument()
         {
             CompilerArguments arguments = new CompilerArguments();
-            IgnoreValidationParser parser = new IgnoreValidationParser();
+            SkipValidationParser parser = new SkipValidationParser();
 
             arguments = parser.Parse(new List<string>(new[] { "test.json" }), arguments);
             Assert.False(arguments.ValidateOutput);

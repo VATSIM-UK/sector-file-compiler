@@ -12,7 +12,7 @@ namespace CompilerCli.Input
             { "--out-file-ese", new EseOutputFileParser() },
             { "--out-file-sct", new SctOutputFileParser() },
             { "--out-file-rwy", new RwyOutputFileParser() },
-            { "--ignore-validation", new IgnoreValidationParser() },
+            { "--skip-validation", new SkipValidationParser() },
             { "--strip-comments", new StripCommentsParser() },
             { "--strip-newlines", new StripNewlinesParser() },
             { "--build-version", new BuildVersionParser() },
