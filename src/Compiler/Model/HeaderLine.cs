@@ -4,12 +4,12 @@ namespace Compiler.Model
 {
     public class HeaderLine: ICompilableElement
     {
-        private readonly Comment line;
+        public Comment Line { get; }
         private readonly Definition definition;
 
         public HeaderLine(Comment line, Definition definition)
         {
-            this.line = line;
+            this.Line = line;
             this.definition = definition;
         }
 
@@ -20,7 +20,7 @@ namespace Compiler.Model
 
         public void Compile(SectorElementCollection elements, TextWriter output)
         {
-            output.WriteLine(line.ToString());
+            output.WriteLine(Line.ToString());
         }
     }
 }

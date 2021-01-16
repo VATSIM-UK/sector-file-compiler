@@ -99,6 +99,28 @@ namespace CompilerTest.Input
         }
         
         [Fact]
+        public void TestItHasAnExcludeListCaseInsensitive()
+        {
+            FolderInclusionRule rule = new (
+                "_TestData/FolderInclusionRule",
+                false,
+                InputDataType.ESE_AGREEMENTS,
+                new OutputGroup("test"),
+                true,
+                new List<string>() {"FiLe2.txt"}
+            );
+
+            IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);
+            Assert.Equal(2, includeFiles.Count());
+
+            using IEnumerator<AbstractSectorDataFile> enumerator = includeFiles.GetEnumerator();
+            enumerator.MoveNext();
+            Assert.Equal(this.GetFilePath("File1.txt"), enumerator.Current.FullPath);
+            enumerator.MoveNext();
+            Assert.Equal(this.GetFilePath("File3.txt"), enumerator.Current.FullPath);
+        }
+        
+        [Fact]
         public void TestItHasAnIncludeList()
         {
             FolderInclusionRule rule = new (
@@ -108,6 +130,26 @@ namespace CompilerTest.Input
                 new OutputGroup("test"),
                 false,
                 new List<string>() {"File2.txt"}
+            );
+
+            IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);
+            Assert.Single(includeFiles);
+
+            using IEnumerator<AbstractSectorDataFile> enumerator = includeFiles.GetEnumerator();
+            enumerator.MoveNext();
+            Assert.Equal(this.GetFilePath("File2.txt"), enumerator.Current.FullPath);
+        }
+        
+        [Fact]
+        public void TestItHasAnIncludeListCaseInsensitive()
+        {
+            FolderInclusionRule rule = new (
+                "_TestData/FolderInclusionRule",
+                false,
+                InputDataType.ESE_AGREEMENTS,
+                new OutputGroup("test"),
+                false,
+                new List<string>() {"FiLe2.txt"}
             );
 
             IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);

@@ -43,6 +43,31 @@ namespace CompilerTest.Input
         }
         
         [Fact]
+        public void TestItLoadsFilesCaseInsensitive()
+        {
+            FileListInclusionRule rule = new(
+                new List<string>()
+                {
+                    this.GetFilePath("file1.txt"),
+                    this.GetFilePath("file2.txt"),
+                },
+                false,
+                "",
+                InputDataType.ESE_AGREEMENTS,
+                new OutputGroup("test")
+            );
+
+            IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);
+            Assert.Equal(2, includeFiles.Count());
+
+            using IEnumerator<AbstractSectorDataFile> enumerator = includeFiles.GetEnumerator();
+            enumerator.MoveNext();
+            Assert.Equal(this.GetFilePath("file1.txt"), enumerator.Current.FullPath);
+            enumerator.MoveNext();
+            Assert.Equal(this.GetFilePath("file2.txt"), enumerator.Current.FullPath);
+        }
+        
+        [Fact]
         public void TestItLoadsFilesAndIgnoresMissingWhenSet()
         {
             FileListInclusionRule rule = new(

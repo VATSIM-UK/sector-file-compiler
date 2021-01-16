@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using Compiler.Exception;
 using Compiler.Output;
 
@@ -27,7 +28,9 @@ namespace Compiler.Input
             this.inputDataType = inputDataType;
             this.outputGroup = outputGroup;
             this.excludeList = excludeList;
-            this.includeExcludeFiles = includeExcludeFiles ?? new List<string>();
+            this.includeExcludeFiles = includeExcludeFiles != null 
+                ? includeExcludeFiles.Select(file => file.ToLower()).ToList()
+                : new List<string>();
         }
 
         public IEnumerable<AbstractSectorDataFile> GetFilesToInclude(SectorDataFileFactory dataFileFactory)
@@ -57,8 +60,8 @@ namespace Compiler.Input
         private bool ShouldInclude(string path)
         {
             return this.excludeList
-                ? !this.includeExcludeFiles.Contains(Path.GetFileName(path))
-                : this.includeExcludeFiles.Contains(Path.GetFileName(path));
+                ? !this.includeExcludeFiles.Contains(Path.GetFileName(path).ToLower())
+                : this.includeExcludeFiles.Contains(Path.GetFileName(path).ToLower());
         }
 
         public OutputGroup GetOutputGroup()

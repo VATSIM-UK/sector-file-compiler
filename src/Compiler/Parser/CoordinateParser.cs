@@ -2,13 +2,13 @@
 
 namespace Compiler.Parser
 {
-    public class CoordinateParser
+    public static class CoordinateParser
     {
         private const char COORDINATE_SEPARATOR = '.';
 
-        public static readonly Coordinate invalidCoordinate = new Coordinate("", "");
+        public static readonly Coordinate invalidCoordinate = new("", "");
 
-        public static readonly Coordinate starterCoordinate = new Coordinate("S999.00.00.000", "E999.00.00.000");
+        public static readonly Coordinate starterCoordinate = new("S999.00.00.000", "E999.00.00.000");
         
         public static Coordinate Parse(string latitude, string longitude)
         {
@@ -18,12 +18,12 @@ namespace Compiler.Parser
                 return starterCoordinate;
             }
 
-            string parsedLatitude = CoordinateParser.ParseCoordinate(true, latitude.Trim());
-            string parsedLongitude = CoordinateParser.ParseCoordinate(false, longitude.Trim());
+            string parsedLatitude = ParseCoordinate(true, latitude.Trim());
+            string parsedLongitude = ParseCoordinate(false, longitude.Trim());
 
             if (parsedLatitude == null || parsedLongitude == null)
             {
-                return CoordinateParser.invalidCoordinate;
+                return invalidCoordinate;
             }
 
             return new Coordinate(parsedLatitude, parsedLongitude);
@@ -31,7 +31,7 @@ namespace Compiler.Parser
 
         private static string ParseCoordinate(bool latitude, string coordinate)
         {
-            string[] parts = coordinate.Split(CoordinateParser.COORDINATE_SEPARATOR);
+            string[] parts = coordinate.Split(COORDINATE_SEPARATOR);
 
             if (parts.Length != 4)
             {
@@ -74,7 +74,7 @@ namespace Compiler.Parser
                 return false;
             }
 
-            return CoordinateParser.ValidateMinutesSeconds(minutes, seconds);
+            return ValidateMinutesSeconds(minutes, seconds);
         }
 
         private static bool ValidateLatitude(int degrees, int minutes, float seconds)
@@ -84,7 +84,7 @@ namespace Compiler.Parser
                 return false;
             }
 
-            return CoordinateParser.ValidateMinutesSeconds(minutes, seconds);
+            return ValidateMinutesSeconds(minutes, seconds);
         }
     }
 }

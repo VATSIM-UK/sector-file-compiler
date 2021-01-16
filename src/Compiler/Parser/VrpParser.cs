@@ -39,10 +39,9 @@ namespace Compiler.Parser
                     return;
                 }
 
-
                 this.sectorElements.Add(
                     new Freetext(
-                        string.Format("{0} VRPs", data.GetParentDirectoryName()),
+                        $"{data.GetParentDirectoryName()} VRPs",
                         line.dataSegments[0],
                         parsedCoordinate,
                         line.definition,

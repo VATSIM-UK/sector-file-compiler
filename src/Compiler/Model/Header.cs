@@ -5,17 +5,17 @@ namespace Compiler.Model
     public class Header: ICompilableElementProvider, IDefinable
     {
         private readonly Definition definition;
-        private readonly List<HeaderLine> lines;
+        public List<HeaderLine> Lines { get; }
 
         public Header(Definition definition, List<HeaderLine> lines)
         {
             this.definition = definition;
-            this.lines = lines;
+            this.Lines = lines;
         }
 
         public IEnumerable<ICompilableElement> GetCompilableElements()
         {
-            return this.lines;
+            return this.Lines;
         }
 
         public Definition GetDefinition()

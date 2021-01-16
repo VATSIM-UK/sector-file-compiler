@@ -2,25 +2,20 @@
 using System.Collections.Generic;
 using Compiler.Parser;
 using Compiler.Model;
+using CompilerTest.Bogus;
 
 namespace CompilerTest.Parser
 {
     public class CoordinateParserTest
     {
-        [Fact]
-        public void TestItParsesCoordinates()
+        [Theory]
+        [InlineData("N054.39.27.000", "W006.12.57.000")]
+        [InlineData("S999.00.00.000", "E999.00.00.000")] // Off-screen coordinate
+        [InlineData("N054.39.60.000", "W006.12.60.000")] // 60 seconds
+        [InlineData("N054.60.44.000", "W006.60.23.000")] // 60 minutes
+        public void TestItParsesValidCoordinates(string latitude, string longitude)
         {
-            Coordinate coordinate = CoordinateParser.Parse("N054.39.27.000", "W006.12.57.000");
-            Assert.Equal("N054.39.27.000", coordinate.latitude);
-            Assert.Equal("W006.12.57.000", coordinate.longitude);
-        }
-
-        [Fact]
-        public void TestItAllowsOfScreenCoordinate()
-        {
-            Coordinate coordinate = CoordinateParser.Parse("S999.00.00.000", "E999.00.00.000");
-            Assert.Equal("S999.00.00.000", coordinate.latitude);
-            Assert.Equal("E999.00.00.000", coordinate.longitude);
+            Assert.Equal(new Coordinate(latitude, longitude), CoordinateParser.Parse(latitude, longitude));
         }
 
         public static IEnumerable<object[]> BadData => new List<object[]>
