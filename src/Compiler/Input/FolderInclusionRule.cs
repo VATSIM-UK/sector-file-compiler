@@ -8,12 +8,12 @@ namespace Compiler.Input
 {
     public class FolderInclusionRule : IInclusionRule
     {
-        private readonly string folder;
-        private readonly bool recursive;
-        private readonly InputDataType inputDataType;
+        public string Folder { get; }
+        public bool Recursive { get; }
+        public InputDataType InputDataType { get; }
+        public bool ExcludeList { get; }
+        public List<string> IncludeExcludeFiles { get; }
         private readonly OutputGroup outputGroup;
-        private readonly bool excludeList;
-        private readonly List<string> includeExcludeFiles;
 
         public FolderInclusionRule(
             string folder,
@@ -23,26 +23,26 @@ namespace Compiler.Input
             bool excludeList = true,
             List<string> includeExcludeFiles = null
         ) {
-            this.folder = folder;
-            this.recursive = recursive;
-            this.inputDataType = inputDataType;
+            this.Folder = folder;
+            this.Recursive = recursive;
+            this.InputDataType = inputDataType;
             this.outputGroup = outputGroup;
-            this.excludeList = excludeList;
-            this.includeExcludeFiles = includeExcludeFiles != null 
+            this.ExcludeList = excludeList;
+            this.IncludeExcludeFiles = includeExcludeFiles != null 
                 ? includeExcludeFiles.Select(file => file.ToLower()).ToList()
                 : new List<string>();
         }
 
         public IEnumerable<AbstractSectorDataFile> GetFilesToInclude(SectorDataFileFactory dataFileFactory)
         {
-            if (!Directory.Exists(this.folder))
+            if (!Directory.Exists(this.Folder))
             {
-                throw new InputDirectoryNotFoundException(folder);
+                throw new InputDirectoryNotFoundException(Folder);
             }
 
             string[] allFiles = Directory.GetFiles(
-                this.folder, "*.*",
-                this.recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
+                this.Folder, "*.*",
+                this.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
             );
 
             List<AbstractSectorDataFile> files = new List<AbstractSectorDataFile>();
@@ -50,7 +50,7 @@ namespace Compiler.Input
             {
                 if (this.ShouldInclude(path))
                 {
-                    files.Add(dataFileFactory.Create(path, this.inputDataType));
+                    files.Add(dataFileFactory.Create(path, this.InputDataType));
                 }
             }
 
@@ -59,9 +59,9 @@ namespace Compiler.Input
 
         private bool ShouldInclude(string path)
         {
-            return this.excludeList
-                ? !this.includeExcludeFiles.Contains(Path.GetFileName(path).ToLower())
-                : this.includeExcludeFiles.Contains(Path.GetFileName(path).ToLower());
+            return this.ExcludeList
+                ? !this.IncludeExcludeFiles.Contains(Path.GetFileName(path).ToLower())
+                : this.IncludeExcludeFiles.Contains(Path.GetFileName(path).ToLower());
         }
 
         public OutputGroup GetOutputGroup()

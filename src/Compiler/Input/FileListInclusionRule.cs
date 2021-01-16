@@ -7,10 +7,10 @@ namespace Compiler.Input
 {
     public class FileListInclusionRule : IInclusionRule
     {
-        private readonly IEnumerable<string> fileList;
-        private readonly bool ignoreMissing;
-        private readonly string exceptWhereExists;
-        private readonly InputDataType inputDataType;
+        public IEnumerable<string> FileList { get; }
+        public bool IgnoreMissing { get; }
+        public string ExceptWhereExists { get; }
+        public InputDataType InputDataType { get; }
         private readonly OutputGroup outputGroup;
 
         public FileListInclusionRule(
@@ -20,25 +20,25 @@ namespace Compiler.Input
             InputDataType inputDataType,
             OutputGroup outputGroup
         ) {
-            this.fileList = fileList;
-            this.ignoreMissing = ignoreMissing;
-            this.exceptWhereExists = exceptWhereExists;
-            this.inputDataType = inputDataType;
+            this.FileList = fileList;
+            this.IgnoreMissing = ignoreMissing;
+            this.ExceptWhereExists = exceptWhereExists;
+            this.InputDataType = inputDataType;
             this.outputGroup = outputGroup;
         }
 
         public IEnumerable<AbstractSectorDataFile> GetFilesToInclude(SectorDataFileFactory dataFileFactory)
         {
             List<AbstractSectorDataFile> files = new List<AbstractSectorDataFile>();
-            foreach (string path in this.fileList)
+            foreach (string path in FileList)
             {
                 if (File.Exists(path))
                 {
-                    if (this.exceptWhereExists == "" || !File.Exists(exceptWhereExists))
+                    if (this.ExceptWhereExists == "" || !File.Exists(ExceptWhereExists))
                     {
-                        files.Add(dataFileFactory.Create(path, this.inputDataType));
+                        files.Add(dataFileFactory.Create(path, this.InputDataType));
                     }
-                } else if (!this.ignoreMissing)
+                } else if (!this.IgnoreMissing)
                 {
                     throw new InputFileNotFoundException(path);
                 }

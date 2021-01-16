@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="_TestData\ConfigFileLoader\" />
+    <TestDataFiles Remove="_TestData\ConfigFileLoader\ValidConfig\Airports\EGLL\.gitignore" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
