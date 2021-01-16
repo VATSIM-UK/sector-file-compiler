@@ -9,9 +9,12 @@ namespace Compiler.Output
     {
         private readonly HashSet<OutputGroup> outputGroups;
 
+        private readonly Dictionary<string, OutputGroup> fileMap;
+
         public OutputGroupRepository()
         {
             this.outputGroups = new HashSet<OutputGroup>();
+            this.fileMap = new();
         }
 
         /*
@@ -23,18 +26,24 @@ namespace Compiler.Output
             {
                 this.outputGroups.First(findGroup => findGroup.Key == group.Key).Merge(group);
             }
+
+            var storedGroup = this.outputGroups.First(storedGroup => group == storedGroup);
+            foreach (var file in storedGroup.FileList)
+            {
+                fileMap[file] = storedGroup;
+            }
         }
 
         public OutputGroup GetForDefinitionFile(Definition definition)
         {
-           return this.outputGroups.First(group => group.FileList.Contains(definition.Filename));
+            return fileMap.First(file => file.Key == definition.Filename).Value;
         }
 
         public bool TryGetForDefinitionFile(Definition definition, out OutputGroup group)
         {
             try
             {
-                group = this.outputGroups.First(outputGroup => outputGroup.FileList.Contains(definition.Filename));
+                group = this.GetForDefinitionFile(definition);
                 return true;
             } catch (InvalidOperationException)
             {
