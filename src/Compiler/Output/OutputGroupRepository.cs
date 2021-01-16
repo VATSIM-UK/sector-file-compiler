@@ -7,28 +7,28 @@ namespace Compiler.Output
 {
     public class OutputGroupRepository
     {
-        private readonly HashSet<OutputGroup> outputGroups;
+        private readonly SortedDictionary<string, OutputGroup> outputGroups;
 
         private readonly Dictionary<string, OutputGroup> fileMap;
 
         public OutputGroupRepository()
         {
-            this.outputGroups = new HashSet<OutputGroup>();
+            this.outputGroups = new ();
             this.fileMap = new();
         }
 
         /*
          * Add an OutputGroup
          */
-        public void Add(OutputGroup group)
+        public void AddGroupWithFiles(OutputGroup group, List<string> files)
         {
-            if (!this.outputGroups.Add(group))
+            if (!this.outputGroups.ContainsKey(group.Key))
             {
-                this.outputGroups.First(findGroup => findGroup.Key == group.Key).Merge(group);
+                this.outputGroups[group.Key] = group;
             }
 
-            var storedGroup = this.outputGroups.First(storedGroup => group == storedGroup);
-            foreach (var file in storedGroup.FileList)
+            OutputGroup storedGroup = this.outputGroups[group.Key];
+            foreach (string file in files)
             {
                 fileMap[file] = storedGroup;
             }

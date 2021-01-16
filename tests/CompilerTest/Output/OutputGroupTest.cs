@@ -37,60 +37,6 @@ namespace CompilerTest.Output
         {
             Assert.Equal("descriptor", this.groupWithDescriptor.HeaderDescription);
         }
-        
-        [Fact]
-        public void TestItAddsFiles()
-        {
-            this.groupWithDescriptor.AddFile("test1.txt");
-            this.groupWithDescriptor.AddFile("test2.txt");
-            this.groupWithDescriptor.AddFile("test3.txt");
-            Assert.Equal(3, this.groupWithDescriptor.CountFiles());
-            
-            using var enumerator = this.groupWithDescriptor.FileList.GetEnumerator();
-            enumerator.MoveNext();
-            Assert.Equal("test1.txt", enumerator.Current);
-            enumerator.MoveNext();
-            Assert.Equal("test2.txt",enumerator.Current);
-            enumerator.MoveNext();
-            Assert.Equal("test3.txt",enumerator.Current);
-        }
-        
-        [Fact]
-        public void TestItDoesntAddDuplicateFiles()
-        {
-            this.groupWithDescriptor.AddFile("test1.txt");
-            this.groupWithDescriptor.AddFile("test1.txt");
-            this.groupWithDescriptor.AddFile("test2.txt");
-            this.groupWithDescriptor.AddFile("test2.txt");
-            Assert.Equal(2, this.groupWithDescriptor.CountFiles());
-
-
-            using var enumerator = this.groupWithDescriptor.FileList.GetEnumerator();
-            enumerator.MoveNext();
-            Assert.Equal("test1.txt", enumerator.Current);
-            enumerator.MoveNext();
-            Assert.Equal("test2.txt",enumerator.Current);
-        }
-        
-        [Fact]
-        public void TestItMergesWithOtherGroups()
-        {
-            this.groupWithDescriptor.AddFile("test1.txt");
-            this.groupWithDescriptor.AddFile("test2.txt");
-            this.groupWithDescriptor.AddFile("test2.txt");
-            this.groupWithDescriptor.AddFile("test3.txt");
-            this.groupWithDescriptor.Merge(this.groupWithoutDescriptor);
-            
-            
-            Assert.Equal(3, this.groupWithDescriptor.CountFiles());
-            using var enumerator = this.groupWithDescriptor.FileList.GetEnumerator();
-            enumerator.MoveNext();
-            Assert.Equal("test1.txt", enumerator.Current);
-            enumerator.MoveNext();
-            Assert.Equal("test2.txt",enumerator.Current);
-            enumerator.MoveNext();
-            Assert.Equal("test3.txt",enumerator.Current);
-        }
 
         [Theory]
         [InlineData("test1", "test2", "test1", "test2", true)] // All the same

@@ -62,11 +62,18 @@ namespace CompilerTest.Input
                 outputGroups
             );
             
-            List<string> files = this.outputGroup.FileList.ToList();
-            Assert.Equal(3, files.Count);
-            Assert.Equal(ConvertPath("_TestData/InputFileListFactory/File1.txt"), files[0]);
-            Assert.Equal(ConvertPath("_TestData/InputFileListFactory/File2.txt"), files[1]);
-            Assert.Equal(ConvertPath("_TestData/InputFileListFactory/File3.txt"), files[2]);
+            Assert.Equal(
+                this.outputGroup,
+                this.outputGroups.GetForDefinitionFile(DefinitionFactory.Make(ConvertPath("_TestData/InputFileListFactory/File1.txt")))
+            );
+            Assert.Equal(
+                this.outputGroup,
+                this.outputGroups.GetForDefinitionFile(DefinitionFactory.Make(ConvertPath("_TestData/InputFileListFactory/File2.txt")))
+            );
+            Assert.Equal(
+                this.outputGroup,
+                this.outputGroups.GetForDefinitionFile(DefinitionFactory.Make(ConvertPath("_TestData/InputFileListFactory/File3.txt")))
+            );
         }
         
         [Fact]

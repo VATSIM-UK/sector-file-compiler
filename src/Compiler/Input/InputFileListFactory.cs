@@ -1,4 +1,5 @@
-﻿using Compiler.Config;
+﻿using System.Collections.Generic;
+using Compiler.Config;
 using Compiler.Output;
 
 namespace Compiler.Input
@@ -15,13 +16,14 @@ namespace Compiler.Input
             foreach (IInclusionRule rule in config)
             {
                 OutputGroup group = rule.GetOutputGroup();
+                List<string> filePaths = new();
                 foreach (AbstractSectorDataFile file in rule.GetFilesToInclude(dataFileFactory))
                 {
                     fileList.Add(file);
-                    group.AddFile(file.FullPath);
+                    filePaths.Add(file.FullPath);
                 }
 
-                outputGroups.Add(group);
+                outputGroups.AddGroupWithFiles(group, filePaths);
             }
             return fileList;
         }

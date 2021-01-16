@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Compiler.Output
 {
     public class OutputGroup: IComparable<OutputGroup>
     {
-        public SortedSet<string> FileList { get; } = new();
         public string Key { get; }
         public string HeaderDescription { get; }
 
@@ -21,16 +19,6 @@ namespace Compiler.Output
             HeaderDescription = headerDescription;
         }
 
-        public void AddFile(string path)
-        {
-            this.FileList.Add(path);
-        }
-
-        public void Merge(OutputGroup group)
-        {
-            this.FileList.UnionWith(group.FileList);
-        }
-
         public bool Equals(OutputGroup compare)
         {
             return compare.Key == this.Key;
@@ -39,11 +27,6 @@ namespace Compiler.Output
         public int CompareTo(OutputGroup obj)
         {
             return string.Compare(this.Key, obj.Key, StringComparison.Ordinal);
-        }
-
-        public int CountFiles()
-        {
-            return this.FileList.Count;
         }
     }
 }

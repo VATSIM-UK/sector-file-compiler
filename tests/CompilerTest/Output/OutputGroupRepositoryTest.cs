@@ -1,4 +1,5 @@
-﻿using Compiler.Model;
+﻿using System.Collections.Generic;
+using Compiler.Model;
 using Compiler.Output;
 using CompilerTest.Bogus.Factory;
 using Xunit;
@@ -22,40 +23,36 @@ namespace CompilerTest.Output
 
         public void TestItAddsGroups()
         {
-            this.repository.Add(this.group1);
-            this.repository.Add(this.group2);
-            this.repository.Add(this.group3);
+            this.repository.AddGroupWithFiles(this.group1, new List<string>{"foo.txt"});
+            this.repository.AddGroupWithFiles(this.group2, new List<string>{"bar.txt"});
+            this.repository.AddGroupWithFiles(this.group3, new List<string>{"baz.txt"});
             Assert.Equal(3, this.repository.Count());
         }
         
         public void TestItDoesntAddGroupsWithDuplicateKeys()
         {
-            this.repository.Add(this.group1);
-            this.repository.Add(this.group2);
-            this.repository.Add(this.group1);
+            this.repository.AddGroupWithFiles(this.group1, new List<string>{"foo.txt"});
+            this.repository.AddGroupWithFiles(this.group2, new List<string>{"bar.txt"});
+            this.repository.AddGroupWithFiles(this.group1, new List<string>{"baz.txt"});
             Assert.Equal(2, this.repository.Count());
         }
 
         public void TestItReturnsGroupForDefinition()
         {
-            this.repository.Add(this.group1);
-            this.repository.Add(this.group2);
-            this.repository.Add(this.group3);
-            
             Definition definition = DefinitionFactory.Make();
-            this.group2.AddFile(definition.Filename);
-            
+            this.repository.AddGroupWithFiles(this.group1, new List<string>{"foo.txt"});
+            this.repository.AddGroupWithFiles(this.group2, new List<string>{definition.Filename});
+            this.repository.AddGroupWithFiles(this.group3, new List<string>{"baz.txt"});
+
             Assert.Equal(this.group2, this.repository.GetForDefinitionFile(definition));
         }
         
         public void TestItTriesReturnsGroupForDefinition()
         {
-            this.repository.Add(this.group1);
-            this.repository.Add(this.group2);
-            this.repository.Add(this.group3);
-            
             Definition definition = DefinitionFactory.Make();
-            this.group2.AddFile(definition.Filename);
+            this.repository.AddGroupWithFiles(this.group1, new List<string>{"foo.txt"});
+            this.repository.AddGroupWithFiles(this.group2, new List<string>{definition.Filename});
+            this.repository.AddGroupWithFiles(this.group3, new List<string>{"baz.txt"});
 
             Assert.True(this.repository.TryGetForDefinitionFile(definition, out OutputGroup group));
             Assert.Equal(this.group2, group);
@@ -63,11 +60,10 @@ namespace CompilerTest.Output
         
         public void TestItTriesReturnNullIfGroupNotFound()
         {
-            this.repository.Add(this.group1);
-            this.repository.Add(this.group2);
-            this.repository.Add(this.group3);
-            
             Definition definition = DefinitionFactory.Make();
+            this.repository.AddGroupWithFiles(this.group1, new List<string>{"foo.txt"});
+            this.repository.AddGroupWithFiles(this.group2, new List<string>{definition.Filename});
+            this.repository.AddGroupWithFiles(this.group3, new List<string>{"baz.txt"});
 
             Assert.False(this.repository.TryGetForDefinitionFile(definition, out OutputGroup group));
             Assert.Null(group);

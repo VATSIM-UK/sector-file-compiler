@@ -12,12 +12,10 @@ namespace CompilerTest.Collector
         public void TestItReturnsElementsInOrder()
         {
             OutputGroup group1 = new("1");
-            group1.AddFile("foo.txt");
             OutputGroup group2 = new("2");
-            group2.AddFile("goo.txt");
-            this.outputGroups.Add(group1);
-            this.outputGroups.Add(group2);
-            
+            this.outputGroups.AddGroupWithFiles(group1, new List<string>{"foo.txt"});
+            this.outputGroups.AddGroupWithFiles(group2, new List<string>{"goo.txt"});
+
             Sectorline line1 = SectorlineFactory.Make(definition: DefinitionFactory.Make("foo.txt"));
             Sectorline line2 = SectorlineFactory.Make(definition: DefinitionFactory.Make("goo.txt"));
             CircleSectorline line3 = CircleSectorlineFactory.Make(definition: DefinitionFactory.Make("foo.txt"));
