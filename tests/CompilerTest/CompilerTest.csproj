@@ -39,8 +39,12 @@
     <TestDataFiles Include="$(ProjectDir)_TestData\\**\*.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="_TestData\ConfigFileLoader\" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Copy SourceFiles="@(TestDataFiles)" DestinationFiles="@(TestDataFiles->'$(TargetDir)_TestData\\%(RecursiveDir)%(Filename)%(Extension)')"/>
+    <Copy SourceFiles="@(TestDataFiles)" DestinationFiles="@(TestDataFiles->'$(TargetDir)_TestData\\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 
 </Project>

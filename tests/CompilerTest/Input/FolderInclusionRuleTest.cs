@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Compiler.Input;
 using Compiler.Output;
@@ -14,7 +15,7 @@ namespace CompilerTest.Input
         
         private string GetFilePath(string filename)
         {
-            return $"_TestData/FolderInclusionRule\\{filename}";
+            return $"_TestData/FolderInclusionRule{Path.DirectorySeparatorChar}{filename}";
         }
         
         [Fact]
@@ -64,7 +65,7 @@ namespace CompilerTest.Input
             Assert.Equal(this.GetFilePath("File1.txt"), files[0].FullPath);
             Assert.Equal(this.GetFilePath("File2.txt"), files[1].FullPath);
             Assert.Equal(this.GetFilePath("File3.txt"), files[2].FullPath);
-            Assert.Equal(this.GetFilePath("Level2\\File4.txt"), files[3].FullPath);
+            Assert.Equal(this.GetFilePath($"Level2{Path.DirectorySeparatorChar}File4.txt"), files[3].FullPath);
         }
         
         [Fact]

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Compiler.Input;
 using Compiler.Output;
@@ -14,7 +15,7 @@ namespace CompilerTest.Input
         
         private string GetFilePath(string filename)
         {
-            return $"_TestData/FileListInclusionRule/{filename}";
+            return $"_TestData/FileListInclusionRule{Path.DirectorySeparatorChar}{filename}";
         }
         
         [Fact]
