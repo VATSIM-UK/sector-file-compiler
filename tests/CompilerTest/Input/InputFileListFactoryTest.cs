@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Compiler.Config;
 using Compiler.Input;
@@ -23,12 +24,17 @@ namespace CompilerTest.Input
             this.inclusionRules = new ConfigInclusionRules();
             inclusionRules.AddMiscInclusionRule(
                 new FolderInclusionRule(
-                    "_TestData/InputFileListFactory",
+                    ConvertPath("_TestData/InputFileListFactory"),
                     false,
                     InputDataType.ESE_AGREEMENTS,
                     this.outputGroup
                 )    
             );
+        }
+
+        private string ConvertPath(string path)
+        {
+            return path.Replace('/', Path.DirectorySeparatorChar);
         }
 
         [Fact]
@@ -42,9 +48,9 @@ namespace CompilerTest.Input
             
             List<AbstractSectorDataFile> files = fileList.ToList();
             Assert.Equal(3, files.Count);
-            Assert.Equal("_TestData/InputFileListFactory\\File1.txt", files[0].FullPath);
-            Assert.Equal("_TestData/InputFileListFactory\\File2.txt", files[1].FullPath);
-            Assert.Equal("_TestData/InputFileListFactory\\File3.txt", files[2].FullPath);
+            Assert.Equal(ConvertPath("_TestData/InputFileListFactory/File1.txt"), files[0].FullPath);
+            Assert.Equal(ConvertPath("_TestData/InputFileListFactory/File2.txt"), files[1].FullPath);
+            Assert.Equal(ConvertPath("_TestData/InputFileListFactory/File3.txt"), files[2].FullPath);
         }
 
         [Fact]
@@ -58,9 +64,9 @@ namespace CompilerTest.Input
             
             List<string> files = this.outputGroup.FileList.ToList();
             Assert.Equal(3, files.Count);
-            Assert.Equal("_TestData/InputFileListFactory\\File1.txt", files[0]);
-            Assert.Equal("_TestData/InputFileListFactory\\File2.txt", files[1]);
-            Assert.Equal("_TestData/InputFileListFactory\\File3.txt", files[2]);
+            Assert.Equal(ConvertPath("_TestData/InputFileListFactory/File1.txt"), files[0]);
+            Assert.Equal(ConvertPath("_TestData/InputFileListFactory/File2.txt"), files[1]);
+            Assert.Equal(ConvertPath("_TestData/InputFileListFactory/File3.txt"), files[2]);
         }
         
         [Fact]
@@ -74,7 +80,7 @@ namespace CompilerTest.Input
 
             Assert.Equal(
                 this.outputGroup,
-                this.outputGroups.GetForDefinitionFile(DefinitionFactory.Make("_TestData/InputFileListFactory\\File1.txt"))
+                this.outputGroups.GetForDefinitionFile(DefinitionFactory.Make(ConvertPath("_TestData/InputFileListFactory/File1.txt")))
             );
         }
     }

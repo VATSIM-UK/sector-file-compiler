@@ -26,7 +26,7 @@ namespace CompilerTest.Parser
             new object[] {"N054.39.27a.000", "W006.12.57.000"}, // Invalid latitude seconds
             new object[] {"N054.39.27.a2", "W006.12.57.000"}, // Invalid latitude fractions
             new object[] {"N054.39.27.000", "S006.12.57.000"}, // Invalid longitude north south
-            new object[] {"N054.39.27.000", "S006.12.57.000"}, // Invalid longitude north south
+            new object[] {"S054.39.27.000", "N006.12.57.000"}, // Invalid longitude north south
             new object[] {"N054.39.27.000", "W006.57.000"}, // Invalid longitude parts
             new object[] {"N054.39.27.000", "W0a6.12.57.000"}, // Invalid longitude degrees
             new object[] {"N054.39.27.000", "W006.12a.57.000"}, // Invalid longitude minutes
