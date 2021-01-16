@@ -325,11 +325,8 @@ namespace Compiler.Config
 
 
             // Get the include and exclude lists and check both aren't there
-            JToken include;
-            JToken exclude;
-
-            bool isInclude = folderObject.TryGetValue("include", out include);
-            bool isExclude = folderObject.TryGetValue("exclude", out exclude);
+            bool isInclude = folderObject.TryGetValue("include", out var include);
+            bool isExclude = folderObject.TryGetValue("exclude", out var exclude);
 
             if (isInclude && isExclude)
             {

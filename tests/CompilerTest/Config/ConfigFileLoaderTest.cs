@@ -109,7 +109,7 @@ namespace CompilerTest.Config
             Assert.False(ownershipRule2.Recursive);
             Assert.False(ownershipRule2.ExcludeList);
             Assert.Single(ownershipRule2.IncludeExcludeFiles);
-            Assert.Equal("foo.txt", ownershipRule2.IncludeExcludeFiles[0]);
+            Assert.Equal("Foo.txt", ownershipRule2.IncludeExcludeFiles[0]);
             Assert.Equal(new OutputGroup("enroute.ESE_OWNERSHIP", "Start enroute Ownership"), ownershipRule2.GetOutputGroup());
             
             // Enroute ownership folder 3
@@ -118,7 +118,7 @@ namespace CompilerTest.Config
             Assert.False(ownershipRule3.Recursive);
             Assert.True(ownershipRule3.ExcludeList);
             Assert.Single(ownershipRule3.IncludeExcludeFiles);
-            Assert.Equal("eur islands.txt", ownershipRule3.IncludeExcludeFiles[0]);
+            Assert.Equal("EUR Islands.txt", ownershipRule3.IncludeExcludeFiles[0]);
             Assert.Equal(new OutputGroup("enroute.ESE_OWNERSHIP", "Start enroute Ownership"), ownershipRule3.GetOutputGroup());
             
             // Misc regions
