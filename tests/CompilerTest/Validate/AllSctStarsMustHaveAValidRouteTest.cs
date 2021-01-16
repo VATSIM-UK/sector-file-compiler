@@ -19,7 +19,7 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItPassesOnValidRoute()
         {
-            List<RouteSegment> segments = new List<RouteSegment>
+            List<RouteSegment> segments = new()
             {
                 RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
                 RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
@@ -27,7 +27,7 @@ namespace CompilerTest.Validate
                 RouteSegmentFactory.MakeCoordinatePoint("testfix"),
             };
 
-            SidStarRoute route = new SidStarRoute(
+            SidStarRoute route = new(
                 SidStarType.STAR,
                 "EGKK TEST",
                 RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
@@ -45,7 +45,7 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsOnBadFix()
         {
-            List<RouteSegment> segments = new List<RouteSegment>
+            List<RouteSegment> segments = new()
             {
                 RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
                 RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
@@ -53,7 +53,7 @@ namespace CompilerTest.Validate
                 RouteSegmentFactory.MakeCoordinatePoint("testfix"),
             };
 
-            SidStarRoute route = new SidStarRoute(
+            SidStarRoute route = new(
                 SidStarType.STAR,
                 "EGKK TEST",
                 RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
@@ -72,7 +72,7 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsOnBadVor()
         {
-            List<RouteSegment> segments = new List<RouteSegment>
+            List<RouteSegment> segments = new()
             {
                 RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
                 RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
@@ -80,7 +80,7 @@ namespace CompilerTest.Validate
                 RouteSegmentFactory.MakeCoordinatePoint("testfix"),
             };
 
-            SidStarRoute route = new SidStarRoute(
+            SidStarRoute route = new(
                 SidStarType.STAR,
                 "EGKK TEST",
                 RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
@@ -99,7 +99,7 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsOnBadNdb()
         {
-            List<RouteSegment> segments = new List<RouteSegment>
+            List<RouteSegment> segments = new()
             {
                 RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
                 RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
@@ -107,7 +107,7 @@ namespace CompilerTest.Validate
                 RouteSegmentFactory.MakeCoordinatePoint("testfix"),
             };
 
-            SidStarRoute route = new SidStarRoute(
+            SidStarRoute route = new(
                 SidStarType.STAR,
                 "EGKK TEST",
                 RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
@@ -126,7 +126,7 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItFailsOnBadAirport()
         {
-            List<RouteSegment> segments = new List<RouteSegment>
+            List<RouteSegment> segments = new()
             {
                 RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
                 RouteSegmentFactory.MakeDoublePoint("testndb", "testairport"),
@@ -134,7 +134,7 @@ namespace CompilerTest.Validate
                 RouteSegmentFactory.MakeCoordinatePoint("testfix"),
             };
 
-            SidStarRoute route = new SidStarRoute(
+            SidStarRoute route = new(
                 SidStarType.STAR,
                 "EGKK TEST",
                 RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),

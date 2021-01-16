@@ -35,7 +35,7 @@ namespace CompilerTest.Bogus
         
         public static Coordinate Make()
         {
-            Faker faker = new Faker();
+            Faker faker = new();
             return new Coordinate(
                 faker.PickRandom(latitudes),
                 faker.PickRandom(longitudes)

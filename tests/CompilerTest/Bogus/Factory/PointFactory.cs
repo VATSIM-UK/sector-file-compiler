@@ -16,7 +16,7 @@ namespace CompilerTest.Bogus
         
         public static Point Make()
         {
-            Faker faker = new Faker();
+            Faker faker = new();
             return faker.Random.Bool()
                 ? new Point(CoordinateFactory.Make())
                 : new Point(faker.Random.ArrayElement(identifiers));

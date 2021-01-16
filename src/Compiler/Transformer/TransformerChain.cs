@@ -5,7 +5,7 @@ namespace Compiler.Transformer
 {
     public class TransformerChain
     {
-        private readonly List<ITransformer> transformers = new List<ITransformer>();
+        private readonly List<ITransformer> transformers = new();
 
         public void AddTransformer(ITransformer transformer)
         {

@@ -106,7 +106,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompilesFirCopx()
         {
-            CoordinationPoint model2 = new CoordinationPoint(
+            CoordinationPoint model2 = new(
                 true,
                 "*",
                 "*",

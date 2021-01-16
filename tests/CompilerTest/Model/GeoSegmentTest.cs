@@ -47,7 +47,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompilesWithNoColour()
         {
-            GeoSegment segment = new GeoSegment(
+            GeoSegment segment = new(
                 new Point(new Coordinate("abc", "def")),
                 new Point(new Coordinate("ghi", "jkl")),
                 null,

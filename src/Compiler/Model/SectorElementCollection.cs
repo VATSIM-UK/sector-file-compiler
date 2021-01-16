@@ -4,47 +4,47 @@ namespace Compiler.Model
 {
     public class SectorElementCollection
     {
-        public List<SidStar> SidStars { get; } = new List<SidStar>();
+        public List<SidStar> SidStars { get; } = new();
 
-        public List<Colour> Colours { get; } = new List<Colour>();
+        public List<Colour> Colours { get; } = new();
 
-        public List<Airport> Airports { get; } = new List<Airport>();
+        public List<Airport> Airports { get; } = new();
 
-        public List<Fix> Fixes { get; } = new List<Fix>();
+        public List<Fix> Fixes { get; } = new();
 
-        public List<Vor> Vors { get; } = new List<Vor>();
+        public List<Vor> Vors { get; } = new();
 
-        public List<Ndb> Ndbs { get; } = new List<Ndb>();
+        public List<Ndb> Ndbs { get; } = new();
 
-        public List<ArtccSegment> Artccs { get; } = new List<ArtccSegment>();
-        public List<ArtccSegment> LowArtccs { get; } = new List<ArtccSegment>();
-        public List<ArtccSegment> HighArtccs { get; } = new List<ArtccSegment>();
-        public List<AirwaySegment> LowAirways { get; } = new List<AirwaySegment>();
-        public List<AirwaySegment> HighAirways { get; } = new List<AirwaySegment>();
-        public List<SidStarRoute> SidRoutes { get; } = new List<SidStarRoute>();
-        public List<SidStarRoute> StarRoutes { get; } = new List<SidStarRoute>();
-        public List<Geo> GeoElements { get; } = new List<Geo>();
-        public List<Label> Labels { get; } = new List<Label>();
-        public List<Region> Regions { get; } = new List<Region>();
+        public List<ArtccSegment> Artccs { get; } = new();
+        public List<ArtccSegment> LowArtccs { get; } = new();
+        public List<ArtccSegment> HighArtccs { get; } = new();
+        public List<AirwaySegment> LowAirways { get; } = new();
+        public List<AirwaySegment> HighAirways { get; } = new();
+        public List<SidStarRoute> SidRoutes { get; } = new();
+        public List<SidStarRoute> StarRoutes { get; } = new();
+        public List<Geo> GeoElements { get; } = new();
+        public List<Label> Labels { get; } = new();
+        public List<Region> Regions { get; } = new();
 
-        public List<Freetext> Freetext { get; } = new List<Freetext>();
+        public List<Freetext> Freetext { get; } = new();
         public Info Info { get; private set; }
 
-        public List<ControllerPosition> EsePositions { get; } = new List<ControllerPosition>();
+        public List<ControllerPosition> EsePositions { get; } = new();
 
-        public List<Sectorline> SectorLines { get; } = new List<Sectorline>();
+        public List<Sectorline> SectorLines { get; } = new();
 
-        public List<CircleSectorline> CircleSectorLines { get; } = new List<CircleSectorline>();
+        public List<CircleSectorline> CircleSectorLines { get; } = new();
 
-        public List<CoordinationPoint> CoordinationPoints { get; } = new List<CoordinationPoint>();
+        public List<CoordinationPoint> CoordinationPoints { get; } = new();
 
-        public List<Sector> Sectors { get; } = new List<Sector>();
+        public List<Sector> Sectors { get; } = new();
 
-        public List<Runway> Runways { get; } = new List<Runway>();
+        public List<Runway> Runways { get; } = new();
 
-        public List<ActiveRunway> ActiveRunways { get; } = new List<ActiveRunway>();
+        public List<ActiveRunway> ActiveRunways { get; } = new();
 
-        public List<Header> FileHeaders { get; } = new List<Header>();
+        public List<Header> FileHeaders { get; } = new();
 
         public void Add(Airport airport)
         {

@@ -7,9 +7,9 @@ namespace Compiler.Config
 {
     public class ConfigInclusionRules: IEnumerable<IInclusionRule>
     {
-        private List<IInclusionRule> airportInclusionRules = new List<IInclusionRule>();
-        private List<IInclusionRule> enrouteInclusionRules = new List<IInclusionRule>();
-        private List<IInclusionRule> miscInclusionRules = new List<IInclusionRule>();
+        private List<IInclusionRule> airportInclusionRules = new();
+        private List<IInclusionRule> enrouteInclusionRules = new();
+        private List<IInclusionRule> miscInclusionRules = new();
 
         public void AddAirportInclusionRule(IInclusionRule rule)
         {

@@ -16,7 +16,7 @@ namespace CompilerTest.Mock
 
         public TextReader GetStream(string fullPath)
         {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new();
             foreach (string line in lines)
             {
                 builder.AppendLine(line);

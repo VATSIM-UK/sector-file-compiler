@@ -9,7 +9,7 @@ namespace CompilerTest.Bogus.Factory
         public static ConfigFileSection Make(string descriptor = "test", string jsonPath = null, InputDataType? dataType = null)
         {
             Randomizer randomizer = new();
-            return new(
+            return new ConfigFileSection(
                 jsonPath ?? "foo/bar/baz.txt",
                 dataType ?? randomizer.Enum<InputDataType>(),
                 descriptor

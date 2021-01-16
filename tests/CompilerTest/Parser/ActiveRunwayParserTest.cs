@@ -32,7 +32,7 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsDataInMode0()
         {
-            this.RunParserOnLines(new List<string>(new string[] { "ACTIVE_RUNWAY:EGHI:20:0 ;comment" }));
+            this.RunParserOnLines(new List<string>(new[] { "ACTIVE_RUNWAY:EGHI:20:0 ;comment" }));
 
             ActiveRunway result = this.sectorElementCollection.ActiveRunways[0];
             Assert.Equal("EGHI", result.Airfield);
@@ -44,7 +44,7 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsDataInMode1()
         {
-            this.RunParserOnLines(new List<string>(new string[] { "ACTIVE_RUNWAY:EGHI:20:1 ;comment" }));
+            this.RunParserOnLines(new List<string>(new[] { "ACTIVE_RUNWAY:EGHI:20:1 ;comment" }));
 
             ActiveRunway result = this.sectorElementCollection.ActiveRunways[0];
             Assert.Equal("EGHI", result.Airfield);

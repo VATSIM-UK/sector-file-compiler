@@ -16,9 +16,9 @@ namespace CompilerTest.Model
             this.definition = DefinitionFactory.Make();
             this.headerLines = new List<HeaderLine>()
             {
-                new HeaderLine(CommentFactory.Make(), DefinitionFactory.Make()),
-                new HeaderLine(CommentFactory.Make(), DefinitionFactory.Make()),
-                new HeaderLine(CommentFactory.Make(), DefinitionFactory.Make()),
+                new(CommentFactory.Make(), DefinitionFactory.Make()),
+                new(CommentFactory.Make(), DefinitionFactory.Make()),
+                new(CommentFactory.Make(), DefinitionFactory.Make()),
             };
             this.header = new Header(
                 this.definition,

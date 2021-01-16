@@ -72,7 +72,7 @@ namespace CompilerTest.Input
             {
                 Assert.Equal(new List<string> { "Line", expectedLine.ToString() }, dataLine.dataSegments);
 
-                Docblock expectedDocblock = new Docblock();
+                Docblock expectedDocblock = new();
                 expectedDocblock.AddLine(new Comment("Docblock " + (expectedLine - 2)));
                 expectedDocblock.AddLine(new Comment("Docblock " + (expectedLine - 1)));
                 Assert.Equal(expectedDocblock, dataLine.docblock);

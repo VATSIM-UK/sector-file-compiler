@@ -7,7 +7,7 @@ namespace CompilerTest.Bogus.Factory
     {
         public static SectorData Make()
         {
-            return new SectorData(
+            return new(
                 DocblockFactory.Make(),
                 CommentFactory.Make(),
                 new List<string> { "abc", "def", "ghi" },

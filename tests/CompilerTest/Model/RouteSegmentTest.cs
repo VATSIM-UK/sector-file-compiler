@@ -45,7 +45,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompilesWithColour()
         {
-            RouteSegment segment = new RouteSegment(
+            RouteSegment segment = new(
                 "FOO",
                 new Point("BIG"),
                 new Point("LAM"),

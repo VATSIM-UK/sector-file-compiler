@@ -101,7 +101,7 @@ namespace CompilerTest.Parser
         public void TestItAddsFirCoordinationPoints()
         {
             this.RunParserOnLines(
-                new List<string>(new string[] { "FIR_COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment" })
+                new List<string>(new[] { "FIR_COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment" })
             );
             
             CoordinationPoint result = this.sectorElementCollection.CoordinationPoints[0];

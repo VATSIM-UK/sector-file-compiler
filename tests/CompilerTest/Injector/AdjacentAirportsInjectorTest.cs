@@ -6,7 +6,7 @@ namespace CompilerTest.Injector
 {
     public class AdjacentAirportsInjectorTest
     {
-        private readonly SectorElementCollection sectorElementCollection = new SectorElementCollection();
+        private readonly SectorElementCollection sectorElementCollection = new();
 
         public AdjacentAirportsInjectorTest()
         {

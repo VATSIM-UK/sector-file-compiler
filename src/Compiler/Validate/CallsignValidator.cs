@@ -4,7 +4,7 @@ namespace Compiler.Validate
 {
     public class CallsignValidator
     {
-        private static readonly List<string> allowedTypes = new List<string>()
+        private static readonly List<string> allowedTypes = new()
         {
             "OBS",
             "DEL",
@@ -17,7 +17,7 @@ namespace Compiler.Validate
             "INFO"
         };
 
-        private static readonly char[] allowedDelimiters = new char[]
+        private static readonly char[] allowedDelimiters = new[]
         {
             '_',
             '-'

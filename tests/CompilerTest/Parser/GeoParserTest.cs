@@ -38,7 +38,7 @@ namespace CompilerTest.Parser
         public void TestItAddsGeoDataWithOneSegment()
         {
             this.RunParserOnLines(
-                new List<string>(new string[] { "TestGeo                     N050.57.00.000 W001.21.24.490 BCN BCN test ;comment" })
+                new List<string>(new[] { "TestGeo                     N050.57.00.000 W001.21.24.490 BCN BCN test ;comment" })
             );
 
             Geo result = this.sectorElementCollection.GeoElements[0];
@@ -62,7 +62,7 @@ namespace CompilerTest.Parser
         public void TestItAddsGeoDataWithMultipleSegment()
         {
             this.RunParserOnLines(
-                new List<string>(new string[]
+                new List<string>(new[]
                 {
                     "TestGeo                     N050.57.00.000 W001.21.24.490 BCN BCN test ;comment",
                     "                            N051.57.00.000 W002.21.24.490 BHD BHD test2 ;comment1",
@@ -121,7 +121,7 @@ namespace CompilerTest.Parser
         public void TestItAddsFakePoint()
         {
             this.RunParserOnLines(
-                new List<string>(new string[] { "TestGeo                     S999.00.00.000 E999.00.00.000 S999.00.00.000 E999.00.00.000 ;comment" })
+                new List<string>(new[] { "TestGeo                     S999.00.00.000 E999.00.00.000 S999.00.00.000 E999.00.00.000 ;comment" })
             );
             
             Geo result = this.sectorElementCollection.GeoElements[0];

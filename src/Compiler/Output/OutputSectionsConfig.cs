@@ -4,117 +4,117 @@
     {
         public static readonly OutputSection[] sections =
         {
-            new OutputSection(
+            new(
                 OutputSectionKeys.FILE_HEADER,
                 false,
                 null
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_COLOUR_DEFS,
                 false,
                 null
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_INFO,
                 false,
                 "[INFO]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_AIRPORT,
                 false,
                 "[AIRPORT]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_RUNWAY,
                 false,
                 "[RUNWAY]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_VOR,
                 false,
                 "[VOR]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_NDB,
                 false,
                 "[NDB]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_FIXES,
                 false,
                 "[FIXES]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_GEO,
                 true,
                 "[GEO]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_LOW_AIRWAY,
                 false,
                 "[LOW AIRWAY]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_HIGH_AIRWAY,
                 false,
                 "[HIGH AIRWAY]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_ARTCC,
                 false,
                 "[ARTCC]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_ARTCC_HIGH,
                 false,
                 "[ARTCC HIGH]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_ARTCC_LOW,
                 false,
                 "[ARTCC LOW]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_SID,
                 false,
                 "[SID]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_STAR,
                 false,
                 "[STAR]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_LABELS,
                 true,
                 "[LABELS]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.SCT_REGIONS,
                 true,
                 "[REGIONS]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.ESE_POSITIONS,
                 false,
                 "[POSITIONS]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.ESE_FREETEXT,
                 false,
                 "[FREETEXT]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.ESE_SIDSSTARS,
                 true,
                 "[SIDSSTARS]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.ESE_AIRSPACE,
                 true,
                 "[AIRSPACE]"
             ),
-            new OutputSection(
+            new(
                 OutputSectionKeys.RWY_ACTIVE_RUNWAYS,
                 false,
                 null

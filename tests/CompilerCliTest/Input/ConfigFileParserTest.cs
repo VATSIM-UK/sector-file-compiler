@@ -14,7 +14,7 @@ namespace CompilerCliTest.Input
             CompilerArguments arguments = new CompilerArguments();
             ConfigFileParser parser = new ConfigFileParser();
 
-            arguments = parser.Parse(new List<string>(new string[] { "test.json" }), arguments);
+            arguments = parser.Parse(new List<string>(new[] { "test.json" }), arguments);
             Assert.Single(arguments.ConfigFiles);
             Assert.Equal("test.json", arguments.ConfigFiles[0]);
         }
@@ -34,7 +34,7 @@ namespace CompilerCliTest.Input
             CompilerArguments arguments = new CompilerArguments();
             ConfigFileParser parser = new ConfigFileParser();
 
-            Assert.Throws<ArgumentException>(() => parser.Parse(new List<string>(new string[] { "a", "b" }), arguments));
+            Assert.Throws<ArgumentException>(() => parser.Parse(new List<string>(new[] { "a", "b" }), arguments));
         }
     }
 }

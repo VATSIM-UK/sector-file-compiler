@@ -36,12 +36,12 @@ namespace Compiler.Output
 
         private static OutputGroup CreateMassGroup(string key)
         {
-            return new OutputGroup(key);
+            return new(key);
         }
 
         private static OutputGroup CreateSpecificGroup(string key, string header)
         {
-            return new OutputGroup(key, header);
+            return new(key, header);
         }
     }
 }

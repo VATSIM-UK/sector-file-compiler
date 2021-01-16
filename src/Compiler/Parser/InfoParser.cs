@@ -23,7 +23,7 @@ namespace Compiler.Parser
 
         private InfoName GetName(SectorData line)
         {
-            return new InfoName(line.rawData, line.definition, line.docblock, line.inlineComment);
+            return new(line.rawData, line.definition, line.docblock, line.inlineComment);
         }
 
         private InfoCallsign GetCallsign(SectorData line)

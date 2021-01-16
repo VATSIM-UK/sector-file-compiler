@@ -8,7 +8,7 @@ namespace CompilerTest.Model
     {
         private readonly Runway runway;
         private readonly Airport airport;
-        private readonly SectorElementCollection sectorElements = new SectorElementCollection();
+        private readonly SectorElementCollection sectorElements = new();
         
         public RunwayTest()
         {

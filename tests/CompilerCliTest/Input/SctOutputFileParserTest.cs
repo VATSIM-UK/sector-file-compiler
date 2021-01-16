@@ -15,7 +15,7 @@ namespace CompilerCliTest.Input
             CompilerArguments arguments = new CompilerArguments();
             SctOutputFileParser parser = new SctOutputFileParser();
 
-            arguments = parser.Parse(new List<string>(new string[] { "test.sct" }), arguments);
+            arguments = parser.Parse(new List<string>(new[] { "test.sct" }), arguments);
             Assert.Single(arguments.OutputFiles);
             Assert.IsType<SctOutput>(arguments.OutputFiles[0]);
         }
@@ -35,7 +35,7 @@ namespace CompilerCliTest.Input
             CompilerArguments arguments = new CompilerArguments();
             SctOutputFileParser parser = new SctOutputFileParser();
 
-            Assert.Throws<ArgumentException>(() => parser.Parse(new List<string>(new string[] { "a", "b" }), arguments));
+            Assert.Throws<ArgumentException>(() => parser.Parse(new List<string>(new[] { "a", "b" }), arguments));
         }
     }
 }

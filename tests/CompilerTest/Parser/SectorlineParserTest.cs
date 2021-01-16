@@ -91,7 +91,7 @@ namespace CompilerTest.Parser
         public void TestItAddsCircleSectorlines()
         {
             this.RunParserOnLines(
-                new List<string>(new string[] {
+                new List<string>(new[] {
                     "CIRCLE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
                     "DISPLAY:BBAPP:BBAPP:BBTWR ;comment1",
                     "DISPLAY:BBTWR:BBAPP:BBTWR ;comment2",
@@ -136,7 +136,7 @@ namespace CompilerTest.Parser
         public void TestItAddsSectorlines()
         {
             this.RunParserOnLines(
-                new List<string>(new string[] {
+                new List<string>(new[] {
                     "SECTORLINE:JJCTR - S6 ;comment1",
                     "DISPLAY:London S6:JJCTR:London S6 ;comment2",
                     "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
@@ -203,7 +203,7 @@ namespace CompilerTest.Parser
         public void TestItAddsMixedData()
         {
             this.RunParserOnLines(
-                new List<string>(new string[] {
+                new List<string>(new[] {
                     "SECTORLINE:JJCTR - LS ;comment6",
                     "DISPLAY:London AC Worthing:JJCTR:JJCTR ;comment7",
                     "DISPLAY:JJCTR:JJCTR:London AC Worthing ;comment8",
@@ -265,7 +265,7 @@ namespace CompilerTest.Parser
         public void TestItAddsMixedDataNoDisplayRules()
         {
             this.RunParserOnLines(
-                new List<string>(new string[] {
+                new List<string>(new[] {
                     "SECTORLINE:JJCTR - LS ;comment6",
                     "COORD:N049.59.59.000:W002.29.35.000 ;comment9",
                     "COORD:N050.00.00.000:W001.47.00.000 ;comment10",

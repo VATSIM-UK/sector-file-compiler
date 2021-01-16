@@ -64,7 +64,7 @@ namespace CompilerTest.Parser
         public void TestItAddsAirportData()
         {
             this.RunParserOnLines(
-                new List<string>(new string[] {"Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3" })
+                new List<string>(new[] {"Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3" })
             );
 
             Airport result = this.sectorElementCollection.Airports[0];

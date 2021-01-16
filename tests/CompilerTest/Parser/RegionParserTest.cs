@@ -13,7 +13,7 @@ namespace CompilerTest.Parser
         public void TestItAddsSinglePointRegionData()
         {
             this.RunParserOnLines(
-                new List<string>(new string[]
+                new List<string>(new[]
                 {
                     "REGIONNAME TestRegion",
                     "Red BCN BCN ;comment",
@@ -34,7 +34,7 @@ namespace CompilerTest.Parser
         public void TestItAddsMultipleLineRegionData()
         {
             this.RunParserOnLines(
-                new List<string>(new string[]
+                new List<string>(new[]
                 {
                     "REGIONNAME TestRegion ; comment",
                     "Red BCN BCN ;comment",
@@ -65,7 +65,7 @@ namespace CompilerTest.Parser
         public void TestItAddsMultipleRegionsData()
         {
             this.RunParserOnLines(
-                new List<string>(new string[]
+                new List<string>(new[]
                 {
                     "REGIONNAME TestRegion1",
                     "Red BCN BCN ;comment",

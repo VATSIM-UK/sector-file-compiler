@@ -38,7 +38,7 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsColourData()
         {
-            this.RunParserOnLines(new List<string>(new string[] {"#define abc 255 ;comment"}));
+            this.RunParserOnLines(new List<string>(new[] {"#define abc 255 ;comment"}));
 
             Colour result = this.sectorElementCollection.Colours[0];
             Assert.Equal("abc", result.Name);

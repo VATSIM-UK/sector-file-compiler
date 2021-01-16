@@ -11,7 +11,7 @@ namespace CompilerTest.Input
         
         public SectorDataFileFactoryTest()
         {
-            this.factory = new(new MockInputStreamFactory(new List<string>()));
+            this.factory = new SectorDataFileFactory(new MockInputStreamFactory(new List<string>()));
         }
 
         [Fact]

@@ -11,9 +11,9 @@ namespace CompilerTest.Collector
         [Fact]
         public void TestItReturnsElementsInOrder()
         {
-            OutputGroup group1 = new OutputGroup("1");
+            OutputGroup group1 = new("1");
             group1.AddFile("foo.txt");
-            OutputGroup group2 = new OutputGroup("2");
+            OutputGroup group2 = new("2");
             group2.AddFile("goo.txt");
             this.outputGroups.Add(group1);
             this.outputGroups.Add(group2);

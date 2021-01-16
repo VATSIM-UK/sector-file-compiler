@@ -13,8 +13,8 @@ namespace CompilerTest.Validate
 
         public AllSidsMustHaveAValidRouteTest()
         {
-            this.first = SidStarFactory.Make(route: new List<string>(new string[] { "testfix", "testvor", "testndb", "testairport" }));
-            this.second = SidStarFactory.Make(route: new List<string>(new string[] { "nottestfix", "testvor", "testndb", "testairport" }));
+            this.first = SidStarFactory.Make(route: new List<string>(new[] { "testfix", "testvor", "testndb", "testairport" }));
+            this.second = SidStarFactory.Make(route: new List<string>(new[] { "nottestfix", "testvor", "testndb", "testairport" }));
 
             this.sectorElements.Add(FixFactory.Make("testfix"));
             this.sectorElements.Add(VorFactory.Make("testvor"));

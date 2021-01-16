@@ -5,7 +5,7 @@ namespace Compiler.Output
 {
     public class OutputGroup: IComparable<OutputGroup>
     {
-        public SortedSet<string> FileList { get; } = new SortedSet<string>();
+        public SortedSet<string> FileList { get; } = new();
         public string Key { get; }
         public string HeaderDescription { get; }
 

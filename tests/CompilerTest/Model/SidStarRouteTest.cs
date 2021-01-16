@@ -84,7 +84,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItItMatchesPaddingOnLongerNames()
         {
-            SidStarRoute longSidStar = new SidStarRoute(
+            SidStarRoute longSidStar = new(
                 SidStarType.SID,
                 "This is a long name which needs extra padding",
                 this.initialSegment,

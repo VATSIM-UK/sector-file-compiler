@@ -4,7 +4,7 @@ namespace Compiler.Parser
 {
     public class PointParser
     {
-        public static readonly Point invalidPoint = new Point("--INVALID--");
+        public static readonly Point invalidPoint = new("--INVALID--");
 
         /**
          * Parses "points" on an ARTCC Line or similar. Will try coordinates and

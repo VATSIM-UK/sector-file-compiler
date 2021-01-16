@@ -8,7 +8,7 @@ namespace Compiler.Argument
     {
         public const string COMPILER_VERISON = "1.0.0";
 
-        public List<string> ConfigFiles { get; } = new List<string>();
+        public List<string> ConfigFiles { get; } = new();
 
         public override bool Equals(Object obj)
         {
@@ -50,7 +50,7 @@ namespace Compiler.Argument
         }
 
         // All the output files that need to be created
-        public List<AbstractOutputFile> OutputFiles { get; } = new List<AbstractOutputFile>();
+        public List<AbstractOutputFile> OutputFiles { get; } = new();
 
         // Should we validate the file before output
         public bool ValidateOutput { set; get; } = true;

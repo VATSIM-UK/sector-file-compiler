@@ -14,7 +14,7 @@ namespace CompilerCliTest.Input
             CompilerArguments arguments = new CompilerArguments();
             BuildVersionParser parser = new BuildVersionParser();
 
-            arguments = parser.Parse(new List<string>(new string[] { "testbuild" }), arguments);
+            arguments = parser.Parse(new List<string>(new[] { "testbuild" }), arguments);
             Assert.Equal("testbuild", arguments.BuildVersion);
         }
 
@@ -33,7 +33,7 @@ namespace CompilerCliTest.Input
             CompilerArguments arguments = new CompilerArguments();
             BuildVersionParser parser = new BuildVersionParser();
 
-            Assert.Throws<ArgumentException>(() => parser.Parse(new List<string>(new string[] { "a", "b" }), arguments));
+            Assert.Throws<ArgumentException>(() => parser.Parse(new List<string>(new[] { "a", "b" }), arguments));
         }
     }
 }

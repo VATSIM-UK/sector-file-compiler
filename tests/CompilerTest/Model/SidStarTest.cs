@@ -16,7 +16,7 @@ namespace CompilerTest.Model
                 "EGKK",
                 "26L",
                 "ADMAG2X",
-                new List<string>(new string[] { "FIX1", "FIX2", "FIX3" }),
+                new List<string>(new[] { "FIX1", "FIX2", "FIX3" }),
                 DefinitionFactory.Make(),
                 DocblockFactory.Make(),
                 CommentFactory.Make()
@@ -50,7 +50,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsRoute()
         {
-            Assert.Equal(new List<string>(new string[] { "FIX1", "FIX2", "FIX3" }), this.sidStar.Route);
+            Assert.Equal(new List<string>(new[] { "FIX1", "FIX2", "FIX3" }), this.sidStar.Route);
         }
 
         [Fact]

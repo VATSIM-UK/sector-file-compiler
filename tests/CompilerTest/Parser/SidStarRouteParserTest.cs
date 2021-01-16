@@ -50,7 +50,7 @@ namespace CompilerTest.Parser
             SidStarRoute result = this.sectorElementCollection.SidRoutes[0];
             Assert.Equal("Test", result.Identifier);
             Assert.Equal(
-                new(
+                new RouteSegment(
                     "Test",
                     new Point("abc"),
                     new Point("def"),
@@ -70,16 +70,16 @@ namespace CompilerTest.Parser
         public void TestItAddsMultiRowElements()
         {
             this.RunParserOnLines(new List<string>(
-                new string[] {
+                new[] {
                     "Test                       abc abc def def ;comment",
                     "                           def def ghi ghi ;comment"
                 }
             ));
 
 
-            List<RouteSegment> expectedAdditionalSegments = new List<RouteSegment>
+            List<RouteSegment> expectedAdditionalSegments = new()
             {
-                new(
+                new RouteSegment(
                     "Test",
                     new Point("def"),
                     new Point("ghi"),
@@ -92,7 +92,7 @@ namespace CompilerTest.Parser
             SidStarRoute result = this.sectorElementCollection.SidRoutes[0];
             Assert.Equal("Test", result.Identifier);
             Assert.Equal(
-                new(
+                new RouteSegment(
                     "Test",
                     new Point("abc"),
                     new Point("def"),
@@ -114,7 +114,7 @@ namespace CompilerTest.Parser
         {
             this.RunParserOnLines(new List<string>(
                 new List<string>(
-                    new string[] {
+                    new[] {
                         "Test                       abc abc def def;comment",
                         "                           def def ghi ghi ;comment",
                         "Test 2                     jkl jkl mno mno;comment"
@@ -122,9 +122,9 @@ namespace CompilerTest.Parser
                 )
             ));
 
-            List<RouteSegment> expectedAdditionalSegments1 = new List<RouteSegment>
+            List<RouteSegment> expectedAdditionalSegments1 = new()
             {
-                new(
+                new RouteSegment(
                     "Test",
                     new Point("def"),
                     new Point("ghi"),
@@ -137,7 +137,7 @@ namespace CompilerTest.Parser
             SidStarRoute result = this.sectorElementCollection.SidRoutes[0];
             Assert.Equal("Test", result.Identifier);
             Assert.Equal(
-                new(
+                new RouteSegment(
                     "Test",
                     new Point("abc"),
                     new Point("def"),
@@ -155,7 +155,7 @@ namespace CompilerTest.Parser
             SidStarRoute result2 = this.sectorElementCollection.SidRoutes[1];
             Assert.Equal("Test 2", result2.Identifier);
             Assert.Equal(
-                new(
+                new RouteSegment(
                     "Test",
                     new Point("jkl"),
                     new Point("mno"),
@@ -174,16 +174,16 @@ namespace CompilerTest.Parser
         public void TestItAddsMultipleElementsWithColour()
         {
             this.RunParserOnLines(new List<string>(
-                new string[] {
+                new[] {
                     "Test                       abc abc def def Red",
                     "                           def def ghi ghi Yellow ;comment",
                     "Test 2                     jkl jkl mno mno Blue;comment"
                 }
             ));
             
-            List<RouteSegment> expectedAdditionalSegments1 = new List<RouteSegment>
+            List<RouteSegment> expectedAdditionalSegments1 = new()
             {
-                new(
+                new RouteSegment(
                     "Test",
                     new Point("def"),
                     new Point("ghi"),
@@ -198,7 +198,7 @@ namespace CompilerTest.Parser
             SidStarRoute result = this.sectorElementCollection.SidRoutes[0];
             Assert.Equal("Test", result.Identifier);
             Assert.Equal(
-                new(
+                new RouteSegment(
                     "Test",
                     new Point("abc"),
                     new Point("def"),
@@ -217,7 +217,7 @@ namespace CompilerTest.Parser
             SidStarRoute result2 = this.sectorElementCollection.SidRoutes[1];
             Assert.Equal("Test 2", result2.Identifier);
             Assert.Equal(
-                new(
+                new RouteSegment(
                     "Test",
                     new Point("jkl"),
                     new Point("mno"),

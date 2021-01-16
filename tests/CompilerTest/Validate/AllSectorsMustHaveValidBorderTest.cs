@@ -42,7 +42,7 @@ namespace CompilerTest.Validate
                     SectorActiveFactory.MakeList(),
                     SectorGuestFactory.MakeList(),
                     new List<SectorBorder>() {
-                        new SectorBorder(
+                        new(
                             new List<string>()
                             {
                                 "ONE",
@@ -71,7 +71,7 @@ namespace CompilerTest.Validate
                     SectorActiveFactory.MakeList(),
                     SectorGuestFactory.MakeList(),
                     new List<SectorBorder>() {
-                        new SectorBorder(
+                        new(
                             new List<string>()
                             {
                                 "ONE",
@@ -110,7 +110,7 @@ namespace CompilerTest.Validate
                     SectorActiveFactory.MakeList(),
                     SectorGuestFactory.MakeList(),
                     new List<SectorBorder>() {
-                        new SectorBorder(
+                        new(
                             new List<string>()
                             {
                                 first,
@@ -139,7 +139,7 @@ namespace CompilerTest.Validate
                     SectorActiveFactory.MakeList(),
                     SectorGuestFactory.MakeList(),
                     new List<SectorBorder>() {
-                        new SectorBorder(
+                        new(
                             new List<string>()
                             {
                                 first,

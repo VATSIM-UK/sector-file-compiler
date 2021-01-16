@@ -61,7 +61,7 @@ namespace CompilerTest.Parser
 
         private static void AssertExpectedDocblockLines(Docblock docblock, List<string> docblockLines)
         {
-            Docblock expectedDocblock = new Docblock();
+            Docblock expectedDocblock = new();
             docblockLines?.ForEach(line => docblock.AddLine(new Comment(line)));
 
             Assert.Equal(expectedDocblock, docblock);

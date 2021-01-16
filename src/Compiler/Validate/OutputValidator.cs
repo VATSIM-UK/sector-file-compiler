@@ -7,7 +7,7 @@ namespace Compiler.Validate
 {
     public class OutputValidator
     {
-        private static readonly List<IValidationRule> validationRules = new List<IValidationRule>
+        private static readonly List<IValidationRule> validationRules = new()
         {
             new AllAirportsMustHaveUniqueCode(),
             new AllAirwaysMustHaveValidPoints(),

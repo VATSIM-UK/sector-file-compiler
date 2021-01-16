@@ -10,7 +10,7 @@ namespace CompilerTest.Model
     {
         private readonly CircleSectorline model1;
         private readonly CircleSectorline model2;
-        private readonly List<SectorlineDisplayRule> displayRules = new List<SectorlineDisplayRule>
+        private readonly List<SectorlineDisplayRule> displayRules = new()
         {
             SectorLineDisplayRuleFactory.Make(),
             SectorLineDisplayRuleFactory.Make(),

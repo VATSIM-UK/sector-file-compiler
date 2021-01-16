@@ -8,7 +8,7 @@ namespace Compiler.Transformer
     {
         public static Dictionary<string, string> GetSystemTokens(CompilerArguments arguments)
         {
-            return new Dictionary<string, string>()
+            return new()
             {
                 { "{YEAR}",  DateTime.Now.Year.ToString()},
                 { "{VERSION}",  arguments.BuildVersion},

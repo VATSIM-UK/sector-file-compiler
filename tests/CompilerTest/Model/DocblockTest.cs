@@ -9,11 +9,11 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsLines()
         {
-            Comment line1 = new Comment("Line 1");
-            Comment line2 = new Comment("Line 2");
-            Comment line3 = new Comment("Line 3");
-            Comment line4 = new Comment("Line 4");
-            Docblock docblock = new Docblock();
+            Comment line1 = new("Line 1");
+            Comment line2 = new("Line 2");
+            Comment line3 = new("Line 3");
+            Comment line4 = new("Line 4");
+            Docblock docblock = new();
             docblock.AddLine(line1);
             docblock.AddLine(line2);
             docblock.AddLine(line3);

@@ -14,7 +14,7 @@ namespace Compiler.Parser
         private readonly IEventLogger errorLog;
         private readonly PositionOrder order;
 
-        private readonly List<string> allowedTypes = new List<string>()
+        private readonly List<string> allowedTypes = new()
         {
             "OBS",
             "DEL",

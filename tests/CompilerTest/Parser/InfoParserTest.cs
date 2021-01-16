@@ -12,7 +12,7 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsInfoData()
         {
-            this.RunParserOnLines(new List<string>(new string[] {
+            this.RunParserOnLines(new List<string>(new[] {
                 "UK (EGTT and EGPX) {VERSION}",
                 "LON_CTR",
                 "EGLL",

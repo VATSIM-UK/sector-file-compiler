@@ -11,7 +11,7 @@ namespace CompilerTest.Collector
         [Fact]
         public void TestItReturnsElementsInOrder()
         {
-            Header header = new Header(DefinitionFactory.Make(), new List<HeaderLine>());
+            Header header = new(DefinitionFactory.Make(), new List<HeaderLine>());
 
             this.sectorElements.Add(header);
 

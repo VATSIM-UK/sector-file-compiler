@@ -20,7 +20,7 @@ namespace CompilerTest.Transformer
         public void TestItAddsCommentStripper()
         {
             this.arguments.StripComments = true;
-            List<Type> expected = new List<Type>(new Type[] { typeof(RemoveAllComments), typeof(ReplaceTokens) });
+            List<Type> expected = new(new[] { typeof(RemoveAllComments), typeof(ReplaceTokens) });
 
             Assert.Equal(
                 expected,
@@ -32,7 +32,7 @@ namespace CompilerTest.Transformer
         public void TestItDoesntAddCommentStripperOnHeader()
         {
             this.arguments.StripComments = true;
-            List<Type> expected = new List<Type>(new Type[] { typeof(ReplaceTokens) });
+            List<Type> expected = new(new[] { typeof(ReplaceTokens) });
 
             Assert.Equal(
                 expected,
@@ -44,7 +44,7 @@ namespace CompilerTest.Transformer
         public void TestItAddsBlankLineStripper()
         {
             this.arguments.RemoveBlankLines = true;
-            List<Type> expected = new List<Type>(new Type[] { typeof(RemoveBlankLines), typeof(ReplaceTokens) });
+            List<Type> expected = new(new[] { typeof(RemoveBlankLines), typeof(ReplaceTokens) });
 
             Assert.Equal(
                 expected,
@@ -57,7 +57,7 @@ namespace CompilerTest.Transformer
         {
             this.arguments.RemoveBlankLines = true;
             this.arguments.StripComments = true;
-            List<Type> expected = new List<Type>(new Type[] { typeof(RemoveAllComments), typeof(RemoveBlankLines), typeof(ReplaceTokens) });
+            List<Type> expected = new(new[] { typeof(RemoveAllComments), typeof(RemoveBlankLines), typeof(ReplaceTokens) });
 
             Assert.Equal(
                 expected,

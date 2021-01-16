@@ -6,7 +6,7 @@ namespace CompilerCli.Input
 {
     public class ArgumentParser
     {
-        private static readonly Dictionary<string, IInputParser> availableArguments = new Dictionary<string, IInputParser>()
+        private static readonly Dictionary<string, IInputParser> availableArguments = new()
         {
             { "--config-file", new ConfigFileParser() },
             { "--out-file-ese", new EseOutputFileParser() },

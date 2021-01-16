@@ -15,7 +15,7 @@ namespace CompilerCliTest.Input
             CompilerArguments arguments = new CompilerArguments();
             RwyOutputFileParser parser = new RwyOutputFileParser();
 
-            arguments = parser.Parse(new List<string>(new string[] { "test.rwy" }), arguments);
+            arguments = parser.Parse(new List<string>(new[] { "test.rwy" }), arguments);
             Assert.Single(arguments.OutputFiles);
             Assert.IsType<RwyOutput>(arguments.OutputFiles[0]);
         }
@@ -35,7 +35,7 @@ namespace CompilerCliTest.Input
             CompilerArguments arguments = new CompilerArguments();
             RwyOutputFileParser parser = new RwyOutputFileParser();
 
-            Assert.Throws<ArgumentException>(() => parser.Parse(new List<string>(new string[] { "a", "b" }), arguments));
+            Assert.Throws<ArgumentException>(() => parser.Parse(new List<string>(new[] { "a", "b" }), arguments));
         }
     }
 }

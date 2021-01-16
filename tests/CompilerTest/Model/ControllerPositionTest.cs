@@ -107,7 +107,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompilesNoVisCenters()
         {
-            ControllerPosition newModel = new ControllerPosition(
+            ControllerPosition newModel = new(
                 "EGBB_APP",
                 "Birmingham Radar",
                 "123.970",

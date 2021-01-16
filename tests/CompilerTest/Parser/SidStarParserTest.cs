@@ -42,7 +42,7 @@ namespace CompilerTest.Parser
             Assert.Equal("EGKK", result.Airport);
             Assert.Equal("26L", result.Runway);
             Assert.Equal("ADMAG2X", result.Identifier);
-            Assert.Equal(new List<string>(new string[] { "FIX1", "FIX2" }), result.Route);
+            Assert.Equal(new List<string>(new[] { "FIX1", "FIX2" }), result.Route);
             this.AssertExpectedMetadata(result);
         }
 
