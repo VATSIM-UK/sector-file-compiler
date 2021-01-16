@@ -8,7 +8,7 @@ namespace CompilerTest.Output
         [Fact]
         public void TestItHasCorrectNumberOfSections()
         {
-            Assert.Equal(23, OutputSectionsConfig.sections.Length);
+            Assert.Equal(23, OutputSectionsConfig.Sections.Length);
         }
 
         [Theory]
@@ -39,7 +39,7 @@ namespace CompilerTest.Output
         {
             Assert.Equal(
                 new OutputSection(expectedKey, expectedPrintGroupings, expectedHeader),
-                OutputSectionsConfig.sections[index]
+                OutputSectionsConfig.Sections[index]
             );
         }
     }

@@ -55,7 +55,7 @@ namespace Compiler.Parser
 
                 // Parse the position coordinate
                 Coordinate parsedCoordinate = CoordinateParser.Parse(line.dataSegments[0], line.dataSegments[1]);
-                if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
+                if (parsedCoordinate.Equals(CoordinateParser.InvalidCoordinate))
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid label coordinate format: " + data.CurrentLine, line)

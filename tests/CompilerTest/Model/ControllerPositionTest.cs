@@ -8,7 +8,7 @@ namespace CompilerTest.Model
     public class ControllerPositionTest
     {
         private readonly ControllerPosition model;
-        private List<Coordinate> coordlist;
+        private readonly List<Coordinate> coordlist;
 
         public ControllerPositionTest()
         {

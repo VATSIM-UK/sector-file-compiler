@@ -4,18 +4,18 @@ namespace Compiler.Parser
 {
     public static class CoordinateParser
     {
-        private const char COORDINATE_SEPARATOR = '.';
+        private const char CoordinateSeparator = '.';
 
-        public static readonly Coordinate invalidCoordinate = new("", "");
+        public static readonly Coordinate InvalidCoordinate = new("", "");
 
-        public static readonly Coordinate starterCoordinate = new("S999.00.00.000", "E999.00.00.000");
+        public static readonly Coordinate StarterCoordinate = new("S999.00.00.000", "E999.00.00.000");
         
         public static Coordinate Parse(string latitude, string longitude)
         {
             // If its the special value used in the sectorfile, allow it
             if (latitude == "S999.00.00.000" && longitude == "E999.00.00.000")
             {
-                return starterCoordinate;
+                return StarterCoordinate;
             }
 
             string parsedLatitude = ParseCoordinate(true, latitude.Trim());
@@ -23,7 +23,7 @@ namespace Compiler.Parser
 
             if (parsedLatitude == null || parsedLongitude == null)
             {
-                return invalidCoordinate;
+                return InvalidCoordinate;
             }
 
             return new Coordinate(parsedLatitude, parsedLongitude);
@@ -31,7 +31,7 @@ namespace Compiler.Parser
 
         private static string ParseCoordinate(bool latitude, string coordinate)
         {
-            string[] parts = coordinate.Split(COORDINATE_SEPARATOR);
+            string[] parts = coordinate.Split(CoordinateSeparator);
 
             if (parts.Length != 4)
             {

@@ -2,7 +2,7 @@
 {
     public class OutputSectionsConfig
     {
-        public static readonly OutputSection[] sections =
+        public static readonly OutputSection[] Sections =
         {
             new(
                 OutputSectionKeys.FILE_HEADER,

@@ -11,7 +11,7 @@ namespace CompilerTest.Event
         {
             ComplilationStartedEvent eventObject = new();
             Assert.Equal(
-                "Sector File Compiler version " + CompilerArguments.COMPILER_VERISON + ": Starting compilation",
+                "Sector File Compiler version " + CompilerArguments.CompilerVersion + ": Starting compilation",
                 eventObject.GetMessage()
             );
         }

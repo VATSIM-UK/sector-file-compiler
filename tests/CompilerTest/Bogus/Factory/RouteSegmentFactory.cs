@@ -5,7 +5,7 @@ namespace CompilerTest.Bogus.Factory
 {
     static class RouteSegmentFactory
     {
-        private static readonly string[] identifiers = new[] {
+        private static readonly string[] Identifiers = new[] {
             "DIKAS",
             "PENIL",
             "UPGAS",
@@ -22,8 +22,8 @@ namespace CompilerTest.Bogus.Factory
                 .CustomInstantiator(
                     f => new RouteSegment(
                         f.Random.String2(4),
-                        new Point(identifier1 ?? f.Random.ArrayElement(identifiers)),
-                        new Point(identifier2 ?? f.Random.ArrayElement(identifiers)),
+                        new Point(identifier1 ?? f.Random.ArrayElement(Identifiers)),
+                        new Point(identifier2 ?? f.Random.ArrayElement(Identifiers)),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make(),
@@ -38,12 +38,11 @@ namespace CompilerTest.Bogus.Factory
                 .CustomInstantiator(
                     f => new RouteSegment(
                         f.Random.String2(4),
-                        new Point(identifier1 ?? f.Random.ArrayElement(identifiers)),
-                        new Point(identifier2 ?? f.Random.ArrayElement(identifiers)),
+                        new Point(identifier1 ?? f.Random.ArrayElement(Identifiers)),
+                        new Point(identifier2 ?? f.Random.ArrayElement(Identifiers)),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
-                        CommentFactory.Make(),
-                        null
+                        CommentFactory.Make()
                     )
                 );
         }
@@ -54,7 +53,7 @@ namespace CompilerTest.Bogus.Factory
                 .CustomInstantiator(
                     f => new RouteSegment(
                         f.Random.String2(4),
-                        new Point(pointIdentifier ?? f.Random.ArrayElement(identifiers)),
+                        new Point(pointIdentifier ?? f.Random.ArrayElement(Identifiers)),
                         coordinate == null ? new Point(CoordinateFactory.Make()) : new Point((Coordinate) coordinate),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
@@ -70,7 +69,7 @@ namespace CompilerTest.Bogus.Factory
                     f => new RouteSegment(
                         f.Random.String2(4),
                         coordinate == null ? new Point(CoordinateFactory.Make()) : new Point((Coordinate) coordinate),
-                        new Point(pointIdentifier ?? f.Random.ArrayElement(identifiers)),
+                        new Point(pointIdentifier ?? f.Random.ArrayElement(Identifiers)),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()

@@ -31,8 +31,8 @@ namespace Compiler.Parser
                 }
 
                 if (
-                    line.dataSegments[0] != CoordinationPoint.POINT_TYPE_FIR &&
-                    line.dataSegments[0] != CoordinationPoint.POINT_TYPE_INTERNAL
+                    line.dataSegments[0] != CoordinationPoint.PointTypeFir &&
+                    line.dataSegments[0] != CoordinationPoint.PointTypeInternal
                 )
                 {
                     this.errorLog.AddEvent(
@@ -64,8 +64,8 @@ namespace Compiler.Parser
                 }
 
                 if (
-                    line.dataSegments[8] != CoordinationPoint.DATA_NOT_SPECIFIED &&
-                    line.dataSegments[9] != CoordinationPoint.DATA_NOT_SPECIFIED
+                    line.dataSegments[8] != CoordinationPoint.DataNotSpecified &&
+                    line.dataSegments[9] != CoordinationPoint.DataNotSpecified
                 )
                 {
                     this.errorLog.AddEvent(
@@ -75,7 +75,7 @@ namespace Compiler.Parser
                 }
 
                 if (
-                    line.dataSegments[8] != CoordinationPoint.DATA_NOT_SPECIFIED &&
+                    line.dataSegments[8] != CoordinationPoint.DataNotSpecified &&
                     (!int.TryParse(line.dataSegments[8], out int climbLevel) ||
                     climbLevel < 0)
                 )
@@ -87,7 +87,7 @@ namespace Compiler.Parser
                 }
 
                 if (
-                    line.dataSegments[9] != CoordinationPoint.DATA_NOT_SPECIFIED &&
+                    line.dataSegments[9] != CoordinationPoint.DataNotSpecified &&
                     (!int.TryParse(line.dataSegments[9], out int descendLevel) ||
                     descendLevel < 0)
                 )
@@ -100,7 +100,7 @@ namespace Compiler.Parser
 
                 this.sectorElements.Add(
                     new CoordinationPoint(
-                        line.dataSegments[0] == CoordinationPoint.POINT_TYPE_FIR,
+                        line.dataSegments[0] == CoordinationPoint.PointTypeFir,
                         line.dataSegments[1],
                         line.dataSegments[2],
                         line.dataSegments[3],

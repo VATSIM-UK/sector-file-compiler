@@ -63,7 +63,7 @@ namespace CompilerTest.Validate
                 "NOTONEORTWO",
                 "EGGD",
                 5.5,
-                SectorLineDisplayRuleFactory.MakeList(1),
+                SectorLineDisplayRuleFactory.MakeList(),
                 DefinitionFactory.Make(),
                 DocblockFactory.Make(),
                 CommentFactory.Make()

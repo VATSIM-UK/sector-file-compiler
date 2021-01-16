@@ -8,9 +8,9 @@ namespace CompilerTest.Input
 {
     public class InputFileListTest
     {
-        private AbstractSectorDataFile file1;
-        private AbstractSectorDataFile file2;
-        private InputFileList fileList;
+        private readonly AbstractSectorDataFile file1;
+        private readonly AbstractSectorDataFile file2;
+        private readonly InputFileList fileList;
 
         public InputFileListTest()
         {

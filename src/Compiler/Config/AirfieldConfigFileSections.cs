@@ -5,7 +5,7 @@ namespace Compiler.Config
 {
     public class AirfieldConfigFileSections
     {
-        public static readonly List<ConfigFileSection> configFileSections = new()
+        public static readonly List<ConfigFileSection> ConfigFileSections = new()
         {
             new ConfigFileSection("active_runways", InputDataType.RWY_ACTIVE_RUNWAY, "Active Runways"),
             new ConfigFileSection("airspace", InputDataType.SCT_ARTCC_LOW, "Airspace"),

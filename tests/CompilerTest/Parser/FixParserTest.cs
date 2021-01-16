@@ -40,7 +40,7 @@ namespace CompilerTest.Parser
             Fix result = this.sectorElementCollection.Fixes[0];
             Assert.Equal("ABCDE", result.Identifier);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.Coordinate);
-            this.AssertExpectedMetadata(result, 1);
+            this.AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

@@ -8,9 +8,9 @@ namespace CompilerTest.Model
 {
     public class HeaderLineTest
     {
-        private Definition definition;
-        private Comment comment;
-        private HeaderLine headerLine;
+        private readonly Definition definition;
+        private readonly Comment comment;
+        private readonly HeaderLine headerLine;
 
         public HeaderLineTest()
         {

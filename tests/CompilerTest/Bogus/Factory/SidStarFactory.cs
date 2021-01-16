@@ -6,7 +6,7 @@ namespace CompilerTest.Bogus.Factory
 {
     static class SidStarFactory
     {
-        private static readonly string[] identifiers = new[]
+        private static readonly string[] Identifiers = new[]
         {
             "BNN4A",
             "LOGAN1H",
@@ -23,7 +23,7 @@ namespace CompilerTest.Bogus.Factory
                         isSid ? "SID" : "STAR",
                         airport ?? AirportFactory.GetRandomDesignator(),
                         runway ?? RunwayFactory.GetRandomDesignator(),
-                        identifier ?? f.Random.ArrayElement(identifiers),
+                        identifier ?? f.Random.ArrayElement(Identifiers),
                         route ?? FixFactory.RandomIdentifiers(3),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),

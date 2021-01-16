@@ -7,7 +7,7 @@ namespace CompilerTest.Bogus.Factory
 {
     static class ControllerPositionFactory
     {
-        private static readonly string[] identifiers =
+        private static readonly string[] Identifiers =
         {
             "LS",
             "LC",
@@ -17,7 +17,7 @@ namespace CompilerTest.Bogus.Factory
             "BJR"
         };
         
-        private static readonly string[] callsigns =
+        private static readonly string[] Callsigns =
         {
             "LON_S_CTR",
             "EGDD_APP",
@@ -29,7 +29,7 @@ namespace CompilerTest.Bogus.Factory
             "EGBB_"
         };
 
-        private static readonly string[] squawksRangeStarts =
+        private static readonly string[] SquawksRangeStarts =
         {
             "3141",
             "4211",
@@ -38,7 +38,7 @@ namespace CompilerTest.Bogus.Factory
             "0101"
         };
         
-        private static readonly string[] squawksRangeEnds =
+        private static readonly string[] SquawksRangeEnds =
         {
             "5321",
             "6772",
@@ -49,12 +49,12 @@ namespace CompilerTest.Bogus.Factory
         
         public static string GetIdentifier()
         {
-            return new Randomizer().ArrayElement(identifiers);
+            return new Randomizer().ArrayElement(Identifiers);
         }
         
         public static List<string> GetIdentifierList()
         {
-            return new Randomizer().ArrayElements(identifiers).ToList();
+            return new Randomizer().ArrayElements(Identifiers).ToList();
         }
 
         public static ControllerPosition Make(
@@ -65,15 +65,15 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<ControllerPosition>().CustomInstantiator(
                 f => new ControllerPosition(
-                    f.Random.ArrayElement(callsigns),
+                    f.Random.ArrayElement(Callsigns),
                     "London Control",
                     "123.456",
-                    identifier ?? f.Random.ArrayElement(identifiers),
+                    identifier ?? f.Random.ArrayElement(Identifiers),
                     "L",
                     "L",
                     "L",
-                    f.Random.ArrayElement(squawksRangeStarts),
-                    f.Random.ArrayElement(squawksRangeEnds),
+                    f.Random.ArrayElement(SquawksRangeStarts),
+                    f.Random.ArrayElement(SquawksRangeEnds),
                     new List<Coordinate>() {CoordinateFactory.Make()},
                     order ?? PositionOrder.CONTROLLER_POSITION,
                     definition ?? DefinitionFactory.Make(),

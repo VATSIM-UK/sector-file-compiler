@@ -8,15 +8,15 @@ namespace CompilerTest.Model
     public class InfoTest
     {
         private readonly Info model;
-        private InfoName infoName;
-        private InfoCallsign infoCallsign;
-        private InfoAirport infoAirport;
-        private InfoLatitude infoLatitude;
-        private InfoLongitude infoLongitude;
-        private InfoMilesPerDegreeLatitude infoPerDegreeLatitude;
-        private InfoMilesPerDegreeLongitude infoPerDegreeLongitude;
-        private InfoMagneticVariation infoMagVar;
-        private InfoScale infoScale;
+        private readonly InfoName infoName;
+        private readonly InfoCallsign infoCallsign;
+        private readonly InfoAirport infoAirport;
+        private readonly InfoLatitude infoLatitude;
+        private readonly InfoLongitude infoLongitude;
+        private readonly InfoMilesPerDegreeLatitude infoPerDegreeLatitude;
+        private readonly InfoMilesPerDegreeLongitude infoPerDegreeLongitude;
+        private readonly InfoMagneticVariation infoMagVar;
+        private readonly InfoScale infoScale;
 
         public InfoTest()
         {

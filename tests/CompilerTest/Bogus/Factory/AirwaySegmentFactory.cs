@@ -5,7 +5,7 @@ namespace CompilerTest.Bogus.Factory
 {
     static class AirwaySegmentFactory
     {
-        private static readonly string[] identifiers = new[]
+        private static readonly string[] Identifiers = new[]
         {
             "N864",
             "L9",
@@ -19,7 +19,7 @@ namespace CompilerTest.Bogus.Factory
             return new Faker<AirwaySegment>()
                 .CustomInstantiator(
                     f => new AirwaySegment(
-                        identifier ?? $"{(type == AirwayType.HIGH ? "U" : "")}{f.Random.ArrayElement(identifiers)}",
+                        identifier ?? $"{(type == AirwayType.HIGH ? "U" : "")}{f.Random.ArrayElement(Identifiers)}",
                         type,
                         PointFactory.Make(),
                         PointFactory.Make(),

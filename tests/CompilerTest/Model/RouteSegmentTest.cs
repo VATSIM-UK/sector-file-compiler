@@ -16,8 +16,7 @@ namespace CompilerTest.Model
                 new Point("LAM"),
                 DefinitionFactory.Make(),
                 DocblockFactory.Make(),
-                CommentFactory.Make(),
-                null
+                CommentFactory.Make()
             );
         }
 

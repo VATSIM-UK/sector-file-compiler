@@ -5,7 +5,7 @@ namespace CompilerTest.Bogus.Factory
 {
     static class VorFactory
     {
-        private static readonly string[] identifiers = new[] {
+        private static readonly string[] Identifiers = new[] {
             "BNN",
             "KOK",
             "LAM",
@@ -21,7 +21,7 @@ namespace CompilerTest.Bogus.Factory
             return new Faker<Vor>()
                 .CustomInstantiator(
                     f => new Vor(
-                        identifier ?? f.Random.ArrayElement(identifiers),
+                        identifier ?? f.Random.ArrayElement(Identifiers),
                         "123.456",
                         CoordinateFactory.Make(),
                         DefinitionFactory.Make(),

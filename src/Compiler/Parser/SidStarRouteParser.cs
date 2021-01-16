@@ -83,7 +83,7 @@ namespace Compiler.Parser
             for (int i = sectorData.dataSegments.Count - 2; i >= 0;)
             {
                 // Work til we find the first valid point
-                if (!PointParser.Parse(sectorData.dataSegments[i], sectorData.dataSegments[i + 1]).Equals(PointParser.invalidPoint)) {
+                if (!PointParser.Parse(sectorData.dataSegments[i], sectorData.dataSegments[i + 1]).Equals(PointParser.InvalidPoint)) {
                     
                     // We've found the second valid point
                     if (!foundSecondPoint)

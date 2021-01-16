@@ -6,7 +6,7 @@ namespace CompilerTest.Model
 {
     public class GeoSegmentTest
     {
-        private GeoSegment segment;
+        private readonly GeoSegment segment;
 
         public GeoSegmentTest()
         {

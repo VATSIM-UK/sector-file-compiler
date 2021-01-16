@@ -2,12 +2,12 @@
 {
     public class FileHeaderDataReader : AbstractSectorDataReader
     {
-        private static readonly string commentDelimiter = ";";
-        private static readonly string dataDelimiter = " ";
+        private static readonly string CommentDelimiter = ";";
+        private static readonly string DataDelimiter = " ";
 
         protected override string GetCommentDelimiter()
         {
-            return FileHeaderDataReader.commentDelimiter;
+            return FileHeaderDataReader.CommentDelimiter;
         }
 
         protected override bool FilterExtraWhitespace()
@@ -17,7 +17,7 @@
 
         protected override string GetDataDelimiter()
         {
-            return FileHeaderDataReader.dataDelimiter;
+            return FileHeaderDataReader.DataDelimiter;
         }
     }
 }

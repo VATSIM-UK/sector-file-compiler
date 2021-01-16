@@ -7,7 +7,7 @@ namespace Compiler.Output
 {
     public class OutputGroupRepository
     {
-        private HashSet<OutputGroup> outputGroups;
+        private readonly HashSet<OutputGroup> outputGroups;
 
         public OutputGroupRepository()
         {

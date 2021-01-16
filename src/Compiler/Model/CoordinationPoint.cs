@@ -2,9 +2,9 @@
 {
     public class CoordinationPoint : AbstractCompilableElement
     {
-        public static readonly string POINT_TYPE_FIR = "FIR_COPX";
-        public static readonly string POINT_TYPE_INTERNAL = "COPX";
-        public static readonly string DATA_NOT_SPECIFIED = "*";
+        public static readonly string PointTypeFir = "FIR_COPX";
+        public static readonly string PointTypeInternal = "COPX";
+        public static readonly string DataNotSpecified = "*";
 
         public CoordinationPoint(
             bool isFirCopx,

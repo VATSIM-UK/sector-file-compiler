@@ -54,7 +54,7 @@ namespace Compiler.Parser
 
                 // Parse the coordinate
                 Coordinate parsedCoordinate = CoordinateParser.Parse(line.dataSegments[2], line.dataSegments[3]);
-                if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
+                if (parsedCoordinate.Equals(CoordinateParser.InvalidCoordinate))
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid coordinate format: " + data.CurrentLine, line)

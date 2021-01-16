@@ -79,7 +79,7 @@ namespace Compiler.Parser
             }
 
             Coordinate parsedCoordinate = CoordinateParser.Parse(coordinateLine.dataSegments[0], coordinateLine.dataSegments[1]);
-            if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
+            if (parsedCoordinate.Equals(CoordinateParser.InvalidCoordinate))
             {
                 this.eventLogger.AddEvent(
                     new SyntaxError("Invalid coordinate format for airport: " + coordinateLine.rawData, coordinateLine)

@@ -2,12 +2,12 @@
 {
     public class EseSectorDataReader : AbstractSectorDataReader
     {
-        private static readonly string commentDelimiter = ";";
-        private static readonly string dataDelimiter = ":";
+        private static readonly string CommentDelimiter = ";";
+        private static readonly string DataDelimiter = ":";
 
         protected override string GetCommentDelimiter()
         {
-            return EseSectorDataReader.commentDelimiter;
+            return EseSectorDataReader.CommentDelimiter;
         }
 
         protected override bool FilterExtraWhitespace()
@@ -17,7 +17,7 @@
 
         protected override string GetDataDelimiter()
         {
-            return EseSectorDataReader.dataDelimiter;
+            return EseSectorDataReader.DataDelimiter;
         }
     }
 }

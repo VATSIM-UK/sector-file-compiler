@@ -8,12 +8,9 @@ namespace CompilerTest.Validate
 {
     public class AllGeoMustHaveValidColoursTest: AbstractValidatorTestCase
     {
-        private readonly Colour definedColour;
-
         public AllGeoMustHaveValidColoursTest()
         {
-            this.definedColour = ColourFactory.Make("colour1");
-            this.sectorElements.Add(this.definedColour);
+            this.sectorElements.Add(ColourFactory.Make("colour1"));
         }
 
         [Fact]

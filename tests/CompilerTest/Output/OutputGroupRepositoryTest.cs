@@ -7,10 +7,10 @@ namespace CompilerTest.Output
 {
     public class OutputGroupRepositoryTest
     {
-        private OutputGroupRepository repository;
-        private OutputGroup group1;
-        private OutputGroup group2;
-        private OutputGroup group3;
+        private readonly OutputGroupRepository repository;
+        private readonly OutputGroup group1;
+        private readonly OutputGroup group2;
+        private readonly OutputGroup group3;
 
         public OutputGroupRepositoryTest()
         {

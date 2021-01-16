@@ -84,17 +84,17 @@ namespace CompilerTest.Parser
 
             CoordinationPoint result = this.sectorElementCollection.CoordinationPoints[0];
             Assert.False(result.IsFirCopx);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.DepartureAirportOrFixBefore);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.DepartureRunway);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.DepartureAirportOrFixBefore);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.DepartureRunway);
             Assert.Equal("HEMEL", result.CoordinationFix);
             Assert.Equal("EGBB", result.ArrivalAirportOrFixAfter);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.ArrivalRunway);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.ArrivalRunway);
             Assert.Equal("London AC Worthing", result.FromSector);
             Assert.Equal("London AC Dover", result.ToSector);
             Assert.Equal(climbLevel, result.ClimbLevel);
             Assert.Equal(descendLevel, result.DescendLevel);
             Assert.Equal("|HEMEL20", result.Name);
-            this.AssertExpectedMetadata(result, 1, "comment");
+            this.AssertExpectedMetadata(result);
         }
 
         [Fact]
@@ -106,17 +106,17 @@ namespace CompilerTest.Parser
             
             CoordinationPoint result = this.sectorElementCollection.CoordinationPoints[0];
             Assert.True(result.IsFirCopx);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.DepartureAirportOrFixBefore);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.DepartureRunway);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.DepartureAirportOrFixBefore);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.DepartureRunway);
             Assert.Equal("HEMEL", result.CoordinationFix);
             Assert.Equal("EGBB", result.ArrivalAirportOrFixAfter);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.ArrivalRunway);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.ArrivalRunway);
             Assert.Equal("London AC Worthing", result.FromSector);
             Assert.Equal("London AC Dover", result.ToSector);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.ClimbLevel);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.ClimbLevel);
             Assert.Equal("25000", result.DescendLevel);
             Assert.Equal("|HEMEL20", result.Name);
-            this.AssertExpectedMetadata(result, 1, "comment");
+            this.AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

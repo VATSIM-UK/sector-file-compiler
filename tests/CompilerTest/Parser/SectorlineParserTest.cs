@@ -105,7 +105,7 @@ namespace CompilerTest.Parser
             Assert.Equal("BBTWR", result1.Name);
             Assert.Equal("EGBB", result1.CentrePoint);
             Assert.Equal(2.5, result1.Radius);
-            this.AssertExpectedMetadata(result1, 1, "comment");
+            this.AssertExpectedMetadata(result1);
 
             Assert.Equal(2, result1.DisplayRules.Count);
             Assert.Equal("BBAPP", result1.DisplayRules[0].ControlledSector);

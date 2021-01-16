@@ -83,7 +83,7 @@ namespace CompilerTest.Parser
             Assert.Equal(2, result1.Points.Count);
             Assert.Equal("Red", result1.Points[0].Colour);
             Assert.Equal(new Point("BCN"), result1.Points[0].Point);
-            this.AssertExpectedMetadata(result1.Points[0], 2, "comment");
+            this.AssertExpectedMetadata(result1.Points[0], 2);
             
             Assert.Equal(new Point("BHD"), result1.Points[1].Point);
             this.AssertExpectedMetadata(result1.Points[1], 3, "");

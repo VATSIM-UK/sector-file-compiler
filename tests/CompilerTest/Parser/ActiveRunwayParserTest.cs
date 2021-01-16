@@ -38,7 +38,7 @@ namespace CompilerTest.Parser
             Assert.Equal("EGHI", result.Airfield);
             Assert.Equal("20", result.Identifier);
             Assert.Equal(0, result.Mode);
-            this.AssertExpectedMetadata(result, 1);
+            this.AssertExpectedMetadata(result);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace CompilerTest.Parser
             Assert.Equal("EGHI", result.Airfield);
             Assert.Equal("20", result.Identifier);
             Assert.Equal(1, result.Mode);
-            this.AssertExpectedMetadata(result, 1);
+            this.AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

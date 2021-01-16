@@ -43,7 +43,7 @@ namespace CompilerTest.Parser
             Colour result = this.sectorElementCollection.Colours[0];
             Assert.Equal("abc", result.Name);
             Assert.Equal(255, result.Value);
-            this.AssertExpectedMetadata(result, 1);
+            this.AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

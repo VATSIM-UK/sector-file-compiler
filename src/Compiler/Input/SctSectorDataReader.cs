@@ -2,12 +2,12 @@
 {
     public class SctSectorDataReader : AbstractSectorDataReader
     {
-        private static readonly string commentDelimiter = ";";
-        private static readonly string dataDelimiter = " ";
+        private static readonly string CommentDelimiter = ";";
+        private static readonly string DataDelimiter = " ";
 
         protected override string GetCommentDelimiter()
         {
-            return SctSectorDataReader.commentDelimiter;
+            return SctSectorDataReader.CommentDelimiter;
         }
 
         protected override bool FilterExtraWhitespace()
@@ -17,7 +17,7 @@
 
         protected override string GetDataDelimiter()
         {
-            return SctSectorDataReader.dataDelimiter;
+            return SctSectorDataReader.DataDelimiter;
         }
     }
 }

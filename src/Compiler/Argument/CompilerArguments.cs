@@ -6,7 +6,7 @@ namespace Compiler.Argument
 {
     public class CompilerArguments
     {
-        public const string COMPILER_VERISON = "1.0.0";
+        public const string CompilerVersion = "1.0.0";
 
         public List<string> ConfigFiles { get; } = new();
 

@@ -132,7 +132,7 @@ namespace Compiler.Parser
                     declarationLine.dataSegments[3]
                 );
 
-                if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
+                if (parsedCoordinate.Equals(CoordinateParser.InvalidCoordinate))
                 {
                     this.errorLog.AddEvent(
                         new SyntaxError("Invalid CIRCLE_SECTORLINE coordinate", declarationLine)
@@ -293,7 +293,7 @@ namespace Compiler.Parser
                 data.dataSegments[2]
             );
 
-            if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
+            if (parsedCoordinate.Equals(CoordinateParser.InvalidCoordinate))
             {
                 this.errorLog.AddEvent(new SyntaxError("Invalid SECTORLINE coordinate", data));
                 throw new ArgumentException();

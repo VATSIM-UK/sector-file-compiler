@@ -2,16 +2,16 @@
 {
     public class RemoveAllComments : ITransformer
     {
-        const char COMMENT_DELIMTER = ';';
+        const char CommentDelimter = ';';
 
         public string Transform(string data)
         {
-            if (!data.Contains(RemoveAllComments.COMMENT_DELIMTER))
+            if (!data.Contains(RemoveAllComments.CommentDelimter))
             {
                 return data;
             }
 
-            int commentPos = data.IndexOf(RemoveAllComments.COMMENT_DELIMTER);
+            int commentPos = data.IndexOf(RemoveAllComments.CommentDelimter);
             return data.Substring(0, commentPos).Trim();
         }
     }

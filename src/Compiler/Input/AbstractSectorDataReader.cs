@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Compiler.Model;
 
@@ -67,7 +68,7 @@ namespace Compiler.Input
         public string GetRawData(string line)
         {
             string preparedLine = this.PrepareLine(line);
-            int commentIndex = preparedLine.IndexOf(this.GetCommentDelimiter());
+            int commentIndex = preparedLine.IndexOf(this.GetCommentDelimiter(), StringComparison.Ordinal);
             return commentIndex == -1
                 ? preparedLine.Trim()
                 : preparedLine.Substring(0, commentIndex).Trim();

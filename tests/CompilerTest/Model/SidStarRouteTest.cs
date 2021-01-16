@@ -9,9 +9,9 @@ namespace CompilerTest.Model
     {
         private readonly SidStarRoute sidStar;
 
-        private List<RouteSegment> segments = new();
+        private readonly List<RouteSegment> segments = new();
 
-        private RouteSegment initialSegment;
+        private readonly RouteSegment initialSegment;
 
         public SidStarRouteTest()
         {

@@ -14,9 +14,9 @@
             this.Coordinate = coordinate;
         }
 
-        public Point(string Identifier)
+        public Point(string identifier)
         {
-            this.Identifier = Identifier;
+            this.Identifier = identifier;
         }
 
         public override bool Equals(object obj)

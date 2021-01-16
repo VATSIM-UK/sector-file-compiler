@@ -10,11 +10,11 @@ namespace CompilerTest.Input
 {
     public class InputFileListFactoryTest
     {
-        private OutputGroupRepository outputGroups;
-        private OutputGroup outputGroup;
-        private SectorDataFileFactory sectorDataFileFactory;
-        private ConfigInclusionRules inclusionRules;
-
+        private readonly OutputGroupRepository outputGroups;
+        private readonly OutputGroup outputGroup;
+        private readonly SectorDataFileFactory sectorDataFileFactory;
+        private readonly ConfigInclusionRules inclusionRules;
+        
         public InputFileListFactoryTest()
         {
             this.outputGroup = new OutputGroup("test");

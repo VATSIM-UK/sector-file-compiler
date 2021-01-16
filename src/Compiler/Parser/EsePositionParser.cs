@@ -27,7 +27,7 @@ namespace Compiler.Parser
             "INFO"
         };
 
-        const string noData = "-";
+        const string NoData = "-";
 
         public EsePositionParser(
             IFrequencyParser frequencyParser,
@@ -82,7 +82,7 @@ namespace Compiler.Parser
 
                 string squawkRangeStart = "";
                 string squawkRangeEnd = "";
-                if (line.dataSegments.Count > 9 && line.dataSegments[9] != EsePositionParser.noData && line.dataSegments[9] != "")
+                if (line.dataSegments.Count > 9 && line.dataSegments[9] != EsePositionParser.NoData && line.dataSegments[9] != "")
                 {
 
                     if (!SquawkValidator.SquawkValid(line.dataSegments[9])) {
@@ -150,7 +150,7 @@ namespace Compiler.Parser
                         line.dataSegments[coordNumber + 1]
                     );
 
-                    if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
+                    if (parsedCoordinate.Equals(CoordinateParser.InvalidCoordinate))
                     {
                         this.errorLog.AddEvent(
                             new SyntaxError("Invalid visibility center " + line.dataSegments[0], line)

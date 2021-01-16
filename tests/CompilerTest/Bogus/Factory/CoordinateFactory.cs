@@ -5,7 +5,7 @@ namespace CompilerTest.Bogus
 {
     static class CoordinateFactory
     {
-        private static readonly string[] latitudes =
+        private static readonly string[] Latitudes =
         {
             "N052.28.42.000",
             "N053.24.22.000",
@@ -18,7 +18,7 @@ namespace CompilerTest.Bogus
             "N051.22.15.000"
         };
 
-        private static readonly string[] longitudes =
+        private static readonly string[] Longitudes =
         {
             "E002.34.14.000",
             "W003.26.43.000",
@@ -37,8 +37,8 @@ namespace CompilerTest.Bogus
         {
             Faker faker = new();
             return new Coordinate(
-                faker.PickRandom(latitudes),
-                faker.PickRandom(longitudes)
+                faker.PickRandom(Latitudes),
+                faker.PickRandom(Longitudes)
             );
         }
     }

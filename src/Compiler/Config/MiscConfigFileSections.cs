@@ -5,7 +5,7 @@ namespace Compiler.Config
 {
     public class MiscConfigFileSections
     {
-        public static readonly List<ConfigFileSection> configFileSections = new()
+        public static readonly List<ConfigFileSection> ConfigFileSections = new()
         {
             new ConfigFileSection("agreements", InputDataType.ESE_AGREEMENTS, "Agreements"),
             new ConfigFileSection("freetext", InputDataType.ESE_FREETEXT, "Freetext"),

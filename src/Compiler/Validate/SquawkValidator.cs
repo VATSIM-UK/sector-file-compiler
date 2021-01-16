@@ -7,11 +7,11 @@ namespace Compiler.Validate
      */
     public class SquawkValidator
     {
-        private static readonly Regex squawkRegex = new(@"^[0-7]{4}$");
+        private static readonly Regex SquawkRegex = new(@"^[0-7]{4}$");
 
         public static bool SquawkValid(string squawk)
         {
-            return squawkRegex.IsMatch(squawk);
+            return SquawkRegex.IsMatch(squawk);
         }
     }
 }

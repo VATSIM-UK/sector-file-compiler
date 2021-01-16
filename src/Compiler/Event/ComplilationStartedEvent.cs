@@ -7,10 +7,7 @@ namespace Compiler.Event
     {
         public string GetMessage()
         {
-            return String.Format(
-                "Sector File Compiler version {0}: Starting compilation",
-                CompilerArguments.COMPILER_VERISON
-            );
+            return $"Sector File Compiler version {CompilerArguments.CompilerVersion}: Starting compilation";
         }
 
         public bool IsFatal()

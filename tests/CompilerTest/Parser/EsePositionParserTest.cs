@@ -30,7 +30,7 @@ namespace CompilerTest.Parser
             Assert.Equal("0301", position.SquawkRangeStart);
             Assert.Equal("0377", position.SquawkRangeEnd);
             Assert.Equal(coordinateList, position.VisCentres);
-            this.AssertExpectedMetadata(position, 1);
+            this.AssertExpectedMetadata(position);
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace CompilerTest.Parser
             Assert.Equal("0301", position.SquawkRangeStart);
             Assert.Equal("0377", position.SquawkRangeEnd);
             Assert.Equal(coordinateList, position.VisCentres);
-            this.AssertExpectedMetadata(position, 1);
+            this.AssertExpectedMetadata(position);
         }
 
         [Fact]

@@ -8,7 +8,7 @@ namespace CompilerTest.Model
     public class SectorBorderTest
     {
         private readonly SectorBorder model;
-        private List<string> borders = new()
+        private readonly List<string> borders = new()
         {
             "ONE",
             "TWO",

@@ -4,7 +4,7 @@ using Compiler.Argument;
 
 namespace CompilerCli.Input
 {
-    public class ArgumentParser
+    public static class ArgumentParser
     {
         private static readonly Dictionary<string, IInputParser> availableArguments = new()
         {

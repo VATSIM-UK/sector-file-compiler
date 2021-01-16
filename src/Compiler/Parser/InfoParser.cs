@@ -54,7 +54,7 @@ namespace Compiler.Parser
 
         private InfoLatitude GetLatitude(SectorData latitude, SectorData longitude)
         {
-            if (CoordinateParser.Parse(latitude.rawData, longitude.rawData).Equals(CoordinateParser.invalidCoordinate))
+            if (CoordinateParser.Parse(latitude.rawData, longitude.rawData).Equals(CoordinateParser.InvalidCoordinate))
             {
                 this.eventLogger.AddEvent(
                     new SyntaxError("Invalid INFO coordinate", latitude.rawData)
@@ -67,7 +67,7 @@ namespace Compiler.Parser
 
         private InfoLongitude GetLongitude(SectorData latitude, SectorData longitude)
         {
-            if (CoordinateParser.Parse(latitude.rawData, longitude.rawData).Equals(CoordinateParser.invalidCoordinate))
+            if (CoordinateParser.Parse(latitude.rawData, longitude.rawData).Equals(CoordinateParser.InvalidCoordinate))
             {
                 this.eventLogger.AddEvent(
                     new SyntaxError("Invalid INFO coordinate", latitude.rawData)

@@ -37,7 +37,7 @@ namespace Compiler.Parser
 
                 // The points are at the end, so work backwards
                 Point endPoint = PointParser.Parse(line.dataSegments[count - 2], line.dataSegments[count - 1]);
-                if (endPoint.Equals(PointParser.invalidPoint))
+                if (endPoint.Equals(PointParser.InvalidPoint))
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid ARTCC end point format: " + data.CurrentLine, line)
@@ -46,7 +46,7 @@ namespace Compiler.Parser
                 }
 
                 Point startPoint = PointParser.Parse(line.dataSegments[count - 4], line.dataSegments[count - 3]);
-                if (startPoint.Equals(PointParser.invalidPoint))
+                if (startPoint.Equals(PointParser.InvalidPoint))
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid ARTCC start point format: " + data.CurrentLine, line)

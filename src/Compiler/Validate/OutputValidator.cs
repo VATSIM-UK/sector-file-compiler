@@ -7,7 +7,7 @@ namespace Compiler.Validate
 {
     public class OutputValidator
     {
-        private static readonly List<IValidationRule> validationRules = new()
+        private static readonly List<IValidationRule> ValidationRules = new()
         {
             new AllAirportsMustHaveUniqueCode(),
             new AllAirwaysMustHaveValidPoints(),
@@ -53,7 +53,7 @@ namespace Compiler.Validate
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            foreach (IValidationRule rule in OutputValidator.validationRules)
+            foreach (IValidationRule rule in OutputValidator.ValidationRules)
             {
                 rule.Validate(sectorElements, args, events);
             }

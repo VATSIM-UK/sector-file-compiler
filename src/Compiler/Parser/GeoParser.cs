@@ -151,7 +151,7 @@ namespace Compiler.Parser
         {
             for (int i = 0; i < line.dataSegments.Count - 1; i++)
             {
-                if (!PointParser.Parse(line.dataSegments[i], line.dataSegments[i + 1]).Equals(PointParser.invalidPoint))
+                if (!PointParser.Parse(line.dataSegments[i], line.dataSegments[i + 1]).Equals(PointParser.InvalidPoint))
                 {
                     return i;
                 }
@@ -163,7 +163,7 @@ namespace Compiler.Parser
         private bool IsNameSegment(SectorData line)
         {
             return line.dataSegments.Count >= 2 &&
-                   PointParser.Parse(line.dataSegments[0], line.dataSegments[1]).Equals(PointParser.invalidPoint);
+                   PointParser.Parse(line.dataSegments[0], line.dataSegments[1]).Equals(PointParser.InvalidPoint);
         }
 
         /*
@@ -182,7 +182,7 @@ namespace Compiler.Parser
 
             // Parse the first coordinate
             Point parsedStartPoint = PointParser.Parse(line.dataSegments[0], line.dataSegments[1]);
-            if (parsedStartPoint.Equals(PointParser.invalidPoint))
+            if (parsedStartPoint.Equals(PointParser.InvalidPoint))
             {
                 this.eventLogger.AddEvent(
                     new SyntaxError("Invalid GEO segment point format", line)
@@ -192,7 +192,7 @@ namespace Compiler.Parser
 
             // Parse the end coordinate
             Point parsedEndPoint = PointParser.Parse(line.dataSegments[2], line.dataSegments[3]);
-            if (parsedEndPoint.Equals(PointParser.invalidPoint))
+            if (parsedEndPoint.Equals(PointParser.InvalidPoint))
             {
                 this.eventLogger.AddEvent(
                     new SyntaxError("Invalid GEO segment point format", line)

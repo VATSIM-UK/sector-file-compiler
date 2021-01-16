@@ -32,7 +32,7 @@ namespace Compiler.Output
             // Process each section in the output
             foreach (OutputSectionKeys section in outputFile.GetOutputSections())
             {
-                OutputSection sectionConfig = OutputSectionsConfig.sections.First(s => s.key == section);
+                OutputSection sectionConfig = OutputSectionsConfig.Sections.First(s => s.key == section);
 
                 // If the section has a header declaration, do it
                 if (sectionConfig.header != null)

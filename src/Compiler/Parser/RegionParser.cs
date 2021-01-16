@@ -11,7 +11,7 @@ namespace Compiler.Parser
     {
         private readonly SectorElementCollection elements;
         private readonly IEventLogger eventLogger;
-        const string regionNameDeclaration = "REGIONNAME";
+        const string RegionNameDeclaration = "REGIONNAME";
 
         public RegionParser(
             SectorElementCollection elements,
@@ -32,7 +32,7 @@ namespace Compiler.Parser
             foreach (SectorData line in data)
             {
                 // Check for the first REGIONNAME
-                if (expectingRegionNameDefinition && (line.dataSegments.Count < 2 || !line.rawData.StartsWith(RegionParser.regionNameDeclaration)))
+                if (expectingRegionNameDefinition && (line.dataSegments.Count < 2 || !line.rawData.StartsWith(RegionParser.RegionNameDeclaration)))
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid first line of region " + data.CurrentLine, line)
@@ -63,7 +63,7 @@ namespace Compiler.Parser
 
                     // Setup a new segment
                     Point parsedNewPoint = PointParser.Parse(line.dataSegments[1], line.dataSegments[2]);
-                    if (parsedNewPoint.Equals(PointParser.invalidPoint))
+                    if (parsedNewPoint.Equals(PointParser.InvalidPoint))
                     {
                         this.eventLogger.AddEvent(
                             new SyntaxError("Invalid region point format: " + data.CurrentLine, line)
@@ -88,7 +88,7 @@ namespace Compiler.Parser
                 /*
                  * We've found a new REGIONNAME declaration, so must be the start of a new region.
                  */
-                if (line.rawData.StartsWith(RegionParser.regionNameDeclaration))
+                if (line.rawData.StartsWith(RegionParser.RegionNameDeclaration))
                 {
                     // If it's not the first in the data stream, then it's a new declaration, save the previous
                     if (foundFirst)
@@ -127,7 +127,7 @@ namespace Compiler.Parser
                 }
 
                 Point parsedPoint = PointParser.Parse(line.dataSegments[0], line.dataSegments[1]);
-                if (parsedPoint == PointParser.invalidPoint)
+                if (parsedPoint == PointParser.InvalidPoint)
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid region point format: " + data.CurrentLine, line)

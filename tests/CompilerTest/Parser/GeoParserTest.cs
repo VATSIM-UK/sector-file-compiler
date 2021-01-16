@@ -55,7 +55,7 @@ namespace CompilerTest.Parser
                 result.Colour
             );
             Assert.Empty(result.AdditionalSegments);
-            this.AssertExpectedMetadata(result, 1, "comment");
+            this.AssertExpectedMetadata(result);
         }
         
         [Fact]

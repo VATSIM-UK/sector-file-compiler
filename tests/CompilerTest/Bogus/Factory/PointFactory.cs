@@ -5,7 +5,7 @@ namespace CompilerTest.Bogus
 {
     static class PointFactory
     {
-        private static readonly string[] identifiers =
+        private static readonly string[] Identifiers =
         {
             "BIG",
             "BNN",
@@ -19,7 +19,7 @@ namespace CompilerTest.Bogus
             Faker faker = new();
             return faker.Random.Bool()
                 ? new Point(CoordinateFactory.Make())
-                : new Point(faker.Random.ArrayElement(identifiers));
+                : new Point(faker.Random.ArrayElement(Identifiers));
         }
     }
 }

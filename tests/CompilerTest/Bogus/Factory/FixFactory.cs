@@ -7,7 +7,7 @@ namespace CompilerTest.Bogus.Factory
 {
     static class FixFactory
     {
-        private static readonly string[] identifiers = new[] {
+        private static readonly string[] Identifiers = new[] {
             "DIKAS",
             "PENIL",
             "UPGAS",
@@ -23,7 +23,7 @@ namespace CompilerTest.Bogus.Factory
             return new Faker<Fix>()
                 .CustomInstantiator(
                     f => new Fix(
-                        identifier ?? f.Random.ArrayElement(identifiers),
+                        identifier ?? f.Random.ArrayElement(Identifiers),
                         coordinate ?? CoordinateFactory.Make(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
@@ -34,7 +34,7 @@ namespace CompilerTest.Bogus.Factory
 
         public static List<string> RandomIdentifiers(int count = 1)
         {
-            return new Randomizer().ArrayElements(identifiers, count).ToList();
+            return new Randomizer().ArrayElements(Identifiers, count).ToList();
         }
 
         public static string RandomIdentifier()

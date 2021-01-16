@@ -6,8 +6,8 @@ namespace CompilerTest.Model
 {
     public class RegionPointTest
     {
-        private RegionPoint regionPoint;
-        private RegionPoint regionPointWithColour;
+        private readonly RegionPoint regionPoint;
+        private readonly RegionPoint regionPointWithColour;
 
         public RegionPointTest()
         {

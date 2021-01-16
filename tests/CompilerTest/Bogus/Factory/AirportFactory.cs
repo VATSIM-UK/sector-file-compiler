@@ -7,7 +7,7 @@ namespace CompilerTest.Bogus.Factory
 {
     static class AirportFactory
     {
-        private static readonly string[] designators = new[] {
+        private static readonly string[] Designators = new[] {
             "EGLL",
             "LXGB",
             "EGSS",
@@ -36,12 +36,12 @@ namespace CompilerTest.Bogus.Factory
         
         public static string GetRandomDesignator()
         {
-            return new Randomizer().ArrayElement(designators);
+            return new Randomizer().ArrayElement(Designators);
         }
 
         public static List<string> GetListOfDesignators()
         {
-            return new Randomizer().ArrayElements(designators).ToList();
+            return new Randomizer().ArrayElements(Designators).ToList();
         }
     }
 }

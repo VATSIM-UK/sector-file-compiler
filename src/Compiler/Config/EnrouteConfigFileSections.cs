@@ -5,7 +5,7 @@ namespace Compiler.Config
 {
     public class EnrouteConfigFileSections
     {
-        public static readonly List<ConfigFileSection> configFileSections = new()
+        public static readonly List<ConfigFileSection> ConfigFileSections = new()
         {
             new ConfigFileSection("sector_lines", InputDataType.ESE_SECTORLINES, "Sector Lines"),
             new ConfigFileSection("ownership", InputDataType.ESE_OWNERSHIP, "Ownership"),

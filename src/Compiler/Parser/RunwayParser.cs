@@ -69,7 +69,7 @@ namespace Compiler.Parser
 
                 // Check the two coordinates
                 Coordinate firstThreshold = CoordinateParser.Parse(line.dataSegments[4], line.dataSegments[5]);
-                if (firstThreshold.Equals(CoordinateParser.invalidCoordinate))
+                if (firstThreshold.Equals(CoordinateParser.InvalidCoordinate))
                 {
                     this.errorLog.AddEvent(
                         new SyntaxError("Invalid runway first threshold ", line)
@@ -78,7 +78,7 @@ namespace Compiler.Parser
                 }
 
                 Coordinate reverseThreshold = CoordinateParser.Parse(line.dataSegments[6], line.dataSegments[7]);
-                if (reverseThreshold.Equals(CoordinateParser.invalidCoordinate))
+                if (reverseThreshold.Equals(CoordinateParser.InvalidCoordinate))
                 {
                     this.errorLog.AddEvent(
                         new SyntaxError("Invalid runway reverse threshold ", line)

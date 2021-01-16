@@ -52,7 +52,7 @@ namespace CompilerTest.Parser
         public void ItReturnsInvalidOnBadData(string latitude, string longitude)
         {
             Coordinate coordinate = CoordinateParser.Parse(latitude, longitude);
-            Assert.Equal(CoordinateParser.invalidCoordinate, coordinate);
+            Assert.Equal(CoordinateParser.InvalidCoordinate, coordinate);
         }
     }
 }

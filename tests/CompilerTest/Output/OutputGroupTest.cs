@@ -5,8 +5,8 @@ namespace CompilerTest.Output
 {
     public class OutputGroupTest
     {
-        private OutputGroup groupWithoutDescriptor;
-        private OutputGroup groupWithDescriptor;
+        private readonly OutputGroup groupWithoutDescriptor;
+        private readonly OutputGroup groupWithDescriptor;
 
         public OutputGroupTest()
         {

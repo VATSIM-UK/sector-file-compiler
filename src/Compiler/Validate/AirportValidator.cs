@@ -4,15 +4,15 @@ namespace Compiler.Validate
 {
     public class AirportValidator
     {
-        private static readonly string ICAO_REGEX = "^[A-Z]{4}$";
+        private static readonly string IcaoRegex = "^[A-Z]{4}$";
 
-        private static readonly string ANY_AIRPORT_STRING = "000A";
+        private static readonly string AnyAirportString = "000A";
 
-        private static readonly string GUEST_AIRPORT_STRING = "*";
+        private static readonly string GuestAirportString = "*";
 
         public static bool IcaoValid(string code)
         {
-            return Regex.IsMatch(code, AirportValidator.ICAO_REGEX);
+            return Regex.IsMatch(code, AirportValidator.IcaoRegex);
         }
 
         /*
@@ -20,8 +20,8 @@ namespace Compiler.Validate
          */
         public static bool ValidEuroscopeAirport(string code)
         {
-            return code == AirportValidator.ANY_AIRPORT_STRING ||
-                Regex.IsMatch(code, AirportValidator.ICAO_REGEX);
+            return code == AirportValidator.AnyAirportString ||
+                Regex.IsMatch(code, AirportValidator.IcaoRegex);
         }
 
         /*
@@ -29,8 +29,8 @@ namespace Compiler.Validate
          */
         public static bool ValidSectorGuestAirport(string code)
         {
-            return code == AirportValidator.GUEST_AIRPORT_STRING ||
-                Regex.IsMatch(code, AirportValidator.ICAO_REGEX);
+            return code == AirportValidator.GuestAirportString ||
+                Regex.IsMatch(code, AirportValidator.IcaoRegex);
         }
     }
 }

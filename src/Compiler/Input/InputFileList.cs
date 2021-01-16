@@ -5,7 +5,7 @@ namespace Compiler.Input
 {
     public class InputFileList: IEnumerable<AbstractSectorDataFile>
     {
-        private List<AbstractSectorDataFile> files = new();
+        private readonly List<AbstractSectorDataFile> files = new();
 
         public void Add(AbstractSectorDataFile file)
         {

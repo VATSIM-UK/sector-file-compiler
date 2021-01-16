@@ -4,7 +4,7 @@ namespace Compiler.Validate
 {
     public class CallsignValidator
     {
-        private static readonly List<string> allowedTypes = new()
+        private static readonly List<string> AllowedTypes = new()
         {
             "OBS",
             "DEL",
@@ -17,7 +17,7 @@ namespace Compiler.Validate
             "INFO"
         };
 
-        private static readonly char[] allowedDelimiters = new[]
+        private static readonly char[] AllowedDelimiters = new[]
         {
             '_',
             '-'
@@ -33,7 +33,7 @@ namespace Compiler.Validate
 
         private static string[] SplitCallsign(string callsign)
         {
-            return callsign.Split(allowedDelimiters);
+            return callsign.Split(AllowedDelimiters);
         }
 
         private static bool CallsignLengthValid(string callsign)
@@ -55,7 +55,7 @@ namespace Compiler.Validate
         private static bool CallsignTypeValid(string callsign)
         {
             string[] splitCallsign = SplitCallsign(callsign);
-            return allowedTypes.Contains(splitCallsign[splitCallsign.Length - 1]);
+            return AllowedTypes.Contains(splitCallsign[splitCallsign.Length - 1]);
         }
     }
 }

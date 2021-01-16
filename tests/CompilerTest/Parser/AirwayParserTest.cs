@@ -46,7 +46,7 @@ namespace CompilerTest.Parser
             Assert.Equal(AirwayType.LOW, result.Type);
             Assert.Equal(new Point(new Coordinate("N050.57.00.001", "W001.21.24.490")), result.StartPoint);
             Assert.Equal(new Point(new Coordinate("N050.57.00.002", "W001.21.24.490")), result.EndPoint);
-            this.AssertExpectedMetadata(result, 1);
+            this.AssertExpectedMetadata(result);
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace CompilerTest.Parser
             Assert.Equal(AirwayType.LOW, result.Type);
             Assert.Equal(new Point("DIKAS"), result.StartPoint);
             Assert.Equal(new Point("BHD"), result.EndPoint);
-            this.AssertExpectedMetadata(result, 1);
+            this.AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

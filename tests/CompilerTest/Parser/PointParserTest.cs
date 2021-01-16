@@ -20,14 +20,14 @@ namespace CompilerTest.Parser
         public void TestItReturnsInvalidOnIdentifierTooLong()
         {
             Point point = PointParser.Parse("ABCDEFG", "ABCDEFG");
-            Assert.Equal(PointParser.invalidPoint, point);
+            Assert.Equal(PointParser.InvalidPoint, point);
         }
 
         [Fact]
         public void TestItReturnsInvalidOnIdentifiersNoMatch()
         {
             Point point = PointParser.Parse("ABCDE", "BCDEF");
-            Assert.Equal(PointParser.invalidPoint, point);
+            Assert.Equal(PointParser.InvalidPoint, point);
         }
 
         [Fact]

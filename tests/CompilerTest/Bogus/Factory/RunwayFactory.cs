@@ -5,7 +5,7 @@ namespace CompilerTest.Bogus.Factory
 {
     static class RunwayFactory
     {
-        private static readonly string[] designators = new[] {
+        private static readonly string[] Designators = new[] {
             "09L",
             "23R",
             "01",
@@ -18,7 +18,7 @@ namespace CompilerTest.Bogus.Factory
         
         public static string GetRandomDesignator()
         {
-            return new Randomizer().ArrayElement(designators);
+            return new Randomizer().ArrayElement(Designators);
         }
 
         public static Runway Make(string airfieldIcao = null, string designator1 = null, string designator2 = null)
@@ -27,10 +27,10 @@ namespace CompilerTest.Bogus.Factory
                 .CustomInstantiator(
                     f => new Runway(
                         airfieldIcao ?? AirportFactory.GetRandomDesignator(),
-                        designator1 ?? f.Random.ArrayElement(designators),
+                        designator1 ?? f.Random.ArrayElement(Designators),
                         000,
                         CoordinateFactory.Make(),
-                        designator2 ?? f.Random.ArrayElement(designators),
+                        designator2 ?? f.Random.ArrayElement(Designators),
                         000,
                         CoordinateFactory.Make(),
                         DefinitionFactory.Make(),

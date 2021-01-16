@@ -5,7 +5,7 @@ namespace CompilerTest.Bogus.Factory
 {
     static class ColourFactory
     {
-        private static readonly string[] identifiers = new[] {
+        private static readonly string[] Identifiers = new[] {
             "red",
             "white",
             "smrGDGround",
@@ -17,7 +17,7 @@ namespace CompilerTest.Bogus.Factory
             return new Faker<Colour>()
                 .CustomInstantiator(
                     f => new Colour(
-                        identifier ?? f.Random.ArrayElement(identifiers),
+                        identifier ?? f.Random.ArrayElement(Identifiers),
                         value ?? f.Random.Int(0, 16777215),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
@@ -28,7 +28,7 @@ namespace CompilerTest.Bogus.Factory
 
         public static string RandomIdentifier()
         {
-            return new Randomizer().ArrayElement(identifiers);
+            return new Randomizer().ArrayElement(Identifiers);
         }
     }
 }

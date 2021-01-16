@@ -35,7 +35,7 @@ namespace Compiler.Parser
 
                 // Parse the airway segment point
                 Point startPoint = PointParser.Parse(line.dataSegments[0], line.dataSegments[1]);
-                if (startPoint.Equals(PointParser.invalidPoint))
+                if (startPoint.Equals(PointParser.InvalidPoint))
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid Airway start point format: " + data.CurrentLine, line)
@@ -46,7 +46,7 @@ namespace Compiler.Parser
 
                 // Parse the segment endpoint
                 Point endPoint = PointParser.Parse(line.dataSegments[2], line.dataSegments[3]);
-                if (endPoint.Equals(PointParser.invalidPoint))
+                if (endPoint.Equals(PointParser.InvalidPoint))
                 {
                     this.eventLogger.AddEvent(
                         new SyntaxError("Invalid Airway end point format: " + data.CurrentLine, line)

@@ -8,7 +8,7 @@ namespace CompilerTest.Model
     public class SectorOwnerHierarchyTest
     {
         private readonly SectorOwnerHierarchy model;
-        private List<string> owners = new()
+        private readonly List<string> owners = new()
         {
             "ONE",
             "TWO",
