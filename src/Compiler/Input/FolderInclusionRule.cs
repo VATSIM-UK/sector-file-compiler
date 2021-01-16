@@ -42,7 +42,8 @@ namespace Compiler.Input
             }
 
             string[] allFiles = Directory.GetFiles(
-                this.Folder, "*.*",
+                this.Folder,
+                "*.*",
                 this.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
             );
             Array.Sort(allFiles, StringComparer.InvariantCulture);
@@ -62,8 +63,8 @@ namespace Compiler.Input
         private bool ShouldInclude(string path)
         {
             return this.ExcludeList
-                ? !this.IncludeExcludeFiles.Contains(Path.GetFileName(path).ToLower())
-                : this.IncludeExcludeFiles.Contains(Path.GetFileName(path).ToLower());
+                ? !this.IncludeExcludeFiles.Contains(Path.GetFileName(path))
+                : this.IncludeExcludeFiles.Contains(Path.GetFileName(path));
         }
 
         public OutputGroup GetOutputGroup()

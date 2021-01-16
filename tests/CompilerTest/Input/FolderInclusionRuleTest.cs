@@ -86,26 +86,7 @@ namespace CompilerTest.Input
             Assert.Equal(this.GetFilePath("File1.txt"), files[0].FullPath);
             Assert.Equal(this.GetFilePath("File3.txt"), files[1].FullPath);
         }
-        
-        [Fact]
-        public void TestItHasAnExcludeListCaseInsensitive()
-        {
-            FolderInclusionRule rule = new (
-                "_TestData/FolderInclusionRule",
-                false,
-                InputDataType.ESE_AGREEMENTS,
-                new OutputGroup("test"),
-                true,
-                new List<string>() {"FiLe2.txt"}
-            );
 
-            IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);
-            List<AbstractSectorDataFile> files = includeFiles.ToList();
-            Assert.Equal(2, files.Count);
-            Assert.Equal(this.GetFilePath("File1.txt"), files[0].FullPath);
-            Assert.Equal(this.GetFilePath("File3.txt"), files[1].FullPath);
-        }
-        
         [Fact]
         public void TestItHasAnIncludeList()
         {
@@ -123,25 +104,7 @@ namespace CompilerTest.Input
             Assert.Single(files);
             Assert.Equal(this.GetFilePath("File2.txt"), files[0].FullPath);
         }
-        
-        [Fact]
-        public void TestItHasAnIncludeListCaseInsensitive()
-        {
-            FolderInclusionRule rule = new (
-                "_TestData/FolderInclusionRule",
-                false,
-                InputDataType.ESE_AGREEMENTS,
-                new OutputGroup("test"),
-                false,
-                new List<string>() {"FiLe2.txt"}
-            );
 
-            IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);
-            List<AbstractSectorDataFile> files = includeFiles.ToList();
-            Assert.Single(files);
-            Assert.Equal(this.GetFilePath("File2.txt"), files[0].FullPath);
-        }
-        
         [Fact]
         public void TestItReturnsOutputGroup()
         {
