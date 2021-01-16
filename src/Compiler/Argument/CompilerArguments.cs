@@ -43,7 +43,6 @@ namespace Compiler.Argument
 
             return true;
         }
-
         public override int GetHashCode()
         {
             return base.GetHashCode();
