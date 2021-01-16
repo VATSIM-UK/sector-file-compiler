@@ -40,14 +40,11 @@ namespace CompilerTest.Input
                 outputGroups
             );
             
-            Assert.Equal(3, fileList.Count());
-            using var enumerator = fileList.GetEnumerator();
-            enumerator.MoveNext();
-            Assert.Equal("_TestData/InputFileListFactory\\File1.txt", enumerator.Current.FullPath);
-            enumerator.MoveNext();
-            Assert.Equal("_TestData/InputFileListFactory\\File2.txt", enumerator.Current.FullPath);
-            enumerator.MoveNext();
-            Assert.Equal("_TestData/InputFileListFactory\\File3.txt", enumerator.Current.FullPath);
+            List<AbstractSectorDataFile> files = fileList.ToList();
+            Assert.Equal(3, files.Count);
+            Assert.Equal("_TestData/InputFileListFactory\\File1.txt", files[0].FullPath);
+            Assert.Equal("_TestData/InputFileListFactory\\File2.txt", files[1].FullPath);
+            Assert.Equal("_TestData/InputFileListFactory\\File3.txt", files[2].FullPath);
         }
 
         [Fact]
@@ -59,14 +56,11 @@ namespace CompilerTest.Input
                 outputGroups
             );
             
-            Assert.Equal(3, this.outputGroup.FileList.Count);
-            using var iterator = this.outputGroup.FileList.GetEnumerator();
-            iterator.MoveNext();
-            Assert.Equal("_TestData/InputFileListFactory\\File1.txt", iterator.Current);
-            iterator.MoveNext();
-            Assert.Equal("_TestData/InputFileListFactory\\File2.txt", iterator.Current);
-            iterator.MoveNext();
-            Assert.Equal("_TestData/InputFileListFactory\\File3.txt", iterator.Current);
+            List<string> files = this.outputGroup.FileList.ToList();
+            Assert.Equal(3, files.Count);
+            Assert.Equal("_TestData/InputFileListFactory\\File1.txt", files[0]);
+            Assert.Equal("_TestData/InputFileListFactory\\File2.txt", files[1]);
+            Assert.Equal("_TestData/InputFileListFactory\\File3.txt", files[2]);
         }
         
         [Fact]

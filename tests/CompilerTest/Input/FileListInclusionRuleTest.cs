@@ -33,13 +33,10 @@ namespace CompilerTest.Input
             );
 
             IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);
-            Assert.Equal(2, includeFiles.Count());
-
-            using IEnumerator<AbstractSectorDataFile> enumerator = includeFiles.GetEnumerator();
-            enumerator.MoveNext();
-            Assert.Equal(this.GetFilePath("File1.txt"), enumerator.Current.FullPath);
-            enumerator.MoveNext();
-            Assert.Equal(this.GetFilePath("File2.txt"), enumerator.Current.FullPath);
+            List<AbstractSectorDataFile> files = includeFiles.ToList();
+            Assert.Equal(2, files.Count);
+            Assert.Equal(this.GetFilePath("File1.txt"), files[0].FullPath);
+            Assert.Equal(this.GetFilePath("File2.txt"), files[1].FullPath);
         }
         
         [Fact]
@@ -58,13 +55,11 @@ namespace CompilerTest.Input
             );
 
             IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);
-            Assert.Equal(2, includeFiles.Count());
 
-            using IEnumerator<AbstractSectorDataFile> enumerator = includeFiles.GetEnumerator();
-            enumerator.MoveNext();
-            Assert.Equal(this.GetFilePath("file1.txt"), enumerator.Current.FullPath);
-            enumerator.MoveNext();
-            Assert.Equal(this.GetFilePath("file2.txt"), enumerator.Current.FullPath);
+            List<AbstractSectorDataFile> files = includeFiles.ToList();
+            Assert.Equal(2, files.Count);
+            Assert.Equal(this.GetFilePath("file1.txt"), files[0].FullPath);
+            Assert.Equal(this.GetFilePath("file2.txt"), files[1].FullPath);
         }
         
         [Fact]
@@ -83,11 +78,9 @@ namespace CompilerTest.Input
             );
 
             IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);
-            Assert.Single(includeFiles);
-
-            using IEnumerator<AbstractSectorDataFile> enumerator = includeFiles.GetEnumerator();
-            enumerator.MoveNext();
-            Assert.Equal(this.GetFilePath("File1.txt"), enumerator.Current.FullPath);
+            List<AbstractSectorDataFile> files = includeFiles.ToList();
+            Assert.Single(files);
+            Assert.Equal(this.GetFilePath("File1.txt"), files[0].FullPath);
         }
         
         [Fact]
