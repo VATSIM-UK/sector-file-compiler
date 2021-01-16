@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using Bogus;
 using Compiler.Model;
-using CompilerTest.Bogus.Factory;
 
-namespace CompilerTest.Bogus
+namespace CompilerTest.Bogus.Factory
 {
     static class RegionPointFactory
     {

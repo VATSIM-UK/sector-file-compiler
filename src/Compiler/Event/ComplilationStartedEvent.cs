@@ -1,5 +1,4 @@
-﻿using System;
-using Compiler.Argument;
+﻿using Compiler.Argument;
 
 namespace Compiler.Event
 {

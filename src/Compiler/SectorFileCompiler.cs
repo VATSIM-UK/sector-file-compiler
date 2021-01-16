@@ -1,4 +1,5 @@
 ﻿using Compiler.Argument;
+using Compiler.Collector;
 using Compiler.Input;
 using Compiler.Output;
 using Compiler.Model;

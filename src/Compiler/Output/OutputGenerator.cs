@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using Compiler.Model;
 using System.Linq;
+using Compiler.Collector;
 
 namespace Compiler.Output
 {

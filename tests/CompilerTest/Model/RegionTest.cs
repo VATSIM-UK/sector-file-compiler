@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Compiler.Model;
-using CompilerTest.Bogus;
 using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model

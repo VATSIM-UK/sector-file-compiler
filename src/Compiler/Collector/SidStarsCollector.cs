@@ -1,8 +1,8 @@
-﻿using Compiler.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Compiler.Model;
 
-namespace Compiler.Output
+namespace Compiler.Collector
 {
     public class SidStarsCollector : ICompilableElementCollector
     {

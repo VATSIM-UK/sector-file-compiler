@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Compiler.Collector;
 using Compiler.Model;
 using Compiler.Output;
 using Xunit;

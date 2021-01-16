@@ -1,7 +1,7 @@
-﻿using Compiler.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Compiler.Model;
 
-namespace Compiler.Output
+namespace Compiler.Collector
 {
     public class HeaderCollector : ICompilableElementCollector
     {

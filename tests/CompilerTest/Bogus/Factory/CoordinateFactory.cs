@@ -1,7 +1,7 @@
 ﻿using Bogus;
 using Compiler.Model;
 
-namespace CompilerTest.Bogus
+namespace CompilerTest.Bogus.Factory
 {
     static class CoordinateFactory
     {
