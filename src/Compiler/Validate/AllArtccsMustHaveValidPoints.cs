@@ -23,7 +23,7 @@ namespace Compiler.Validate
         ) {
             foreach (ArtccSegment artcc in artccs)
             {
-                if (artcc.StartPoint.Type() == Point.TYPE_IDENTIFIER)
+                if (artcc.StartPoint.Type() == Point.TypeIdentifier)
                 {
                     if (this.InvalidPoint(artcc.StartPoint.Identifier, sectorElements))
                     {
@@ -38,7 +38,7 @@ namespace Compiler.Validate
                     }
                 }
 
-                if (artcc.EndPoint.Type() == Point.TYPE_IDENTIFIER)
+                if (artcc.EndPoint.Type() == Point.TypeIdentifier)
                 {
                     if (this.InvalidPoint(artcc.EndPoint.Identifier, sectorElements))
                     {

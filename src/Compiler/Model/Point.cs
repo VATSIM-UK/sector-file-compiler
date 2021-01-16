@@ -3,8 +3,8 @@
     public class Point
     {
         // The different types of point
-        public const int TYPE_COORDINATE = 0;
-        public const int TYPE_IDENTIFIER = 1;
+        public const int TypeCoordinate = 0;
+        public const int TypeIdentifier = 1;
 
         public Coordinate Coordinate { get; }
         public string Identifier { get; }
@@ -33,7 +33,7 @@
 
         public int Type()
         {
-            return this.Identifier == null ? Point.TYPE_COORDINATE : Point.TYPE_IDENTIFIER;
+            return this.Identifier == null ? Point.TypeCoordinate : Point.TypeIdentifier;
         }
 
         public override string ToString()

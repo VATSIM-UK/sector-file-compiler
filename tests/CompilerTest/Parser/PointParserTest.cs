@@ -12,7 +12,7 @@ namespace CompilerTest.Parser
             Coordinate expectedCoordinate = new Coordinate("N050.57.00.000", "W001.21.24.490");
             Point point = PointParser.Parse("N050.57.00.000", "W001.21.24.490");
 
-            Assert.Equal(Point.TYPE_COORDINATE, point.Type());
+            Assert.Equal(Point.TypeCoordinate, point.Type());
             Assert.Equal(expectedCoordinate, point.Coordinate);
         }
 
@@ -35,7 +35,7 @@ namespace CompilerTest.Parser
         {
             Point point = PointParser.Parse("ABCDE", "ABCDE");
 
-            Assert.Equal(Point.TYPE_IDENTIFIER, point.Type());
+            Assert.Equal(Point.TypeIdentifier, point.Type());
             Assert.Equal("ABCDE ABCDE", point.ToString());
         }
     }

@@ -22,7 +22,7 @@ namespace Compiler.Validate
         ) {
             foreach (AirwaySegment airway in airways)
             {
-                if (airway.StartPoint.Type() == Point.TYPE_IDENTIFIER)
+                if (airway.StartPoint.Type() == Point.TypeIdentifier)
                 {
                     if (this.InvalidPoint(airway.StartPoint.Identifier, sectorElements))
                     {
@@ -37,7 +37,7 @@ namespace Compiler.Validate
                     }
                 }
 
-                if (airway.EndPoint.Type() == Point.TYPE_IDENTIFIER)
+                if (airway.EndPoint.Type() == Point.TypeIdentifier)
                 {
                     if (this.InvalidPoint(airway.EndPoint.Identifier, sectorElements))
                     {
