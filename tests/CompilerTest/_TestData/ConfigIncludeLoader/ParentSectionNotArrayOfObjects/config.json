@@ -1,7 +1,9 @@
 {
-  "enroute": {
-    "ownership": [
-      "test"
-    ]
+  "includes": {
+    "enroute": {
+      "ownership": [
+        "test"
+      ]
+    }
   }
 }

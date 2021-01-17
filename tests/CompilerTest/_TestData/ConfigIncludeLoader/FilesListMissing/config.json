@@ -1,7 +1,9 @@
 {
-  "misc": {
-    "regions": {
-      "type": "files"
+  "includes": {
+    "misc": {
+      "regions": {
+        "type": "files"
+      }
     }
   }
 }

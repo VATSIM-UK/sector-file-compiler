@@ -1,5 +1,7 @@
 {
-  "enroute": {
-    "ownership": ""
+  "includes": {
+    "enroute": {
+      "ownership": ""
+    }
   }
 }

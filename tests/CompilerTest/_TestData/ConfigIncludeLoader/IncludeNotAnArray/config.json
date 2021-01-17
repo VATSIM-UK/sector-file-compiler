@@ -1,11 +1,13 @@
 {
-  "enroute": {
-    "ownership": [
-      {
-        "type": "folder",
-        "folder": "test", 
-        "include" : "Foo"
-      }
-    ]
+  "includes": {
+    "enroute": {
+      "ownership": [
+        {
+          "type": "folder",
+          "folder": "test",
+          "include": "Foo"
+        }
+      ]
+    }
   }
 }

@@ -58,6 +58,18 @@ namespace CompilerTest.Config
         }
 
         [Fact]
+        public void TestItHandlesNoIncludes()
+        {
+            fileLoader.LoadConfig(
+                this.arguments,
+                this.includes,
+                JObject.Parse(File.ReadAllText("_TestData/ConfigIncludeLoader/NoIncludes/config.json")),
+                "_TestData/ConfigIncludeLoader/NoIncludes/config.json"
+            );
+            Assert.Empty(this.includes);
+        }
+
+        [Fact]
         public void TestItLoadsAConfigFile()
         {
             fileLoader.LoadConfig(

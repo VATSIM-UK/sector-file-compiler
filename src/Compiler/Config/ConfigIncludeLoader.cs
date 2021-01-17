@@ -17,15 +17,15 @@ namespace Compiler.Config
             JObject jsonConfig,
             string fileName
         ) {
-// Load airport data
-            JToken airportData = jsonConfig.SelectToken("airports");
+            // Load airport data
+            JToken airportData = jsonConfig.SelectToken("includes.airports");
             if (airportData != null)
             {
                 this.IterateAirportConfig(airportData, inclusionRules, fileName);
             }
 
             // Load enroute data
-            JToken enrouteData = jsonConfig.SelectToken("enroute");
+            JToken enrouteData = jsonConfig.SelectToken("includes.enroute");
             if (enrouteData != null)
             {
                 this.IterateConfigFileSections(
@@ -39,7 +39,7 @@ namespace Compiler.Config
             }
 
             // Load misc data
-            JToken miscData = jsonConfig.SelectToken("misc");
+            JToken miscData = jsonConfig.SelectToken("includes.misc");
             if (miscData != null)
             {
                 this.IterateConfigFileSections(
