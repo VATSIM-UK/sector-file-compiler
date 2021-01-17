@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Compiler.Argument;
 using Compiler.Exception;
 using Compiler.Input;
 using Compiler.Output;
@@ -9,10 +8,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Compiler.Config
 {
-    public class ConfigIncludeLoader: IConfigLoader
+    public class ConfigIncludeLoader
     {
         public void LoadConfig(
-            CompilerArguments arguments,
             ConfigInclusionRules inclusionRules,
             JObject jsonConfig,
             string fileName

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Compiler.Argument;
 using Compiler.Config;
 using Xunit;
 using Compiler.Exception;
@@ -14,13 +13,11 @@ namespace CompilerTest.Config
     public class ConfigIncludeLoaderTest
     {
         private readonly ConfigIncludeLoader fileLoader;
-        private readonly CompilerArguments arguments;
-        private ConfigInclusionRules includes;
+        private readonly ConfigInclusionRules includes;
 
         public ConfigIncludeLoaderTest()
         {
             this.fileLoader = new ConfigIncludeLoader();
-            this.arguments = new CompilerArguments();
             this.includes = new ConfigInclusionRules();
         }
         
@@ -47,7 +44,7 @@ namespace CompilerTest.Config
         public void TestItThrowsExceptionOnBadData(string fileToLoad, string expectedMessage)
         {
             ConfigFileInvalidException exception = Assert.Throws<ConfigFileInvalidException>(
-                () => fileLoader.LoadConfig(this.arguments, this.includes, JObject.Parse(File.ReadAllText(fileToLoad)), fileToLoad)
+                () => fileLoader.LoadConfig(this.includes, JObject.Parse(File.ReadAllText(fileToLoad)), fileToLoad)
             );
             Assert.Equal(expectedMessage, exception.Message);
         }
@@ -61,7 +58,6 @@ namespace CompilerTest.Config
         public void TestItHandlesNoIncludes()
         {
             fileLoader.LoadConfig(
-                this.arguments,
                 this.includes,
                 JObject.Parse(File.ReadAllText("_TestData/ConfigIncludeLoader/NoIncludes/config.json")),
                 "_TestData/ConfigIncludeLoader/NoIncludes/config.json"
@@ -73,7 +69,6 @@ namespace CompilerTest.Config
         public void TestItLoadsAConfigFile()
         {
             fileLoader.LoadConfig(
-                this.arguments,
                 this.includes,
                 JObject.Parse(File.ReadAllText("_TestData/ConfigIncludeLoader/ValidConfig/config.json")),
                 "_TestData/ConfigIncludeLoader/ValidConfig/config.json"

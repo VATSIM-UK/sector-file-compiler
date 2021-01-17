@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace Compiler.Config
+﻿namespace Compiler.Config
 {
     public class ConfigFileLoaderFactory
     {
         public static ConfigFileLoader Make()
         {
             return new ConfigFileLoader(
-                new List<IConfigLoader>{new ConfigIncludeLoader()}
+                new ConfigIncludeLoader(),
+                ConfigOptionsLoaderFactory.Make()
             );
         }
     }

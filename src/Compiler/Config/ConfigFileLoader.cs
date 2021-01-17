@@ -8,11 +8,16 @@ namespace Compiler.Config
 {
     public class ConfigFileLoader
     {
-        private readonly IEnumerable<IConfigLoader> loaders;
+        private readonly ConfigIncludeLoader includeLoader;
+        private readonly ConfigOptionsLoader optionsLoader;
 
-        public ConfigFileLoader(IEnumerable<IConfigLoader> loaders) 
+        public ConfigFileLoader(
+            ConfigIncludeLoader includeLoader,
+            ConfigOptionsLoader optionsLoader
+        )
         {
-            this.loaders = loaders;
+            this.includeLoader = includeLoader;
+            this.optionsLoader = optionsLoader;
         }
         
         /**
@@ -39,10 +44,8 @@ namespace Compiler.Config
                     throw new ConfigFileInvalidException("Config file not found");
                 }
 
-                foreach (var loader in loaders)
-                {
-                    loader.LoadConfig(arguments, config, jsonConfig, file);
-                }
+                includeLoader.LoadConfig(config, jsonConfig, file);
+                optionsLoader.LoadOptions(arguments, jsonConfig, file);
             }
             
             return config;

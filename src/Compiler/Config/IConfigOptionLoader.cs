@@ -3,14 +3,13 @@ using Newtonsoft.Json.Linq;
 
 namespace Compiler.Config
 {
-    public interface IConfigLoader
+    public interface IConfigOptionLoader
     {
         /**
-         * From config, load
+         * From config, load into compiler arguments.
          */
         public void LoadConfig(
             CompilerArguments arguments,
-            ConfigInclusionRules inclusionRules,
             JObject config,
             string fileName
         );
