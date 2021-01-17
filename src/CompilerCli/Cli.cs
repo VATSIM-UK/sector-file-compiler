@@ -6,11 +6,13 @@ using CompilerCli.Output;
 using CompilerCli.Input;
 using Compiler.Event;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CompilerCli
 {
     class Cli
     {
+        [ExcludeFromCodeCoverage]
         static int Main(string[] args)
         {
             // Setup the console output stream.

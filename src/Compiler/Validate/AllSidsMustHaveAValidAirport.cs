@@ -20,7 +20,7 @@ namespace Compiler.Validate
                     string errorMessage =
                         $"Airport {sidStar.Airport} is not valid for {sidStar.Type}/{sidStar.Identifier}";
 
-                    events.AddEvent(new ValidationRuleFailure(errorMessage));
+                    events.AddEvent(new ValidationRuleFailure(errorMessage, sidStar));
                 }
             }
         }

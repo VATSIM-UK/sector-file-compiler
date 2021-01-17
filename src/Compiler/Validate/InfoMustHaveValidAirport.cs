@@ -18,7 +18,7 @@ namespace Compiler.Validate
             }
 
             events.AddEvent(
-                new ValidationRuleFailure("Invalid airport in INFO definition")
+                new ValidationRuleFailure("Invalid airport in INFO definition", sectorElements.Info.Airport)
             );
         }       
     }

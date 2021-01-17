@@ -18,7 +18,7 @@ namespace Compiler.Validate
                 {
                     string message =
                         $"Invalid TO sector {point.ToSector} for coordination point: {point.GetCompileData(sectorElements)}";
-                    events.AddEvent(new ValidationRuleFailure(message));
+                    events.AddEvent(new ValidationRuleFailure(message, point));
                 }
             }
         }

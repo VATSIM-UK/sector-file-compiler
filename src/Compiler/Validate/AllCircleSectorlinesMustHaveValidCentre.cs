@@ -26,7 +26,7 @@ namespace Compiler.Validate
                 ) {
                     string message =
                         $"Invalid fix {circle.CentrePoint} for CIRCLE_SECTORLINE: {circle.GetCompileData(sectorElements)}";
-                    events.AddEvent(new ValidationRuleFailure(message));
+                    events.AddEvent(new ValidationRuleFailure(message, circle));
                 }
             }
         }

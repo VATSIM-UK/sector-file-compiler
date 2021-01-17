@@ -17,7 +17,7 @@ namespace Compiler.Validate
                         string message =
                             $"Invalid waypoint {waypoint} on {sidStar.Type} {sidStar.Airport}/{sidStar.Identifier}";
                         events.AddEvent(
-                            new ValidationRuleFailure(message)
+                            new ValidationRuleFailure(message, sidStar)
                         );
                     }
                 }

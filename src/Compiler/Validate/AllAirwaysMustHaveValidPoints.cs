@@ -28,7 +28,7 @@ namespace Compiler.Validate
                         string message =
                             $"Invalid end point {airway.StartPoint.Identifier} on Airway segment for {airway.Identifier}";
                         events.AddEvent(
-                            new ValidationRuleFailure(message)
+                            new ValidationRuleFailure(message, airway)
                         );
                     }
                 }
@@ -40,7 +40,7 @@ namespace Compiler.Validate
                         string message =
                             $"Invalid start point {airway.EndPoint.Identifier} on Airway segment for {airway.Identifier}";
                         events.AddEvent(
-                            new ValidationRuleFailure(message)
+                            new ValidationRuleFailure(message, airway)
                         );
                     }
                 }

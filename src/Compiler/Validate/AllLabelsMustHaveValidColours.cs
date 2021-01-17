@@ -14,7 +14,7 @@ namespace Compiler.Validate
                 if (!ColourValidator.ColourValid(sectorElements, label.Colour))
                 {
                     string errorMessage = $"Invalid colour value {label.Colour} in label {label.Text}";
-                    events.AddEvent(new ValidationRuleFailure(errorMessage));
+                    events.AddEvent(new ValidationRuleFailure(errorMessage, label));
                 }
             }
         }

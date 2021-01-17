@@ -23,5 +23,11 @@ namespace CompilerTest.Model
                 new Definition(firstFilename, firstLineNumber).Equals(new Definition(secondFileName, secondLineNumber))
             );
         }
+
+        [Fact]
+        public void TestItHasAStringRepresentation()
+        {
+            Assert.Equal("Test1.txt on line 23", new Definition("Test1.txt", 23).ToString());
+        }
     }
 }

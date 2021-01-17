@@ -15,7 +15,7 @@ namespace Compiler.Validate
             {
                 if (existingAirports.Contains(airport.Icao))
                 {
-                    events.AddEvent(new ValidationRuleFailure("Duplicate airport " + airport.Icao));
+                    events.AddEvent(new ValidationRuleFailure("Duplicate airport " + airport.Icao, airport));
                     continue;
                 }
 

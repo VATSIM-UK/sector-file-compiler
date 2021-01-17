@@ -20,7 +20,7 @@ namespace Compiler.Validate
                         this.RunwayValid(sectorElements, active.Runway, active.Airfield);
                         string message =
                             $"Invalid ACTIVE runway {active.Airfield}/{active.Runway} on sector {sector.Name}";
-                        events.AddEvent(new ValidationRuleFailure(message));
+                        events.AddEvent(new ValidationRuleFailure(message, active));
                         break;
                     }
                 }

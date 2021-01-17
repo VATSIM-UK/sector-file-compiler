@@ -11,16 +11,15 @@ namespace Compiler.Validate
     {
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-
-            List<string> duplicates = sectorElements.Sectors.GroupBy(sector => sector.Name) 
+            List<Sector> duplicates = sectorElements.Sectors.GroupBy(sector => sector.Name) 
                 .Where(group => group.Count() > 1)
-                .Select(group => group.Key)
+                .Select(group => group.First())
                 .ToList();
 
-            foreach (string duplicate in duplicates)
+            foreach (Sector duplicate in duplicates)
             {
                 string message = $"Duplicate SECTOR for {duplicate}";
-                events.AddEvent(new ValidationRuleFailure(message));
+                events.AddEvent(new ValidationRuleFailure(message, duplicate));
             }
         }
     }

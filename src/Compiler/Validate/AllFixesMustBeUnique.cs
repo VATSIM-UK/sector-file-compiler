@@ -15,7 +15,7 @@ namespace Compiler.Validate
             {
                 if (checkedFixes.Contains(GetFixKey(fix)))
                 {
-                    events.AddEvent(new ValidationRuleFailure("Duplicate fix found: " + fix.Identifier));
+                    events.AddEvent(new ValidationRuleFailure("Duplicate fix found: " + fix.Identifier, fix));
                     continue;
                 }
 

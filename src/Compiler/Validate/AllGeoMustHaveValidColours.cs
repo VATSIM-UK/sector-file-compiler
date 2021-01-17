@@ -25,7 +25,7 @@ namespace Compiler.Validate
             {
                 string errorMessage =
                     $"Invalid colour value {geo.Colour} in GEO declaration {geo.GetCompileData(sectorElements)}";
-                events.AddEvent(new ValidationRuleFailure(errorMessage));
+                events.AddEvent(new ValidationRuleFailure(errorMessage, geo));
             }
         }
 
@@ -35,7 +35,7 @@ namespace Compiler.Validate
             {
                 string errorMessage =
                     $"Invalid colour value {segment.Colour} in GEO segment {segment.GetCompileData(sectorElements)}";
-                events.AddEvent(new ValidationRuleFailure(errorMessage));
+                events.AddEvent(new ValidationRuleFailure(errorMessage, segment));
             }
         }
 

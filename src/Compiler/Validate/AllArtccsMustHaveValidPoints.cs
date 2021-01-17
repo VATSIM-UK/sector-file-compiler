@@ -29,7 +29,7 @@ namespace Compiler.Validate
                         string message =
                             $"Invalid end point {artcc.StartPoint.Identifier} on ARTCC segment for {artcc.Identifier}";
                         events.AddEvent(
-                            new ValidationRuleFailure(message)
+                            new ValidationRuleFailure(message, artcc)
                         );
                     }
                 }
@@ -41,7 +41,7 @@ namespace Compiler.Validate
                         string message =
                             $"Invalid start point {artcc.EndPoint.Identifier} on ARTCC segment for {artcc.Identifier}";
                         events.AddEvent(
-                            new ValidationRuleFailure(message)
+                            new ValidationRuleFailure(message, artcc)
                         );
                     }
                 }

@@ -20,7 +20,7 @@ namespace Compiler.Validate
                         string message =
                             $"Invalid segment {segment.GetCompileData(sectorElements)} on SID Route {star.Identifier}";
                         events.AddEvent(
-                            new ValidationRuleFailure(message)
+                            new ValidationRuleFailure(message, segment)
                         );
                     }
                 }

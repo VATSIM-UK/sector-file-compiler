@@ -29,7 +29,7 @@ namespace Compiler.Validate
             {
                 string message = $"Invalid waypoint on GEO declaration: {geo.GetCompileData(sectorElements)}";
                 events.AddEvent(
-                    new ValidationRuleFailure(message)
+                    new ValidationRuleFailure(message, geo)
                 );
             }
         }
@@ -40,7 +40,7 @@ namespace Compiler.Validate
             {
                 string message = $"Invalid waypoint on GEO segment: {segment.GetCompileData(sectorElements)}";
                 events.AddEvent(
-                    new ValidationRuleFailure(message)
+                    new ValidationRuleFailure(message, segment)
                 );
             }
         }

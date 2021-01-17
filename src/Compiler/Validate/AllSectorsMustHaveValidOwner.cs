@@ -19,7 +19,7 @@ namespace Compiler.Validate
                     if (!positions.Contains(position))
                     {
                         string message = $"Invalid OWNER position {position} on sector {sector.Name}";
-                        events.AddEvent(new ValidationRuleFailure(message));
+                        events.AddEvent(new ValidationRuleFailure(message, sector));
                         break;
                     }
                 }

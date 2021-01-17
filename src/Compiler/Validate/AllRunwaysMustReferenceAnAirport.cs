@@ -23,7 +23,7 @@ namespace Compiler.Validate
                         $"Runway {runway.FirstIdentifier}/{runway.ReverseIdentifier} ({runway.AirfieldIcao}) does not match up to a defined airport";
 
                     events.AddEvent(
-                        new ValidationRuleFailure(message)
+                        new ValidationRuleFailure(message, runway)
                     );
                 }
             }

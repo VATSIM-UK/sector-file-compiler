@@ -15,7 +15,7 @@ namespace Compiler.Validate
             {
                 if (coloursProcessed.Contains(colour.Name.ToLower()))
                 {
-                    events.AddEvent(new ValidationRuleFailure("Duplicate colourm definition " + colour.Name));
+                    events.AddEvent(new ValidationRuleFailure("Duplicate colourm definition " + colour.Name, colour));
                     continue;
                 }
 

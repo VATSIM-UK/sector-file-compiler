@@ -24,7 +24,7 @@ namespace Compiler.Validate
             {
                 string message = $"Invalid waypoint {point.Point} on region {region.Name}";
                 events.AddEvent(
-                    new ValidationRuleFailure(message)
+                    new ValidationRuleFailure(message, region)
                 );
             }
         }

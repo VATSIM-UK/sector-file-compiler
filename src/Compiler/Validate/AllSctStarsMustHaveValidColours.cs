@@ -17,7 +17,7 @@ namespace Compiler.Validate
                     {
                         string errorMessage =
                             $"Invalid colour value {segment.Colour} in route segment for STAR {star.Identifier}";
-                        events.AddEvent(new ValidationRuleFailure(errorMessage));
+                        events.AddEvent(new ValidationRuleFailure(errorMessage, segment));
                     }
                 }
             }

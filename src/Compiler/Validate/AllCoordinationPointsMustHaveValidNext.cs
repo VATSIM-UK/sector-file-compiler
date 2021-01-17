@@ -25,7 +25,7 @@ namespace Compiler.Validate
                 ) {
                     string message =
                         $"Invalid next fix or arrival airport {point.ArrivalAirportOrFixAfter} on coordination point: {point.GetCompileData(sectorElements)}";
-                    events.AddEvent(new ValidationRuleFailure(message));
+                    events.AddEvent(new ValidationRuleFailure(message, point));
                 }
             }
         }

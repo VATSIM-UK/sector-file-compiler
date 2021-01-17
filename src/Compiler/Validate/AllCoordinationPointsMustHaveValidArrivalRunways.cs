@@ -14,7 +14,7 @@ namespace Compiler.Validate
                 if (!RunwayValid(sectorElements, point.ArrivalRunway, point.ArrivalAirportOrFixAfter)) {
                     string message =
                         $"Invalid arrival runway {point.ArrivalRunway}/{point.ArrivalAirportOrFixAfter} for coordination point: {point.GetCompileData(sectorElements)}";
-                    events.AddEvent(new ValidationRuleFailure(message));
+                    events.AddEvent(new ValidationRuleFailure(message, point));
                 }
             }
         }

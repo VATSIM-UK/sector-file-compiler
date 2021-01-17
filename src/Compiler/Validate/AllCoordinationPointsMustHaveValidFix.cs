@@ -26,7 +26,7 @@ namespace Compiler.Validate
                 ) {
                     string message =
                         $"Invalid fix {point.CoordinationFix} for coordination point: {point.GetCompileData(sectorElements)}";
-                    events.AddEvent(new ValidationRuleFailure(message));
+                    events.AddEvent(new ValidationRuleFailure(message, point));
                 }
             }
         }

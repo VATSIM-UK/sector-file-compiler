@@ -25,7 +25,7 @@ namespace Compiler.Validate
                 ) {
                     string message =
                         $"Invalid previous fix or departure airport {point.DepartureAirportOrFixBefore} on coordination point: {point.GetCompileData(sectorElements)}";
-                    events.AddEvent(new ValidationRuleFailure(message));
+                    events.AddEvent(new ValidationRuleFailure(message, point));
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using Compiler.Event;
+﻿using System.Collections.Generic;
+using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
 using Compiler.Argument;
@@ -10,17 +11,23 @@ namespace Compiler.Validate
     {
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            var duplicates = sectorElements.SectorLines.Select(sectorline => sectorline.Name)
-                .Concat(sectorElements.CircleSectorLines.Select(sectorline => sectorline.Name))
-                .GroupBy(name => name)
+            var duplicates = sectorElements.SectorLines.ToDictionary(
+                    element => (AbstractCompilableElement) element, element => element.Name
+                )
+                .Concat(
+                    sectorElements.CircleSectorLines.ToDictionary(
+                        element => (AbstractCompilableElement) element, element => element.Name
+                    )
+                )
+                .GroupBy(pair => pair.Value)
                 .Where(group => group.Count() > 1)
-                .Select(group => group.Key)
+                .Select(group => group.First())
                 .ToList();
 
-            foreach (string duplicate in duplicates)
+            foreach (var duplicate in duplicates)
             {
-                string message = $"Duplicate SECTORLINE or CIRCLE_SECTORLINE for {duplicate}";
-                events.AddEvent(new ValidationRuleFailure(message));
+                string message = $"Duplicate SECTORLINE or CIRCLE_SECTORLINE for {duplicate.Value}";
+                events.AddEvent(new ValidationRuleFailure(message, duplicate.Key));
             }
         }
     }

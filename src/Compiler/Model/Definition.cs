@@ -30,5 +30,10 @@ namespace Compiler.Model
         {
             return HashCode.Combine(Filename, LineNumber);
         }
+
+        public override string ToString()
+        {
+            return $"{Filename} on line {LineNumber}";
+        }
     }
 }
