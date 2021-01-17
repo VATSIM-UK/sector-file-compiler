@@ -4,9 +4,9 @@ using Compiler.Argument;
 
 namespace CompilerCli.Input
 {
-    public class ConfigFileParser : IInputParser
+    public class ConfigFileArgument : AbstractArgument
     {
-        public CompilerArguments Parse(List<string>values, CompilerArguments compilerSettings)
+        public override void Parse(List<string>values, CompilerArguments compilerSettings)
         {
             if (values.Count != 1)
             {
@@ -14,7 +14,11 @@ namespace CompilerCli.Input
             }
 
             compilerSettings.ConfigFiles.Add(values[0]);
-            return compilerSettings;
+        }
+
+        public override string GetSpecifier()
+        {
+            return "--config-file";
         }
     }
 }

@@ -7,11 +7,18 @@ namespace CompilerCliTest.Input
 {
     public class ArgumentParserTest
     {
+        private ArgumentParser parser;
+
+        public ArgumentParserTest()
+        {
+            parser = ArgumentParserFactory.Make();
+        }
+        
         [Fact]
         public void TestItReturnsEmptyArgumentsIfNoneProvided()
         {
             CompilerArguments expected = new CompilerArguments();
-            Assert.True(expected.Equals(ArgumentParser.CreateFromCommandLine(new string[] { })));
+            Assert.True(expected.Equals(parser.CreateFromCommandLine(new string[] { })));
         }
 
         [Fact]
@@ -20,7 +27,7 @@ namespace CompilerCliTest.Input
             CompilerArguments expected = new CompilerArguments();
             expected.ConfigFiles.Add("test.json");
 
-            CompilerArguments actual = ArgumentParser.CreateFromCommandLine(new[] { "--config-file", "test.json" });
+            CompilerArguments actual = parser.CreateFromCommandLine(new[] { "--config-file", "test.json" });
             Assert.True(expected.Equals(actual));
         }
 
@@ -31,7 +38,7 @@ namespace CompilerCliTest.Input
             expected.ConfigFiles.Add("test1.json");
             expected.ConfigFiles.Add("test2.json");
 
-            CompilerArguments actual = ArgumentParser.CreateFromCommandLine(new[] { "--test-arg", "val1", "val2", "--config-file", "test1.json", "--config-file", "test2.json" });
+            CompilerArguments actual = parser.CreateFromCommandLine(new[] { "--test-arg", "val1", "val2", "--config-file", "test1.json", "--config-file", "test2.json" });
             Assert.True(expected.Equals(actual));
         }
 
@@ -41,7 +48,7 @@ namespace CompilerCliTest.Input
             CompilerArguments expected = new CompilerArguments();
             expected.ConfigFiles.Add("test.json");
 
-            CompilerArguments actual = ArgumentParser.CreateFromCommandLine(new[] { "--test-arg", "--config-file", "test.json" });
+            CompilerArguments actual = parser.CreateFromCommandLine(new[] { "--test-arg", "--config-file", "test.json" });
             Assert.True(expected.Equals(actual));
         }
 
@@ -49,7 +56,7 @@ namespace CompilerCliTest.Input
         public void TestItThrowsAnExceptionOnUnknownFlags()
         {
             Assert.Throws<ArgumentException>(
-                () => ArgumentParser.CreateFromCommandLine(new[] { "--whats-this", "test.json" })
+                () => parser.CreateFromCommandLine(new[] { "--whats-this", "test.json" })
             );
         }
     }

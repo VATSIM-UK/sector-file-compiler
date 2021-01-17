@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Compiler.Argument;
 
 namespace CompilerCli.Input
 {
-    public static class ArgumentParser
+    public class ArgumentParser
     {
-        private static readonly Dictionary<string, IInputParser> AvailableArguments = new()
-        {
-            { "--config-file", new ConfigFileParser() },
-            { "--skip-validation", new SkipValidationParser() },
-            { "--strip-comments", new StripCommentsParser() },
-            { "--test-arg", new DefaultArgumentParser() },
-        };
+        private readonly SortedSet<AbstractArgument> availableArguments;
+        private readonly CompilerArguments compilerArguments;
 
-        public static CompilerArguments CreateFromCommandLine(string[] args)
+        internal ArgumentParser(SortedSet<AbstractArgument> availableArguments, CompilerArguments compilerArguments)
         {
-            CompilerArguments arguments = new CompilerArguments();
-
+            this.availableArguments = availableArguments;
+            this.compilerArguments = compilerArguments;
+        }
+        public CompilerArguments CreateFromCommandLine(string[] args)
+        {
             int i = 0;
             while (i < args.Length)
             {
-                if (!AvailableArguments.ContainsKey(args[i]))
+                if (!TryGetArgument(args[i], out AbstractArgument matchedArgument))
                 {
                     throw new ArgumentException("Unknown argument: " + args[i]);
                 }
@@ -30,24 +29,35 @@ namespace CompilerCli.Input
                 List<string> values = new List<string>();
                 while (nextArgument < args.Length)
                 {
-                    if (args[nextArgument].StartsWith("--")) {
-                        if (!AvailableArguments.ContainsKey(args[nextArgument]))
-                        {
-                            throw new ArgumentException("Unknown argument: " + args[i]);
-                        }
-
+                    if (TryGetArgument(args[nextArgument], out _)) {
                         break;
                     }
-
+                    
                     values.Add(args[nextArgument]);
                     nextArgument++;
                 }
 
-                arguments = AvailableArguments[args[i]].Parse(values, arguments);
+                matchedArgument.Parse(values, compilerArguments);
                 i = nextArgument;
             }
 
-            return arguments;
+            return compilerArguments;
+        }
+
+        /**
+         * Given an argument specifier, try and find that argument
+         */
+        private bool TryGetArgument(string inputArgument, out AbstractArgument argument)
+        {
+            try
+            {
+                argument = this.availableArguments.First(arg => arg.GetSpecifier() == inputArgument);
+                return true;
+            } catch (InvalidOperationException)
+            {
+                argument = null;
+                return false;
+            }
         }
     }
 }

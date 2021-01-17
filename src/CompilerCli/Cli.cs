@@ -26,7 +26,7 @@ namespace CompilerCli
             CompilerArguments arguments;
             try
             {
-                arguments = ArgumentParser.CreateFromCommandLine(args);
+                arguments = ArgumentParserFactory.Make().CreateFromCommandLine(args);
             } catch (ArgumentException exception)
             {
                 output.Write(exception.Message);
