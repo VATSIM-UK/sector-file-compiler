@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Compiler.Argument;
 using Compiler.Config;
 using Xunit;
 using Compiler.Exception;
@@ -12,38 +13,22 @@ namespace CompilerTest.Config
     public class ConfigFileLoaderTest
     {
         private readonly ConfigFileLoader fileLoader;
+        private readonly CompilerArguments arguments;
 
         public ConfigFileLoaderTest()
         {
-            this.fileLoader = new ConfigFileLoader();
+            this.fileLoader = ConfigFileLoaderFactory.Make();
+            this.arguments = new CompilerArguments();
         }
         
         [Theory]
         [InlineData("xyz", "Config file not found")]
         [InlineData("_TestData/ConfigFileLoader/InvalidJson/config.json", "Invalid JSON in _TestData/ConfigFileLoader/InvalidJson/config.json: Error reading JObject from JsonReader. Current JsonReader item is not an object: StartArray. Path '', line 1, position 1.")]
-        [InlineData("_TestData/ConfigFileLoader/AirportNotObject/config.json", "Invalid airport config in _TestData/ConfigFileLoader/AirportNotObject/config.json must be an object")]
-        [InlineData("_TestData/ConfigFileLoader/AirportKeyNotObject/config.json", "Invalid airport config[Airports] in _TestData/ConfigFileLoader/AirportKeyNotObject/config.json must be an object")]
-        [InlineData("_TestData/ConfigFileLoader/InvalidTypeType/config.json", "Invalid type field for section misc.regions - must be \"files\" or \"folders\"")]
-        [InlineData("_TestData/ConfigFileLoader/InvalidType/config.json", "Invalid type field for section misc.regions - must be \"files\" or \"folders\"")]
-        [InlineData("_TestData/ConfigFileLoader/NoFolder/config.json", "Folder invalid in section enroute.ownership - must be string under key \"folder\"")]
-        [InlineData("_TestData/ConfigFileLoader/FolderInvalid/config.json", "Folder invalid in section enroute.ownership - must be string under key \"folder\"")]
-        [InlineData("_TestData/ConfigFileLoader/RecursiveInvalid/config.json", "Recursive must be a boolean in section enroute.ownership")]
-        [InlineData("_TestData/ConfigFileLoader/IncludeAndExclude/config.json", "Cannot specify both include and exclude for folders in section enroute.ownership")]
-        [InlineData("_TestData/ConfigFileLoader/ExcludeNotAnArray/config.json", "Exclude list must be an array in section enroute.ownership")]
-        [InlineData("_TestData/ConfigFileLoader/ExcludeFilesNotAString/config.json", "Exclude file must be a string in section enroute.ownership")]
-        [InlineData("_TestData/ConfigFileLoader/IncludeNotAnArray/config.json", "Include list must be an array in section enroute.ownership")]
-        [InlineData("_TestData/ConfigFileLoader/IncludeFilesNotAString/config.json", "Include file must be a string in section enroute.ownership")]
-        [InlineData("_TestData/ConfigFileLoader/FilesListNotAnArray/config.json", "Files list invalid in section misc.regions - must be array under key \"files\"")]
-        [InlineData("_TestData/ConfigFileLoader/FilesListMissing/config.json", "Files list invalid in section misc.regions - must be array under key \"files\"")]
-        [InlineData("_TestData/ConfigFileLoader/IgnoreMissingNotBoolean/config.json", "Invalid ignore_missing value in section misc.regions - must be a boolean")]
-        [InlineData("_TestData/ConfigFileLoader/ExceptWhereExistsNotString/config.json", "Invalid except_where_exists value in section misc.regions - must be a string")]
-        [InlineData("_TestData/ConfigFileLoader/FilePathInvalid/config.json", "Invalid file path in section misc.regions - must be a string")]
-        [InlineData("_TestData/ConfigFileLoader/ParentSectionNotArrayOrObject/config.json", "Invalid config section for enroute - must be an object or array of objects") ]
-        [InlineData("_TestData/ConfigFileLoader/ParentSectionNotArrayOfObjects/config.json", "Invalid config section for enroute - must be an object or array of objects")]
+        [InlineData("_TestData/ConfigFileLoader/NotObject/config.json", "Invalid JSON in _TestData/ConfigFileLoader/NotObject/config.json: Error reading JObject from JsonReader. Current JsonReader item is not an object: StartArray. Path '', line 1, position 1.")]
         public void TestItThrowsExceptionOnBadData(string fileToLoad, string expectedMessage)
         {
             ConfigFileInvalidException exception = Assert.Throws<ConfigFileInvalidException>(
-                () => fileLoader.LoadConfigFiles(new List<string> {fileToLoad})
+                () => fileLoader.LoadConfigFiles(new List<string> {fileToLoad}, this.arguments)
             );
             Assert.Equal(expectedMessage, exception.Message);
         }
@@ -57,7 +42,7 @@ namespace CompilerTest.Config
         public void TestItLoadsAConfigFile()
         {
             ConfigInclusionRules rules = fileLoader.LoadConfigFiles(
-                new List<string> {"_TestData/ConfigFileLoader/ValidConfig/config.json"}
+                new List<string> {"_TestData/ConfigFileLoader/ValidConfig/config.json"}, this.arguments
             );
 
             List<IInclusionRule> ruleList = rules.ToList();

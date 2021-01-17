@@ -43,7 +43,7 @@ namespace Compiler
             ConfigInclusionRules config;
             try
             {
-                config = new ConfigFileLoader().LoadConfigFiles(this.arguments.ConfigFiles);
+                config = ConfigFileLoaderFactory.Make().LoadConfigFiles(this.arguments.ConfigFiles, this.arguments);
             } catch (ConfigFileInvalidException e)
             {
                 this.events.AddEvent(new CompilationMessage(e.Message));
@@ -53,7 +53,7 @@ namespace Compiler
 
             // Parse all the input files and create elements
             SectorElementCollection sectorElements = new SectorElementCollection();
-            DataParserFactory parserFactory = new DataParserFactory(sectorElements, events);
+            DataParserFactory parserFactory = new DataParserFactory(sectorElements, this.events);
             InputFileList fileList;
             try
             {
