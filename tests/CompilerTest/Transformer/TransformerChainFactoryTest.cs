@@ -13,14 +13,20 @@ namespace CompilerTest.Transformer
 
         public TransformerChainFactoryTest()
         {
-            this.arguments = new CompilerArguments();
+            arguments = new CompilerArguments();
         }
 
         [Fact]
         public void TestItAddsCommentStripper()
         {
             this.arguments.StripComments = true;
-            List<Type> expected = new(new[] { typeof(RemoveAllComments), typeof(ReplaceTokens) });
+            List<Type> expected = new(new[]
+                {
+                    typeof(RemoveAllComments),
+                    typeof(ReplaceTokens),
+                    typeof(BuildVersionTokenReplacer)
+                }
+            );
 
             Assert.Equal(
                 expected,
@@ -32,36 +38,15 @@ namespace CompilerTest.Transformer
         public void TestItDoesntAddCommentStripperOnHeader()
         {
             this.arguments.StripComments = true;
-            List<Type> expected = new(new[] { typeof(ReplaceTokens) });
+            List<Type> expected = new(new[]
+            {
+                typeof(ReplaceTokens),
+                typeof(BuildVersionTokenReplacer)
+            });
 
             Assert.Equal(
                 expected,
                 TransformerChainFactory.Create(arguments, OutputSectionKeys.FILE_HEADER).GetTransformerTypes()
-            );
-        }
-
-        [Fact]
-        public void TestItAddsBlankLineStripper()
-        {
-            this.arguments.RemoveBlankLines = true;
-            List<Type> expected = new(new[] { typeof(RemoveBlankLines), typeof(ReplaceTokens) });
-
-            Assert.Equal(
-                expected,
-                TransformerChainFactory.Create(arguments, OutputSectionKeys.SCT_VOR).GetTransformerTypes()
-            );
-        }
-
-        [Fact]
-        public void TestItAddsMultipleTransformers ()
-        {
-            this.arguments.RemoveBlankLines = true;
-            this.arguments.StripComments = true;
-            List<Type> expected = new(new[] { typeof(RemoveAllComments), typeof(RemoveBlankLines), typeof(ReplaceTokens) });
-
-            Assert.Equal(
-                expected,
-                TransformerChainFactory.Create(arguments, OutputSectionKeys.SCT_VOR).GetTransformerTypes()
             );
         }
     }

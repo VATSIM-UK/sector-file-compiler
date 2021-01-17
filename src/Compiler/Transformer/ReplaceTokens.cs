@@ -7,17 +7,17 @@ namespace Compiler.Transformer
      */
     public class ReplaceTokens : ITransformer
     {
-        private readonly Dictionary<string, string> tokens;
-        public ReplaceTokens(Dictionary<string, string> tokens)
+        private readonly IEnumerable<ITokenReplacer> replacers;
+        public ReplaceTokens(IEnumerable<ITokenReplacer> replacers)
         {
-            this.tokens = tokens;
+            this.replacers = replacers;
         }
 
         public string Transform(string data)
         {
-            foreach (KeyValuePair<string, string> token in this.tokens)
+            foreach (var replacer in replacers)
             {
-                data = data.Replace(token.Key, token.Value);
+                data = replacer.ReplaceTokens(data);
             }
 
             return data;

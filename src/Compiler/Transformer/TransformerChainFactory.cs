@@ -14,12 +14,8 @@ namespace Compiler.Transformer
                 chain.AddTransformer(new RemoveAllComments());
             }
 
-            if (arguments.RemoveBlankLines)
-            {
-                chain.AddTransformer(new RemoveBlankLines());
-            }
-
-            chain.AddTransformer(new ReplaceTokens(SystemTokensFactory.GetSystemTokens(arguments)));
+            chain.AddTransformer(ReplaceTokensFactory.Make(arguments));
+            chain.AddTransformer(BuildVersionTokenReplacerFactory.Make(arguments));
 
             return chain;
         }

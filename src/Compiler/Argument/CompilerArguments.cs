@@ -1,6 +1,7 @@
 ﻿using Compiler.Output;
 using System;
 using System.Collections.Generic;
+using Compiler.Transformer;
 
 namespace Compiler.Argument
 {
@@ -8,12 +9,14 @@ namespace Compiler.Argument
     {
         public const string CompilerVersion = "1.0.0";
 
+        public const string DefaultBuildVersion = "BUILD_VERSION";
+
         public List<string> ConfigFiles { get; } = new();
 
         public override bool Equals(Object obj)
         {
             //Check for null and compare run-time types.
-            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            if ((obj == null) || GetType() != obj.GetType())
             {
                 return false;
             }
@@ -21,21 +24,21 @@ namespace Compiler.Argument
             CompilerArguments compare = (CompilerArguments)obj;
 
             // Both have nothing, so equal
-            if (this.ConfigFiles.Count == 0 && compare.ConfigFiles.Count == 0)
+            if (ConfigFiles.Count == 0 && compare.ConfigFiles.Count == 0)
             {
                 return true;
             }
 
             // Different length, so definitely not equal
-            if (this.ConfigFiles.Count != compare.ConfigFiles.Count)
+            if (ConfigFiles.Count != compare.ConfigFiles.Count)
             {
                 return false ;
             }
 
             // Check every one is equal.
-            for (int i = 0; i < this.ConfigFiles.Count; i++)
+            for (int i = 0; i < ConfigFiles.Count; i++)
             {
-                if (!this.ConfigFiles[i].Equals(compare.ConfigFiles[i]))
+                if (!ConfigFiles[i].Equals(compare.ConfigFiles[i]))
                 {
                     return false;
                 }
@@ -60,13 +63,13 @@ namespace Compiler.Argument
         // Should we strip blank lines out of the final output
         public bool RemoveBlankLines { set; get; } = false;
 
-        // Should we force all route segments (in SCT SID/STAR) to be joined up
-        public bool EnforceContiguousRouteSegments { set; get; } = false;
+        // Replace tokens in the output
+        public List<ITokenReplacer> TokenReplacers { get; } = new();
+        
+        // The version being built
+        public string BuildVersion { get; set; } = DefaultBuildVersion;
 
-        // Whether or not compilation should include a comment at the start of every input file
-        public bool DisplayInputFiles { set; get; } = false;
-
-        // The build version to use
-        public string BuildVersion { set; get; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        // The token to replace with the build version
+        public string VersionToken { get; set; } = "{VERSION}";
     }
 }
