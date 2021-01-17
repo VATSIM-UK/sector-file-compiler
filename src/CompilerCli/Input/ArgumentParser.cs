@@ -9,15 +9,8 @@ namespace CompilerCli.Input
         private static readonly Dictionary<string, IInputParser> AvailableArguments = new()
         {
             { "--config-file", new ConfigFileParser() },
-            { "--out-file-ese", new EseOutputFileParser() },
-            { "--out-file-sct", new SctOutputFileParser() },
-            { "--out-file-rwy", new RwyOutputFileParser() },
             { "--skip-validation", new SkipValidationParser() },
             { "--strip-comments", new StripCommentsParser() },
-            { "--strip-newlines", new StripNewlinesParser() },
-            { "--build-version", new BuildVersionParser() },
-            { "--force-contiguous-routes", new BuildVersionParser() },
-            { "--display-input-files", new DisplayInputFilesParser() },
             { "--test-arg", new DefaultArgumentParser() },
         };
 
