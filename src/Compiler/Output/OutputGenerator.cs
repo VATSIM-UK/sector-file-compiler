@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Compiler.Model;
 using System.Linq;
@@ -25,7 +24,6 @@ namespace Compiler.Output
 
         public void GenerateOutput(AbstractOutputFile outputFile)
         {
-            Console.WriteLine($"Starting file {outputFile.GetType()}");
             TextWriter outputStream = outputFile.GetOutputStream();
 
             // Process each section in the output
