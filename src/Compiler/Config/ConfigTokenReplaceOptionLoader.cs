@@ -1,5 +1,4 @@
-﻿using System;
-using Compiler.Argument;
+﻿using Compiler.Argument;
 using Compiler.Exception;
 using Compiler.Transformer;
 using Newtonsoft.Json.Linq;
@@ -51,7 +50,7 @@ namespace Compiler.Config
                         ProcessDateReplacement(arguments, replacementObject, toReplaceToken.ToString());
                         break;
                     case "version":
-                        ProcessVersionReplacement(arguments, replacementObject, toReplaceToken.ToString());
+                        ProcessVersionReplacement(arguments, toReplaceToken.ToString());
                         break;
                     default:
                         throw new ConfigFileInvalidException("Invalid replace type - must be date or version");
@@ -81,7 +80,7 @@ namespace Compiler.Config
         /**
          * Add a version replacement token
          */
-        private void ProcessVersionReplacement(CompilerArguments arguments, JObject replacement, string tokenToReplace)
+        private void ProcessVersionReplacement(CompilerArguments arguments, string tokenToReplace)
         {
             arguments.TokenReplacers.Add(new TokenBuildVersionReplacer(arguments, tokenToReplace));
         }

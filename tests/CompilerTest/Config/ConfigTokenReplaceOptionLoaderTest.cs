@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using Compiler.Argument;
 using Compiler.Config;
 using Compiler.Exception;
