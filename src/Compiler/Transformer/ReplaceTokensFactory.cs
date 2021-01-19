@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Compiler.Argument;
+﻿using Compiler.Argument;
 
 namespace Compiler.Transformer
 {
@@ -7,7 +6,7 @@ namespace Compiler.Transformer
     {
         public static ReplaceTokens Make(CompilerArguments arguments)
         {
-            return new ReplaceTokens(arguments.TokenReplacers);
+            return new (arguments.TokenReplacers);
         }
     }
 }

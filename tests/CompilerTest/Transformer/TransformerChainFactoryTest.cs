@@ -24,7 +24,7 @@ namespace CompilerTest.Transformer
                 {
                     typeof(RemoveAllComments),
                     typeof(ReplaceTokens),
-                    typeof(BuildVersionTokenReplacer)
+                    typeof(TokenBuildVersionReplacer)
                 }
             );
 
@@ -41,7 +41,7 @@ namespace CompilerTest.Transformer
             List<Type> expected = new(new[]
             {
                 typeof(ReplaceTokens),
-                typeof(BuildVersionTokenReplacer)
+                typeof(TokenBuildVersionReplacer)
             });
 
             Assert.Equal(

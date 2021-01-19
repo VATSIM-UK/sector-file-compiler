@@ -1,0 +1,9 @@
+﻿{
+  "replace": [
+    {
+      "token": "{FOO}",
+      "type": "date",
+      "format": 123
+    }
+  ]
+}

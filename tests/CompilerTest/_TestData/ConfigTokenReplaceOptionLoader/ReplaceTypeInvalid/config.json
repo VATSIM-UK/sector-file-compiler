@@ -1,0 +1,8 @@
+﻿{
+  "replace": [
+    {
+      "token": "{FOO}",
+      "type": "abc"
+    }
+  ]
+}

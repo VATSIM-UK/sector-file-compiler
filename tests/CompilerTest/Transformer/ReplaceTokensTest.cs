@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Compiler.Argument;
 using Xunit;
 using Compiler.Transformer;

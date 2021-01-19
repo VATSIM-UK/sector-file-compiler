@@ -4,18 +4,18 @@ namespace Compiler.Transformer
 {
     public class TokenDateReplacer: ITokenReplacer
     {
-        private readonly string token;
-        private readonly string format;
+        public string Token { get; }
+        public string Format { get; }
 
         public TokenDateReplacer(string token, string format)
         {
-            this.token = token;
-            this.format = format;
+            this.Token = token;
+            this.Format = format;
         }
         
         public string ReplaceTokens(string data)
         {
-            return data.Replace(token, DateTime.Now.ToString(format));
+            return data.Replace(Token, DateTime.Now.ToString(Format));
         }
     }
 }

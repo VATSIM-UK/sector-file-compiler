@@ -15,7 +15,6 @@ namespace Compiler.Transformer
             }
 
             chain.AddTransformer(ReplaceTokensFactory.Make(arguments));
-            chain.AddTransformer(BuildVersionTokenReplacerFactory.Make(arguments));
 
             return chain;
         }

@@ -5,9 +5,10 @@
         public static ConfigOptionsLoader Make()
         {
             return new ConfigOptionsLoader(
-                new []
+                new IConfigOptionLoader[]
                 {
-                    new ConfigOutputFilesOptionLoader()
+                    new ConfigOutputFilesOptionLoader(),
+                    new ConfigTokenReplaceOptionLoader()
                 }
             );
         }

@@ -21,7 +21,6 @@ namespace CompilerCliTest.Input
         public void TestItSetsBuildVersion()
         {
             commandLineArgument.Parse(new List<string>(new[] { "VERSION" }), arguments);
-            Assert.Single(arguments.ConfigFiles);
             Assert.Equal("VERSION", arguments.BuildVersion);
         }
 
