@@ -10,136 +10,216 @@ The compiler parses a number of input files, validates their contents and then c
 
 ## Compiling
 
-The solution is best compiled using Visual Studio 2019. The required test runners and dependencies can then be installed via the dotnet CLI.
+The solution is best compiled using Visual Studio 2019 or compatible .NET IDE. The required test runners and dependencies can then be installed via the dotnet CLI.
 
 # Using The Compiler
 
 To run the compiler, you need to use the CompilerCli executable.
 
-## Input Configuration
+## Command Line Arguments
 
-The input for the compiler is determined through a configuration file in JSON format.
-This file is used to specify which files should be compiled, which sections of the output they should appear in and the order in which they should appear.
-All file paths are relative to the config file.
-
-Each section may have an array of files or, alternatively, an object specifying arrays of files for logical subsections. For example,
-the VOR section could have subsections for VORs within each FIR.
-
-### Compiler configuration sections
-
-#### SCT2
-`sct_header` - A comment block or copyright notice to go at the top of the SCT2 output.
-
-`sct_colour_defs` - A place at the top of the SCT2 to define colours
-
-`sct_info` - The \[INFO\] section of the SCT2.
-
-`sct_airport` - The \[AIPORT\] section of the SCT2.
-
-`sct_runway` - The \[RUNWAY\] section of the SCT2.
-
-`sct_vor` - The \[VOR\] section of the SCT2.
-
-`sct_ndb` - The \[NDB\] section of the SCT2.
-
-`sct_fixes` - The \[FIXES\] section of the SCT2.
-
-`sct_geo` - The \[GEO\] section of the SCT2.
-
-`sct_low_airway` - The \[LOW AIRWAY\] section of the SCT2.
-
-`sct_high_airway` - The \[HIGH AIRWAY\] section of the SCT2.
-
-`sct_artcc` - The \[ARTCC\] section of the SCT2.
-
-`sct_artcc_high` - The \[ARTCC HIGH\] section of the SCT2.
-
-`sct_artcc_low` - The \[ARTCC LOW\] section of the SCT2.
-
-`sct_sid` - The \[SID\] section of the SCT2.
-
-`sct_star` - The \[STAR\] section of the SCT2.
-
-`sct_labels` - The \[LABELS\] section of the SCT2.
-
-`sct_regions` - The \[REGIONS\] section of the SCT2.
-
-#### ESE (EuroScope Only)
-`ese_header` - A comment block or copyright notice to go at the top of the ESE output.
-
-`ese_preamble` - Any other information to appear at the top of the ESE.
-
-`ese_positions` - The \[POSITIONS\] section of the ESE.
-
-`ese_freetext` - The \[FREETEXT\] section of the ESE.
-
-`ese_sidsstars` - EuroScope only. The \[SIDSSTARS\] section of the ESE.
-
-`ese_airspace` - The \[AIRSPACE\] section of the ESE.
-
-### RWY (EuroScope Only)
-`rwy_active` - The default active runway setup (.rwy file)
-
-### Example compiler configuration
-
-```JSON
-{
-  "ese_header": [
-    "Copyright.txt"
-  ],
-  "ese_preamble": [
-    "preamble.txt"
-  ],
-  "sidsstars": [
-    "Airports/EGBB/Sids.txt",
-    "Airports/EGBB/Stars.txt",
-  ],
-  "positions": [
-      "Airports/EGBB/Positions.txt"
-  ],
-  "freetext": [
-      "Airports/EGBB/Freetext.txt"
-  ],
-  "airspace": [
-      "Airports/EGBB/Airspace.txt"
-  ],
-}
-
-```
-
-## Command Line Flags
-
-### Required Flags
+### Required
 
 `--config-file` - Takes a single argument. Path to a compiler configuration JSON file. If this argument is specified multiple
 times, then the compiler will attempt to merge the configs together.
 
-`--out-file-ese` - Takes a single argument. Where the output file for the EuroScope ESE should be generated.
+### Optional
 
-`--out-file-rwy` - Takes a single argument. Where the output file for the EuroScope RWY should be generated.
+`--skip-validation` - If set, the compiler will skip the post-parse validation phase of compilation,
 
-`--out-file-sct` - Takes a single argument. Where the output file for the SCT should be generated.
-
-### Optional Flags
-
-`--ignore-validation` - If set, any validation failures will not halt compilation.
-
-`--strip-comments` - If set, any comments in the input will be removed. This does not apply to files named in the header parts of the compiler configuration.
-
-`--strip-newlines` - If set, any lines that are empty (i.e. just newlines) in the input will be removed.
+`--strip-comments` - If set, any comments in the input will be removed. If an empty line is leftover, it will be discarded.
 
 `--build-version` - Takes a single argument. Specifies the version of the build to replace the `{VERSION}` token in the input.
 
-`--force-contiguous-routes` - If set, forces SIDs and STARs in the SCT to have contiguous routes (no gaps).
 
-`--display-input-files` - If set, adds a comment line in the output at the point where a new input file was started.
+## Input Configuration
 
-### Token Replacements
+The compiler configuration file, at the highest level, is a JSON object with a number of keys.
 
-There are a number of tokens that may be added to comments in the input files, which will be replaced in the output.
+### Compiler Options
 
-`{YEAR}` - The year at the time of compilation.
+Options for the compiler can be specified using the `options` key in the config file. The options are as follows:
 
-`{VERSION}` - A user generated version for the sector file, e.g. the AIRAC date. Defaults to current date and time.
+#### SCT Output
 
-`{BUILD}` - The date on which the build occured.
+The `sct_output` option takes a single string. It provides the path, relative to the config
+file, where the `.sct` file should be written.
+
+#### ESE Output
+
+The `ese_output` option takes a single string. It provides the path, relative to the config
+file, where the `.ese` file should be written.
+
+#### RWY Output
+
+The `rwy_output` option takes a single string. It provides the path, relative to the config
+file, where the `.rwy` file should be written.
+
+#### Token Replacement
+
+The `replace` option takes an array of objects. Each object provides details of tokens
+within comments in the output that should be replaced on compilation. There are two types
+of replacements.
+
+The date replacement type replaces the specified token with a date in the given format. For example,
+the following config would replace the `{YEAR}` token with a four digit year.
+
+```json
+{
+    "token": "{YEAR}",
+    "type": "date",
+    "format": "yyyy"
+}
+```
+
+The version replacement type replaces the specified token with the build version, which
+can be specified on the commandline, as follows:
+
+```json
+{
+    "token": "{VERSION}",
+    "type": "version"
+}
+```
+
+### Include Files
+
+The input files that the compiler should parse are specified in the `include` key of the compiler
+configuration. There are three subsections.
+
+#### The Airports Subsection
+
+This subsection is an object of objects. The key of each parent object specifies
+a folder (relative to the config file) to look in for airport files.
+
+Valid keys in each airports object are as follows:
+
+```json
+{
+  "active_runways": {},
+  "airspace": {},
+  "basic": {},
+  "fixes": {},
+  "freetext": {},
+  "ownership": {},
+  "positions": {},
+  "positions_mentor": {},
+  "sid_airspace": {},
+  "runways": {},
+  "sectors": {},
+  "sids": {},
+  "stars": {},
+  "smr": {
+    "geo": {},
+    "regions": {},
+    "labels": {}
+  },
+  "ground_map": {
+    "geo": {},
+    "regions": {},
+    "labels": {}
+  },
+  "vrps": {}
+}
+```
+
+### The Enroute Subsection
+
+The `enroute` subsection contains data in relation to enroute positions and is an object. **Each
+key may be an array of objects, or a single object.**
+
+```json
+{
+  "sector_lines": {},
+  "ownership": {},
+  "positions": []
+}
+```
+
+### The Misc Subsection
+
+The `misc` subsection contains other misc data. **Each
+key may be an array of objects, or a single object.**
+
+```json
+{
+  "agreements": [],
+  "freetext": {},
+  "colours": {},
+  "info": {},
+  "file_headers": {},
+  "pre_positions": {},
+  "fixes": {},
+  "ndbs": {},
+  "vors": {},
+  "danger_areas": {},
+  "artcc_low": {},
+  "artcc_high": {},
+  "lower_airways": [],
+  "upper_airways": [],
+  "sid_airspace": {},
+  "star_airspace": [],
+  "geo": {},
+  "regions": {}
+}
+```
+
+There are two main ways to specify files:
+
+#### File Lists
+
+This rule includes files as listed in the configuration file.
+
+```json
+{
+    "type": "files",
+    "files": [
+        "Basic.txt"
+    ],
+    "ignore_missing": true,
+    "except_where_exists": "Basic2.txt"
+}
+```
+There are two optional flags available for the file list rule:
+
+- `ignore_missing` (default: `false`) instructs the compiler to simply ignore the input file
+if it cannot be found (would usually cause an error). This is useful for airports where not all airports have all files.
+- `except_where_exists`instructs the compiler to skip the files, if another file is present.
+This is particularly useful for SMRs and Ground Maps.
+  
+#### Folders
+
+This rule includes all files within a given folder.
+
+```json
+{
+    "type": "folder",
+    "folder": "Ownership/Alternate",
+    "recursive": true,
+    "exclude": [
+      "EUR Islands.txt"
+    ]
+}
+```
+
+There are two optional flags available for the folder rule:
+
+- `recursive` (default: `false`) will cause the compiler to include all files in any subfolders
+contained within the main folder.
+- `exclude` will cause the compiler to ignore any files with a particular name.
+
+## Comment Annotations
+
+There are a number of annotations that may be applied to comments, which have an effect on the output
+of the compiler. These annotations will be removed during compilation.
+
+### Preserving comments
+
+The `@preserveComment` annotation will force the compiler to keep the comments even if the `--strip-comments` option is specified.
+
+#### Example Usage
+
+```
+; @preserveComment This comment will be preserved
+; This comment will not
+```

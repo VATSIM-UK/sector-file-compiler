@@ -21,14 +21,14 @@ namespace Compiler.Model
 
         public override string GetCompileData(SectorElementCollection elements)
         {
-            return $"REGIONNAME {this.Name}";
+            return $"REGIONNAME {Name}";
         }
 
         public override IEnumerable<ICompilableElement> GetCompilableElements()
         {
             List<ICompilableElement> elements = new List<ICompilableElement>();
             elements.Add(this);
-            elements.AddRange(this.Points);
+            elements.AddRange(Points);
             return elements;
         }
     }
