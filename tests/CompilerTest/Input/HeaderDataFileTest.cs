@@ -67,23 +67,17 @@ namespace CompilerTest.Input
         public void TestItIteratesTheInputFile()
         {
             int expectedLine = 1;
-            foreach (SectorData dataLine in this.file)
+            foreach (SectorData dataLine in file)
             {
                 Assert.Equal(new List<string>(), dataLine.dataSegments);
                 Assert.Equal(new Docblock(), dataLine.docblock);
 
-                if (expectedLine % 2 == 0)
-                {
-                    Assert.Equal(new Comment(""), dataLine.inlineComment);
-                } else
-                {
-                    Assert.Equal(new Comment("Line " + expectedLine), dataLine.inlineComment);
-                }
-                
+                Assert.Equal(new Comment("Line " + expectedLine), dataLine.inlineComment);
+
                 Assert.Equal(expectedLine, this.file.CurrentLineNumber);
                 Assert.Equal(new Definition("_TestData/HeaderDataFile/StreamTest.txt", expectedLine), dataLine.definition);
 
-                expectedLine++;
+                expectedLine+= 2;
             }
 
             Assert.Equal(9, this.file.CurrentLineNumber);

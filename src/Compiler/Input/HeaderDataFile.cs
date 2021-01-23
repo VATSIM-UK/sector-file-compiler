@@ -23,8 +23,14 @@ namespace Compiler.Input
             using TextReader file = this.streamFactory.GetStream(this.FullPath);
             while ((line = file.ReadLine()) != null)
             {
-                this.CurrentLine = line;
-                this.CurrentLineNumber++;
+                CurrentLine = line;
+                CurrentLineNumber++;
+
+                // Ignore blank lines
+                if (line.Trim().Length == 0)
+                {
+                    continue;
+                }
 
                 yield return new SectorData(
                     new Docblock(),
