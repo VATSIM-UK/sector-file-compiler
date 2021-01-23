@@ -23,14 +23,17 @@ jobs:
         run: dotnet build /p:Configuration=Debug SectorFileCompiler.sln --nologo --no-restore /warnaserror;
       
       - name: Run Compiler Tests
-        run: dotnet test tests/CompilerTest/CompilerTest.csproj --results-directory './coverage' --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+        run: |
+          cd tests/CompilerTest
+          dotnet dotcover test --dcReportType=DetailedXml --dcOutput=../../coverage/Compiler.xml
 
       - name: Run Compiler CLI Tests
-        run: dotnet test tests/CompilerCliTest/CompilerCliTest.csproj --results-directory './coverage' --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+        run: |
+          cd tests/CompilerCliTest
+          dotnet dotcover test --dcReportType=DetailedXml --dcOutput=../../coverage/CompilerCli.xml
 
       - name: Upload Code Coverage Reports
         if: matrix.platform == 'ubuntu-latest'
         run: |
-          dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.6.1
-          reportgenerator "-reports:coverage/**/*.xml" "-targetdir:coverage/" "-reporttypes:Clover"
-          bash <(curl -s https://codecov.io/bash) -f coverage/Clover.xml
+          cd coverage
+          bash <(curl -s https://codecov.io/bash) -f *.xml
