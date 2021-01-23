@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Compiler.Argument;
 
-namespace CompilerCli.Input
+namespace CompilerCli.Compiler
 {
-    public class BuildVersionArgument : AbstractArgument
+    public class BuildVersionCompilerArgument : AbstractCompilerArgument
     {
         public override void Parse(List<string>values, CompilerArguments compilerSettings)
         {

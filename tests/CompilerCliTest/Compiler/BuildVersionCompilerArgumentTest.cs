@@ -2,25 +2,25 @@
 using System;
 using System.Collections.Generic;
 using Compiler.Argument;
-using CompilerCli.Input;
+using CompilerCli.Compiler;
 
-namespace CompilerCliTest.Input
+namespace CompilerCliTest.Compiler
 {
-    public class BuildVersionArgumentTest
+    public class BuildVersionCompilerArgumentTest
     {
         private CompilerArguments arguments;
-        private BuildVersionArgument commandLineArgument;
+        private BuildVersionCompilerArgument commandLineCompilerArgument;
 
-        public BuildVersionArgumentTest()
+        public BuildVersionCompilerArgumentTest()
         {
             arguments = new CompilerArguments();
-            commandLineArgument = new BuildVersionArgument();
+            commandLineCompilerArgument = new BuildVersionCompilerArgument();
         }
         
         [Fact]
         public void TestItSetsBuildVersion()
         {
-            commandLineArgument.Parse(new List<string>(new[] { "VERSION" }), arguments);
+            commandLineCompilerArgument.Parse(new List<string>(new[] { "VERSION" }), arguments);
             Assert.Equal("VERSION", arguments.BuildVersion);
         }
 
@@ -28,7 +28,7 @@ namespace CompilerCliTest.Input
         public void TestItThrowsExceptionOnNoValues()
         {
             Assert.Throws<ArgumentException>(
-                () => commandLineArgument.Parse(new List<string>(new string[] {}), arguments)
+                () => commandLineCompilerArgument.Parse(new List<string>(new string[] {}), arguments)
             );
         }
 
@@ -36,14 +36,14 @@ namespace CompilerCliTest.Input
         public void TestItThrowsExceptionOnTooManyValues()
         {
             Assert.Throws<ArgumentException>(
-                () => commandLineArgument.Parse(new List<string>(new[] { "a", "b" }), arguments)
+                () => commandLineCompilerArgument.Parse(new List<string>(new[] { "a", "b" }), arguments)
             );
         }
 
         [Fact]
         public void TestItReturnsASpecifier()
         {
-            Assert.Equal("--build-version", commandLineArgument.GetSpecifier());
+            Assert.Equal("--build-version", commandLineCompilerArgument.GetSpecifier());
         }
     }
 }

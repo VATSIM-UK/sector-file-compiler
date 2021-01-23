@@ -2,25 +2,25 @@
 using System;
 using System.Collections.Generic;
 using Compiler.Argument;
-using CompilerCli.Input;
+using CompilerCli.Compiler;
 
-namespace CompilerCliTest.Input
+namespace CompilerCliTest.Compiler
 {
-    public class ConfigFileArgumentTest
+    public class ConfigFileCompilerArgumentTest
     {
         private CompilerArguments arguments;
-        private ConfigFileArgument commandLineArgument;
+        private ConfigFileCompilerArgument commandLineCompilerArgument;
 
-        public ConfigFileArgumentTest()
+        public ConfigFileCompilerArgumentTest()
         {
             arguments = new CompilerArguments();
-            commandLineArgument = new ConfigFileArgument();
+            commandLineCompilerArgument = new ConfigFileCompilerArgument();
         }
         
         [Fact]
         public void TestItSetsConfigFile()
         {
-            commandLineArgument.Parse(new List<string>(new[] { "test.json" }), arguments);
+            commandLineCompilerArgument.Parse(new List<string>(new[] { "test.json" }), arguments);
             Assert.Single(arguments.ConfigFiles);
             Assert.Equal("test.json", arguments.ConfigFiles[0]);
         }
@@ -29,7 +29,7 @@ namespace CompilerCliTest.Input
         public void TestItThrowsExceptionOnNoValues()
         {
             Assert.Throws<ArgumentException>(
-                () => commandLineArgument.Parse(new List<string>(new string[] {}), arguments)
+                () => commandLineCompilerArgument.Parse(new List<string>(new string[] {}), arguments)
             );
         }
 
@@ -37,14 +37,14 @@ namespace CompilerCliTest.Input
         public void TestItThrowsExceptionOnTooManyValues()
         {
             Assert.Throws<ArgumentException>(
-                () => commandLineArgument.Parse(new List<string>(new[] { "a", "b" }), arguments)
+                () => commandLineCompilerArgument.Parse(new List<string>(new[] { "a", "b" }), arguments)
             );
         }
 
         [Fact]
         public void TestItReturnsASpecifier()
         {
-            Assert.Equal("--config-file", commandLineArgument.GetSpecifier());
+            Assert.Equal("--config-file", commandLineCompilerArgument.GetSpecifier());
         }
     }
 }

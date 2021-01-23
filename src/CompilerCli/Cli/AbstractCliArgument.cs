@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Compiler.Argument;
 
-namespace CompilerCli.Input
+namespace CompilerCli.Cli
 {
-    public abstract class AbstractArgument: IComparable
+    public abstract class AbstractCliArgument: IComparable
     {
         /**
          * Parses values for the argument and adjusts compiler arguments.
          */
-        public abstract void Parse(List<string> values, CompilerArguments compilerSettings);
+        public abstract void Parse(List<string> values, CliArguments cliArguments);
 
         /**
          * Returns the string that specifies the argument
@@ -18,8 +17,8 @@ namespace CompilerCli.Input
 
         public override bool Equals(object obj)
         {
-            return obj is AbstractArgument &&
-                   (obj as AbstractArgument).GetSpecifier() == GetSpecifier();
+            return obj is AbstractCliArgument &&
+                   (obj as AbstractCliArgument).GetSpecifier() == GetSpecifier();
         }
 
         public override int GetHashCode()
@@ -29,12 +28,12 @@ namespace CompilerCli.Input
 
         public int CompareTo(object obj)
         {
-            if (obj is not AbstractArgument)
+            if (obj is not AbstractCliArgument)
             {
                 return 1;
             }
 
-            return String.Compare(GetSpecifier(), ((AbstractArgument) obj).GetSpecifier(), StringComparison.Ordinal);
+            return String.Compare(GetSpecifier(), ((AbstractCliArgument) obj).GetSpecifier(), StringComparison.Ordinal);
         }
     }
 }

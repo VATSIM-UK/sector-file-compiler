@@ -31,6 +31,7 @@ times, then the compiler will attempt to merge the configs together.
 
 `--build-version` - Takes a single argument. Specifies the version of the build to replace the `{VERSION}` token in the input.
 
+`--no-wait` - Prompts the compiler not to wait for a keypress when compilation has finished.
 
 ## Input Configuration
 

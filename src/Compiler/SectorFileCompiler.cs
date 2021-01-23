@@ -1,4 +1,5 @@
-﻿using Compiler.Argument;
+﻿using System.Diagnostics.CodeAnalysis;
+using Compiler.Argument;
 using Compiler.Collector;
 using Compiler.Input;
 using Compiler.Output;
@@ -26,6 +27,7 @@ namespace Compiler
         /**
          * Run the compiler.
          */
+        [ExcludeFromCodeCoverage]
         public int Compile()
         {
             events.AddEvent(new ComplilationStartedEvent());

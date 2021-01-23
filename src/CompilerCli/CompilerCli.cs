@@ -3,14 +3,15 @@ using System.IO;
 using Compiler;
 using Compiler.Argument;
 using CompilerCli.Output;
-using CompilerCli.Input;
 using Compiler.Event;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using CompilerCli.Argument;
+using CompilerCli.Cli;
 
 namespace CompilerCli
 {
-    class Cli
+    class CompilerCli
     {
         [ExcludeFromCodeCoverage]
         static int Main(string[] args)
@@ -23,10 +24,11 @@ namespace CompilerCli
             Console.SetOut(output);
 
             // Parse the sectorfile
-            CompilerArguments arguments;
+            CompilerArguments compilerArguments = CompilerArgumentsFactory.Make();
+            CliArguments cliArguments = CliArgumentsFactory.Make();
             try
             {
-                arguments = ArgumentParserFactory.Make().CreateFromCommandLine(args);
+                ArgumentParserFactory.Make().CreateFromCommandLine(compilerArguments, cliArguments, args);
             } catch (ArgumentException exception)
             {
                 output.Write(exception.Message);
@@ -34,12 +36,15 @@ namespace CompilerCli
             }
 
             int returnCode = SectorFileCompilerFactory.Create(
-                arguments,
+                compilerArguments,
                 new List<IEventObserver>() { new ConsoleOutput(output) }
             ).Compile();
 
-            output.Write("Press any key to exit");
-            Console.ReadKey();
+            if (cliArguments.PauseOnFinish)
+            {
+                output.Write("Press any key to exit");
+                Console.ReadKey();
+            }
             return returnCode;
         }
     }
