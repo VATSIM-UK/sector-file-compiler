@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using Compiler.Argument;
 using CompilerCli.Argument;
 using CompilerCli.Cli;
-using CompilerCli.Compiler;
 using Xunit;
 
 namespace CompilerCliTest.Argument
@@ -25,7 +23,6 @@ namespace CompilerCliTest.Argument
         public void TestItReturnsEmptyArgumentsIfNoneProvided()
         {
             CompilerArguments expectedCompiler = new();
-            CliArguments expectedCli = new();
             parser.CreateFromCommandLine(compilerArguments, cliArguments, new string[] { });
             Assert.True(expectedCompiler.Equals(compilerArguments));
             Assert.True(cliArguments.PauseOnFinish);

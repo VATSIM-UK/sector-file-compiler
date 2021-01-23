@@ -1,9 +1,7 @@
 ﻿using Xunit;
 using System;
 using System.Collections.Generic;
-using Compiler.Argument;
 using CompilerCli.Cli;
-using CompilerCli.Compiler;
 
 namespace CompilerCliTest.Cli
 {
