@@ -3,7 +3,6 @@ using Moq;
 using Compiler.Argument;
 using Compiler.Event;
 using Compiler.Error;
-using Compiler.Output;
 
 namespace CompilerTest.Argument
 {
@@ -15,11 +14,8 @@ namespace CompilerTest.Argument
 
         private readonly Mock<IEventLogger> eventLogger;
 
-        private readonly Mock<IOutputWriter> mockOutputWriter;
-
         public CompilerArgumentsValidatorTest()
         {
-            mockOutputWriter = new Mock<IOutputWriter>();
             eventLogger = new Mock<IEventLogger>();
             arguments = new CompilerArguments();
             mockConfigFile = "/foo/bar";

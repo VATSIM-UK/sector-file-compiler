@@ -6,17 +6,14 @@ namespace Compiler.Transformer
     {
         public static TransformerChain Create(CompilerArguments arguments)
         {
-            return AddRemoveAllComments(
-                new TransformerChain(),
-                arguments
-            ).AddTransformer(ReplaceTokensFactory.Make(arguments));
+            return MakeNewChain()
+                .AddTransformer(RemoveAllCommentsFactory.Make(arguments))
+                .AddTransformer(ReplaceTokensFactory.Make(arguments));
         }
 
-        private static TransformerChain AddRemoveAllComments(TransformerChain chain, CompilerArguments arguments)
+        private static TransformerChain MakeNewChain()
         {
-            return arguments.StripComments
-                ? chain.AddTransformer(new RemoveAllComments())
-                : chain;
+            return new ();
         }
     }
 }

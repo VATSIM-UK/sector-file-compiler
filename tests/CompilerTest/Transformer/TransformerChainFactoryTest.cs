@@ -8,17 +8,9 @@ namespace CompilerTest.Transformer
 {
     public class TransformerChainFactoryTest
     {
-        private readonly CompilerArguments arguments;
-
-        public TransformerChainFactoryTest()
-        {
-            arguments = new CompilerArguments();
-        }
-
         [Fact]
-        public void TestItAddsCommentStripper()
+        public void TestItAddsTransformers()
         {
-            arguments.StripComments = true;
             List<Type> expected = new(new[]
                 {
                     typeof(RemoveAllComments),
@@ -28,21 +20,7 @@ namespace CompilerTest.Transformer
 
             Assert.Equal(
                 expected,
-                TransformerChainFactory.Create(arguments).GetTransformerTypes()
-            );
-        }
-
-        [Fact]
-        public void TestItDoesntAddCommentStripperIfDisabled()
-        {
-            List<Type> expected = new(new[]
-            {
-                typeof(ReplaceTokens)
-            });
-
-            Assert.Equal(
-                expected,
-                TransformerChainFactory.Create(arguments).GetTransformerTypes()
+                TransformerChainFactory.Create(CompilerArgumentsFactory.Make()).GetTransformerTypes()
             );
         }
     }
