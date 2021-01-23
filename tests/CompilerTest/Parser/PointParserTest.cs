@@ -12,7 +12,7 @@ namespace CompilerTest.Parser
             Coordinate expectedCoordinate = new Coordinate("N050.57.00.000", "W001.21.24.490");
             Point point = PointParser.Parse("N050.57.00.000", "W001.21.24.490");
 
-            Assert.Equal(Point.TYPE_COORDINATE, point.Type());
+            Assert.Equal(Point.TypeCoordinate, point.Type());
             Assert.Equal(expectedCoordinate, point.Coordinate);
         }
 
@@ -20,14 +20,14 @@ namespace CompilerTest.Parser
         public void TestItReturnsInvalidOnIdentifierTooLong()
         {
             Point point = PointParser.Parse("ABCDEFG", "ABCDEFG");
-            Assert.Equal(PointParser.invalidPoint, point);
+            Assert.Equal(PointParser.InvalidPoint, point);
         }
 
         [Fact]
         public void TestItReturnsInvalidOnIdentifiersNoMatch()
         {
             Point point = PointParser.Parse("ABCDE", "BCDEF");
-            Assert.Equal(PointParser.invalidPoint, point);
+            Assert.Equal(PointParser.InvalidPoint, point);
         }
 
         [Fact]
@@ -35,8 +35,8 @@ namespace CompilerTest.Parser
         {
             Point point = PointParser.Parse("ABCDE", "ABCDE");
 
-            Assert.Equal(Point.TYPE_IDENTIFIER, point.Type());
-            Assert.Equal("ABCDE ABCDE", point.Compile());
+            Assert.Equal(Point.TypeIdentifier, point.Type());
+            Assert.Equal("ABCDE ABCDE", point.ToString());
         }
     }
 }

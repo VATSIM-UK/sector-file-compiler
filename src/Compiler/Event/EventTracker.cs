@@ -4,9 +4,9 @@ namespace Compiler.Event
 {
     public class EventTracker: IEventLogger
     {
-        private readonly List<ICompilerEvent> events = new List<ICompilerEvent>();
+        private readonly List<ICompilerEvent> events = new();
 
-        private readonly List<IEventObserver> observers = new List<IEventObserver>();
+        private readonly List<IEventObserver> observers = new();
 
         public void AddObserver(IEventObserver observer)
         {

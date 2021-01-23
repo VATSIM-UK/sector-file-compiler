@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -20,23 +18,17 @@ namespace Compiler.Validate
                 {
                     if (guest.DepartureAirport != "*" && !airports.Contains(guest.DepartureAirport))
                     {
-                        string message = String.Format(
-                            "Invalid departure GUEST airport {0} on sector {1}",
-                            guest.DepartureAirport,
-                            sector.Name
-                        );
-                        events.AddEvent(new ValidationRuleFailure(message));
+                        string message =
+                            $"Invalid departure GUEST airport {guest.DepartureAirport} on sector {sector.Name}";
+                        events.AddEvent(new ValidationRuleFailure(message, guest));
                         break;
                     }
 
                     if (guest.ArrivalAirport != "*" && !airports.Contains(guest.ArrivalAirport))
                     {
-                        string message = String.Format(
-                            "Invalid arrival GUEST airport {0} on sector {1}",
-                            guest.ArrivalAirport,
-                            sector.Name
-                        );
-                        events.AddEvent(new ValidationRuleFailure(message));
+                        string message =
+                            $"Invalid arrival GUEST airport {guest.ArrivalAirport} on sector {sector.Name}";
+                        events.AddEvent(new ValidationRuleFailure(message, guest));
                         break;
                     }
                 }

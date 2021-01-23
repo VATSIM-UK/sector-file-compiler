@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Model
+﻿namespace Compiler.Model
 {
-    public class GeoSegment : AbstractSectorElement, ICompilable
+    public class GeoSegment : AbstractCompilableElement
     {
-        public GeoSegment(Point firstPoint, Point secondPoint, string colour, string comment)
-            : base(comment)
+        public GeoSegment(
+            Point firstPoint,
+            Point secondPoint,
+            string colour,
+            Definition definition,
+            Docblock docblock,
+            Comment comment
+
+        ) : base(definition, docblock, comment)
         {
             FirstPoint = firstPoint;
             SecondPoint = secondPoint;
@@ -18,15 +21,9 @@ namespace Compiler.Model
         public Point SecondPoint { get; }
         public string Colour { get; }
 
-        public string Compile()
+        public override string GetCompileData(SectorElementCollection elements)
         {
-            return String.Format(
-                "{0} {1} {2}{3}\r\n",
-                this.FirstPoint.Compile(),
-                this.SecondPoint.Compile(),
-                this.Colour,
-                this.CompileComment()
-            );
+            return $"{this.FirstPoint} {this.SecondPoint} {Colour ?? ""}".Trim();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -9,7 +10,14 @@ namespace CompilerTest.Model
 
         public LabelTest()
         {
-            this.label = new Label("label 1", new Coordinate("abc", "def"), "colour", null);
+            this.label = new Label(
+                "label 1",
+                new Coordinate("abc", "def"),
+                "colour",
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
         }
 
         [Fact]
@@ -33,16 +41,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("\"label 1\" abc def colour\r\n", this.label.Compile());
-        }
-
-        [Fact]
-        public void TestItCompilesWithComment()
-        {
-            Assert.Equal(
-                "\"label 1\" abc def colour ;comment\r\n",
-                new Label("label 1", new Coordinate("abc", "def"), "colour", "comment").Compile()
-            );
+            Assert.Equal("\"label 1\" abc def colour", this.label.GetCompileData(new SectorElementCollection()));
         }
     }
 }

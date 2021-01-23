@@ -1,27 +1,19 @@
 ﻿using Compiler.Argument;
-using Compiler.Output;
 
 namespace Compiler.Transformer
 {
-    public class TransformerChainFactory
+    public static class TransformerChainFactory
     {
-        public static TransformerChain Create(CompilerArguments arguments, OutputSections section)
+        public static TransformerChain Create(CompilerArguments arguments)
         {
-            TransformerChain chain = new TransformerChain();
+            return MakeNewChain()
+                .AddTransformer(RemoveAllCommentsFactory.Make(arguments))
+                .AddTransformer(ReplaceTokensFactory.Make(arguments));
+        }
 
-            if (arguments.StripComments && section != OutputSections.ESE_HEADER && section != OutputSections.SCT_HEADER)
-            {
-                chain.AddTransformer(new RemoveAllComments());
-            }
-
-            if (arguments.RemoveBlankLines)
-            {
-                chain.AddTransformer(new RemoveBlankLines());
-            }
-
-            chain.AddTransformer(new ReplaceTokens(SystemTokensFactory.GetSystemTokens(arguments)));
-
-            return chain;
+        private static TransformerChain MakeNewChain()
+        {
+            return new ();
         }
     }
 }

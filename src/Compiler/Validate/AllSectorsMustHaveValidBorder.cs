@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -17,17 +15,16 @@ namespace Compiler.Validate
             List<string> sectorlines = sectorElements.SectorLines.Select(line => line.Name).ToList();
             foreach (Sector sector in sectorElements.Sectors)
             {
-                foreach (string position in sector.Border.BorderLines)
+                foreach (SectorBorder border in sector.Borders)
                 {
-                    if (!circleSectorlines.Contains(position) && !sectorlines.Contains(position))
+                    foreach (string borderLine in border.BorderLines)
                     {
-                        string message = String.Format(
-                            "Invalid BORDER line {0} on sector {1}",
-                            position,
-                            sector.Name
-                        );
-                        events.AddEvent(new ValidationRuleFailure(message));
-                        break;
+                        if (!circleSectorlines.Contains(borderLine) && !sectorlines.Contains(borderLine))
+                        {
+                            string message = $"Invalid BORDER line {borderLine} on sector {sector.Name}";
+                            events.AddEvent(new ValidationRuleFailure(message, border));
+                            break;
+                        }
                     }
                 }
             }

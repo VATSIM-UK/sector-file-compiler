@@ -1,36 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Model
+﻿namespace Compiler.Model
 {
-    public class SectorlineCoordinate : AbstractSectorElement, ICompilable
+    public class SectorlineCoordinate : AbstractCompilableElement
     {
         public SectorlineCoordinate(
             Coordinate coordinate,
-            string comment
-        ) : base(comment) 
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base(definition, docblock, inlineComment) 
         {
             Coordinate = coordinate;
         }
 
         public Coordinate Coordinate { get; }
 
-        public string Compile()
-        {
-            return String.Format(
-                "COORD:{0}:{1}{2}\r\n",
-                this.Coordinate.latitude,
-                this.Coordinate.longitude,
-                this.CompileComment()
-            );
-        }
-
         public override bool Equals(object obj)
         {
             return (obj is SectorlineCoordinate) &&
-                (((SectorlineCoordinate)obj).Coordinate.Equals(this.Coordinate)) &&
-                (((SectorlineCoordinate)obj).Comment == this.Comment);
+                (((SectorlineCoordinate)obj).Coordinate.Equals(this.Coordinate));
+        }
+
+        public override string GetCompileData(SectorElementCollection elements)
+        {
+            return $"COORD:{this.Coordinate.latitude}:{this.Coordinate.longitude}";
         }
 
         public override int GetHashCode()

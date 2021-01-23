@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -25,13 +23,9 @@ namespace Compiler.Validate
                     !vors.Contains(point.DepartureAirportOrFixBefore) &&
                     !ndbs.Contains(point.DepartureAirportOrFixBefore)
                 ) {
-                    string message = String.Format(
-                        "Invalid previous fix or departure airport {0} on coordination point: {1}",
-                        point.DepartureAirportOrFixBefore,
-                        point.Compile()
-                    );
-                    events.AddEvent(new ValidationRuleFailure(message));
-                    continue;
+                    string message =
+                        $"Invalid previous fix or departure airport {point.DepartureAirportOrFixBefore} on coordination point: {point.GetCompileData(sectorElements)}";
+                    events.AddEvent(new ValidationRuleFailure(message, point));
                 }
             }
         }

@@ -1,13 +1,14 @@
 ﻿using Xunit;
 using Compiler.Model;
 using System.Collections.Generic;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
     public class SectorAlternateOwnerHierarchyTest
     {
         private readonly SectorAlternateOwnerHierarchy model;
-        private List<string> owners = new List<string>
+        private readonly List<string> owners = new()
         {
             "ONE",
             "TWO",
@@ -19,7 +20,9 @@ namespace CompilerTest.Model
             this.model = new SectorAlternateOwnerHierarchy(
                 "TEST",
                 this.owners,
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -39,8 +42,8 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "ALTOWNER:TEST:ONE:TWO:THREE ;comment\r\n",
-                this.model.Compile()
+                "ALTOWNER:TEST:ONE:TWO:THREE",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

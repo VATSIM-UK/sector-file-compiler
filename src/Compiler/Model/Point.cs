@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Model
+﻿namespace Compiler.Model
 {
-    public class Point : ICompilable
+    public class Point
     {
         // The different types of point
-        public const int TYPE_COORDINATE = 0;
-        public const int TYPE_IDENTIFIER = 1;
+        public const int TypeCoordinate = 0;
+        public const int TypeIdentifier = 1;
 
         public Coordinate Coordinate { get; }
         public string Identifier { get; }
@@ -18,9 +14,9 @@ namespace Compiler.Model
             this.Coordinate = coordinate;
         }
 
-        public Point(string Identifier)
+        public Point(string identifier)
         {
-            this.Identifier = Identifier;
+            this.Identifier = identifier;
         }
 
         public override bool Equals(object obj)
@@ -37,10 +33,10 @@ namespace Compiler.Model
 
         public int Type()
         {
-            return this.Identifier == null ? Point.TYPE_COORDINATE : Point.TYPE_IDENTIFIER;
+            return this.Identifier == null ? Point.TypeCoordinate : Point.TypeIdentifier;
         }
 
-        public string Compile()
+        public override string ToString()
         {
             return this.Identifier != null
                 ? this.Identifier + " " + this.Identifier

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Linq;
 using Compiler.Event;
 using Compiler.Error;
 using Compiler.Model;
@@ -14,26 +12,15 @@ namespace Compiler.Validate
         {
             foreach(SidStar sidStar in sectorElements.SidStars)
             {
-                bool airportFound = false;
-                foreach (Airport airport in sectorElements.Airports)
-                {
-                    if (sidStar.Airport == airport.Icao)
-                    {
-                        airportFound = true;
-                        break;
-                    }
-                }
+                bool airportExists = sectorElements.Airports
+                    .Count(airport => sidStar.Airport == airport.Icao) != 0;
 
-                if (!airportFound)
+                if (!airportExists)
                 {
-                    string errorMessage = String.Format(
-                        "Airport {0} is not valid for {1}/{2}",
-                        sidStar.Airport,
-                        sidStar.Type,
-                        sidStar.Identifier
-                    );
+                    string errorMessage =
+                        $"Airport {sidStar.Airport} is not valid for {sidStar.Type}/{sidStar.Identifier}";
 
-                    events.AddEvent(new ValidationRuleFailure(errorMessage));
+                    events.AddEvent(new ValidationRuleFailure(errorMessage, sidStar));
                 }
             }
         }

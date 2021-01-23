@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Model
+﻿namespace Compiler.Model
 {
-    public class SectorlineDisplayRule : AbstractSectorElement, ICompilable
+    public class SectorlineDisplayRule : AbstractCompilableElement
     {
         public SectorlineDisplayRule(
             string controlledSector,
             string compareSectorFirst,
             string compareSectorSecond,
-            string comment
-        ) : base(comment) 
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base(definition, docblock, inlineComment) 
         {
             ControlledSector = controlledSector;
             CompareSectorFirst = compareSectorFirst;
@@ -22,24 +20,18 @@ namespace Compiler.Model
         public string CompareSectorFirst { get; }
         public string CompareSectorSecond { get; }
 
-        public string Compile()
-        {
-            return String.Format(
-                "DISPLAY:{0}:{1}:{2}{3}\r\n",
-                this.ControlledSector,
-                this.CompareSectorFirst,
-                this.CompareSectorSecond,
-                this.CompileComment()
-            );
-        }
 
         public override bool Equals(object obj)
         {
             return (obj is SectorlineDisplayRule rule) &&
                 (rule.ControlledSector == this.ControlledSector) &&
                 (rule.ControlledSector == this.ControlledSector) &&
-                (rule.CompareSectorSecond == this.CompareSectorSecond) &&
-                (rule.Comment == this.Comment);
+                (rule.CompareSectorSecond == this.CompareSectorSecond);
+        }
+
+        public override string GetCompileData(SectorElementCollection elements)
+        {
+            return $"DISPLAY:{this.ControlledSector}:{this.CompareSectorFirst}:{this.CompareSectorSecond}";
         }
 
         public override int GetHashCode()

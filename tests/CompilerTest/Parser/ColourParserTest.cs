@@ -1,31 +1,14 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Moq;
-using Compiler.Parser;
 using Compiler.Error;
 using Compiler.Model;
-using Compiler.Event;
-using Compiler.Output;
-using CompilerTest.Mock;
+using Compiler.Input;
 
 namespace CompilerTest.Parser
 {
-    public class ColourParserTest
+    public class ColourParserTest: AbstractParserTestCase
     {
-        private readonly ColourParser parser;
-
-        private readonly SectorElementCollection collection;
-
-        private readonly Mock<IEventLogger> log;
-
-        public ColourParserTest()
-        {
-            this.log = new Mock<IEventLogger>();
-            this.collection = new SectorElementCollection();
-            this.parser = (ColourParser)(new SectionParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.SCT_COLOUR_DEFS);
-        }
-
         public static IEnumerable<object[]> BadData => new List<object[]>
         {
             new object[] { new List<string>{
@@ -46,48 +29,26 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.parser.ParseData(
-                new MockSectorDataFile(
-                    "test.txt",
-                    lines
-                )
-            );
+            this.RunParserOnLines(lines);
 
-            Assert.Empty(this.collection.Colours);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItHandlesMetadata()
-        {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] {
-                    ""
-                })
-            );
-
-            this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(
-                this.collection.Compilables[OutputSections.SCT_COLOUR_DEFS][0]
-            );
+            Assert.Empty(this.sectorElementCollection.Colours);
+            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsColourData()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] {
-                    "#define abc 255 ;comment"
-                })
-            );
-            this.parser.ParseData(data);
+            this.RunParserOnLines(new List<string>(new[] {"#define abc 255 ;comment"}));
 
-            Colour result = this.collection.Colours[0];
+            Colour result = this.sectorElementCollection.Colours[0];
             Assert.Equal("abc", result.Name);
             Assert.Equal(255, result.Value);
-            Assert.Equal("comment", result.Comment);
+            this.AssertExpectedMetadata(result);
+        }
+
+        protected override InputDataType GetInputDataType()
+        {
+            return InputDataType.SCT_COLOUR_DEFINITIONS;
         }
     }
 }

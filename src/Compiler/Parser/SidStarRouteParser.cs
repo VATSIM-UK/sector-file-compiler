@@ -7,21 +7,16 @@ using System.Linq;
 
 namespace Compiler.Parser
 {
-    public class SidStarRouteParser: AbstractSectorElementParser, ISectorDataParser
+    public class SidStarRouteParser: ISectorDataParser
     {
-        private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
         private readonly IEventLogger errorLog;
 
         public SidStarRouteParser(
-            MetadataParser metadataParser,
-            ISectorLineParser sectorLineParser,
             SectorElementCollection sectorElements,
             IEventLogger errorLog,
             SidStarType type
-        ) : base(metadataParser)
-        {
-            this.sectorLineParser = sectorLineParser;
+        ) {
             this.sectorElements = sectorElements;
             this.errorLog = errorLog;
             this.Type = type;
@@ -31,72 +26,62 @@ namespace Compiler.Parser
 
         public void ParseData(AbstractSectorDataFile data)
         {
-            List<SectorFormatLine> linesToProcess = new List<SectorFormatLine>();
+            List<SectorData> linesToProcess = new List<SectorData>();
             bool foundFirst = false;
-            int newSegmentStartLine = 0;
-            foreach (string line in data)
+            foreach (SectorData line in data)
             {
-                // Defer all metadata lines to the base
-                if (this.ParseMetadata(line))
-                {
-                    continue;
-                }
-
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
-
                 // We haven't yet started a SID/STAR route, so make sure we have a new declaration
                 if (
                     !foundFirst &&
-                    (this.GetFirstPointIndex(sectorData) == -1 ||
-                    this.GetFirstPointIndex(sectorData) == 0)
+                    (this.GetFirstPointIndex(line) == -1 ||
+                    this.GetFirstPointIndex(line) == 0)
                 )
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid new SIDSTAR route declaration", data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Invalid new SIDSTAR route declaration", line)
                     );
                     return;
                 } else if (!foundFirst) {
-                    linesToProcess.Add(sectorData);
-                    newSegmentStartLine = data.CurrentLineNumber;
+                    linesToProcess.Add(line);
                     foundFirst = true;
                     continue;
                 }
 
                 // We've reached the end of the segment, time to make the thing and start over!
-                int firstPointIndex = this.GetFirstPointIndex(sectorData);
+                int firstPointIndex = this.GetFirstPointIndex(line);
                 if (firstPointIndex == -1)
                 {
                     this.errorLog.AddEvent(
-                      new SyntaxError("Unable to find first point in SID/STAR route", data.FullPath, data.CurrentLineNumber)
+                      new SyntaxError("Unable to find first point in SID/STAR route", line)
                     );
                     this.errorLog.AddEvent(new ParserSuggestion("Have you provided valid coordinates?"));
                     return;
                 } else if (firstPointIndex != 0)
                 {
-                    this.ProcessSidStar(linesToProcess, data, newSegmentStartLine);
+                    this.ProcessSidStar(linesToProcess);
                     linesToProcess.Clear();
-                    linesToProcess.Add(sectorData);
+                    linesToProcess.Add(line);
                     continue;
                 }
 
                 // It may be a standard route line with no identifier present (we validate it later)
-                linesToProcess.Add(sectorData);
+                linesToProcess.Add(line);
             }
 
             // If we've got some lines left over, process them now
             if (linesToProcess.Count != 0)
             {
-                this.ProcessSidStar(linesToProcess, data, newSegmentStartLine);
+                this.ProcessSidStar(linesToProcess);
             }
         }
 
-        private int GetFirstPointIndex(SectorFormatLine sectorData)
+        private int GetFirstPointIndex(SectorData sectorData)
         {
             bool foundSecondPoint = false;
             for (int i = sectorData.dataSegments.Count - 2; i >= 0;)
             {
                 // Work til we find the first valid point
-                if (!PointParser.Parse(sectorData.dataSegments[i], sectorData.dataSegments[i + 1]).Equals(PointParser.invalidPoint)) {
+                if (!PointParser.Parse(sectorData.dataSegments[i], sectorData.dataSegments[i + 1]).Equals(PointParser.InvalidPoint)) {
                     
                     // We've found the second valid point
                     if (!foundSecondPoint)
@@ -119,14 +104,14 @@ namespace Compiler.Parser
         /**
          * Process an individual SID/STARs worth of lines
          */
-        private void ProcessSidStar(List<SectorFormatLine> lines, AbstractSectorDataFile data, int startLine)
+        private void ProcessSidStar(List<SectorData> lines)
         {
             // Get the name out and remove it from the array
             int firstLineFirstCoordinateIndex = this.GetFirstPointIndex(lines[0]);
             if (firstLineFirstCoordinateIndex == -1)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Invalid SID/STAR route segment coordinates", data.FullPath, startLine)
+                    new SyntaxError("Invalid SID/STAR route segment coordinates", lines[0])
                 );
                 return;
             }
@@ -140,19 +125,29 @@ namespace Compiler.Parser
             {
                 segments.Add(
                     new RouteSegment(
+                        sidStarName,
                         PointParser.Parse(lines[i].dataSegments[0], lines[i].dataSegments[1]),
                         PointParser.Parse(lines[i].dataSegments[2], lines[i].dataSegments[3]),
-                        lines[i].dataSegments.Count == 5 ? lines[i].dataSegments[4] : null,
-                        lines[i].comment
+                        lines[i].definition,
+                        lines[i].docblock,
+                        lines[i].inlineComment,
+                        lines[i].dataSegments.Count == 5 ? lines[i].dataSegments[4] : null
                     )
                 );
             }
+
+            RouteSegment initialSegment = segments.ElementAt(0);
+            segments.RemoveAt(0);
 
             this.sectorElements.Add(
                 new SidStarRoute(
                     this.Type,
                     sidStarName,
-                    segments
+                    initialSegment,
+                    segments,
+                    lines[0].definition,
+                    lines[0].docblock,
+                    lines[0].inlineComment
                 )
             );
         }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -18,38 +16,32 @@ namespace Compiler.Validate
         }
 
         private void TestArtccCategory(
-            List<Artcc> artccs,
+            List<ArtccSegment> artccs,
             SectorElementCollection sectorElements,
             IEventLogger events
         ) {
-            foreach (Artcc artcc in artccs)
+            foreach (ArtccSegment artcc in artccs)
             {
-                if (artcc.StartPoint.Type() == Point.TYPE_IDENTIFIER)
+                if (artcc.StartPoint.Type() == Point.TypeIdentifier)
                 {
                     if (this.InvalidPoint(artcc.StartPoint.Identifier, sectorElements))
                     {
-                        string message = String.Format(
-                            "Invalid end point {0} on ARTCC segment for {1}",
-                            artcc.StartPoint.Identifier,
-                            artcc.Identifier
-                        );
+                        string message =
+                            $"Invalid end point {artcc.StartPoint.Identifier} on ARTCC segment for {artcc.Identifier}";
                         events.AddEvent(
-                            new ValidationRuleFailure(message)
+                            new ValidationRuleFailure(message, artcc)
                         );
                     }
                 }
 
-                if (artcc.EndPoint.Type() == Point.TYPE_IDENTIFIER)
+                if (artcc.EndPoint.Type() == Point.TypeIdentifier)
                 {
                     if (this.InvalidPoint(artcc.EndPoint.Identifier, sectorElements))
                     {
-                        string message = String.Format(
-                            "Invalid start point {0} on ARTCC segment for {1}",
-                            artcc.EndPoint.Identifier,
-                            artcc.Identifier
-                        );
+                        string message =
+                            $"Invalid start point {artcc.EndPoint.Identifier} on ARTCC segment for {artcc.Identifier}";
                         events.AddEvent(
-                            new ValidationRuleFailure(message)
+                            new ValidationRuleFailure(message, artcc)
                         );
                     }
                 }

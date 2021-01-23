@@ -1,6 +1,8 @@
 ﻿using Xunit;
 using System.Collections.Generic;
+using System.Linq;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -8,18 +10,16 @@ namespace CompilerTest.Model
     {
         private readonly Region region;
 
-        private readonly List<Point> points = new List<Point>();
+        private readonly List<RegionPoint> points = RegionPointFactory.MakeList(3);
 
         public RegionTest()
         {
-            this.points.Add(new Point("test1"));
-            this.points.Add(new Point("test2"));
-            this.points.Add(new Point("test3"));
             this.region = new Region(
                 "Region1",
-                "Red",
                 this.points,
-                null
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -27,12 +27,6 @@ namespace CompilerTest.Model
         public void TestItSetsName()
         {
             Assert.Equal("Region1", this.region.Name);
-        }
-
-        [Fact]
-        public void TestItSetsColour()
-        {
-            Assert.Equal("Red", this.region.Colour);
         }
 
         [Fact]
@@ -45,25 +39,19 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "REGIONNAME Region1\r\nRed test1 test1\r\n test2 test2\r\n test3 test3\r\n",
-                this.region.Compile()
+                "REGIONNAME Region1",
+                this.region.GetCompileData(new SectorElementCollection())
             );
         }
 
         [Fact]
-        public void TestItCompilesWithComment()
+        public void TestItReturnsCompilableElements()
         {
-            Region region = new Region(
-                "Region1",
-                "Red",
-                this.points,
-                "comment"
-            );
-
-            Assert.Equal(
-                "REGIONNAME Region1\r\nRed test1 test1 ;comment\r\n test2 test2\r\n test3 test3\r\n",
-                region.Compile()
-            );
+            IEnumerable<ICompilableElement> expected = new List<ICompilableElement>()
+            {
+                this.region
+            }.Concat(this.points);
+            Assert.Equal(expected, this.region.GetCompilableElements());
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Compiler.Input;
+﻿using System.Collections.Generic;
+using Compiler.Input;
+using Compiler.Model;
 using Xunit;
 
 namespace CompilerTest.Input
@@ -10,7 +12,10 @@ namespace CompilerTest.Input
         public SectorDataFileTest()
         {
             this.file = new SectorDataFile(
-                "_TestData/StreamTest.txt"
+                "_TestData/SectorDataFile/StreamTest.txt",
+                new InputFileStreamFactory(),
+                InputDataType.ESE_AGREEMENTS,
+                new EseSectorDataReader()
             );
         }
 
@@ -18,8 +23,26 @@ namespace CompilerTest.Input
         public void ItSetsFullPath()
         {
             Assert.Equal(
-                "_TestData/StreamTest.txt",
+                "_TestData/SectorDataFile/StreamTest.txt",
                 this.file.FullPath
+            );
+        }
+
+        [Fact]
+        public void ItGetsParentDirectory()
+        {
+            Assert.Equal(
+                "SectorDataFile",
+                this.file.GetParentDirectoryName()
+            );
+        }
+
+        [Fact]
+        public void ItGetsFileName()
+        {
+            Assert.Equal(
+                "StreamTest",
+                this.file.GetFileName()
             );
         }
 
@@ -36,17 +59,31 @@ namespace CompilerTest.Input
         }
 
         [Fact]
+        public void ItHasADataType()
+        {
+            Assert.Equal(InputDataType.ESE_AGREEMENTS, this.file.DataType);
+        }
+
+        [Fact]
         public void TestItIteratesTheInputFile()
         {
-            int expectedLine = 1;
-            foreach (string line in this.file)
+            int expectedLine = 3;
+            foreach (SectorData dataLine in this.file)
             {
-                Assert.Equal("Line " + expectedLine.ToString(), line);
-                Assert.Equal("Line " + expectedLine.ToString(), this.file.CurrentLine);
-                Assert.Equal(expectedLine++, this.file.CurrentLineNumber);
+                Assert.Equal(new List<string> { "Line", expectedLine.ToString() }, dataLine.dataSegments);
+
+                Docblock expectedDocblock = new();
+                expectedDocblock.AddLine(new Comment("Docblock " + (expectedLine - 2)));
+                expectedDocblock.AddLine(new Comment("Docblock " + (expectedLine - 1)));
+                Assert.Equal(expectedDocblock, dataLine.docblock);
+                Assert.Equal(new Comment("Inline " + expectedLine), dataLine.inlineComment);
+                Assert.Equal(expectedLine, this.file.CurrentLineNumber);
+                Assert.Equal(new Definition("_TestData/SectorDataFile/StreamTest.txt", expectedLine), dataLine.definition);
+
+                expectedLine += 4;
             }
 
-            Assert.Equal(8, this.file.CurrentLineNumber);
+            Assert.Equal(33, this.file.CurrentLineNumber);
         }
     }
 }

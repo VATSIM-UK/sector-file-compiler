@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Model
+﻿namespace Compiler.Model
 {
-    public class Fix : AbstractSectorElement, ICompilable
+    public class Fix : AbstractCompilableElement
     {
         public string Identifier { get; }
         public Coordinate Coordinate { get; }
 
-        public Fix(string identifier, Coordinate coordinate, string comment) : base(comment)
+        public Fix(
+            string identifier,
+            Coordinate coordinate,
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base(definition, docblock, inlineComment)
         {
             Identifier = identifier;
             Coordinate = coordinate;
         }
 
-        public string Compile()
+        public override string GetCompileData(SectorElementCollection elements)
         {
-            return String.Format(
-                "{0} {1}{2}\r\n",
-                this.Identifier,
-                this.Coordinate.ToString(),
-                this.CompileComment()
-            );
+            return $"{this.Identifier} {this.Coordinate.ToString()}";
         }
     }
 }

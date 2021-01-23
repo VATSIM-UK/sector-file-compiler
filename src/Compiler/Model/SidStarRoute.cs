@@ -1,39 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Compiler.Model
 {
-    public class SidStarRoute : ICompilable
+    public class SidStarRoute : AbstractCompilableElement
     {
         public SidStarRoute(
             SidStarType type,
             string identifier,
-            List<RouteSegment> segments
-        ) {
+            RouteSegment initialSegment,
+            List<RouteSegment> segments,
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base (definition, docblock, inlineComment)
+        {
             Type = type;
             Identifier = identifier;
+            InitialSegment = initialSegment;
             Segments = segments;
         }
 
         public SidStarType Type { get; }
         public string Identifier { get; }
+        public RouteSegment InitialSegment { get; }
         public List<RouteSegment> Segments { get; }
 
-        public string Compile()
+        public override IEnumerable<ICompilableElement> GetCompilableElements()
         {
-            string output = String.Format(
-                "{0} {1}",
-                this.Identifier.PadRight(26, ' '),
-                this.Segments[0].Compile()
-            );
+            List<ICompilableElement> elements = new List<ICompilableElement>() {this};
+            return elements.Concat(this.Segments);
+        }
 
-            for (int i = 1; i < this.Segments.Count; i++)
-            {
-                output += "".PadRight(this.Identifier.PadRight(26, ' ').Length + 1) + this.Segments[i].Compile();
-            }
-
-            return output;
+        public override string GetCompileData(SectorElementCollection elements)
+        {
+            return $"{this.Identifier?.PadRight(26, ' ')} {this.InitialSegment.Start} {this.InitialSegment.End}{(this.InitialSegment.Colour == null ? "" : " " + this.InitialSegment.Colour)}";
         }
     }
 }

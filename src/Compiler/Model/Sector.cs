@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Compiler.Model
 {
-    public class Sector : AbstractSectorElement, ICompilable
+    public class Sector : AbstractCompilableElement
     {
         public Sector(
             string name,
@@ -15,11 +13,13 @@ namespace Compiler.Model
             List<SectorAlternateOwnerHierarchy> altOwners,
             List<SectorActive> active,
             List<SectorGuest> guests,
-            SectorBorder border,
-            SectorArrivalAirports arrivalAirports,
-            SectorDepartureAirports departureAirports,
-            string definitionComment
-        ) : base(definitionComment) 
+            List<SectorBorder> borders,
+            List<SectorArrivalAirports> arrivalAirports,
+            List<SectorDepartureAirports> departureAirports,
+            Definition initialDefinition,
+            Docblock initialDocblock,
+            Comment initialInlineComment
+        ) : base(initialDefinition, initialDocblock, initialInlineComment) 
         {
             Name = name;
             MinimumAltitude = minimumAltitude;
@@ -28,12 +28,11 @@ namespace Compiler.Model
             AltOwners = altOwners;
             Active = active;
             Guests = guests;
-            Border = border;
+            Borders = borders;
             ArrivalAirports = arrivalAirports;
             DepartureAirports = departureAirports;
         }
 
-        public List<string> BorderLines { get; }
         public string Name { get; }
         public int MinimumAltitude { get; }
         public int MaximumAltitude { get; }
@@ -41,26 +40,25 @@ namespace Compiler.Model
         public List<SectorAlternateOwnerHierarchy> AltOwners { get; }
         public List<SectorActive> Active { get; }
         public List<SectorGuest> Guests { get; }
-        public SectorBorder Border { get; }
-        public SectorArrivalAirports ArrivalAirports { get; }
-        public SectorDepartureAirports DepartureAirports { get; }
 
-        public string Compile()
+        public List<SectorBorder> Borders { get; }
+        public List<SectorArrivalAirports> ArrivalAirports { get; }
+        public List<SectorDepartureAirports> DepartureAirports { get; }
+
+        public override IEnumerable<ICompilableElement> GetCompilableElements()
         {
-            return String.Format(
-                "SECTOR:{0}:{1}:{2}{3}\r\n{4}{5}{6}{7}{8}{9}{10}\r\n",
-                this.Name,
-                this.MinimumAltitude.ToString(),
-                this.MaximumAltitude.ToString(),
-                this.CompileComment(),
-                this.Owners.Compile(),
-                this.AltOwners.Aggregate("", (ownerString, newOwner) => ownerString + newOwner.Compile()),
-                this.Active.Aggregate("", (activeString, newActive) => activeString + newActive.Compile()),
-                this.Guests.Aggregate("", (guestString, newGuest) => guestString + newGuest.Compile()),
-                this.Border.Compile(),
-                this.ArrivalAirports.Compile(),
-                this.DepartureAirports.Compile()
-            );
+            List<ICompilableElement> elements = new List<ICompilableElement> {this, this.Owners};
+            return elements.Concat(this.AltOwners)
+                .Concat(this.Active)
+                .Concat(this.Guests)
+                .Concat(this.Borders)
+                .Concat(this.ArrivalAirports)
+                .Concat(this.DepartureAirports);
+        }
+
+        public override string GetCompileData(SectorElementCollection elements)
+        {
+            return $"SECTOR:{this.Name}:{this.MinimumAltitude.ToString()}:{this.MaximumAltitude.ToString()}";
         }
     }
 }

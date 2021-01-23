@@ -1,7 +1,4 @@
 ﻿using Compiler.Event;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Compiler.Error
 {
@@ -16,7 +13,7 @@ namespace Compiler.Error
 
         public string GetMessage()
         {
-            return String.Format("Invalid compiler configuration: {0}", exceptionMessage);
+            return $"Invalid compiler configuration: {exceptionMessage}";
         }
 
         public bool IsFatal()

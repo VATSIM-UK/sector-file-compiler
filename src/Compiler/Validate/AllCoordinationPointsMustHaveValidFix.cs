@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -26,13 +24,9 @@ namespace Compiler.Validate
                     !vors.Contains(point.CoordinationFix) &&
                     !ndbs.Contains(point.CoordinationFix)
                 ) {
-                    string message = String.Format(
-                        "Invalid fix {0} for coordination point: {1}",
-                        point.CoordinationFix,
-                        point.Compile()
-                    );
-                    events.AddEvent(new ValidationRuleFailure(message));
-                    continue;
+                    string message =
+                        $"Invalid fix {point.CoordinationFix} for coordination point: {point.GetCompileData(sectorElements)}";
+                    events.AddEvent(new ValidationRuleFailure(message, point));
                 }
             }
         }

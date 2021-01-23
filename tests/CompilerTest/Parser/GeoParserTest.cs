@@ -1,31 +1,14 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Moq;
-using Compiler.Parser;
 using Compiler.Error;
+using Compiler.Input;
 using Compiler.Model;
-using Compiler.Event;
-using Compiler.Output;
-using CompilerTest.Mock;
 
 namespace CompilerTest.Parser
 {
-    public class GeoParserTest
+    public class GeoParserTest: AbstractParserTestCase
     {
-        private readonly GeoParser parser;
-
-        private readonly SectorElementCollection collection;
-
-        private readonly Mock<IEventLogger> log;
-
-        public GeoParserTest()
-        {
-            this.log = new Mock<IEventLogger>();
-            this.collection = new SectorElementCollection();
-            this.parser = (GeoParser)(new SectionParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.SCT_GEO);
-        }
-
         public static IEnumerable<object[]> BadData => new List<object[]>
         {
             new object[] { new List<string>{
@@ -40,110 +23,123 @@ namespace CompilerTest.Parser
             new object[] { new List<string>{
                 "TestGeo                     N050.57.00.000 W001.21.24.490 N050.57.00.000 N050.57.00.001 test"
             }}, // Second point invalid
-            new object[] { new List<string>{
-                "COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:-5:*:|HEMEL20 ;comment"
-            }}, // Climb level negative
-            new object[] { new List<string>{
-                "COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:*:abc:|HEMEL20 ;comment"
-            }}, // Descend level not integer
-            new object[] { new List<string>{
-                "COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:*:-5:|HEMEL20 ;comment"
-            }}, // Descend level negative
-            new object[] { new List<string>{
-                "FIR_COPX:*:*:HEMEL:*:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment"
-            }}, // Arrival airport any, but runway set
-            new object[] { new List<string>{
-                "FIR_COPX:*:*:HEMEL:DIKAS:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment"
-            }}, // Next fix is a fix (not an airport) but arrival runway is specified
-            new object[] { new List<string>{
-                "FIR_COPX:*:09R:HEMEL:EGKK:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment"
-            }}, // Any departure airport, but runway specified
-            new object[] { new List<string>{
-                "FIR_COPX:IBROD:09R:HEMEL:EGKK:26R:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment"
-            }}, // Next fix is a fix (not an airport) but departure runway is specified
         };
 
         [Theory]
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.parser.ParseData(
-                new MockSectorDataFile(
-                    "test.txt",
-                    lines
-                )
-            );
-
-            Assert.Empty(this.collection.GeoElements);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            this.RunParserOnLines(lines);
+            Assert.Empty(this.sectorElementCollection.GeoElements);
+            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
-        public void TestItHandlesMetadata()
+        public void TestItAddsGeoDataWithOneSegment()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "" })
+            this.RunParserOnLines(
+                new List<string>(new[] { "TestGeo                     N050.57.00.000 W001.21.24.490 BCN BCN test ;comment" })
             );
 
-            this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_GEO][0]);
-        }
-
-        [Fact]
-        public void TestItAddsGeoData()
-        {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "TestGeo                     N050.57.00.000 W001.21.24.490 BCN BCN test ;comment" })
-            );
-            this.parser.ParseData(data);
-
-            Geo result = this.collection.GeoElements[0];
+            Geo result = this.sectorElementCollection.GeoElements[0];
             Assert.Equal(
                 new Point(new Coordinate("N050.57.00.000", "W001.21.24.490")),
-                result.Segments[0].FirstPoint
+                result.FirstPoint
             );
             Assert.Equal(
                 new Point("BCN"),
-                result.Segments[0].SecondPoint
+                result.SecondPoint
             );
             Assert.Equal(
                 "test",
-                result.Segments[0].Colour
+                result.Colour
+            );
+            Assert.Empty(result.AdditionalSegments);
+            this.AssertExpectedMetadata(result);
+        }
+        
+        [Fact]
+        public void TestItAddsGeoDataWithMultipleSegment()
+        {
+            this.RunParserOnLines(
+                new List<string>(new[]
+                {
+                    "TestGeo                     N050.57.00.000 W001.21.24.490 BCN BCN test ;comment",
+                    "                            N051.57.00.000 W002.21.24.490 BHD BHD test2 ;comment1",
+                    "                            N053.57.00.000 W003.21.24.490 LAM LAM test3 ;comment2"
+                })
+            );
+
+            Geo result = this.sectorElementCollection.GeoElements[0];
+            Assert.Equal(
+                new Point(new Coordinate("N050.57.00.000", "W001.21.24.490")),
+                result.FirstPoint
             );
             Assert.Equal(
-                "comment",
-                result.Segments[0].Comment
+                new Point("BCN"),
+                result.SecondPoint
             );
+            Assert.Equal(
+                "test",
+                result.Colour
+            );
+            this.AssertExpectedMetadata(result);
+            
+            // Segment 1
+            Assert.Equal(2, result.AdditionalSegments.Count);
+            Assert.Equal(
+                new Point(new Coordinate("N051.57.00.000", "W002.21.24.490")),
+                result.AdditionalSegments[0].FirstPoint
+            );
+            Assert.Equal(
+                new Point("BHD"),
+                result.AdditionalSegments[0].SecondPoint
+            );
+            Assert.Equal(
+                "test2",
+                result.AdditionalSegments[0].Colour
+            );
+            this.AssertExpectedMetadata(result.AdditionalSegments[0], 2, "comment1");
+            
+            // Segment 2
+            Assert.Equal(
+                new Point(new Coordinate("N053.57.00.000", "W003.21.24.490")),
+                result.AdditionalSegments[1].FirstPoint
+            );
+            Assert.Equal(
+                new Point("LAM"),
+                result.AdditionalSegments[1].SecondPoint
+            );
+            Assert.Equal(
+                "test3",
+                result.AdditionalSegments[1].Colour
+            );
+            this.AssertExpectedMetadata(result.AdditionalSegments[1], 3, "comment2");
         }
 
         [Fact]
         public void TestItAddsFakePoint()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "TestGeo                     S999.00.00.000 E999.00.00.000 S999.00.00.000 E999.00.00.000" })
+            this.RunParserOnLines(
+                new List<string>(new[] { "TestGeo                     S999.00.00.000 E999.00.00.000 S999.00.00.000 E999.00.00.000 ;comment" })
             );
-            this.parser.ParseData(data);
+            
+            Geo result = this.sectorElementCollection.GeoElements[0];
+            Assert.Equal(
+                new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
+                result.FirstPoint
+            );
+            Assert.Equal(
+                new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
+                result.SecondPoint
+            );
+            Assert.Null(result.Colour);
+            this.AssertExpectedMetadata(result);
+        }
 
-            Geo result = this.collection.GeoElements[0];
-            Assert.Equal(
-                new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
-                result.Segments[0].FirstPoint
-            );
-            Assert.Equal(
-                new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
-                result.Segments[0].SecondPoint
-            );
-            Assert.Equal(
-                "0",
-                result.Segments[0].Colour
-            );
-            Assert.Equal(
-                "Compiler inserted line",
-                result.Segments[0].Comment
-            );
+        protected override InputDataType GetInputDataType()
+        {
+            return InputDataType.SCT_GEO;
         }
     }
 }

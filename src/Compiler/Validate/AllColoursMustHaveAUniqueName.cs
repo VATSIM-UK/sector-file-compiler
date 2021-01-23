@@ -2,7 +2,6 @@
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
-using Compiler.Output;
 using Compiler.Argument;
 
 namespace Compiler.Validate
@@ -14,13 +13,13 @@ namespace Compiler.Validate
             List<string> coloursProcessed = new List<string>();
             foreach (Colour colour in sectorElements.Colours)
             {
-                if (coloursProcessed.Contains(colour.Name))
+                if (coloursProcessed.Contains(colour.Name.ToLower()))
                 {
-                    events.AddEvent(new ValidationRuleFailure("Duplicate colourm definition " + colour.Name));
+                    events.AddEvent(new ValidationRuleFailure("Duplicate colourm definition " + colour.Name, colour));
                     continue;
                 }
 
-                coloursProcessed.Add(colour.Name);
+                coloursProcessed.Add(colour.Name.ToLower());
             }
         }
     }

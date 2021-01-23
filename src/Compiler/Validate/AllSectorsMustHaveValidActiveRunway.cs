@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -20,13 +18,9 @@ namespace Compiler.Validate
                     if (!this.RunwayValid(sectorElements, active.Runway, active.Airfield))
                     {
                         this.RunwayValid(sectorElements, active.Runway, active.Airfield);
-                        string message = String.Format(
-                            "Invalid ACTIVE runway {0}/{1} on sector {2}",
-                            active.Airfield,
-                            active.Runway,
-                            sector.Name
-                        );
-                        events.AddEvent(new ValidationRuleFailure(message));
+                        string message =
+                            $"Invalid ACTIVE runway {active.Airfield}/{active.Runway} on sector {sector.Name}";
+                        events.AddEvent(new ValidationRuleFailure(message, active));
                         break;
                     }
                 }
@@ -40,10 +34,10 @@ namespace Compiler.Validate
                 return true;
             }
 
-            List<Airport> airport = sectorElements.Airports.Where(airport => airport.Icao == airportCode).ToList();
+            List<Airport> airport = sectorElements.Airports.Where(airportElement => airportElement.Icao == airportCode).ToList();
 
             return airport.Count != 0 && sectorElements.Runways
-                .Where(runway => runway.RunwayDialogDescription == airport[0] .Icao + " " + airport[0].Name)
+                .Where(runway => runway.AirfieldIcao == airport[0].Icao)
                 .Where(runway => runway.FirstIdentifier == runwayIdentifier || runway.ReverseIdentifier == runwayIdentifier)
                 .ToList()
                 .Count() != 0;

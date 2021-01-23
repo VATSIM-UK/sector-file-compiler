@@ -9,9 +9,9 @@ namespace CompilerTest.Event
         [Fact]
         public void TestFormat()
         {
-            ComplilationStartedEvent eventObject = new ComplilationStartedEvent();
+            ComplilationStartedEvent eventObject = new();
             Assert.Equal(
-                "Sector File Compiler version " + CompilerArguments.COMPILER_VERISON + ": Starting compilation",
+                "Sector File Compiler version " + CompilerArguments.CompilerVersion + ": Starting compilation",
                 eventObject.GetMessage()
             );
         }
@@ -19,7 +19,7 @@ namespace CompilerTest.Event
         [Fact]
         public void TestItIsNotFatal()
         {
-            ComplilationStartedEvent eventObject = new ComplilationStartedEvent();
+            ComplilationStartedEvent eventObject = new();
             Assert.False(eventObject.IsFatal());
         }
     }

@@ -1,31 +1,14 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Moq;
-using Compiler.Parser;
 using Compiler.Error;
 using Compiler.Model;
-using Compiler.Event;
-using Compiler.Output;
-using CompilerTest.Mock;
+using Compiler.Input;
 
 namespace CompilerTest.Parser
 {
-    public class SectorlineParserTest
+    public class SectorlineParserTest: AbstractParserTestCase
     {
-        private readonly AirspaceParser parser;
-
-        private readonly SectorElementCollection collection;
-
-        private readonly Mock<IEventLogger> log;
-
-        public SectorlineParserTest()
-        {
-            this.log = new Mock<IEventLogger>();
-            this.collection = new SectorElementCollection();
-            this.parser = (AirspaceParser)(new SectionParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.ESE_AIRSPACE);
-        }
-
         public static IEnumerable<object[]> BadData => new List<object[]>
         {
             new object[] { new List<string>{
@@ -98,131 +81,131 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.parser.ParseData(
-                new MockSectorDataFile(
-                    "test.txt",
-                    lines
-                )
-            );
-
-            Assert.Empty(this.collection.SectorLines);
-            Assert.Empty(this.collection.CircleSectorLines);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            this.RunParserOnLines(lines);
+            Assert.Empty(this.sectorElementCollection.SectorLines);
+            Assert.Empty(this.sectorElementCollection.CircleSectorLines);
+            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsCircleSectorlines()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] {
+            this.RunParserOnLines(
+                new List<string>(new[] {
                     "CIRCLE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
                     "DISPLAY:BBAPP:BBAPP:BBTWR ;comment1",
                     "DISPLAY:BBTWR:BBAPP:BBTWR ;comment2",
                     "CIRCLE_SECTORLINE:AEAPP:N054.39.27.000:W006.12.57.000:30 ;comment3",
                     "DISPLAY:AEAPP:AEAPP:Rathlin West ;comment4"
-                })
+                })    
             );
 
-            this.parser.ParseData(data);
-
             // First
-            CircleSectorline result1 = this.collection.CircleSectorLines[0];
+            CircleSectorline result1 = this.sectorElementCollection.CircleSectorLines[0];
             Assert.Equal("BBTWR", result1.Name);
             Assert.Equal("EGBB", result1.CentrePoint);
             Assert.Equal(2.5, result1.Radius);
+            this.AssertExpectedMetadata(result1);
 
-            List<SectorlineDisplayRule> displayRules1 = new List<SectorlineDisplayRule>
-            {
-                new SectorlineDisplayRule("BBAPP", "BBAPP", "BBTWR", "comment1"),
-                new SectorlineDisplayRule("BBTWR", "BBAPP", "BBTWR", "comment2"),
-            };
-            Assert.Equal(displayRules1, result1.DisplayRules);
-            Assert.Equal("comment", result1.Comment);
+            Assert.Equal(2, result1.DisplayRules.Count);
+            Assert.Equal("BBAPP", result1.DisplayRules[0].ControlledSector);
+            Assert.Equal("BBAPP", result1.DisplayRules[0].CompareSectorFirst);
+            Assert.Equal("BBTWR", result1.DisplayRules[0].CompareSectorSecond);
+            this.AssertExpectedMetadata(result1.DisplayRules[0], 2, "comment1");
+            
+            Assert.Equal("BBTWR", result1.DisplayRules[1].ControlledSector);
+            Assert.Equal("BBAPP", result1.DisplayRules[1].CompareSectorFirst);
+            Assert.Equal("BBTWR", result1.DisplayRules[1].CompareSectorSecond);
+            this.AssertExpectedMetadata(result1.DisplayRules[1], 3, "comment2");
 
             // Second
-            CircleSectorline result2 = this.collection.CircleSectorLines[1];
+            CircleSectorline result2 = this.sectorElementCollection.CircleSectorLines[1];
             Assert.Equal("AEAPP", result2.Name);
             Assert.Equal(new Coordinate("N054.39.27.000", "W006.12.57.000"), result2.CentreCoordinate);
             Assert.Equal(30, result2.Radius);
+            this.AssertExpectedMetadata(result2, 4, "comment3");
 
-            List<SectorlineDisplayRule> displayRules2 = new List<SectorlineDisplayRule>
-            {
-                new SectorlineDisplayRule("AEAPP", "AEAPP", "Rathlin West", "comment4"),
-            };
-            Assert.Equal(displayRules2, result2.DisplayRules);
-            Assert.Equal("comment3", result2.Comment);
+            Assert.Single(result2.DisplayRules);
+            Assert.Equal("AEAPP", result2.DisplayRules[0].ControlledSector);
+            Assert.Equal("AEAPP", result2.DisplayRules[0].CompareSectorFirst);
+            Assert.Equal("Rathlin West", result2.DisplayRules[0].CompareSectorSecond);
+            this.AssertExpectedMetadata(result2.DisplayRules[0], 5, "comment4");
         }
 
         [Fact]
         public void TestItAddsSectorlines()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] {
+            this.RunParserOnLines(
+                new List<string>(new[] {
                     "SECTORLINE:JJCTR - S6 ;comment1",
                     "DISPLAY:London S6:JJCTR:London S6 ;comment2",
                     "DISPLAY:JJCTR:JJCTR:London S6 ;comment3",
                     "COORD:N050.00.00.000:W002.40.34.000 ;comment4",
                     "COORD:N049.59.59.000:W002.29.35.000 ;comment5",
                     "SECTORLINE:JJCTR - LS ;comment6",
-                    "DISPLAY:London AC Worthing:JJCTR:London S6 ;comment7",
+                    "DISPLAY:London AC Worthing:JJCTR:London AC Worthing ;comment7",
                     "DISPLAY:JJCTR:JJCTR:London AC Worthing ;comment8",
                     "COORD:N049.59.59.000:W002.29.35.000 ;comment9",
                     "COORD:N050.00.00.000:W001.47.00.000 ;comment10",
                 })
             );
 
-            this.parser.ParseData(data);
-
             // First
-            Sectorline result1 = this.collection.SectorLines[0];
+            Sectorline result1 = this.sectorElementCollection.SectorLines[0];
             Assert.Equal("JJCTR - S6", result1.Name);
+            this.AssertExpectedMetadata(result1, 1, "comment1");
+            
+            Assert.Equal(2, result1.DisplayRules.Count);
+            Assert.Equal("London S6", result1.DisplayRules[0].ControlledSector);
+            Assert.Equal("JJCTR", result1.DisplayRules[0].CompareSectorFirst);
+            Assert.Equal("London S6", result1.DisplayRules[0].CompareSectorSecond);
+            this.AssertExpectedMetadata(result1.DisplayRules[0], 2, "comment2");
+            
+            Assert.Equal("JJCTR", result1.DisplayRules[1].ControlledSector);
+            Assert.Equal("JJCTR", result1.DisplayRules[1].CompareSectorFirst);
+            Assert.Equal("London S6", result1.DisplayRules[1].CompareSectorSecond);
+            this.AssertExpectedMetadata(result1.DisplayRules[1], 3, "comment3");
 
-            List<SectorlineDisplayRule> displayRules1 = new List<SectorlineDisplayRule>
-            {
-                new SectorlineDisplayRule("London S6", "JJCTR", "London S6", "comment2"),
-                new SectorlineDisplayRule("JJCTR", "JJCTR", "London S6", "comment3"),
-            };
-            Assert.Equal(displayRules1, result1.DisplayRules);
-
-            List<SectorlineCoordinate> coordinates1 = new List<SectorlineCoordinate>
-            {
-                new SectorlineCoordinate(new Coordinate("N050.00.00.000", "W002.40.34.000"), "comment4"),
-                new SectorlineCoordinate(new Coordinate("N049.59.59.000", "W002.29.35.000"), "comment5"),
-            };
-            Assert.Equal(coordinates1, result1.Coordinates);
-            Assert.Equal("comment1", result1.Comment);
-
+            Assert.Equal(2, result1.Coordinates.Count);
+            Assert.Equal(new Coordinate("N050.00.00.000", "W002.40.34.000"), result1.Coordinates[0].Coordinate);
+            this.AssertExpectedMetadata(result1.Coordinates[0], 4, "comment4");
+            
+            Assert.Equal(new Coordinate("N049.59.59.000", "W002.29.35.000"), result1.Coordinates[1].Coordinate);
+            this.AssertExpectedMetadata(result1.Coordinates[1], 5, "comment5");
 
             // Second
-            Sectorline result2 = this.collection.SectorLines[1];
+            Sectorline result2 = this.sectorElementCollection.SectorLines[1];
             Assert.Equal("JJCTR - LS", result2.Name);
+            this.AssertExpectedMetadata(result2, 6, "comment6");
 
-            List<SectorlineDisplayRule> displayRules2 = new List<SectorlineDisplayRule>
-            {
-                new SectorlineDisplayRule("London AC Worthing", "JJCTR", "London S6", "comment7"),
-                new SectorlineDisplayRule("JJCTR", "JJCTR", "London AC Worthing", "comment8"),
-            };
-            Assert.Equal(displayRules2, result2.DisplayRules);
+            
+            Assert.Equal(2, result2.DisplayRules.Count);
+            Assert.Equal("London AC Worthing", result2.DisplayRules[0].ControlledSector);
+            Assert.Equal("JJCTR", result2.DisplayRules[0].CompareSectorFirst);
+            Assert.Equal("London AC Worthing", result2.DisplayRules[0].CompareSectorSecond);
+            this.AssertExpectedMetadata(result2.DisplayRules[0], 7, "comment7");
+            
+            Assert.Equal("JJCTR", result2.DisplayRules[1].ControlledSector);
+            Assert.Equal("JJCTR", result2.DisplayRules[1].CompareSectorFirst);
+            Assert.Equal("London AC Worthing", result2.DisplayRules[1].CompareSectorSecond);
+            this.AssertExpectedMetadata(result2.DisplayRules[1], 8, "comment8");
 
-            List<SectorlineCoordinate> coordinates2 = new List<SectorlineCoordinate>
-            {
-                new SectorlineCoordinate(new Coordinate("N049.59.59.000", "W002.29.35.000"), "comment9"),
-                new SectorlineCoordinate(new Coordinate("N050.00.00.000", "W001.47.00.000"), "comment10"),
-            };
-            Assert.Equal(coordinates2, result2.Coordinates);
-            Assert.Equal("comment6", result2.Comment);
+            
+            Assert.Equal(2, result2.Coordinates.Count);
+            Assert.Equal(new Coordinate("N049.59.59.000", "W002.29.35.000"), result2.Coordinates[0].Coordinate);
+            this.AssertExpectedMetadata(result2.Coordinates[0], 9, "comment9");
+            
+            Assert.Equal(new Coordinate("N050.00.00.000", "W001.47.00.000"), result2.Coordinates[1].Coordinate);
+            this.AssertExpectedMetadata(result2.Coordinates[1], 10, "comment10");
         }
 
         [Fact]
         public void TestItAddsMixedData()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] {
+            this.RunParserOnLines(
+                new List<string>(new[] {
                     "SECTORLINE:JJCTR - LS ;comment6",
-                    "DISPLAY:London AC Worthing:JJCTR:London S6 ;comment7",
+                    "DISPLAY:London AC Worthing:JJCTR:JJCTR ;comment7",
                     "DISPLAY:JJCTR:JJCTR:London AC Worthing ;comment8",
                     "COORD:N049.59.59.000:W002.29.35.000 ;comment9",
                     "COORD:N050.00.00.000:W001.47.00.000 ;comment10",
@@ -233,49 +216,56 @@ namespace CompilerTest.Parser
                 })
             );
 
-            this.parser.ParseData(data);
-
             // First
-            CircleSectorline result1 = this.collection.CircleSectorLines[0];
+            CircleSectorline result1 = this.sectorElementCollection.CircleSectorLines[0];
             Assert.Equal("BBTWR", result1.Name);
             Assert.Equal("EGBB", result1.CentrePoint);
             Assert.Equal(2.5, result1.Radius);
+            this.AssertExpectedMetadata(result1, 7);
 
-            List<SectorlineDisplayRule> displayRules1 = new List<SectorlineDisplayRule>
-            {
-                new SectorlineDisplayRule("BBAPP", "BBAPP", "BBTWR", "comment1"),
-                new SectorlineDisplayRule("BBTWR", "BBAPP", "BBTWR", "comment2"),
-            };
-            Assert.Equal(displayRules1, result1.DisplayRules);
-            Assert.Equal("comment", result1.Comment);
+            Assert.Equal(2, result1.DisplayRules.Count);
+            Assert.Equal("BBAPP", result1.DisplayRules[0].ControlledSector);
+            Assert.Equal("BBAPP", result1.DisplayRules[0].CompareSectorFirst);
+            Assert.Equal("BBTWR", result1.DisplayRules[0].CompareSectorSecond);
+            this.AssertExpectedMetadata(result1.DisplayRules[0], 8, "comment1");
+            
+            Assert.Equal("BBTWR", result1.DisplayRules[1].ControlledSector);
+            Assert.Equal("BBAPP", result1.DisplayRules[1].CompareSectorFirst);
+            Assert.Equal("BBTWR", result1.DisplayRules[1].CompareSectorSecond);
+            this.AssertExpectedMetadata(result1.DisplayRules[1], 9, "comment2");
 
 
             // Second
-            Sectorline result2 = this.collection.SectorLines[0];
+            Sectorline result2 = this.sectorElementCollection.SectorLines[0];
             Assert.Equal("JJCTR - LS", result2.Name);
+            this.AssertExpectedMetadata(result2, 1, "comment6");
 
-            List<SectorlineDisplayRule> displayRules2 = new List<SectorlineDisplayRule>
-            {
-                new SectorlineDisplayRule("London AC Worthing", "JJCTR", "London S6", "comment7"),
-                new SectorlineDisplayRule("JJCTR", "JJCTR", "London AC Worthing", "comment8"),
-            };
-            Assert.Equal(displayRules2, result2.DisplayRules);
+            
+            Assert.Equal(2, result2.DisplayRules.Count);
+            Assert.Equal("London AC Worthing", result2.DisplayRules[0].ControlledSector);
+            Assert.Equal("JJCTR", result2.DisplayRules[0].CompareSectorFirst);
+            Assert.Equal("JJCTR", result2.DisplayRules[0].CompareSectorSecond);
+            this.AssertExpectedMetadata(result2.DisplayRules[0], 2, "comment7");
+            
+            Assert.Equal("JJCTR", result2.DisplayRules[1].ControlledSector);
+            Assert.Equal("JJCTR", result2.DisplayRules[1].CompareSectorFirst);
+            Assert.Equal("London AC Worthing", result2.DisplayRules[1].CompareSectorSecond);
+            this.AssertExpectedMetadata(result2.DisplayRules[1], 3, "comment8");
 
-            List<SectorlineCoordinate> coordinates2 = new List<SectorlineCoordinate>
-            {
-                new SectorlineCoordinate(new Coordinate("N049.59.59.000", "W002.29.35.000"), "comment9"),
-                new SectorlineCoordinate(new Coordinate("N050.00.00.000", "W001.47.00.000"), "comment10"),
-            };
-            Assert.Equal(coordinates2, result2.Coordinates);
-            Assert.Equal("comment6", result2.Comment);
+            
+            Assert.Equal(2, result2.Coordinates.Count);
+            Assert.Equal(new Coordinate("N049.59.59.000", "W002.29.35.000"), result2.Coordinates[0].Coordinate);
+            this.AssertExpectedMetadata(result2.Coordinates[0], 4, "comment9");
+            
+            Assert.Equal(new Coordinate("N050.00.00.000", "W001.47.00.000"), result2.Coordinates[1].Coordinate);
+            this.AssertExpectedMetadata(result2.Coordinates[1], 5, "comment10");
         }
 
         [Fact]
         public void TestItAddsMixedDataNoDisplayRules()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] {
+            this.RunParserOnLines(
+                new List<string>(new[] {
                     "SECTORLINE:JJCTR - LS ;comment6",
                     "COORD:N049.59.59.000:W002.29.35.000 ;comment9",
                     "COORD:N050.00.00.000:W001.47.00.000 ;comment10",
@@ -284,37 +274,23 @@ namespace CompilerTest.Parser
                 })
             );
 
-            this.parser.ParseData(data);
-
             // First
-            CircleSectorline result1 = this.collection.CircleSectorLines[0];
+            CircleSectorline result1 = this.sectorElementCollection.CircleSectorLines[0];
             Assert.Equal("BBTWR", result1.Name);
             Assert.Equal("EGBB", result1.CentrePoint);
             Assert.Equal(2.5, result1.Radius);
-
-            List<SectorlineDisplayRule> displayRules1 = new List<SectorlineDisplayRule>
-            {
-            };
-            Assert.Equal(displayRules1, result1.DisplayRules);
-            Assert.Equal("comment", result1.Comment);
+            Assert.Empty(result1.DisplayRules);
 
 
             // Second
-            Sectorline result2 = this.collection.SectorLines[0];
+            Sectorline result2 = this.sectorElementCollection.SectorLines[0];
             Assert.Equal("JJCTR - LS", result2.Name);
+            Assert.Empty(result2.DisplayRules);
+        }
 
-            List<SectorlineDisplayRule> displayRules2 = new List<SectorlineDisplayRule>
-            {
-            };
-            Assert.Equal(displayRules2, result2.DisplayRules);
-
-            List<SectorlineCoordinate> coordinates2 = new List<SectorlineCoordinate>
-            {
-                new SectorlineCoordinate(new Coordinate("N049.59.59.000", "W002.29.35.000"), "comment9"),
-                new SectorlineCoordinate(new Coordinate("N050.00.00.000", "W001.47.00.000"), "comment10"),
-            };
-            Assert.Equal(coordinates2, result2.Coordinates);
-            Assert.Equal("comment6", result2.Comment);
+        protected override InputDataType GetInputDataType()
+        {
+            return InputDataType.ESE_SECTORLINES;
         }
     }
 }

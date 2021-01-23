@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -18,13 +16,9 @@ namespace Compiler.Validate
             {
                 if (!sectors.Contains(point.ToSector))
                 {
-                    string message = String.Format(
-                        "Invalid TO sector {0} for coordination point: {1}",
-                        point.ToSector,
-                        point.Compile()
-                    );
-                    events.AddEvent(new ValidationRuleFailure(message));
-                    continue;
+                    string message =
+                        $"Invalid TO sector {point.ToSector} for coordination point: {point.GetCompileData(sectorElements)}";
+                    events.AddEvent(new ValidationRuleFailure(message, point));
                 }
             }
         }

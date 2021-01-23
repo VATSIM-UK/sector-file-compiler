@@ -13,7 +13,7 @@ namespace Compiler.Validate
             {
                 if (!ColourValidator.IsValidColourInteger(colour.Value.ToString()))
                 {
-                    events.AddEvent(new ValidationRuleFailure("Invalid colour value " + colour.Value));
+                    events.AddEvent(new ValidationRuleFailure("Invalid colour value " + colour.Value, colour));
                 }
             }
         }

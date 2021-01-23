@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using Compiler.Argument;
 using Xunit;
 using Compiler.Transformer;
 
@@ -10,16 +11,17 @@ namespace CompilerTest.Transformer
 
         public ReplaceTokensTest()
         {
-            this.transformer = new ReplaceTokens(
-                new Dictionary<string, string>() { { "{TOKENA}", "VALUEA" }, { "{TOKENB}", "VALUEB" } }
-            );
+            var arguments = CompilerArgumentsFactory.Make();
+            arguments.TokenReplacers.Add(new TokenDateReplacer("{TOKENA}", "Y-m-d"));
+            arguments.TokenReplacers.Add(new TokenDateReplacer("{TOKENB}", "d-m-Y"));
+            transformer = ReplaceTokensFactory.Make(arguments);
         }
 
         [Fact]
         public void TestItReplacesTokensInLines()
         {
             string input = "A line with {TOKENA} and {TOKENB} in it";
-            string expected = "A line with VALUEA and VALUEB in it";
+            string expected = $"A line with {DateTime.Now:Y-m-d} and {DateTime.Now:d-m-Y} in it";
             Assert.Equal(expected, this.transformer.Transform(input));
         }
     }

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
@@ -20,8 +20,11 @@
 
   <ItemGroup>
     <Compile Remove="Setting\**" />
+    <Compile Remove="Sorter\**" />
     <EmbeddedResource Remove="Setting\**" />
+    <EmbeddedResource Remove="Sorter\**" />
     <None Remove="Setting\**" />
+    <None Remove="Sorter\**" />
   </ItemGroup>
 
   <ItemGroup>

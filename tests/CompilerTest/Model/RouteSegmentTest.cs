@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -11,10 +11,12 @@ namespace CompilerTest.Model
         public RouteSegmentTest()
         {
             this.segment = new RouteSegment(
+                "FOO",
                 new Point("BIG"),
                 new Point("LAM"),
-                null,
-                null
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -34,39 +36,27 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "BIG BIG LAM LAM\r\n",
-                this.segment.Compile()
+                "                           BIG BIG LAM LAM",
+                this.segment.GetCompileData(new SectorElementCollection())
             );
         }
 
         [Fact]
         public void TestItCompilesWithColour()
         {
-            RouteSegment segment = new RouteSegment(
+            RouteSegment routeSegment = new(
+                "FOO",
                 new Point("BIG"),
                 new Point("LAM"),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make(),
                 "FooColour"
             );
 
             Assert.Equal(
-                "BIG BIG LAM LAM FooColour\r\n",
-                segment.Compile()
-            );
-        }
-
-        [Fact]
-        public void TestItCompilesWithComment()
-        {
-            RouteSegment segment = new RouteSegment(
-                new Point("BIG"),
-                new Point("LAM"),
-                null,
-                "Foo"
-            );
-
-            Assert.Equal(
-                "BIG BIG LAM LAM ;Foo\r\n",
-                segment.Compile()
+                "                           BIG BIG LAM LAM FooColour",
+                routeSegment.GetCompileData(new SectorElementCollection())
             );
         }
     }

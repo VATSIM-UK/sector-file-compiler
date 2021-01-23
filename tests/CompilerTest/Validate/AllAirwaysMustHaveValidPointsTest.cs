@@ -1,91 +1,79 @@
 ﻿using Xunit;
 using Compiler.Model;
-using Compiler.Error;
-using Compiler.Event;
 using Compiler.Validate;
-using Moq;
-using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllAirwaysMustHaveValidPointsTest
+    public class AllAirwaysMustHaveValidPointsTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection sectorElements;
-        private readonly Mock<IEventLogger> loggerMock;
-        private readonly AllAirwaysMustHaveValidPoints rule;
-        private readonly CompilerArguments args;
 
         public AllAirwaysMustHaveValidPointsTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-
-            this.sectorElements.Add(new Fix("testfix", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Vor("testvor", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Ndb("testndb", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Airport("testairport", "testairport", new Coordinate("abc", "def"), "123.456", "test"));
-
-            this.rule = new AllAirwaysMustHaveValidPoints();
-            this.args = new CompilerArguments();
+            this.sectorElements.Add(FixFactory.Make("testfix"));
+            this.sectorElements.Add(VorFactory.Make("testvor"));
+            this.sectorElements.Add(NdbFactory.Make("testndb"));
+            this.sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
-        private Airway GetAirway(AirwayType type, string startPointIdentifier, string endPointIdentifier)
+        private static AirwaySegment GetAirway(AirwayType type, string startPointIdentifier, string endPointIdentifier)
         {
-            return new Airway("test", type, new Point(startPointIdentifier), new Point(endPointIdentifier), "");
+            return new(
+                "test",
+                type,
+                new Point(startPointIdentifier),
+                new Point(endPointIdentifier),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
         }
 
         [Fact]
         public void TestItPassesOnValidPointLow()
         {
-            this.sectorElements.Add(this.GetAirway(AirwayType.LOW, "testfix", "testvor"));
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.sectorElements.Add(GetAirway(AirwayType.LOW, "testfix", "testvor"));
+            this.AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidStartPointLow()
         {
-            this.sectorElements.Add(this.GetAirway(AirwayType.LOW, "nottestfix", "testvor"));
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            this.sectorElements.Add(GetAirway(AirwayType.LOW, "nottestfix", "testvor"));
+            this.AssertValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidEndPointLow()
         {
-            this.sectorElements.Add(this.GetAirway(AirwayType.LOW, "testfix", "nottestvor"));
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            this.sectorElements.Add(GetAirway(AirwayType.LOW, "testfix", "nottestvor"));
+            this.AssertValidationErrors();
         }
 
         [Fact]
         public void TestItPassesOnValidPointHigh()
         {
-            this.sectorElements.Add(this.GetAirway(AirwayType.HIGH, "testfix", "testvor"));
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.sectorElements.Add(GetAirway(AirwayType.HIGH, "testfix", "testvor"));
+            this.AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidStartPointHigh()
         {
-            this.sectorElements.Add(this.GetAirway(AirwayType.HIGH, "nottestfix", "testvor"));
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            this.sectorElements.Add(GetAirway(AirwayType.HIGH, "nottestfix", "testvor"));
+            this.AssertValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidEndPointHigh()
         {
-            this.sectorElements.Add(this.GetAirway(AirwayType.HIGH, "testfix", "nottestvor"));
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
+            this.sectorElements.Add(GetAirway(AirwayType.HIGH, "testfix", "nottestvor"));
+            this.AssertValidationErrors();
+        }
 
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllAirwaysMustHaveValidPoints();
         }
     }
 }

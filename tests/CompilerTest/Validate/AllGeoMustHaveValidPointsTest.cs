@@ -1,83 +1,72 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Compiler.Model;
-using Compiler.Error;
-using Compiler.Event;
 using Compiler.Validate;
-using Moq;
-using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllGeoMustHaveValidPointsTest
+    public class AllGeoMustHaveValidPointsTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection sectorElements;
-        private readonly Mock<IEventLogger> loggerMock;
-        private readonly AllGeoMustHaveValidPoints rule;
-        private readonly CompilerArguments args;
-
         public AllGeoMustHaveValidPointsTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.sectorElements.Add(new Fix("testfix", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Vor("testvor", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Ndb("testndb", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Airport("testairport", "testairport", new Coordinate("abc", "def"), "123.456", "test"));
-            this.rule = new AllGeoMustHaveValidPoints();
-            this.args = new CompilerArguments();
+            this.sectorElements.Add(FixFactory.Make("testfix"));
+            this.sectorElements.Add(VorFactory.Make("testvor"));
+            this.sectorElements.Add(NdbFactory.Make("testndb"));
+            this.sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
         [Fact]
         public void TestItPassesOnValidPoints()
         {
-            Geo geo1 = new Geo(
-                "TestGeo",
-                new List<GeoSegment>
+            this.sectorElements.Add(GeoFactory.Make(
+                firstPoint: new Point("testndb"),
+                secondPoint: new Point("testairport"),
+                additionalSegments: new List<GeoSegment>
                 {
-                    new GeoSegment(new Point("testndb"), new Point("testairport"), "test", "comment")
+                    GeoSegmentFactory.Make(firstPoint: new Point("testndb"), secondPoint: new Point("testairport")),
                 }
-            );
-
-            Geo geo2 = new Geo(
-                "TestGeo",
-                new List<GeoSegment>
+            ));
+            
+            this.sectorElements.Add(GeoFactory.Make(
+                firstPoint: new Point("testfix"),
+                secondPoint: new Point("testvor"),
+                additionalSegments: new List<GeoSegment>
                 {
-                    new GeoSegment(new Point("testfix"), new Point("testvor"), "test", "comment"),
+                    GeoSegmentFactory.Make(firstPoint: new Point("testfix"), secondPoint: new Point("testvor")),
                 }
-            );
+            ));
 
-            this.sectorElements.Add(geo1);
-            this.sectorElements.Add(geo2);
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidPoint()
         {
-            Geo geo1 = new Geo(
-                "TestGeo",
-                new List<GeoSegment>
+            this.sectorElements.Add(GeoFactory.Make(
+                firstPoint: new Point("nottestndb"),
+                secondPoint: new Point("testairport"),
+                additionalSegments: new List<GeoSegment>
                 {
-                    new GeoSegment(new Point("nottestfix"), new Point("testairport"), "test", "comment")
+                    GeoSegmentFactory.Make(firstPoint: new Point("nottestvor"), secondPoint: new Point("testfix")),
                 }
-            );
-
-            Geo geo2 = new Geo(
-                "TestGeo",
-                new List<GeoSegment>
+            ));
+            
+            this.sectorElements.Add(GeoFactory.Make(
+                firstPoint: new Point("testndb"),
+                secondPoint: new Point("nottestairport"),
+                additionalSegments: new List<GeoSegment>
                 {
-                    new GeoSegment(new Point("testndb"), new Point("nottestairport"), "test", "comment"),
+                    GeoSegmentFactory.Make(firstPoint: new Point("testvor"), secondPoint: new Point("nottestfix")),
                 }
-            );
+            ));
+            
+            this.AssertValidationErrors(4);
+        }
 
-            this.sectorElements.Add(geo1);
-            this.sectorElements.Add(geo2);
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(2));
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllGeoMustHaveValidPoints();
         }
     }
 }

@@ -1,0 +1,8 @@
+﻿{
+  "replace": [
+    {
+      "type": "version",
+      "token": "TEST"
+    }
+  ]
+}

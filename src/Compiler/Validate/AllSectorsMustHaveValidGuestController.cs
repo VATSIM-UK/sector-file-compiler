@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -20,12 +18,8 @@ namespace Compiler.Validate
                 {
                     if (!controllers.Contains(guest.Controller))
                     {
-                        string message = String.Format(
-                            "Invalid GUEST position {0} on sector {1}",
-                            guest.Controller,
-                            sector.Name
-                        );
-                        events.AddEvent(new ValidationRuleFailure(message));
+                        string message = $"Invalid GUEST position {guest.Controller} on sector {sector.Name}";
+                        events.AddEvent(new ValidationRuleFailure(message, guest));
                         break;
                     }
                 }

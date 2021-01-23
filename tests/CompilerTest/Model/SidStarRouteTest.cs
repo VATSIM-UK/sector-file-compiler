@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -8,18 +9,26 @@ namespace CompilerTest.Model
     {
         private readonly SidStarRoute sidStar;
 
-        private List<RouteSegment> segments;
+        private readonly List<RouteSegment> segments = new();
+
+        private readonly RouteSegment initialSegment;
 
         public SidStarRouteTest()
         {
+            this.initialSegment = RouteSegmentFactory.MakeDoublePoint("LAM", "BIG");
+            this.segments.Add(RouteSegmentFactory.MakeDoublePoint(""));
+            this.segments.Add(RouteSegmentFactory.MakeDoublePoint());
+            this.segments.Add(RouteSegmentFactory.MakeDoublePoint());
             this.segments = new List<RouteSegment>();
             this.sidStar = new SidStarRoute(
                 SidStarType.SID,
                 "EGKK - ADMAG2X",
-                this.segments
+                this.initialSegment,
+                this.segments,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
-            this.segments.Add(new RouteSegment(new Point("LAM"), new Point("BIG"), null));
-            this.segments.Add(new RouteSegment(new Point("BIG"), new Point("OCK"), null));
         }
 
         [Fact]
@@ -33,34 +42,63 @@ namespace CompilerTest.Model
         {
             Assert.Equal(this.segments, this.sidStar.Segments);
         }
+        
+        [Fact]
+        public void TestItSetsInitialSegment()
+        {
+            Assert.Equal(this.initialSegment, this.sidStar.InitialSegment);
+        }
 
         [Fact]
         public void TestItCompilesWithPadding()
         {
-            string expected = "EGKK - ADMAG2X             LAM LAM BIG BIG\r\n";
-            expected += "                           BIG BIG OCK OCK\r\n";
+            string expected = $"EGKK - ADMAG2X             LAM LAM BIG BIG {this.initialSegment.Colour}";
 
             Assert.Equal(
                 expected,
-                this.sidStar.Compile()
+                this.sidStar.GetCompileData(new SectorElementCollection())
+            );
+        }
+        
+        [Fact]
+        public void TestItCompilesWithNoInitialSegmentColour()
+        {
+            SidStarRoute route = new(
+                SidStarType.SID,
+                "EGKK - ADMAG2X",
+                RouteSegmentFactory.MakeDoublePointWithNoColour("BNN", "OCK"),
+                this.segments,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
+            
+            string expected = "EGKK - ADMAG2X             BNN BNN OCK OCK";
+
+            Assert.Equal(
+                expected,
+                route.GetCompileData(new SectorElementCollection())
             );
         }
 
         [Fact]
         public void TestItItMatchesPaddingOnLongerNames()
         {
-            SidStarRoute longSidStar = new SidStarRoute(
+            SidStarRoute longSidStar = new(
                 SidStarType.SID,
                 "This is a long name which needs extra padding",
-                this.segments
+                this.initialSegment,
+                this.segments,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
 
-            string expected = "This is a long name which needs extra padding LAM LAM BIG BIG\r\n";
-            expected += "                                              BIG BIG OCK OCK\r\n";
+            string expected = $"This is a long name which needs extra padding LAM LAM BIG BIG {this.initialSegment.Colour}";
 
             Assert.Equal(
                 expected,
-                longSidStar.Compile()
+                longSidStar.GetCompileData(new SectorElementCollection())
             );
         }
     }

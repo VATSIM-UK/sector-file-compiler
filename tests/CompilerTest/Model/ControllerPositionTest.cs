@@ -1,13 +1,14 @@
 ﻿using Xunit;
 using Compiler.Model;
 using System.Collections.Generic;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
     public class ControllerPositionTest
     {
         private readonly ControllerPosition model;
-        private List<Coordinate> coordlist;
+        private readonly List<Coordinate> coordlist;
 
         public ControllerPositionTest()
         {
@@ -26,7 +27,10 @@ namespace CompilerTest.Model
                 "0401",
                 "0407",
                 this.coordlist,
-                "comment"
+                PositionOrder.PRE_POSITION,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -77,6 +81,12 @@ namespace CompilerTest.Model
         {
             Assert.Equal("0407", this.model.SquawkRangeEnd);
         }
+        
+        [Fact]
+        public void TestItSetsPositionOrder()
+        {
+            Assert.Equal(PositionOrder.PRE_POSITION, this.model.PositionOrder);
+        }
 
 
         [Fact]
@@ -89,15 +99,15 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "EGBB_APP:Birmingham Radar:123.970:BBR:B:EGBB:APP:-:-:0401:0407:abc:def:ghi:jkl:mno:pqr ;comment\r\n",
-                this.model.Compile()
+                "EGBB_APP:Birmingham Radar:123.970:BBR:B:EGBB:APP:-:-:0401:0407:abc:def:ghi:jkl:mno:pqr",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
 
         [Fact]
         public void TestItCompilesNoVisCenters()
         {
-            ControllerPosition newModel = new ControllerPosition(
+            ControllerPosition newModel = new(
                 "EGBB_APP",
                 "Birmingham Radar",
                 "123.970",
@@ -108,11 +118,14 @@ namespace CompilerTest.Model
                 "0401",
                 "0407",
                 new List<Coordinate>(),
-                "comment"
+                PositionOrder.PRE_POSITION,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
             Assert.Equal(
-                "EGBB_APP:Birmingham Radar:123.970:BBR:B:EGBB:APP:-:-:0401:0407 ;comment\r\n",
-                newModel.Compile()
+                "EGBB_APP:Birmingham Radar:123.970:BBR:B:EGBB:APP:-:-:0401:0407",
+                newModel.GetCompileData(new SectorElementCollection())
             );
         }
     }

@@ -1,0 +1,15 @@
+{
+  "includes": {
+    "misc": {
+      "regions": {
+        "ignore_missing": "test",
+        "type": "files",
+        "files": [
+          "Misc/Regions_LTMA Airfield CAS.txt",
+          "Misc/Regions_Severn Buffers.txt",
+          "Misc/Regions_Uncontrolled airspace.txt"
+        ]
+      }
+    }
+  }
+}

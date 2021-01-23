@@ -8,29 +8,29 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItHasTypeIdentifier()
         {
-            Point point = new Point("TESTF");
-            Assert.Equal(Point.TYPE_IDENTIFIER, point.Type());
+            Point point = new("TESTF");
+            Assert.Equal(Point.TypeIdentifier, point.Type());
         }
 
         [Fact]
         public void TestItCompilesIdentifier()
         {
-            Point point = new Point("TESTF");
-            Assert.Equal("TESTF TESTF", point.Compile());
+            Point point = new("TESTF");
+            Assert.Equal("TESTF TESTF", point.ToString());
         }
 
         [Fact]
         public void TestItHasTypeCoordinate()
         {
-            Point point = new Point(new Coordinate("abc", "def"));
-            Assert.Equal(Point.TYPE_COORDINATE, point.Type());
+            Point point = new(new Coordinate("abc", "def"));
+            Assert.Equal(Point.TypeCoordinate, point.Type());
         }
 
         [Fact]
         public void TestItCompilesCoordinate()
         {
-            Point point = new Point(new Coordinate("abc", "def"));
-            Assert.Equal("abc def", point.Compile());
+            Point point = new(new Coordinate("abc", "def"));
+            Assert.Equal("abc def", point.ToString());
         }
     }
 }

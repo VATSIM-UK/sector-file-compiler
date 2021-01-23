@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Compiler.Event;
-using Compiler.Model;
-using Compiler.Argument;
+﻿using Compiler.Model;
 
 namespace Compiler.Validate
 {
@@ -45,7 +40,7 @@ namespace Compiler.Validate
 
         public static bool IsValidCoordinate(Point point)
         {
-            return point.Type() == Point.TYPE_COORDINATE;
+            return point.Type() == Point.TypeCoordinate;
         }
 
         public static bool IsValidVor(string identifier, SectorElementCollection sectorElements)

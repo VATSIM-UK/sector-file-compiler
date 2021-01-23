@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -11,7 +12,9 @@ namespace CompilerTest.Model
         {
             this.model = new SectorlineCoordinate(
                 new Coordinate("abc", "def"),
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -25,8 +28,8 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "COORD:abc:def ;comment\r\n",
-                this.model.Compile()
+                "COORD:abc:def",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -17,38 +15,32 @@ namespace Compiler.Validate
         }
 
         private void TestAirwayCategory(
-            List<Airway> airways,
+            List<AirwaySegment> airways,
             SectorElementCollection sectorElements,
             IEventLogger events
         ) {
-            foreach (Airway airway in airways)
+            foreach (AirwaySegment airway in airways)
             {
-                if (airway.StartPoint.Type() == Point.TYPE_IDENTIFIER)
+                if (airway.StartPoint.Type() == Point.TypeIdentifier)
                 {
                     if (this.InvalidPoint(airway.StartPoint.Identifier, sectorElements))
                     {
-                        string message = String.Format(
-                            "Invalid end point {0} on Airway segment for {1}",
-                            airway.StartPoint.Identifier,
-                            airway.Identifier
-                        );
+                        string message =
+                            $"Invalid end point {airway.StartPoint.Identifier} on Airway segment for {airway.Identifier}";
                         events.AddEvent(
-                            new ValidationRuleFailure(message)
+                            new ValidationRuleFailure(message, airway)
                         );
                     }
                 }
 
-                if (airway.EndPoint.Type() == Point.TYPE_IDENTIFIER)
+                if (airway.EndPoint.Type() == Point.TypeIdentifier)
                 {
                     if (this.InvalidPoint(airway.EndPoint.Identifier, sectorElements))
                     {
-                        string message = String.Format(
-                            "Invalid start point {0} on Airway segment for {1}",
-                            airway.EndPoint.Identifier,
-                            airway.Identifier
-                        );
+                        string message =
+                            $"Invalid start point {airway.EndPoint.Identifier} on Airway segment for {airway.Identifier}";
                         events.AddEvent(
-                            new ValidationRuleFailure(message)
+                            new ValidationRuleFailure(message, airway)
                         );
                     }
                 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -21,12 +19,8 @@ namespace Compiler.Validate
                 {
                     if (!airports.Contains(active.Airfield))
                     {
-                        string message = String.Format(
-                            "Invalid ACTIVE airport {0} on sector {1}",
-                            active.Airfield,
-                            sector.Name
-                        );
-                        events.AddEvent(new ValidationRuleFailure(message));
+                        string message = $"Invalid ACTIVE airport {active.Airfield} on sector {sector.Name}";
+                        events.AddEvent(new ValidationRuleFailure(message, active));
                         break;
                     }
                 }

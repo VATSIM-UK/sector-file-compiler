@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -17,7 +15,7 @@ namespace Compiler.Validate
             {
                 if (existingAirports.Contains(airport.Icao))
                 {
-                    events.AddEvent(new ValidationRuleFailure("Duplicate airport " + airport.Icao));
+                    events.AddEvent(new ValidationRuleFailure("Duplicate airport " + airport.Icao, airport));
                     continue;
                 }
 

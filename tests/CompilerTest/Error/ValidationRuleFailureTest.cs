@@ -1,27 +1,32 @@
 ﻿using Xunit;
 using Compiler.Error;
+using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Error
 {
     public class ValidationRuleFailureTest
     {
         private readonly ValidationRuleFailure rule;
+        private readonly Definition definition;
 
         public ValidationRuleFailureTest()
         {
-            this.rule = new ValidationRuleFailure("just because");
+            RouteSegment segment = RouteSegmentFactory.MakeDoublePoint();
+            definition = segment.GetDefinition();
+            rule = new ValidationRuleFailure("just because", segment);
         }
 
         [Fact]
         public void TestItIsFatal()
         {
-            Assert.True(this.rule.IsFatal());
+            Assert.True(rule.IsFatal());
         }
 
         [Fact]
         public void TestItReturnsAMessage()
         {
-            Assert.Equal("Validation rule not met: just because", this.rule.GetMessage());
+            Assert.Equal($"Validation rule not met: just because, defined in {definition}", rule.GetMessage());
         }
     }
 }

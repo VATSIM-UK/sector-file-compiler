@@ -1,113 +1,147 @@
 ﻿using Xunit;
 using System.Collections.Generic;
 using Compiler.Model;
-using Compiler.Event;
-using Compiler.Error;
 using Compiler.Validate;
-using Moq;
-using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllSctStarsMustHaveValidColoursTest
+    public class AllSctStarsMustHaveValidColoursTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection sectorElements;
-        private readonly Mock<IEventLogger> loggerMock;
-        private readonly Colour definedColour;
-        private readonly AllSctStarsMustHaveValidColours rule;
-        private readonly CompilerArguments args;
-        private readonly List<RouteSegment> segments1;
-        private readonly List<RouteSegment> segments2;
-
         public AllSctStarsMustHaveValidColoursTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.definedColour = new Colour("colour1", -1, "test");
-            this.rule = new AllSctStarsMustHaveValidColours();
-            this.args = new CompilerArguments();
-            this.segments1 = new List<RouteSegment>();
-            this.segments2 = new List<RouteSegment>();
-            this.sectorElements.Add(this.definedColour);
-            this.sectorElements.Add(new SidStarRoute(SidStarType.STAR, "Test", this.segments1));
-            this.sectorElements.Add(new SidStarRoute(SidStarType.STAR, "Test", this.segments2));
+            this.sectorElements.Add(ColourFactory.Make("colour1"));
         }
 
         [Fact]
         public void TestItPassesOnValidColoursIntegers()
         {
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), "255", "comment"));
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), "266", "comment"));
-            this.segments2.Add(new RouteSegment(new Point("abc"), new Point("def"), "266", "comment"));
-
-            this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.sectorElements.Add(
+                SidStarRouteFactory.Make(
+                    SidStarType.STAR,
+                    new List<RouteSegment>()
+                    {
+                        RouteSegmentFactory.MakeDoublePoint(colour: "255"),
+                        RouteSegmentFactory.MakeDoublePoint(colour: "266"),
+                        RouteSegmentFactory.MakeDoublePoint(colour: "266"),
+                    }
+                )
+            );
+            
+            this.AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItPassesOnValidDefinedColours()
         {
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), "colour1", "comment"));
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), "colour1", "comment"));
-            this.segments2.Add(new RouteSegment(new Point("abc"), new Point("def"), "colour1", "comment"));
-
-            this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.sectorElements.Add(
+                SidStarRouteFactory.Make(
+                    SidStarType.STAR,
+                    new List<RouteSegment>()
+                    {
+                        RouteSegmentFactory.MakeDoublePoint(colour: "colour1"),
+                        RouteSegmentFactory.MakeDoublePoint(colour: "colour1"),
+                        RouteSegmentFactory.MakeDoublePoint(colour: "colour1"),
+                    }
+                )
+            );
+            
+            this.AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItPassesOnNullColours()
         {
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), null, "comment"));
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), null, "comment"));
-            this.segments2.Add(new RouteSegment(new Point("abc"), new Point("def"), null, "comment"));
-
-            this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.sectorElements.Add(
+                SidStarRouteFactory.Make(
+                    SidStarType.STAR,
+                    new List<RouteSegment>()
+                    {
+                        RouteSegmentFactory.MakeDoublePointWithNoColour(),
+                        RouteSegmentFactory.MakeDoublePointWithNoColour(),
+                        RouteSegmentFactory.MakeDoublePointWithNoColour(),
+                    }
+                )
+            );
+            
+            this.AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidDefinedColours()
         {
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), "colour1", "comment"));
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), "colour2", "comment"));
-            this.segments2.Add(new RouteSegment(new Point("abc"), new Point("def"), "colour1", "comment"));
-
-            this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            this.sectorElements.Add(
+                SidStarRouteFactory.Make(
+                    SidStarType.STAR,
+                    new List<RouteSegment>()
+                    {
+                        RouteSegmentFactory.MakeDoublePoint(colour: "colour1"),
+                        RouteSegmentFactory.MakeDoublePoint(colour: "colour2"),
+                        RouteSegmentFactory.MakeDoublePoint(colour: "colour1"),
+                    }
+                )
+            );
+            
+            this.AssertValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidDefinedColoursAfterLooping()
         {
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), "colour1", "comment"));
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), "colour1", "comment"));
-            this.segments2.Add(new RouteSegment(new Point("abc"), new Point("def"), "colour2", "comment"));
-
-            this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            this.sectorElements.Add(
+                SidStarRouteFactory.Make(
+                    SidStarType.STAR,
+                    new List<RouteSegment>()
+                    {
+                        RouteSegmentFactory.MakeDoublePoint(colour: "colour1"),
+                        RouteSegmentFactory.MakeDoublePoint(colour: "colour1"),
+                        RouteSegmentFactory.MakeDoublePoint(colour: "colour2"),
+                    }
+                )
+            );
+            
+            this.AssertValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidColourIntegers()
         {
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), "255", "comment"));
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), "123456789", "comment"));
-            this.segments2.Add(new RouteSegment(new Point("abc"), new Point("def"), "255", "comment"));
-
-            this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            this.sectorElements.Add(
+                SidStarRouteFactory.Make(
+                    SidStarType.STAR,
+                    new List<RouteSegment>()
+                    {
+                        RouteSegmentFactory.MakeDoublePoint(colour: "255"),
+                        RouteSegmentFactory.MakeDoublePoint(colour: "-1"),
+                        RouteSegmentFactory.MakeDoublePoint(colour: "255"),
+                    }
+                )
+            );
+            
+            this.AssertValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidColourIntegersAfterLooping()
         {
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), "255", "comment"));
-            this.segments1.Add(new RouteSegment(new Point("abc"), new Point("def"), "255", "comment"));
-            this.segments2.Add(new RouteSegment(new Point("abc"), new Point("def"), "123456789", "comment"));
+            this.sectorElements.Add(
+                SidStarRouteFactory.Make(
+                    SidStarType.STAR,
+                    new List<RouteSegment>()
+                    {
+                        RouteSegmentFactory.MakeDoublePoint(colour: "255"),
+                        RouteSegmentFactory.MakeDoublePoint(colour: "255"),
+                        RouteSegmentFactory.MakeDoublePoint(colour: "-1"),
+                    }
+                )
+            );
+            
+            this.AssertValidationErrors();
+        }
 
-            this.rule.Validate(this.sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllSctStarsMustHaveValidColours();
         }
     }
 }

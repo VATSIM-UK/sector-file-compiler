@@ -1,0 +1,13 @@
+{
+  "includes": {
+    "enroute": {
+      "ownership": [
+        {
+          "type": "folder",
+          "folder": 123,
+          "recursive": true
+        }
+      ]
+    }
+  }
+}

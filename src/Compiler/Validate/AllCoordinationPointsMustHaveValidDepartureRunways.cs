@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Compiler.Event;
+﻿using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
 using Compiler.Argument;
-using System.Linq;
 
 namespace Compiler.Validate
 {
@@ -16,14 +12,9 @@ namespace Compiler.Validate
             foreach (CoordinationPoint point in sectorElements.CoordinationPoints)
             {
                 if (!RunwayValid(sectorElements, point.DepartureRunway, point.DepartureAirportOrFixBefore)) {
-                    string message = String.Format(
-                        "Invalid departure runway {0}/{1} for coordination point: {1}",
-                        point.DepartureRunway,
-                        point.DepartureAirportOrFixBefore,
-                        point.Compile()
-                    );
-                    events.AddEvent(new ValidationRuleFailure(message));
-                    continue;
+                    string message =
+                        $"Invalid departure runway {point.DepartureRunway}/{point.DepartureAirportOrFixBefore} for coordination point: {point.GetCompileData(sectorElements)}";
+                    events.AddEvent(new ValidationRuleFailure(message, point));
                 }
             }
         }

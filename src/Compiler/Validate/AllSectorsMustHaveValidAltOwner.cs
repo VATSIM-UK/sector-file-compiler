@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -23,12 +21,8 @@ namespace Compiler.Validate
                     {
                         if (!positions.Contains(position))
                         {
-                            string message = String.Format(
-                                "Invalid ALTOWNER position {0} on sector {1}",
-                                position,
-                                sector.Name
-                            );
-                            events.AddEvent(new ValidationRuleFailure(message));
+                            string message = $"Invalid ALTOWNER position {position} on sector {sector.Name}";
+                            events.AddEvent(new ValidationRuleFailure(message, alt));
                             failedValidation = true;
                             break;
                         }

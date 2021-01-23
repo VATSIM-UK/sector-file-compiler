@@ -1,6 +1,8 @@
 ﻿using Xunit;
 using Compiler.Model;
 using System.Collections.Generic;
+using System.Linq;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -8,27 +10,23 @@ namespace CompilerTest.Model
     {
         private readonly Geo model;
         private readonly List<GeoSegment> segments;
+        private readonly Point firstPoint;
+        private readonly Point secondPoint;
 
         public GeoTest()
         {
-            this.segments = new List<GeoSegment>
-            {
-                new GeoSegment(
-                    new Point(new Coordinate("abc", "def")),
-                    new Point(new Coordinate("ghi", "jkl")),
-                    "red",
-                    "comment1"
-                ),
-                new GeoSegment(
-                    new Point(new Coordinate("mno", "pqr")),
-                    new Point(new Coordinate("stu", "vwx")),
-                    "blue",
-                    "comment2"
-                ),
-            };
+            this.secondPoint = PointFactory.Make();
+            this.firstPoint = PointFactory.Make();
+            this.segments = GeoSegmentFactory.MakeList(2);
             this.model = new Geo(
                 "TestGeo",
-                segments
+                this.firstPoint,
+                this.secondPoint,
+                "red",
+                this.segments,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -41,15 +39,43 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsSegments()
         {
-            Assert.Equal(this.segments, this.model.Segments);
+            Assert.Equal(this.segments, this.model.AdditionalSegments);
+        }
+        
+        [Fact]
+        public void TestItSetsFirstPoint()
+        {
+            Assert.Equal(this.firstPoint, this.model.FirstPoint);
+        }
+        
+        [Fact]
+        public void TestItSetsSecondPoint()
+        {
+            Assert.Equal(this.secondPoint, this.model.SecondPoint);
+        }
+        
+        [Fact]
+        public void TestItSetsColour()
+        {
+            Assert.Equal("red", this.model.Colour);
+        }
+
+        [Fact]
+        public void TestItReturnsCompilableElements()
+        {
+            IEnumerable<ICompilableElement> expected = new List<ICompilableElement>
+            {
+                this.model
+            }.Concat(this.model.AdditionalSegments);
+            Assert.Equal(expected, this.model.GetCompilableElements());
         }
 
         [Fact]
         public void TestItCompiles()
         {
             Assert.Equal(
-                "TestGeo                     abc def ghi jkl red ;comment1\r\nmno pqr stu vwx blue ;comment2\r\n",
-                this.model.Compile()
+                $"TestGeo                     {this.firstPoint} {this.secondPoint} red",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

@@ -1,31 +1,18 @@
 ﻿using System.Collections.Generic;
 using Xunit;
-using Moq;
 using Compiler.Model;
 using Compiler.Validate;
-using Compiler.Event;
-using Compiler.Error;
-using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllSectorsMustHaveValidDepartureAirportsTest
+    public class AllSectorsMustHaveValidDepartureAirportsTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection elements;
-        private readonly AllSectorsMustHaveValidDepartureAirports validator;
-        private readonly Mock<IEventLogger> loggerMock;
-        private readonly CompilerArguments args;
-
         public AllSectorsMustHaveValidDepartureAirportsTest()
         {
-            this.elements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.validator = new AllSectorsMustHaveValidDepartureAirports();
-            this.args = new CompilerArguments();
-
-            this.elements.Add(new Airport("a", "EGKK", new Coordinate("a", "b"), "a", "c"));
-            this.elements.Add(new Airport("a", "EGLL", new Coordinate("a", "b"), "a", "c"));
-            this.elements.Add(new Airport("a", "EGCC", new Coordinate("a", "b"), "a", "c"));
+            this.sectorElements.Add(AirportFactory.Make("EGKK"));
+            this.sectorElements.Add(AirportFactory.Make("EGLL"));
+            this.sectorElements.Add(AirportFactory.Make("EGCC"));
         }
 
         [Theory]
@@ -35,89 +22,24 @@ namespace CompilerTest.Validate
         [InlineData("EGKK", "EGLL", "EGCC")]
         public void TestItPassesOnAllValid(string first, string second, string third)
         {
-            this.elements.Add(
-                new Sector(
-                    "COOL1",
-                    5000,
-                    66000,
-                    new SectorOwnerHierarchy(
-                        new List<string>()
-                        {
-                            "LS", "LC"
-                        },
-                        ""
-                    ),
-                    new List<SectorAlternateOwnerHierarchy>()
+            this.sectorElements.Add(
+                SectorFactory.Make(
+                    departureAirports: new List<SectorDepartureAirports>()
                     {
-                        new SectorAlternateOwnerHierarchy("ALT1", new List<string>(){"LON1", "LON2"}, ""),
-                        new SectorAlternateOwnerHierarchy("ALT2", new List<string>(){"LON3", "LON4"}, ""),
-                    },
-                    new List<SectorActive>()
-                    {
-                        new SectorActive("EGLL", "09R", ""),
-                        new SectorActive("EGWU", "05", ""),
-                    },
-                    new List<SectorGuest>()
-                    {
-                        new SectorGuest("LLN", "EGLL", "EGLL", ""),
-                        new SectorGuest("LLS", "EGLL", "*", ""),
-                    },
-                    new SectorBorder(
-                    new List<string>()
-                        {
-                            "ONE",
-                            "TWO",
-                        },
-                        ""
-                    ),
-                    new SectorArrivalAirports(new List<string>() { "EGLL" }, ""),
-                    new SectorDepartureAirports(new List<string>() { first, second }, ""),
-                    "comment"
+                        SectorDepartureAirportsFactory.Make(new List<string>() {first, second})
+                    }
                 )
             );
-            this.elements.Add(
-                new Sector(
-                    "COOL2",
-                    5000,
-                    66000,
-                    new SectorOwnerHierarchy(
-                        new List<string>()
-                        {
-                            "LS", "LC"
-                        },
-                        ""
-                    ),
-                    new List<SectorAlternateOwnerHierarchy>()
+            this.sectorElements.Add(
+                SectorFactory.Make(
+                    departureAirports: new List<SectorDepartureAirports>()
                     {
-                        new SectorAlternateOwnerHierarchy("ALT1", new List<string>(){"LON1", "LON2"}, ""),
-                        new SectorAlternateOwnerHierarchy("ALT2", new List<string>(){"LON3", "LON4"}, ""),
-                    },
-                    new List<SectorActive>()
-                    {
-                        new SectorActive("EGLL", "09R", ""),
-                        new SectorActive("EGWU", "05", ""),
-                    },
-                    new List<SectorGuest>()
-                    {
-                        new SectorGuest("LLN", "EGLL", "EGLL", ""),
-                        new SectorGuest("LLS", "EGLL", "*", ""),
-                    },
-                    new SectorBorder(
-                    new List<string>()
-                        {
-                            "ONE",
-                            "TWO",
-                        },
-                        ""
-                    ),
-                    new SectorArrivalAirports(new List<string>() { "EGLL", "EGBB" }, ""),
-                    new SectorDepartureAirports(new List<string>() { second, third }, ""),
-                    "comment"
+                        SectorDepartureAirportsFactory.Make(new List<string>() {second, third})
+                    }
                 )
             );
-
-            this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            
+            this.AssertNoValidationErrors();
         }
 
         [Theory]
@@ -128,89 +50,29 @@ namespace CompilerTest.Validate
         [InlineData("WHAT", "WHAT", "WHAT", 2)]
         public void TestItFailsOnInvalid(string first, string second, string third, int timesCalled)
         {
-            this.elements.Add(
-                new Sector(
-                    "COOL1",
-                    5000,
-                    66000,
-                    new SectorOwnerHierarchy(
-                        new List<string>()
-                        {
-                            "LS", "LC"
-                        },
-                        ""
-                    ),
-                    new List<SectorAlternateOwnerHierarchy>()
+            this.sectorElements.Add(
+                SectorFactory.Make(
+                    departureAirports: new List<SectorDepartureAirports>()
                     {
-                        new SectorAlternateOwnerHierarchy("ALT1", new List<string>(){"LON1", "LON2"}, ""),
-                        new SectorAlternateOwnerHierarchy("ALT2", new List<string>(){"LON3", "LON4"}, ""),
-                    },
-                    new List<SectorActive>()
-                    {
-                        new SectorActive("EGLL", "09R", ""),
-                        new SectorActive("EGWU", "05", ""),
-                    },
-                    new List<SectorGuest>()
-                    {
-                        new SectorGuest("LLN", "EGLL", "EGLL", ""),
-                        new SectorGuest("LLS", "EGLL", "*", ""),
-                    },
-                    new SectorBorder(
-                    new List<string>()
-                        {
-                            "ONE",
-                            "TWO",
-                        },
-                        ""
-                    ),
-                    new SectorArrivalAirports(new List<string>() { "EGLL" }, ""),
-                    new SectorDepartureAirports(new List<string>() { first, second }, ""),
-                    "comment"
+                        SectorDepartureAirportsFactory.Make(new List<string>() {first, second})
+                    }
                 )
             );
-            this.elements.Add(
-                new Sector(
-                    "COOL2",
-                    5000,
-                    66000,
-                    new SectorOwnerHierarchy(
-                        new List<string>()
-                        {
-                            "LS", "LC"
-                        },
-                        ""
-                    ),
-                    new List<SectorAlternateOwnerHierarchy>()
+            this.sectorElements.Add(
+                SectorFactory.Make(
+                    departureAirports: new List<SectorDepartureAirports>()
                     {
-                        new SectorAlternateOwnerHierarchy("ALT1", new List<string>(){"LON1", "LON2"}, ""),
-                        new SectorAlternateOwnerHierarchy("ALT2", new List<string>(){"LON3", "LON4"}, ""),
-                    },
-                    new List<SectorActive>()
-                    {
-                        new SectorActive("EGLL", "09R", ""),
-                        new SectorActive("EGWU", "05", ""),
-                    },
-                    new List<SectorGuest>()
-                    {
-                        new SectorGuest("LLN", "EGLL", "EGLL", ""),
-                        new SectorGuest("LLS", "EGLL", "*", ""),
-                    },
-                    new SectorBorder(
-                    new List<string>()
-                        {
-                            "ONE",
-                            "TWO",
-                        },
-                        ""
-                    ),
-                    new SectorArrivalAirports(new List<string>() { "EGLL", "EGBB" }, ""),
-                    new SectorDepartureAirports(new List<string>() { second, third }, ""),
-                    "comment"
+                        SectorDepartureAirportsFactory.Make(new List<string>() {second, third})
+                    }
                 )
             );
+            
+            this.AssertValidationErrors(timesCalled);
+        }
 
-            this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(timesCalled));
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllSectorsMustHaveValidDepartureAirports();
         }
     }
 }

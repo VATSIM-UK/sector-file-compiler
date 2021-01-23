@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Event
+﻿namespace Compiler.Event
 {
     public class CompilationMessage : ICompilerEvent
     {
@@ -15,7 +11,7 @@ namespace Compiler.Event
 
         public string GetMessage()
         {
-            return String.Format("INFO: {0}", this.message);
+            return $"INFO: {this.message}";
         }
 
         public bool IsFatal()

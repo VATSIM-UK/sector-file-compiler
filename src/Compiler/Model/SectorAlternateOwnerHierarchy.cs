@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Compiler.Model
 {
-    public class SectorAlternateOwnerHierarchy : AbstractSectorElement, ICompilable
+    public class SectorAlternateOwnerHierarchy : AbstractCompilableElement
     {
         public SectorAlternateOwnerHierarchy(
             string name,
             List<string> owners,
-            string comment
-        ) : base(comment) 
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base(definition, docblock, inlineComment)
         {
             Name = name;
             Owners = owners;
@@ -20,22 +19,11 @@ namespace Compiler.Model
         public string Name { get; }
         public List<string> Owners { get; }
 
-        public string Compile()
-        {
-            return String.Format(
-                "ALTOWNER:{0}:{1}{2}\r\n",
-                this.Name,
-                string.Join(':', this.Owners),
-                this.CompileComment()
-            );
-        }
-
         public override bool Equals(object obj)
         {
             if (
                 !(obj is SectorAlternateOwnerHierarchy) ||
                 ((SectorAlternateOwnerHierarchy)obj).Name != this.Name ||
-                ((SectorAlternateOwnerHierarchy)obj).Comment != this.Comment ||
                 ((SectorAlternateOwnerHierarchy)obj).Owners.Count != this.Owners.Count
             )
             {
@@ -51,6 +39,11 @@ namespace Compiler.Model
             }
 
             return true;
+        }
+
+        public override string GetCompileData(SectorElementCollection elements)
+        {
+            return $"ALTOWNER:{this.Name}:{string.Join(':', this.Owners)}";
         }
 
         public override int GetHashCode()

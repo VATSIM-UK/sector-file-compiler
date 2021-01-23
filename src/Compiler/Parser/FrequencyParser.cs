@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Parser
+﻿namespace Compiler.Parser
 {
     public class FrequencyParser : IFrequencyParser
     {

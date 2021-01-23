@@ -1,31 +1,14 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Moq;
-using Compiler.Parser;
 using Compiler.Error;
 using Compiler.Model;
-using Compiler.Event;
-using Compiler.Output;
-using CompilerTest.Mock;
+using Compiler.Input;
 
 namespace CompilerTest.Parser
 {
-    public class CoordinationPointParserTest
+    public class CoordinationPointParserTest: AbstractParserTestCase
     {
-        private readonly AirspaceParser parser;
-
-        private readonly SectorElementCollection collection;
-
-        private readonly Mock<IEventLogger> log;
-
-        public CoordinationPointParserTest()
-        {
-            this.log = new Mock<IEventLogger>();
-            this.collection = new SectorElementCollection();
-            this.parser = (AirspaceParser)(new SectionParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.ESE_AIRSPACE);
-        }
-
         public static IEnumerable<object[]> BadData => new List<object[]>
         {
             new object[] { new List<string>{
@@ -67,31 +50,10 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.parser.ParseData(
-                new MockSectorDataFile(
-                    "test.txt",
-                    lines
-                )
-            );
+            this.RunParserOnLines(lines);
 
-            Assert.Empty(this.collection.CoordinationPoints);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItHandlesMetadata()
-        {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] {
-                    ""
-                })
-            );
-
-            this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(
-                this.collection.Compilables[OutputSections.ESE_AIRSPACE][0]
-            );
+            Assert.Empty(this.sectorElementCollection.CoordinationPoints);
+            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Theory]
@@ -118,49 +80,48 @@ namespace CompilerTest.Parser
         ] // Climb unspecified, descend unspecified
         public void TestItAddsInternalCoordinationPoints(string line, string climbLevel, string descendLevel)
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { line })
-            );
+            this.RunParserOnLines(new List<string> {line});
 
-            this.parser.ParseData(data);
-
-            CoordinationPoint result = this.collection.CoordinationPoints[0];
+            CoordinationPoint result = this.sectorElementCollection.CoordinationPoints[0];
             Assert.False(result.IsFirCopx);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.DepartureAirportOrFixBefore);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.DepartureRunway);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.DepartureAirportOrFixBefore);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.DepartureRunway);
             Assert.Equal("HEMEL", result.CoordinationFix);
-            Assert.Equal("EGBB", result.ArrivalAiportOrFixAfter);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.ArrivalRunway);
+            Assert.Equal("EGBB", result.ArrivalAirportOrFixAfter);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.ArrivalRunway);
             Assert.Equal("London AC Worthing", result.FromSector);
             Assert.Equal("London AC Dover", result.ToSector);
             Assert.Equal(climbLevel, result.ClimbLevel);
             Assert.Equal(descendLevel, result.DescendLevel);
             Assert.Equal("|HEMEL20", result.Name);
+            this.AssertExpectedMetadata(result);
         }
 
         [Fact]
         public void TestItAddsFirCoordinationPoints()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "FIR_COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment" })
+            this.RunParserOnLines(
+                new List<string>(new[] { "FIR_COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment" })
             );
-
-            this.parser.ParseData(data);
-
-            CoordinationPoint result = this.collection.CoordinationPoints[0];
+            
+            CoordinationPoint result = this.sectorElementCollection.CoordinationPoints[0];
             Assert.True(result.IsFirCopx);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.DepartureAirportOrFixBefore);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.DepartureRunway);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.DepartureAirportOrFixBefore);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.DepartureRunway);
             Assert.Equal("HEMEL", result.CoordinationFix);
-            Assert.Equal("EGBB", result.ArrivalAiportOrFixAfter);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.ArrivalRunway);
+            Assert.Equal("EGBB", result.ArrivalAirportOrFixAfter);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.ArrivalRunway);
             Assert.Equal("London AC Worthing", result.FromSector);
             Assert.Equal("London AC Dover", result.ToSector);
-            Assert.Equal(CoordinationPoint.DATA_NOT_SPECIFIED, result.ClimbLevel);
+            Assert.Equal(CoordinationPoint.DataNotSpecified, result.ClimbLevel);
             Assert.Equal("25000", result.DescendLevel);
             Assert.Equal("|HEMEL20", result.Name);
+            this.AssertExpectedMetadata(result);
+        }
+
+        protected override InputDataType GetInputDataType()
+        {
+            return InputDataType.ESE_AGREEMENTS;
         }
     }
 }

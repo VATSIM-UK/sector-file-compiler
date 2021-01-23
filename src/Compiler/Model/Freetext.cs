@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Model
+﻿namespace Compiler.Model
 {
-    public class Freetext : AbstractSectorElement, ICompilable
+    public class Freetext : AbstractCompilableElement
     {
-        public Freetext(string title, string text, Coordinate coordinate, string comment)
-            : base(comment)
+        public Freetext(
+            string title,
+            string text,
+            Coordinate coordinate,
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base(definition, docblock, inlineComment)
         {
             Title = title;
             Text = text;
@@ -18,16 +20,9 @@ namespace Compiler.Model
         public string Text { get; }
         public Coordinate Coordinate { get; }
 
-        public string Compile()
+        public override string GetCompileData(SectorElementCollection elements)
         {
-            return String.Format(
-                "{0}:{1}:{2}:{3}{4}\r\n",
-                this.Coordinate.latitude,
-                this.Coordinate.longitude,
-                this.Title,
-                this.Text,
-                this.CompileComment()
-            );
+            return $"{this.Coordinate.latitude}:{this.Coordinate.longitude}:{this.Title}:{this.Text}";
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
-using System.Collections.Generic;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -22,7 +22,9 @@ namespace CompilerTest.Model
                 "*",
                 "14000",
                 "ABTUMDES",
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -53,7 +55,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsArrivalAirportOrFixAfter()
         {
-            Assert.Equal("EGKK", this.model.ArrivalAiportOrFixAfter);
+            Assert.Equal("EGKK", this.model.ArrivalAirportOrFixAfter);
         }
 
         [Fact]
@@ -96,15 +98,15 @@ namespace CompilerTest.Model
         public void TestItCompiles()
         {
             Assert.Equal(
-                "COPX:*:*:ABTUM:EGKK:26L:TCE:TCSW:*:14000:ABTUMDES ;comment\r\n",
-                this.model.Compile()
+                "COPX:*:*:ABTUM:EGKK:26L:TCE:TCSW:*:14000:ABTUMDES",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
 
         [Fact]
         public void TestItCompilesFirCopx()
         {
-            CoordinationPoint model2 = new CoordinationPoint(
+            CoordinationPoint model2 = new(
                 true,
                 "*",
                 "*",
@@ -116,12 +118,14 @@ namespace CompilerTest.Model
                 "*",
                 "14000",
                 "ABTUMDES",
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
 
             Assert.Equal(
-                "FIR_COPX:*:*:ABTUM:EGKK:26L:TCE:TCSW:*:14000:ABTUMDES ;comment\r\n",
-                model2.Compile()
+                "FIR_COPX:*:*:ABTUM:EGKK:26L:TCE:TCSW:*:14000:ABTUMDES",
+                model2.GetCompileData(new SectorElementCollection())
             );
         }
     }

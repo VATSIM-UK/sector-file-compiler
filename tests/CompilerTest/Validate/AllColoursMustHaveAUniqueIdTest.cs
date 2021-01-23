@@ -1,32 +1,21 @@
 ﻿using Xunit;
 using Compiler.Model;
-using Compiler.Event;
-using Compiler.Error;
 using Compiler.Validate;
-using Moq;
-using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllColoursMustHaveAUniqueIdTest
+    public class AllColoursMustHaveAUniqueIdTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection sectorElements;
-        private readonly Mock<IEventLogger> loggerMock;
         private readonly Colour first;
         private readonly Colour second;
         private readonly Colour third;
-        private readonly AllColoursMustHaveAUniqueId rule;
-        private readonly CompilerArguments args;
 
         public AllColoursMustHaveAUniqueIdTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.first = new Colour("colour1", 123, "test");
-            this.second = new Colour("colour2", 123, "test");
-            this.third = new Colour("colour1", 123, "test");
-            this.rule = new AllColoursMustHaveAUniqueId();
-            this.args = new CompilerArguments();
+            this.first = ColourFactory.Make("colour1");
+            this.second = ColourFactory.Make("colour2");
+            this.third = ColourFactory.Make("colour1");
         }
 
         [Fact]
@@ -34,9 +23,7 @@ namespace CompilerTest.Validate
         {
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.second);
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.AssertNoValidationErrors();
         }
 
         [Fact]
@@ -45,8 +32,12 @@ namespace CompilerTest.Validate
             this.sectorElements.Add(this.first);
             this.sectorElements.Add(this.second);
             this.sectorElements.Add(this.third);
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            this.AssertValidationErrors();
+        }
+
+        protected override IValidationRule GetValidationRule()
+        {
+            return new AllColoursMustHaveAUniqueId();
         }
     }
 }

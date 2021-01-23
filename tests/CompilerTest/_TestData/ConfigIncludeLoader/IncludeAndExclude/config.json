@@ -1,0 +1,14 @@
+{
+  "includes": {
+    "enroute": {
+      "ownership": [
+        {
+          "type": "folder",
+          "folder": "test",
+          "include": "Foo",
+          "exclude": "Foo"
+        }
+      ]
+    }
+  }
+}

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler.Event
+﻿namespace Compiler.Event
 {
     /**
      * An event for when the parser wants to suggest a change or
@@ -19,7 +15,7 @@ namespace Compiler.Event
 
         public string GetMessage()
         {
-            return String.Format("SUGGESTION: {0}", this.message);
+            return $"SUGGESTION: {this.message}";
         }
 
         public bool IsFatal()

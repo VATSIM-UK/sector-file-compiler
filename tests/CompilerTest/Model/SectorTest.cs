@@ -1,6 +1,8 @@
 ﻿using Xunit;
 using Compiler.Model;
 using System.Collections.Generic;
+using System.Linq;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -8,49 +10,22 @@ namespace CompilerTest.Model
     {
         private readonly Sector model;
         private readonly SectorOwnerHierarchy owners;
-        private readonly List<SectorAlternateOwnerHierarchy> altOwners = new List<SectorAlternateOwnerHierarchy>()
-        {
-            new SectorAlternateOwnerHierarchy("ALT1", new List<string>(){"LON1", "LON2"}, ""),
-            new SectorAlternateOwnerHierarchy("ALT2", new List<string>(){"LON3", "LON4"}, ""),
-        };
-        private readonly List<SectorGuest> guests = new List<SectorGuest>()
-        {
-            new SectorGuest("LLN", "EGLL", "EGWU", ""),
-            new SectorGuest("LLS", "EGLL", "*", ""),
-        };
-        private readonly List<SectorActive> active = new List<SectorActive>()
-        {
-            new SectorActive("EGLL", "09R", ""),
-            new SectorActive("EGWU", "05", ""),
-        };
-
-        private readonly SectorBorder border;
-
-        private SectorDepartureAirports departureAirports;
-
-        private SectorArrivalAirports arrivalAirports;
+        private readonly List<SectorAlternateOwnerHierarchy> altOwners;
+        private readonly List<SectorGuest> guests;
+        private readonly List<SectorActive> active ;
+        private readonly List<SectorBorder> borders;
+        private readonly List<SectorDepartureAirports> departureAirports;
+        private readonly List<SectorArrivalAirports> arrivalAirports;
 
         public SectorTest()
         {
-            this.owners = new SectorOwnerHierarchy(
-                new List<string>()
-                {
-                    "LLN", "LLS"
-                },
-                ""
-            );
-
-            this.border = new SectorBorder(
-                new List<string>()
-                {
-                    "LINE1",
-                    "LINE2",
-                },
-                ""
-            );
-
-            this.departureAirports = new SectorDepartureAirports(new List<string>() { "EGLL", "EGWU" }, "");
-            this.arrivalAirports = new SectorArrivalAirports(new List<string>() { "EGSS", "EGGW" }, "");
+            this.altOwners = SectorAlternateOwnerHierarchyFactory.MakeList();
+            this.guests = SectorGuestFactory.MakeList();
+            this.active = SectorActiveFactory.MakeList();
+            this.owners = SectorOwnerHierarchyFactory.Make();
+            this.borders = SectorBorderFactory.MakeList();
+            this.departureAirports = SectorDepartureAirportsFactory.MakeList();
+            this.arrivalAirports = SectorArrivalAirportsFactory.MakeList();
 
             this.model = new Sector(
                 "COOL",
@@ -60,10 +35,12 @@ namespace CompilerTest.Model
                 this.altOwners,
                 this.active,
                 this.guests,
-                this.border,
+                this.borders,
                 this.arrivalAirports,
                 this.departureAirports,
-                "comment"
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -112,7 +89,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsBorder()
         {
-            Assert.Equal(this.border, this.model.Border);
+            Assert.Equal(this.borders, this.model.Borders);
         }
 
         [Fact]
@@ -128,21 +105,29 @@ namespace CompilerTest.Model
         }
 
         [Fact]
+        public void TestItReturnsCompilableElements()
+        {
+            IEnumerable<ICompilableElement> expected = new List<ICompilableElement>
+                {
+                    this.model,
+                    this.model.Owners
+                }
+                .Concat(this.model.AltOwners)
+                .Concat(this.model.Active)
+                .Concat(this.model.Guests)
+                .Concat(this.model.Borders)
+                .Concat(this.model.ArrivalAirports)
+                .Concat(this.model.DepartureAirports);
+            
+            Assert.Equal(expected, this.model.GetCompilableElements());
+        }
+
+        [Fact]
         public void TestItCompiles()
         {
             Assert.Equal(
-                "SECTOR:COOL:5000:66000 ;comment\r\n" +
-                "OWNER:LLN:LLS\r\n" +
-                "ALTOWNER:ALT1:LON1:LON2\r\n" +
-                "ALTOWNER:ALT2:LON3:LON4\r\n" +
-                "ACTIVE:EGLL:09R\r\n" +
-                "ACTIVE:EGWU:05\r\n" +
-                "GUEST:LLN:EGLL:EGWU\r\n" +
-                "GUEST:LLS:EGLL:*\r\n" +
-                "BORDER:LINE1:LINE2\r\n" +
-                "ARRAPT:EGSS:EGGW\r\n" +
-                "DEPAPT:EGLL:EGWU\r\n\r\n",
-                this.model.Compile()
+                "SECTOR:COOL:5000:66000",
+                this.model.GetCompileData(new SectorElementCollection())
             );
         }
     }

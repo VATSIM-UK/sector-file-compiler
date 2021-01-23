@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Compiler.Model
 {
-    public class ControllerPosition : AbstractSectorElement, ICompilable
+    public class ControllerPosition : AbstractCompilableElement
     {
         public ControllerPosition(
             string callsign,
@@ -17,8 +15,11 @@ namespace Compiler.Model
             string squawkRangeStart,
             string squawkRangeEnd,
             List<Coordinate> visCentres,
-            string comment
-        ) : base (comment)
+            PositionOrder positionOrder,
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base (definition, docblock, inlineComment)
         {
             Callsign = callsign;
             RtfCallsign = rtfCallsign;
@@ -30,6 +31,7 @@ namespace Compiler.Model
             SquawkRangeStart = squawkRangeStart;
             SquawkRangeEnd = squawkRangeEnd;
             VisCentres = visCentres;
+            PositionOrder = positionOrder;
         }
 
         public string Callsign { get; }
@@ -42,23 +44,12 @@ namespace Compiler.Model
         public string SquawkRangeStart { get; }
         public string SquawkRangeEnd { get; }
         public List<Coordinate> VisCentres { get; }
+        public PositionOrder PositionOrder { get; }
 
-        public string Compile()
+        public override string GetCompileData(SectorElementCollection elements)
         {
-            return String.Format(
-                "{0}:{1}:{2}:{3}:{4}:{5}:{6}:-:-:{7}:{8}{9}{10}\r\n",
-                this.Callsign,
-                this.RtfCallsign,
-                this.Frequency,
-                this.Identifier,
-                this.MiddleLetter,
-                this.Prefix,
-                this.Suffix,
-                this.SquawkRangeStart,
-                this.SquawkRangeEnd,
-                this.CompileVisCenters(),
-                this.CompileComment()
-            );
+            return
+                $"{this.Callsign}:{this.RtfCallsign}:{this.Frequency}:{this.Identifier}:{this.MiddleLetter}:{this.Prefix}:{this.Suffix}:-:-:{this.SquawkRangeStart}:{this.SquawkRangeEnd}{this.CompileVisCenters()}";
         }
 
         private string CompileVisCenters()
@@ -66,11 +57,7 @@ namespace Compiler.Model
             string compiledString = "";
             foreach (Coordinate coordinate in this.VisCentres)
             {
-                compiledString += string.Format(
-                    ":{0}:{1}",
-                    coordinate.latitude,
-                    coordinate.longitude
-                );
+                compiledString += $":{coordinate.latitude}:{coordinate.longitude}";
             }
 
             return compiledString;

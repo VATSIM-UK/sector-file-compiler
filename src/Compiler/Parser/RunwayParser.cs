@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Compiler.Model;
+﻿using Compiler.Model;
 using Compiler.Error;
 using Compiler.Event;
 using Compiler.Input;
@@ -8,106 +7,94 @@ using System.Linq;
 
 namespace Compiler.Parser
 {
-    public class RunwayParser: AbstractSectorElementParser, ISectorDataParser
+    public class RunwayParser: ISectorDataParser
     {
-        private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
         private readonly IEventLogger errorLog;
 
         public RunwayParser(
-            MetadataParser metadataParser,
-            ISectorLineParser sectorLineParser,
             SectorElementCollection sectorElements,
             IEventLogger errorLog
-        ) : base(metadataParser)
-        {
-            this.sectorLineParser = sectorLineParser;
+        ) {
             this.sectorElements = sectorElements;
             this.errorLog = errorLog;
         }
 
         public void ParseData(AbstractSectorDataFile data)
         {
-            foreach (string line in data)
+            foreach (SectorData line in data)
             {
-                // Defer all metadata lines to the base
-                if (this.ParseMetadata(line))
-                {
-                    continue;
-                }
-
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
-                if (sectorData.dataSegments.Count < 8)
+                // Runways are weird and have double spaces randomly, so handle it.
+                if (line.dataSegments.Count < 8)
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Too few RUNWAY segments", data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Too few RUNWAY segments", line)
                     );
                     continue;
                 }
 
                 // Check the two identifiers
-                if (!RunwayValidator.RunwayValidIncludingAdjacent(sectorData.dataSegments[0]))
+                if (!RunwayValidator.RunwayValidIncludingAdjacent(line.dataSegments[0]))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid runway designator " + sectorData.dataSegments[0], data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Invalid runway designator " + line.dataSegments[0], line)
                     );
                     continue;
                 }
 
-                if (!RunwayValidator.RunwayValidIncludingAdjacent(sectorData.dataSegments[1]))
+                if (!RunwayValidator.RunwayValidIncludingAdjacent(line.dataSegments[1]))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid runway designator " + sectorData.dataSegments[1], data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Invalid runway designator " + line.dataSegments[1], line)
                     );
                     continue;
                 }
 
                 // Check the two headings
-                if (!this.HeadingIsValid(sectorData.dataSegments[2]))
+                if (!this.HeadingIsValid(line.dataSegments[2]))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid runway heading " + sectorData.dataSegments[2], data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Invalid runway heading " + line.dataSegments[2], line)
                     );
                     continue;
                 }
 
-                if (!this.HeadingIsValid(sectorData.dataSegments[3]))
+                if (!this.HeadingIsValid(line.dataSegments[3]))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid runway heading " + sectorData.dataSegments[3], data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Invalid runway heading " + line.dataSegments[3], line)
                     );
                     continue;
                 }
 
                 // Check the two coordinates
-                Coordinate firstThreshold = CoordinateParser.Parse(sectorData.dataSegments[4], sectorData.dataSegments[5]);
-                if (firstThreshold.Equals(CoordinateParser.invalidCoordinate))
+                Coordinate firstThreshold = CoordinateParser.Parse(line.dataSegments[4], line.dataSegments[5]);
+                if (firstThreshold.Equals(CoordinateParser.InvalidCoordinate))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid runway first threshold ", data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Invalid runway first threshold ", line)
                     );
                     continue;
                 }
 
-                Coordinate reverseThreshold = CoordinateParser.Parse(sectorData.dataSegments[6], sectorData.dataSegments[7]);
-                if (reverseThreshold.Equals(CoordinateParser.invalidCoordinate))
+                Coordinate reverseThreshold = CoordinateParser.Parse(line.dataSegments[6], line.dataSegments[7]);
+                if (reverseThreshold.Equals(CoordinateParser.InvalidCoordinate))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid runway reverse threshold ", data.FullPath, data.CurrentLineNumber)
+                        new SyntaxError("Invalid runway reverse threshold ", line)
                     );
                     continue;
                 }
 
                 // Compile together the airfield description
-                string runwayDialogDescription = "";
-                if (sectorData.dataSegments.Count > 8)
+                if (line.dataSegments.Count > 8)
                 {
 
-                    runwayDialogDescription = string.Join(
-                        " ", 
-                        sectorData.dataSegments
+                    string.Join(
+                        " ",
+                        line.dataSegments
                             .Skip(8)
-                            .Take(sectorData.dataSegments.Count - 8)
+                            .Take(line.dataSegments.Count - 8)
                             .ToList()
                     );
                 }
@@ -116,14 +103,16 @@ namespace Compiler.Parser
                 // Add the element
                 this.sectorElements.Add(
                     new Runway(
-                        sectorData.dataSegments[0],
-                        int.Parse(sectorData.dataSegments[2]),
+                        data.GetParentDirectoryName(),
+                        line.dataSegments[0],
+                        int.Parse(line.dataSegments[2]),
                         firstThreshold,
-                        sectorData.dataSegments[1],
-                        int.Parse(sectorData.dataSegments[3]),
+                        line.dataSegments[1],
+                        int.Parse(line.dataSegments[3]),
                         reverseThreshold,
-                        runwayDialogDescription,
-                        sectorData.comment
+                        line.definition,
+                        line.docblock,
+                        line.inlineComment
                     )
                 );
             }

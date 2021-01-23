@@ -1,86 +1,54 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Moq;
-using Compiler.Parser;
 using Compiler.Error;
 using Compiler.Model;
-using Compiler.Event;
-using Compiler.Output;
-using CompilerTest.Mock;
+using Compiler.Input;
 
 namespace CompilerTest.Parser
 {
-    public class SidStarParserTest
+    public class SidStarParserTest: AbstractParserTestCase
     {
-        private readonly SidStarParser parser;
-
-        private readonly SectorElementCollection collection;
-
-        private readonly Mock<IEventLogger> log;
-
-        public SidStarParserTest()
+        public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            this.log = new Mock<IEventLogger>();
-            this.collection = new SectorElementCollection();
-            this.parser = (SidStarParser)(new SectionParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.ESE_SIDSSTARS);
-        }
-
-        [Fact]
-        public void TestItRaisesASyntaxErrorIfIncorrectNumberOfSegments()
+            new object[] { new List<string>{
+                "abc:def:ghi"
+            }}, // Too few segments
+            new object[] { new List<string>{
+                "abc:def:ghi:jkl:mno:pqr:stu"
+            }}, // Too many segments
+            new object[] { new List<string>{
+                "abc:def:ghi:jkl:mno"
+            }}, // Unknown type
+        };
+        
+        [Theory]
+        [MemberData(nameof(BadData))]
+        public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "abc:def:ghi" })
-            );
+            this.RunParserOnLines(lines);
 
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItRaisesAnErrorIfUnknownType()
-        {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "abc:def:ghi:jkl:mno" })
-            );
-
-            this.parser.ParseData(data);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
-        }
-
-        [Fact]
-        public void TestItHandlesMetadata()
-        {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "" })
-            );
-
-            this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(
-                this.collection.Compilables[OutputSections.ESE_SIDSSTARS][0]
-            );
+            Assert.Empty(this.sectorElementCollection.Runways);
+            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsSidStarData()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 ;comment" })
-            );
+            this.RunParserOnLines(new List<string>(new[] { "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 ;comment" }));
 
-            this.parser.ParseData(data);
-
-            SidStar result = this.collection.SidStars[0];
+            SidStar result = this.sectorElementCollection.SidStars[0];
             Assert.Equal("SID", result.Type);
             Assert.Equal("EGKK", result.Airport);
             Assert.Equal("26L", result.Runway);
             Assert.Equal("ADMAG2X", result.Identifier);
-            Assert.Equal(new List<string>(new string[] { "FIX1", "FIX2" }), result.Route);
-            Assert.Equal("comment", result.Comment);
+            Assert.Equal(new List<string>(new[] { "FIX1", "FIX2" }), result.Route);
+            this.AssertExpectedMetadata(result);
+        }
+
+        protected override InputDataType GetInputDataType()
+        {
+            return InputDataType.ESE_SIDS;
         }
     }
 }

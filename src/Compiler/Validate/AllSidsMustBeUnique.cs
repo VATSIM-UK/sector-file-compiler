@@ -17,7 +17,7 @@ namespace Compiler.Validate
                 string sidStarKey = this.GetKey(sidStar);
                 if (keys.Contains(sidStarKey))
                 {
-                    events.AddEvent(new ValidationRuleFailure("Duplicate SID/STAR " + sidStarKey));
+                    events.AddEvent(new ValidationRuleFailure("Duplicate SID/STAR " + sidStarKey, sidStar));
                     continue;
                 }
 

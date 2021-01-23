@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -15,8 +16,10 @@ namespace CompilerTest.Model
                 "EGKK",
                 "26L",
                 "ADMAG2X",
-                new List<string>(new string[] { "FIX1", "FIX2", "FIX3" }),
-                null
+                new List<string>(new[] { "FIX1", "FIX2", "FIX3" }),
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
             );
         }
 
@@ -47,33 +50,15 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsRoute()
         {
-            Assert.Equal(new List<string>(new string[] { "FIX1", "FIX2", "FIX3" }), this.sidStar.Route);
+            Assert.Equal(new List<string>(new[] { "FIX1", "FIX2", "FIX3" }), this.sidStar.Route);
         }
 
         [Fact]
         public void TestItCompiles()
         {
             Assert.Equal(
-                "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 FIX3\r\n",
-                this.sidStar.Compile()
-            );
-        }
-
-        [Fact]
-        public void TestItCompilesWithComment()
-        {
-            SidStar sid = new SidStar(
-                "SID",
-                "EGKK",
-                "26L",
-                "ADMAG2X",
-                new List<string>(new string[] { "FIX1", "FIX2", "FIX3" }),
-                "comment"
-            );
-
-            Assert.Equal(
-                "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 FIX3 ;comment\r\n",
-                sid.Compile()
+                "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 FIX3",
+                this.sidStar.GetCompileData(new SectorElementCollection())
             );
         }
     }

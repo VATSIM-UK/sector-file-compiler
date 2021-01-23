@@ -1,64 +1,34 @@
 ﻿using Xunit;
-using Moq;
-using Compiler.Model;
 using Compiler.Validate;
-using Compiler.Event;
-using Compiler.Error;
-using Compiler.Argument;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class InfoMustHaveValidAirportTest
+    public class InfoMustHaveValidAirportTest: AbstractValidatorTestCase
     {
-        private readonly SectorElementCollection elements;
-        private readonly InfoMustHaveValidAirport validator;
-        private readonly Mock<IEventLogger> loggerMock;
-        private readonly CompilerArguments args;
-
         public InfoMustHaveValidAirportTest()
         {
-            this.elements = new SectorElementCollection();
-            this.elements.Add(new Airport("a", "EGKK", new Coordinate("a", "b"), "a", "c"));
-            this.elements.Add(new Airport("a", "EGLL", new Coordinate("a", "b"), "a", "c"));
-            this.loggerMock = new Mock<IEventLogger>();
-            this.validator = new InfoMustHaveValidAirport();
-            this.args = new CompilerArguments();
+            this.sectorElements.Add(AirportFactory.Make("EGLL"));
+            this.sectorElements.Add(AirportFactory.Make("EGKK"));
         }
 
         [Fact]
         public void TestItPassesOnValidAirport()
         {
-            this.elements.Add(new Info(
-                "Test",
-                "LON_CTR",
-                "EGLL",
-                new Coordinate("abc", "def"),
-                0,
-                0,
-                0,
-                0
-            ));
-
-            this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            this.sectorElements.Add(InfoFactory.Make("EGLL"));
+            this.AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidAirport()
         {
-            this.elements.Add(new Info(
-                "Test",
-                "LON_CTR",
-                "EGXX",
-                new Coordinate("abc", "def"),
-                0,
-                0,
-                0,
-                0
-            ));
+            this.sectorElements.Add(InfoFactory.Make("EGXX"));
+            this.AssertValidationErrors();
+        }
 
-            this.validator.Validate(this.elements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+        protected override IValidationRule GetValidationRule()
+        {
+            return new InfoMustHaveValidAirport();
         }
     }
 }

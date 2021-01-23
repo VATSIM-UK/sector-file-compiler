@@ -1,153 +1,176 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Moq;
-using Compiler.Parser;
 using Compiler.Error;
 using Compiler.Model;
-using Compiler.Event;
-using Compiler.Output;
-using CompilerTest.Mock;
+using Compiler.Input;
 
 namespace CompilerTest.Parser
 {
-    public class RegionParserTest
+    public class RegionParserTest : AbstractParserTestCase
     {
-        private readonly RegionParser parser;
-
-        private readonly SectorElementCollection collection;
-
-        private readonly Mock<IEventLogger> log;
-
-        public RegionParserTest()
-        {
-            this.log = new Mock<IEventLogger>();
-            this.collection = new SectorElementCollection();
-            this.parser = (RegionParser)(new SectionParserFactory(this.collection, this.log.Object))
-                .GetParserForSection(OutputSections.SCT_REGIONS);
-        }
-
-        [Fact]
-        public void TestItHandlesMetadata()
-        {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "" })
-            );
-
-            this.parser.ParseData(data);
-            Assert.IsType<BlankLine>(this.collection.Compilables[OutputSections.SCT_REGIONS][0]);
-        }
-
         [Fact]
         public void TestItAddsSinglePointRegionData()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment" })
+            this.RunParserOnLines(
+                new List<string>(new[]
+                {
+                    "REGIONNAME TestRegion",
+                    "Red BCN BCN ;comment",
+                })
             );
-            this.parser.ParseData(data);
 
-            Region result = this.collection.Regions[0];
-            Assert.Single(result.Points);
-            Assert.Equal(new Point("BCN"), result.Points[0]);
-            Assert.Equal("Red", result.Colour);
-            Assert.Equal("comment", result.Comment);
+            Region result = this.sectorElementCollection.Regions[0];
             Assert.Equal("TestRegion", result.Name);
+            this.AssertExpectedMetadata(result, commentString: "");
+            
+            Assert.Single(result.Points);
+            Assert.Equal("Red", result.Points[0].Colour);
+            Assert.Equal(new Point("BCN"), result.Points[0].Point);
+            this.AssertExpectedMetadata(result.Points[0], 2);
         }
 
         [Fact]
         public void TestItAddsMultipleLineRegionData()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { "REGIONNAME TestRegion", "Red BCN BCN ;comment", "BHD BHD", " JSY JSY" })
+            this.RunParserOnLines(
+                new List<string>(new[]
+                {
+                    "REGIONNAME TestRegion ; comment",
+                    "Red BCN BCN ;comment",
+                    "BHD BHD",
+                    " JSY JSY"
+                })
             );
-            this.parser.ParseData(data);
 
-            Region result = this.collection.Regions[0];
-            Assert.Equal(3, result.Points.Count);
-            Assert.Equal(new Point("BCN"), result.Points[0]);
-            Assert.Equal(new Point("BHD"), result.Points[1]);
-            Assert.Equal(new Point("JSY"), result.Points[2]);
-            Assert.Equal("Red", result.Colour);
-            Assert.Equal("comment", result.Comment);
+            Region result = this.sectorElementCollection.Regions[0];
             Assert.Equal("TestRegion", result.Name);
+            this.AssertExpectedMetadata(result);
+            Assert.Equal(3, result.Points.Count);
+            
+            Assert.Equal("Red", result.Points[0].Colour);
+            Assert.Equal(new Point("BCN"), result.Points[0].Point);
+            this.AssertExpectedMetadata(result.Points[0], 2);
+            
+            Assert.Null(result.Points[1].Colour);
+            Assert.Equal(new Point("BHD"), result.Points[1].Point);
+            this.AssertExpectedMetadata(result.Points[1], 3, "");
+            
+            Assert.Null(result.Points[2].Colour);
+            Assert.Equal(new Point("JSY"), result.Points[2].Point);
+            this.AssertExpectedMetadata(result.Points[2], 4, "");
         }
 
         [Fact]
         public void TestItAddsMultipleRegionsData()
         {
-            MockSectorDataFile data = new MockSectorDataFile(
-                "test.txt",
-                new List<string>(new string[] { 
+            this.RunParserOnLines(
+                new List<string>(new[]
+                {
                     "REGIONNAME TestRegion1",
                     "Red BCN BCN ;comment",
-                     " BHD BHD",
+                    " BHD BHD",
                     "REGIONNAME TestRegion2",
                     "White JSY JSY"
                 })
             );
-            this.parser.ParseData(data);
-
-            Assert.Equal(2, this.collection.Regions.Count);
-            Region result1 = this.collection.Regions[0];
-            Region result2 = this.collection.Regions[1];
             
+            Assert.Equal(2, this.sectorElementCollection.Regions.Count);
+            Region result1 = this.sectorElementCollection.Regions[0];
+            Assert.Equal("TestRegion1", result1.Name);
+            this.AssertExpectedMetadata(result1, 1, "");
 
             Assert.Equal(2, result1.Points.Count);
-            Assert.Equal(new Point("BCN"), result1.Points[0]);
-            Assert.Equal(new Point("BHD"), result1.Points[1]);
-            Assert.Equal("Red", result1.Colour);
-            Assert.Equal("comment", result1.Comment);
-            Assert.Equal("TestRegion1", result1.Name);
+            Assert.Equal("Red", result1.Points[0].Colour);
+            Assert.Equal(new Point("BCN"), result1.Points[0].Point);
+            this.AssertExpectedMetadata(result1.Points[0], 2);
+            
+            Assert.Equal(new Point("BHD"), result1.Points[1].Point);
+            this.AssertExpectedMetadata(result1.Points[1], 3, "");
 
-            Assert.Single(result2.Points);
-            Assert.Equal(new Point("JSY"), result2.Points[0]);
-            Assert.Equal("White", result2.Colour);
-            Assert.Null(result2.Comment);
+            Region result2 = this.sectorElementCollection.Regions[1];
             Assert.Equal("TestRegion2", result2.Name);
+            this.AssertExpectedMetadata(result2, 4, "");
+            
+            Assert.Single(result2.Points);
+            Assert.Equal(new Point("JSY"), result2.Points[0].Point);
+            Assert.Equal("White", result2.Points[0].Colour);
+            this.AssertExpectedMetadata(result2.Points[0], 5, "");
         }
 
         public static IEnumerable<object[]> BadData => new List<object[]>
         {
-            new object[] { new List<string>{
-                "BCN BCN ;comment", " BHD BHD"
-            }}, // Invalid first line
-            new object[] { new List<string>{
-                "REGIONNAME TestRegion", "Red BCN BHD ;comment",
-                " BHD BHD"
-            }}, // Invalid first region point
-            new object[] { new List<string>{
-                "REGIONNAME TestRegion", "Red BCN BCN ;comment",
-                "BHD MID"
-            }}, // Invalid continuation point
-            new object[] { new List<string>{
-                "REGIONNAME TestRegion",
-                "Red BCN BCN ;comment",
-                "Red BCN BCN ;comment"
-            }}, // Unexpected colour
-            new object[] { new List<string>{
-                "REGIONNAME TestRegion",
-                "BCN BCN ;comment"
-            }}, // No colour
-            new object[] { new List<string>{
-                "REGIONNAME TestRegion2"
-            }}, // Incomplete region at end of file
+            new object[]
+            {
+                new List<string>
+                {
+                    "BCN BCN ;comment", " BHD BHD"
+                }
+            }, // Invalid first line
+            new object[]
+            {
+                new List<string>
+                {
+                    "REGIONNAME TestRegion", "Red BCN BHD ;comment",
+                    " BHD BHD"
+                }
+            }, // Invalid first region point
+            new object[]
+            {
+                new List<string>
+                {
+                    "REGIONNAME TestRegion", "Red BCN BCN ;comment",
+                    "BHD MID"
+                }
+            }, // Invalid continuation point
+            new object[]
+            {
+                new List<string>
+                {
+                    "REGIONNAME TestRegion",
+                    "Red BCN BCN ;comment",
+                    "Red BCN BCN ;comment"
+                }
+            }, // Unexpected colour
+            new object[]
+            {
+                new List<string>
+                {
+                    "REGIONNAME TestRegion",
+                    "BCN BCN ;comment"
+                }
+            }, // No colour
+            new object[]
+            {
+                new List<string>
+                {
+                    "REGIONNAME TestRegion2"
+                }
+            }, // Incomplete region at end of file
+            new object[]
+            {
+                new List<string>
+                {
+                    "REGIONNAME TestRegion1",
+                    "REGIONNAME TestRegion2",
+                    "White JSY JSY"
+                }
+            }, // Incomplete mid-file
         };
 
         [Theory]
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.parser.ParseData(
-                new MockSectorDataFile(
-                    "test.txt",
-                    lines
-                )
-            );
+            this.RunParserOnLines(lines);
 
-            Assert.Empty(this.collection.Regions);
-            this.log.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(this.sectorElementCollection.Regions);
+            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+        }
+
+        protected override InputDataType GetInputDataType()
+        {
+            return InputDataType.SCT_REGIONS;
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Compiler.Model;
+﻿using Compiler.Model;
 
 namespace Compiler.Validate
 {
@@ -26,7 +23,7 @@ namespace Compiler.Validate
         {
             foreach (Colour colour in sectorElements.Colours)
             {
-                if (colourString == colour.Name)
+                if (colourString.ToLower() == colour.Name.ToLower())
                 {
                     return true;
                 }

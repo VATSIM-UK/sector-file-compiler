@@ -1,107 +1,127 @@
-﻿using System;
-using Xunit;
-using Moq;
-using Compiler.Input;
-using Compiler.Config;
-using Newtonsoft.Json.Linq;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Compiler.Argument;
+using Compiler.Config;
+using Xunit;
+using Compiler.Exception;
+using Compiler.Input;
+using Compiler.Output;
 
 namespace CompilerTest.Config
 {
     public class ConfigFileLoaderTest
     {
-        private readonly Mock<IFileInterface> mockInput;
+        private readonly ConfigFileLoader fileLoader;
+        private readonly CompilerArguments arguments;
 
         public ConfigFileLoaderTest()
         {
-            this.mockInput = new Mock<IFileInterface>();
+            this.fileLoader = ConfigFileLoaderFactory.Make();
+            this.arguments = new CompilerArguments();
         }
-
-        [Fact]
-        public void ItThrowsExceptionOnInvalidJson()
+        
+        [Theory]
+        [InlineData("xyz", "Config file not found")]
+        [InlineData("_TestData/ConfigFileLoader/InvalidJson/config.json", "Invalid JSON in _TestData/ConfigFileLoader/InvalidJson/config.json: Error reading JObject from JsonReader. Current JsonReader item is not an object: StartArray. Path '', line 1, position 1.")]
+        [InlineData("_TestData/ConfigFileLoader/NotObject/config.json", "Invalid JSON in _TestData/ConfigFileLoader/NotObject/config.json: Error reading JObject from JsonReader. Current JsonReader item is not an object: StartArray. Path '', line 1, position 1.")]
+        public void TestItThrowsExceptionOnBadData(string fileToLoad, string expectedMessage)
         {
-            string badJson = @"[
-              sct_header: 'Intel',
-              sct_info: [
-                '../info.txt',
-              ]
-            }";
-
-            this.mockInput.Setup(foo => foo.Contents()).Returns(badJson);
-            this.mockInput.Setup(foo => foo.GetPath()).Returns("foo/bar/baz.txt");
-
-            var exception = Assert.Throws<ArgumentException>(
-                () => ConfigFileLoader.LoadConfigFile(mockInput.Object)
+            ConfigFileInvalidException exception = Assert.Throws<ConfigFileInvalidException>(
+                () => fileLoader.LoadConfigFiles(new List<string> {fileToLoad}, this.arguments)
             );
-            Assert.StartsWith("Invalid JSON in foo/bar/baz.txt: ", exception.Message);
+            Assert.Equal(expectedMessage, exception.Message);
+        }
+
+        private string GetFullFilePath(string relative)
+        {
+            return Path.GetFullPath(relative.Replace('/', Path.DirectorySeparatorChar));
         }
 
         [Fact]
-        public void ItThrowsExceptionInvalidFormat()
+        public void TestItLoadsAConfigFile()
         {
-            string badJson = @"{
-              sct_header: [
-                '../header.txt',
-              ],
-              not_sct_info: [
-                '../info.txt',
-              ]
-            }";
-
-            this.mockInput.Setup(foo => foo.Contents()).Returns(badJson);
-            this.mockInput.Setup(foo => foo.GetPath()).Returns("foo/bar/baz.txt");
-
-            var exception = Assert.Throws<ArgumentException>(
-                () => ConfigFileLoader.LoadConfigFile(mockInput.Object)
+            ConfigInclusionRules rules = fileLoader.LoadConfigFiles(
+                new List<string> {"_TestData/ConfigFileLoader/ValidConfig/config.json"}, this.arguments
             );
-            Assert.StartsWith("Invalid format in ", exception.Message);
-        }
 
-        [Fact]
-        public void ItReturnsNormalisedConfigFile()
-        {
-            string config = @"{
-              sct_header: [
-                '../header.txt',
-              ],
-              sct_info: {
-                subsection_1: [
-                  'info1.txt',
-                ],
-                subsection_2: [
-                  '../info2.txt',
-                ]
-              }
-            }";
+            List<IInclusionRule> ruleList = rules.ToList();
+            Assert.Equal(6, ruleList.Count);
+            
 
-            // Populate the expected, we expect the relative paths to be resolved
-            string expected = @"{
-              sct_header: [
-              ],
-              sct_info: {
-                subsection_1: [
-                ],
-                subsection_2: [
-                ]
-              }
-            }";
-
-            JObject expectedObject = JObject.Parse(expected);
-            JArray headerArray = (JArray)expectedObject["sct_header"];
-            headerArray.Add(Path.GetFullPath("foo/header.txt"));
-
-            JObject infoObject = (JObject)expectedObject["sct_info"];
-            JArray infoSection1 = (JArray)infoObject["subsection_1"];
-            JArray infoSection2 = (JArray)infoObject["subsection_2"];
-            infoSection1.Add(Path.GetFullPath("foo/bar/info1.txt"));
-            infoSection2.Add(Path.GetFullPath("foo/info2.txt"));
-
-
-            this.mockInput.Setup(foo => foo.Contents()).Returns(config);
-            this.mockInput.Setup(foo => foo.GetPath()).Returns("foo/bar/baz.txt");
-            this.mockInput.Setup(foo => foo.DirectoryLocation()).Returns("foo/bar");
-
-            Assert.Equal(expectedObject, ConfigFileLoader.LoadConfigFile(this.mockInput.Object));
+            // Airport - Basic
+            FileListInclusionRule airportBasicRule = (FileListInclusionRule) ruleList[0];
+            Assert.Equal(2, airportBasicRule.FileList.Count());
+            Assert.Equal(
+                new List<string>
+                {
+                    GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Airports/EGLL/Basic.txt"),
+                    GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Airports/EGLL/Basic2.txt"),
+                },
+                airportBasicRule.FileList.ToList()
+            );
+            Assert.False(airportBasicRule.IgnoreMissing);
+            Assert.Equal("", airportBasicRule.ExceptWhereExists);
+            Assert.Equal(InputDataType.SCT_AIRPORT_BASIC, airportBasicRule.InputDataType);
+            Assert.Equal(new OutputGroup("airport.SCT_AIRPORT_BASIC.EGLL", "Start EGLL Basic"), airportBasicRule.GetOutputGroup());
+            
+            // Airport - Geo
+            FileListInclusionRule airportGeoRule = (FileListInclusionRule) ruleList[1];
+            Assert.Single(airportGeoRule.FileList);
+            Assert.Equal(
+                new List<string>
+                {
+                    GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Airports/EGLL/SMR/Geo.txt"),
+                },
+                airportGeoRule.FileList.ToList()
+            );
+            Assert.True(airportGeoRule.IgnoreMissing);
+            Assert.Equal(GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Airports/EGLL/SMR/Foo.txt"), airportGeoRule.ExceptWhereExists);
+            Assert.Equal(InputDataType.SCT_GEO, airportGeoRule.InputDataType);
+            Assert.Equal(new OutputGroup("airport.SCT_GEO.EGLL", "Start EGLL Geo"), airportGeoRule.GetOutputGroup());
+            
+            // Enroute ownership folder 1
+            FolderInclusionRule ownershipRule1 = (FolderInclusionRule) ruleList[2];
+            Assert.Equal(GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Ownership/Alternate"), ownershipRule1.Folder);
+            Assert.True(ownershipRule1.Recursive);
+            Assert.True(ownershipRule1.ExcludeList);
+            Assert.Empty(ownershipRule1.IncludeExcludeFiles);
+            Assert.Equal(new OutputGroup("enroute.ESE_OWNERSHIP", "Start enroute Ownership"), ownershipRule1.GetOutputGroup());
+            
+            // Enroute ownership folder 2
+            FolderInclusionRule ownershipRule2 = (FolderInclusionRule) ruleList[3];
+            Assert.Equal(GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Ownership/Foo"), ownershipRule2.Folder);
+            Assert.False(ownershipRule2.Recursive);
+            Assert.False(ownershipRule2.ExcludeList);
+            Assert.Single(ownershipRule2.IncludeExcludeFiles);
+            Assert.Equal("Foo.txt", ownershipRule2.IncludeExcludeFiles[0]);
+            Assert.Equal(new OutputGroup("enroute.ESE_OWNERSHIP", "Start enroute Ownership"), ownershipRule2.GetOutputGroup());
+            
+            // Enroute ownership folder 3
+            FolderInclusionRule ownershipRule3 = (FolderInclusionRule) ruleList[4];
+            Assert.Equal(GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Ownership/Non-UK"), ownershipRule3.Folder);
+            Assert.False(ownershipRule3.Recursive);
+            Assert.True(ownershipRule3.ExcludeList);
+            Assert.Single(ownershipRule3.IncludeExcludeFiles);
+            Assert.Equal("EUR Islands.txt", ownershipRule3.IncludeExcludeFiles[0]);
+            Assert.Equal(new OutputGroup("enroute.ESE_OWNERSHIP", "Start enroute Ownership"), ownershipRule3.GetOutputGroup());
+            
+            // Misc regions
+            FileListInclusionRule miscRegions = (FileListInclusionRule) ruleList[5];
+            Assert.Equal(3, miscRegions.FileList.Count());
+            Assert.Equal(
+                new List<string>
+                {
+                    GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Misc/Regions_LTMA Airfield CAS.txt"),
+                    GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Misc/Regions_Severn Buffers.txt"),
+                    GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Misc/Regions_Uncontrolled airspace.txt"),
+                },
+                miscRegions.FileList.ToList()
+            );
+            Assert.False(miscRegions.IgnoreMissing);
+            Assert.Equal("", miscRegions.ExceptWhereExists);
+            Assert.Equal(InputDataType.SCT_REGIONS, miscRegions.InputDataType);
+            Assert.Equal(new OutputGroup("misc.SCT_REGIONS", "Start misc Regions"), miscRegions.GetOutputGroup());
         }
     }
 }

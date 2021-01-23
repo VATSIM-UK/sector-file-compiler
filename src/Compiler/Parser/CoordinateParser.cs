@@ -2,26 +2,28 @@
 
 namespace Compiler.Parser
 {
-    public class CoordinateParser
+    public static class CoordinateParser
     {
-        private const char COORDINATE_SEPARATOR = '.';
+        private const char CoordinateSeparator = '.';
 
-        public static readonly Coordinate invalidCoordinate = new Coordinate("", "");
+        public static readonly Coordinate InvalidCoordinate = new("", "");
+
+        public static readonly Coordinate StarterCoordinate = new("S999.00.00.000", "E999.00.00.000");
         
         public static Coordinate Parse(string latitude, string longitude)
         {
             // If its the special value used in the sectorfile, allow it
             if (latitude == "S999.00.00.000" && longitude == "E999.00.00.000")
             {
-                return new Coordinate(latitude, longitude);
+                return StarterCoordinate;
             }
 
-            string parsedLatitude = CoordinateParser.ParseCoordinate(true, latitude.Trim());
-            string parsedLongitude = CoordinateParser.ParseCoordinate(false, longitude.Trim());
+            string parsedLatitude = ParseCoordinate(true, latitude.Trim());
+            string parsedLongitude = ParseCoordinate(false, longitude.Trim());
 
             if (parsedLatitude == null || parsedLongitude == null)
             {
-                return CoordinateParser.invalidCoordinate;
+                return InvalidCoordinate;
             }
 
             return new Coordinate(parsedLatitude, parsedLongitude);
@@ -29,7 +31,7 @@ namespace Compiler.Parser
 
         private static string ParseCoordinate(bool latitude, string coordinate)
         {
-            string[] parts = coordinate.Split(CoordinateParser.COORDINATE_SEPARATOR);
+            string[] parts = coordinate.Split(CoordinateSeparator);
 
             if (parts.Length != 4)
             {
@@ -63,7 +65,7 @@ namespace Compiler.Parser
 
         private static bool ValidateMinutesSeconds(int minutes, float seconds)
         {
-            return minutes < 60 && seconds < 60.0;
+            return minutes <= 60 && seconds <= 60.0;
         }
 
         private static bool ValidateLongitude(int degrees, int minutes, float seconds)
@@ -72,7 +74,7 @@ namespace Compiler.Parser
                 return false;
             }
 
-            return CoordinateParser.ValidateMinutesSeconds(minutes, seconds);
+            return ValidateMinutesSeconds(minutes, seconds);
         }
 
         private static bool ValidateLatitude(int degrees, int minutes, float seconds)
@@ -82,7 +84,7 @@ namespace Compiler.Parser
                 return false;
             }
 
-            return CoordinateParser.ValidateMinutesSeconds(minutes, seconds);
+            return ValidateMinutesSeconds(minutes, seconds);
         }
     }
 }

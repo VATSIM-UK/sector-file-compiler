@@ -1,38 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Compiler.Model
 {
-    public class Sectorline : AbstractSectorElement, ICompilable
+    public class Sectorline : AbstractCompilableElement
     {
         public Sectorline(
             string name,
             List<SectorlineDisplayRule> displayRules,
             List<SectorlineCoordinate> coordinates,
-            string nameComment
-        ) : base(nameComment) 
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base(definition, docblock, inlineComment) 
         {
             Name = name;
             DisplayRules = displayRules;
             Coordinates = coordinates;
         }
-
-        public Coordinate Corodinate { get; }
         public string Name { get; }
         public List<SectorlineDisplayRule> DisplayRules { get; }
         public List<SectorlineCoordinate> Coordinates { get; }
 
-        public string Compile()
+        /*
+         * This model contains other compilable elements and is itself compilable for the definition
+         * line. So return them all.
+         */
+        public override IEnumerable<ICompilableElement> GetCompilableElements()
         {
-            return String.Format(
-                "SECTORLINE:{0}{1}\r\n{2}{3}\r\n",
-                this.Name,
-                this.CompileComment(),
-                this.DisplayRules.Aggregate("", (ruleString, newRule) => ruleString + newRule.Compile()),
-                this.Coordinates.Aggregate("", (coordString, coordinate) => coordString + coordinate.Compile())
-            );
+            List<ICompilableElement> compilables = new List<ICompilableElement> {this};
+            return compilables.Concat(this.DisplayRules)
+                .Concat(this.Coordinates);
+        }
+
+        public override string GetCompileData(SectorElementCollection elements)
+        {
+            return $"SECTORLINE:{this.Name}";
         }
     }
 }

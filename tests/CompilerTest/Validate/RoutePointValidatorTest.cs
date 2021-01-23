@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using Compiler.Model;
 using Compiler.Validate;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
@@ -11,23 +12,23 @@ namespace CompilerTest.Validate
         public RoutePointValidatorTest()
         {
             this.sectorElements = new SectorElementCollection();
-            this.sectorElements.Add(new Fix("testfix", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Vor("testvor", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Ndb("testndb", "123.456", new Coordinate("abc", "def"), "test"));
-            this.sectorElements.Add(new Airport("testairport", "testairport", new Coordinate("abc", "def"), "123.456", "test"));
+            this.sectorElements.Add(FixFactory.Make("testfix"));
+            this.sectorElements.Add(VorFactory.Make("testvor"));
+            this.sectorElements.Add(NdbFactory.Make("testndb"));
+            this.sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
         [Fact]
         public void TestItReturnsTrueOnValidCoordinate()
         {
-            Point point = new Point(new Coordinate("abc", "def"));
+            Point point = new(new Coordinate("abc", "def"));
             Assert.True(RoutePointValidator.IsValidCoordinate(point));
         }
 
         [Fact]
         public void TestItReturnsFalseOnInvalidCoordinate()
         {
-            Point point = new Point("abc");
+            Point point = new("abc");
             Assert.False(RoutePointValidator.IsValidCoordinate(point));
         }
 
@@ -66,42 +67,42 @@ namespace CompilerTest.Validate
         [Fact]
         public void TestItValidatesFalseIfAllStepsFail()
         {
-            Point point = new Point("what");
+            Point point = new("what");
             Assert.False(RoutePointValidator.ValidatePoint(point, this.sectorElements));
         }
 
         [Fact]
         public void TestItValidatesTrueIfValidCoordinate()
         {
-            Point point = new Point(new Coordinate("abc", "def"));
+            Point point = new(new Coordinate("abc", "def"));
             Assert.True(RoutePointValidator.ValidatePoint(point, this.sectorElements));
         }
 
         [Fact]
         public void TestItValidatesTrueIfValidVor()
         {
-            Point point = new Point("testvor");
+            Point point = new("testvor");
             Assert.True(RoutePointValidator.ValidatePoint(point, this.sectorElements));
         }
 
         [Fact]
         public void TestItValidatesTrueIfValidNdb()
         {
-            Point point = new Point("testndb");
+            Point point = new("testndb");
             Assert.True(RoutePointValidator.ValidatePoint(point, this.sectorElements));
         }
 
         [Fact]
         public void TestItValidatesTrueIfValidFix()
         {
-            Point point = new Point("testfix");
+            Point point = new("testfix");
             Assert.True(RoutePointValidator.ValidatePoint(point, this.sectorElements));
         }
 
         [Fact]
         public void TestItValidatesTrueIfValidAirport()
         {
-            Point point = new Point("testairport");
+            Point point = new("testairport");
             Assert.True(RoutePointValidator.ValidatePoint(point, this.sectorElements));
         }
 

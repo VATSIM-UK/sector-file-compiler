@@ -4,115 +4,210 @@ using Compiler.Model;
 using Compiler.Event;
 using Compiler.Error;
 using Compiler.Input;
-using System.Linq;
 
 namespace Compiler.Parser
 {
-    public class GeoParser : AbstractSectorElementParser, ISectorDataParser
+    public class GeoParser : ISectorDataParser
     {
         private readonly SectorElementCollection elements;
-        private readonly ISectorLineParser sectorLineParser;
         private readonly IEventLogger eventLogger;
 
-        private static readonly string noDataString = "S999.00.00.000 E999.00.00.000";
-
         public GeoParser(
-            MetadataParser metadataParser,
-            ISectorLineParser sectorLineParser,
             SectorElementCollection elements,
             IEventLogger eventLogger
-        ) : base(metadataParser)
-        {
+        ) {
             this.elements = elements;
-            this.sectorLineParser = sectorLineParser;
             this.eventLogger = eventLogger;
         }
 
         public void ParseData(AbstractSectorDataFile data)
         {
             bool foundFirst = false;
-            string name = "";
-            List<GeoSegment> segments = new List<GeoSegment>();
-            foreach (string line in data)
-            {
-                // Defer all metadata lines to the base
-                if (this.ParseMetadata(line))
-                {
-                    continue;
-                }
 
-                SectorFormatLine sectorData = this.sectorLineParser.ParseLine(line);
-                // Find the name
+            // Set up some variables for the first declaration line
+            string name = "";
+            Point initialFirstPoint = new Point("");
+            Point initialSecondPoint = new Point("");
+            string initialColour = "0";
+            Definition initialDefinition = new Definition("", 1);
+            Comment initialComment = new Comment("");
+            Docblock initialDocblock = new Docblock();
+
+            List<GeoSegment> segments = new List<GeoSegment>();
+
+            foreach (SectorData line in data)
+            {
+                // If not found the first item, we should check it's a name.
                 if (!foundFirst)
                 {
-                    name = sectorData.dataSegments[0];
-                    sectorData.dataSegments.RemoveAt(0);
-                    foundFirst = true;
-                }
+                    if (!this.IsNameSegment(line)) {
+                        this.eventLogger.AddEvent(
+                            new SyntaxError("Invalid start to geo segment, expected a name", line)
+                        );
+                        return;
+                    }
 
-                /*
-                 * In some places in the UKSF, we define this random point to make sure drawing works properly.
-                 * If we see it, just insert it.
-                 */
-                if (sectorData.data.Contains(GeoParser.noDataString))
-                {
-                    segments.Add(
-                        new GeoSegment(
-                            new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
-                            new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
-                            "0",
-                            "Compiler inserted line"
-                        )
-                    );
+                    foundFirst = true;
+
+                    // Set up the segment
+                    int nameEndIndex = this.GetEndOfNameIndex(line);
+                    name = string.Join(' ', line.dataSegments.GetRange(0, nameEndIndex));
+                    line.dataSegments.RemoveRange(0, nameEndIndex);
+
+                    try
+                    {
+                        GeoSegment firstSegment = this.ParseGeoSegment(line);
+                        initialFirstPoint = firstSegment.FirstPoint;
+                        initialSecondPoint = firstSegment.SecondPoint;
+                        initialColour = firstSegment.Colour;
+                        initialDefinition = firstSegment.GetDefinition();
+                        initialDocblock = firstSegment.Docblock;
+                        initialComment = firstSegment.InlineComment;
+                    }
+                    catch (ArgumentException)
+                    {
+                        // Syntax errors dealt with in segment parsing method
+                        return;
+                    }
+
                     continue;
                 }
 
-
-                if (sectorData.dataSegments.Count != 5)
+                // If it's a name segment, we should save our progress and start afresh
+                if (this.IsNameSegment(line))
                 {
-                    this.eventLogger.AddEvent(
-                        new SyntaxError("Incorrect number parts for GEO segment", data.FullPath, data.CurrentLineNumber)
+                    // Add the full geo element
+                    this.elements.Add(
+                        new Geo(
+                            name,
+                            initialFirstPoint,
+                            initialSecondPoint,
+                            initialColour,
+                            segments,
+                            initialDefinition,
+                            initialDocblock,
+                            initialComment
+                        )
                     );
-                    return;
+
+                    // Reset the segments array
+                    segments = new List<GeoSegment>();
+
+                    // Set up the segment
+                    int nameEndIndex = this.GetEndOfNameIndex(line);
+                    name = string.Join(' ', line.dataSegments.GetRange(0, nameEndIndex));
+                    line.dataSegments.RemoveRange(0, nameEndIndex);
+
+                    try
+                    {
+                        GeoSegment firstSegment = this.ParseGeoSegment(line);
+                        initialFirstPoint = firstSegment.FirstPoint;
+                        initialSecondPoint = firstSegment.SecondPoint;
+                        initialColour = firstSegment.Colour;
+                        initialDefinition = firstSegment.GetDefinition();
+                        initialDocblock = firstSegment.Docblock;
+                        initialComment = firstSegment.InlineComment;
+                    }
+                    catch (ArgumentException)
+                    {
+                        // Syntax errors dealt with in segment parsing method
+                        return;
+                    }
+
+                    continue;
                 }
 
-                // Parse the first coordinate
-                Point parsedStartPoint = PointParser.Parse(sectorData.dataSegments[0], sectorData.dataSegments[1]);
-                if (parsedStartPoint.Equals(PointParser.invalidPoint))
+                // Otherwise, process the segment
+                try
                 {
-                    this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid GEO segment point format: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
-                    );
+                    segments.Add(this.ParseGeoSegment(line));
+                }
+                catch
+                {
+                    // Syntax errors dealt with in segment parsing method
                     return;
                 }
-
-                // Parse the end coordinate
-                Point parsedEndPoint = PointParser.Parse(sectorData.dataSegments[2], sectorData.dataSegments[3]);
-                if (parsedEndPoint.Equals(PointParser.invalidPoint))
-                {
-                    this.eventLogger.AddEvent(
-                        new SyntaxError("Invalid GEO segment point format: " + data.CurrentLine, data.FullPath, data.CurrentLineNumber)
-                    );
-                    return;
-                }
-
-                // Add segment
-                segments.Add(
-                    new GeoSegment(parsedStartPoint, parsedEndPoint, sectorData.dataSegments[4], sectorData.comment)
-                );
-            }
-
-            // Check segment count
-            if (segments.Count == 0)
-            {
-                this.eventLogger.AddEvent(
-                    new SyntaxError("Expected GEO segements in file", data.FullPath, 0)
-                );
-                return;
             }
 
             // Add final geo element
-            this.elements.Add(new Geo(name, segments));
+            this.elements.Add(
+                new Geo(
+                    name,
+                    initialFirstPoint,
+                    initialSecondPoint,
+                    initialColour,
+                    segments,
+                    initialDefinition,
+                    initialDocblock,
+                    initialComment
+                )
+            );
+        }
+
+        /**
+         * The name in this format of line can be determined to mean all data segments up until the first coordinate.
+         */
+        private int GetEndOfNameIndex(SectorData line)
+        {
+            for (int i = 0; i < line.dataSegments.Count - 1; i++)
+            {
+                if (!PointParser.Parse(line.dataSegments[i], line.dataSegments[i + 1]).Equals(PointParser.InvalidPoint))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private bool IsNameSegment(SectorData line)
+        {
+            return line.dataSegments.Count >= 2 &&
+                   PointParser.Parse(line.dataSegments[0], line.dataSegments[1]).Equals(PointParser.InvalidPoint);
+        }
+
+        /*
+         * Parses an individual GEO segment of coordinates and colours
+         */
+        private GeoSegment ParseGeoSegment(SectorData line)
+        {
+
+            if (line.dataSegments.Count < 4 || line.dataSegments.Count > 5)
+            {
+                this.eventLogger.AddEvent(
+                    new SyntaxError("Incorrect number parts for GEO segment", line)
+                );
+                throw new ArgumentException();
+            }
+
+            // Parse the first coordinate
+            Point parsedStartPoint = PointParser.Parse(line.dataSegments[0], line.dataSegments[1]);
+            if (parsedStartPoint.Equals(PointParser.InvalidPoint))
+            {
+                this.eventLogger.AddEvent(
+                    new SyntaxError("Invalid GEO segment point format", line)
+                );
+                throw new ArgumentException();
+            }
+
+            // Parse the end coordinate
+            Point parsedEndPoint = PointParser.Parse(line.dataSegments[2], line.dataSegments[3]);
+            if (parsedEndPoint.Equals(PointParser.InvalidPoint))
+            {
+                this.eventLogger.AddEvent(
+                    new SyntaxError("Invalid GEO segment point format", line)
+                );
+                throw new ArgumentException();
+            }
+
+            return new GeoSegment(
+                parsedStartPoint,
+                parsedEndPoint,
+                line.dataSegments.Count > 4 ? line.dataSegments[4] : null,
+                line.definition,
+                line.docblock,
+                line.inlineComment
+            );
         }
     }
 }

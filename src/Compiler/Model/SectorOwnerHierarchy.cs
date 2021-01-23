@@ -1,36 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Compiler.Model
 {
-    public class SectorOwnerHierarchy : AbstractSectorElement, ICompilable
+    public class SectorOwnerHierarchy : AbstractCompilableElement
     {
         public SectorOwnerHierarchy(
             List<string> owners,
-            string comment
-        ) : base(comment) 
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base(definition, docblock, inlineComment)
         {
             Owners = owners;
         }
 
         public List<string> Owners { get; }
 
-        public string Compile()
-        {
-            return String.Format(
-                "OWNER:{0}{1}\r\n",
-                string.Join(':', this.Owners),
-                this.CompileComment()
-            );
-        }
-
         public override bool Equals(object obj)
         {
             if (
                 !(obj is SectorOwnerHierarchy) ||
-                ((SectorOwnerHierarchy)obj).Comment != this.Comment ||
                 ((SectorOwnerHierarchy)obj).Owners.Count != this.Owners.Count
             ) {
                 return false;
@@ -45,6 +34,11 @@ namespace Compiler.Model
             }
 
             return true;
+        }
+
+        public override string GetCompileData(SectorElementCollection elements)
+        {
+            return $"OWNER:{string.Join(':', this.Owners)}";
         }
 
         public override int GetHashCode()

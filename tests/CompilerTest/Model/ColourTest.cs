@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Compiler.Model;
+using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
@@ -9,7 +10,13 @@ namespace CompilerTest.Model
 
         public ColourTest()
         {
-            this.colour = new Colour("colour1", 123, null);
+            this.colour = new Colour(
+                "colour1",
+                123,
+                DefinitionFactory.Make(),
+                DocblockFactory.Make(),
+                CommentFactory.Make()
+            );
         }
 
         [Fact]
@@ -27,13 +34,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("#define colour1 123\r\n", this.colour.Compile());
-        }
-
-        [Fact]
-        public void TestItCompilesWithComment()
-        {
-            Assert.Equal("#define colour1 123 ;comment\r\n", (new Colour("colour1", 123, "comment").Compile()));
+            Assert.Equal("#define colour1 123", this.colour.GetCompileData(new SectorElementCollection()));
         }
     }
 }

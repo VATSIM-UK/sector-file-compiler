@@ -2,7 +2,7 @@
 
 namespace Compiler.Model
 {
-    public class SidStar :AbstractSectorElement, ICompilable
+    public class SidStar : AbstractCompilableElement
     {
         public string Type { get; }
         public string Airport { get; }
@@ -16,8 +16,10 @@ namespace Compiler.Model
             string runway,
             string identifier,
             List<string> route,
-            string comment
-        ) : base(comment)
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+        ) : base(definition, docblock, inlineComment)
         {
             this.Type = type;
             this.Airport = airport;
@@ -26,17 +28,9 @@ namespace Compiler.Model
             this.Route = route;
         }
 
-        public string Compile()
+        public override string GetCompileData(SectorElementCollection elements)
         {
-            return string.Format(
-                "{0}:{1}:{2}:{3}:{4}{5}\r\n",
-                this.Type,
-                this.Airport,
-                this.Runway,
-                this.Identifier,
-                string.Join(' ', this.Route),
-                this.CompileComment()
-            );
+            return $"{this.Type}:{this.Airport}:{this.Runway}:{this.Identifier}:{string.Join(' ', this.Route)}";
         }
     }
 }

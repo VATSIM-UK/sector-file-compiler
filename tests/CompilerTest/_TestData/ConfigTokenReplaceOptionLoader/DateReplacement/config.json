@@ -1,0 +1,9 @@
+﻿{
+  "replace": [
+    {
+      "type": "date",
+      "token": "TEST",
+      "format": "Y-m-d"
+    }
+  ]
+}

@@ -1,5 +1,4 @@
-﻿using System;
-using Compiler.Event;
+﻿using Compiler.Event;
 
 namespace Compiler.Error
 {
@@ -13,10 +12,7 @@ namespace Compiler.Error
 
         public string GetMessage()
         {
-            return String.Format(
-                "File not found: {0}",
-                this.filename
-            );
+            return $"File not found: {this.filename}";
         }
 
         public bool IsFatal()

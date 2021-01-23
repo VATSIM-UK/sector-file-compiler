@@ -3,61 +3,125 @@ using Compiler.Model;
 using Compiler.Error;
 using Compiler.Event;
 using System;
+using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class SectorlineParser : AbstractEseAirspaceParser
+    public class SectorlineParser : ISectorDataParser
     {
-        private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
         private readonly IEventLogger errorLog;
 
         public SectorlineParser(
-            MetadataParser metadataParser,
-            ISectorLineParser sectorLineParser,
             SectorElementCollection sectorElements,
             IEventLogger errorLog
-        ) : base(metadataParser)
-        {
-            this.sectorLineParser = sectorLineParser;
+        ) {
             this.sectorElements = sectorElements;
             this.errorLog = errorLog;
         }
 
-
-        public void ParseData(List<(int, string)> lines, string filename)
+        public void ParseData(AbstractSectorDataFile data)
         {
-            SectorFormatLine sectorData = this.sectorLineParser.ParseLine(lines[0].Item2);
-            if (
-                sectorData.dataSegments[0] != "CIRCLE_SECTORLINE" &&
-                sectorData.dataSegments[0] != "SECTORLINE"
-            )
+            List<SectorData> linesToProcess = new List<SectorData>();
+            bool foundFirst = false;
+            foreach (SectorData line in data)
             {
-                this.errorLog.AddEvent(
-                    new SyntaxError("Invalid SECTORLINE declaration", filename, lines[0].Item1)
-                );
-                throw new Exception();
+                if (
+                    !foundFirst &&
+                    !this.IsNewDeclaration(line)
+                ) {
+                    {
+                        this.errorLog.AddEvent(
+                            new SyntaxError("Invalid SECTORLINE declaration", line)
+                        );
+                        return;
+                    }
+                }
+
+                if (!foundFirst)
+                {
+                    linesToProcess.Add(line);
+                    foundFirst = true;
+                    continue;
+                }
+
+                if (this.IsNewDeclaration(line))
+                {
+                    try
+                    {
+                        this.ProcessLines(ref linesToProcess);
+                    } catch
+                    {
+                        // Logging done higher up
+                        return;
+                    }
+                    linesToProcess.Clear();
+                }
+
+                linesToProcess.Add(line);
             }
 
-            if (sectorData.dataSegments[0] == "CIRCLE_SECTORLINE")
+            try
             {
-                ParseCircleSectorline(lines, filename);
-            } else {
-                ParseStandardSectorline(lines, filename);
+                this.ProcessLines(ref linesToProcess);
+            }
+            catch
+            {
+                // Logging done higher up
             }
         }
 
-        private void ParseCircleSectorline(List<(int, string)> lines, string filename)
+        private void ProcessLines(ref List<SectorData> lines)
+        {
+            if (lines.Count == 0)
+            {
+                return;
+            }
+
+            if (this.IsNewCircleSectorlineDeclaration(lines[0]))
+            {
+                this.ParseCircleSectorline(ref lines);
+            } else
+            {
+                this.ParseStandardSectorline(ref lines);
+            }
+        }
+        
+        /*
+         * Returns true if it's a new declaration
+         */
+        private bool IsNewDeclaration(SectorData line)
+        {
+            return this.IsNewSectorlineDeclaration(line) || this.IsNewCircleSectorlineDeclaration(line);
+        }
+
+        /*
+         * Returns true if it's a new CIRCLE_SECTORLINE declaration
+         */
+        private bool IsNewCircleSectorlineDeclaration(SectorData line)
+        {
+            return line.dataSegments[0] == "CIRCLE_SECTORLINE";
+        }
+
+        /*
+         * Returns true if it's a SECTORLINE new declaration
+         */
+        private bool IsNewSectorlineDeclaration(SectorData line)
+        {
+            return line.dataSegments[0] == "SECTORLINE";
+        }
+
+        private void ParseCircleSectorline(ref List<SectorData> lines)
         {
             // Deal with the declaration line
-            SectorFormatLine declarationLine = this.sectorLineParser.ParseLine(lines[0].Item2);
+            SectorData declarationLine = lines[0];
 
             if (declarationLine.dataSegments.Count != 4 && declarationLine.dataSegments.Count != 5)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Incorrect number of segments for SECTORLINE declaration", filename, lines[0].Item1)
+                    new SyntaxError("Incorrect number of segments for SECTORLINE declaration", declarationLine)
                 );
-                throw new Exception();
+                throw new ArgumentException();
             }
 
             Coordinate parsedCoordinate = new Coordinate("", "");
@@ -68,12 +132,12 @@ namespace Compiler.Parser
                     declarationLine.dataSegments[3]
                 );
 
-                if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
+                if (parsedCoordinate.Equals(CoordinateParser.InvalidCoordinate))
                 {
                     this.errorLog.AddEvent(
-                        new SyntaxError("Invalid CIRCLE_SECTORLINE coordinate", filename, lines[0].Item1)
+                        new SyntaxError("Invalid CIRCLE_SECTORLINE coordinate", declarationLine)
                     );
-                    throw new Exception();
+                    throw new ArgumentException();
                 }
             }
 
@@ -83,9 +147,9 @@ namespace Compiler.Parser
                     out double radius) == false)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Invalid CIRCLE_SECTORLINE radius", filename, lines[0].Item1)
+                    new SyntaxError("Invalid CIRCLE_SECTORLINE radius", declarationLine)
                 );
-                throw new Exception();
+                throw new ArgumentException();
             }
 
 
@@ -93,26 +157,8 @@ namespace Compiler.Parser
             int i = 1;
             while (i < lines.Count)
             {
-                // Defer all metadata lines to the base
-                if (this.ParseMetadata(lines[i].Item2))
-                {
-                    i++;
-                    continue;
-                }
-
-                SectorFormatLine displayData = this.sectorLineParser.ParseLine(lines[i].Item2);
-
-                try
-                {
-                    displayRules.Add(this.ParseDisplayRule(displayData));
-                } catch (Exception exception)
-                {
-                    this.errorLog.AddEvent(
-                        new SyntaxError(exception.Message, filename, lines[i].Item1)
-                    );
-                    throw exception;
-                }
-
+                SectorData displayData = lines[i];
+                displayRules.Add(this.ParseDisplayRule(displayData));
                 i++;
             }
 
@@ -125,7 +171,9 @@ namespace Compiler.Parser
                         declarationLine.dataSegments[2],
                         radius,
                         displayRules,
-                        declarationLine.comment
+                        declarationLine.definition,
+                        declarationLine.docblock,
+                        declarationLine.inlineComment
                     )
                 );
             } else {
@@ -135,24 +183,26 @@ namespace Compiler.Parser
                         parsedCoordinate,
                         radius,
                         displayRules,
-                        declarationLine.comment
+                        declarationLine.definition,
+                        declarationLine.docblock,
+                        declarationLine.inlineComment
                     )
                 );
             }
 
         }
 
-        private void ParseStandardSectorline(List<(int, string)> lines, string filename)
+        private void ParseStandardSectorline(ref List<SectorData> lines)
         {
             // Deal with the declaration line
-            SectorFormatLine declarationLine = this.sectorLineParser.ParseLine(lines[0].Item2);
+            SectorData declarationLine = lines[0];
 
             if (declarationLine.dataSegments.Count != 2)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("Incorrect number of segments for SECTORLINE declaration", filename, lines[0].Item1)
+                    new SyntaxError("Incorrect number of segments for SECTORLINE declaration", declarationLine)
                 );
-                throw new Exception();
+                throw new ArgumentException();
             }
 
             List<SectorlineDisplayRule> displayRules = new List<SectorlineDisplayRule>();
@@ -160,35 +210,19 @@ namespace Compiler.Parser
             int i = 1;
             while (i < lines.Count)
             {
-                // Defer all metadata lines to the base
-                if (this.ParseMetadata(lines[i].Item2))
+                SectorData dataLine = lines[i];
+                if (IsCoordDeclaration(dataLine))
                 {
-                    i++;
-                    continue;
+                    coordinates.Add(ParseCoordinate(dataLine));
                 }
-
-                SectorFormatLine dataLine = this.sectorLineParser.ParseLine(lines[i].Item2);
-
-                try
+                else if (IsDiplayDeclaration(dataLine))
                 {
-                    if (IsCoordDeclaration(dataLine))
-                    {
-                        coordinates.Add(ParseCoordinate(dataLine));
-                    }
-                    else if (IsDiplayDeclaration(dataLine))
-                    {
-                        displayRules.Add(ParseDisplayRule(dataLine));
-                    }
-                    else
-                    {
-                        throw new Exception("Invalid declaration in SECTORLINE declaration");
-                    }
-                } catch (Exception exception)
+                    displayRules.Add(ParseDisplayRule(dataLine));
+                }
+                else
                 {
-                    this.errorLog.AddEvent(
-                        new SyntaxError(exception.Message, filename, lines[0].Item1 + i)
-                    );
-                    throw exception;
+                    this.errorLog.AddEvent(new SyntaxError("Invalid declaration in SECTORLINE declaration", dataLine));
+                    throw new ArgumentException("Invalid declaration in SECTORLINE declaration");
                 }
 
                 i++;
@@ -197,9 +231,9 @@ namespace Compiler.Parser
             if (coordinates.Count == 0)
             {
                 this.errorLog.AddEvent(
-                    new SyntaxError("No coordinates found for SECTORLINE ", filename, lines[0].Item1)
+                    new SyntaxError("No coordinates found for SECTORLINE", declarationLine)
                 );
-                throw new Exception();
+                throw new ArgumentException();
             }
 
             this.sectorElements.Add(
@@ -207,31 +241,37 @@ namespace Compiler.Parser
                     declarationLine.dataSegments[1],
                     displayRules,
                     coordinates,
-                    declarationLine.comment
+                    declarationLine.definition,
+                    declarationLine.docblock,
+                    declarationLine.inlineComment
                 )
             );
         }
 
-        private SectorlineDisplayRule ParseDisplayRule(SectorFormatLine data)
+        private SectorlineDisplayRule ParseDisplayRule(SectorData data)
         {
             if (data.dataSegments.Count != 4)
             {
-                throw new Exception("Invalid number of SECTORLINE DISPLAY rule segements");
+                this.errorLog.AddEvent(new SyntaxError("Invalid number of SECTORLINE DISPLAY rule segements", data));
+                throw new ArgumentException();
             }
 
             return new SectorlineDisplayRule(
                 data.dataSegments[1],
                 data.dataSegments[2],
                 data.dataSegments[3],
-                data.comment
+                data.definition,
+                data.docblock,
+                data.inlineComment
             );
         }
 
-        private SectorlineCoordinate ParseCoordinate(SectorFormatLine data)
+        private SectorlineCoordinate ParseCoordinate(SectorData data)
         {
             if (data.dataSegments.Count != 3)
             {
-                throw new Exception("Invalid number of SECTORLINE COORD segements");
+                this.errorLog.AddEvent(new SyntaxError("Invalid number of SECTORLINE COORD segements", data));
+                throw new ArgumentException();
             }
 
             Coordinate parsedCoordinate = CoordinateParser.Parse(
@@ -239,24 +279,26 @@ namespace Compiler.Parser
                 data.dataSegments[2]
             );
 
-            if (parsedCoordinate.Equals(CoordinateParser.invalidCoordinate))
-
+            if (parsedCoordinate.Equals(CoordinateParser.InvalidCoordinate))
             {
-                throw new Exception("Invalid SECTORLINE coordinate");
+                this.errorLog.AddEvent(new SyntaxError("Invalid SECTORLINE coordinate", data));
+                throw new ArgumentException();
             }
 
             return new SectorlineCoordinate(
                 parsedCoordinate,
-                data.comment
+                data.definition,
+                data.docblock,
+                data.inlineComment
             );
         }
 
-        private bool IsDiplayDeclaration(SectorFormatLine data)
+        private bool IsDiplayDeclaration(SectorData data)
         {
             return data.dataSegments.Count > 0 && data.dataSegments[0] == "DISPLAY";
         }
 
-        private bool IsCoordDeclaration(SectorFormatLine data)
+        private bool IsCoordDeclaration(SectorData data)
         {
             return data.dataSegments.Count > 0 && data.dataSegments[0] == "COORD";
         }

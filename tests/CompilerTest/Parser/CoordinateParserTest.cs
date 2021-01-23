@@ -7,20 +7,14 @@ namespace CompilerTest.Parser
 {
     public class CoordinateParserTest
     {
-        [Fact]
-        public void TestItParsesCoordinates()
+        [Theory]
+        [InlineData("N054.39.27.000", "W006.12.57.000")]
+        [InlineData("S999.00.00.000", "E999.00.00.000")] // Off-screen coordinate
+        [InlineData("N054.39.60.000", "W006.12.60.000")] // 60 seconds
+        [InlineData("N054.60.44.000", "W006.60.23.000")] // 60 minutes
+        public void TestItParsesValidCoordinates(string latitude, string longitude)
         {
-            Coordinate coordinate = CoordinateParser.Parse("N054.39.27.000", "W006.12.57.000");
-            Assert.Equal("N054.39.27.000", coordinate.latitude);
-            Assert.Equal("W006.12.57.000", coordinate.longitude);
-        }
-
-        [Fact]
-        public void TestItAllowsOfScreenCoordinate()
-        {
-            Coordinate coordinate = CoordinateParser.Parse("S999.00.00.000", "E999.00.00.000");
-            Assert.Equal("S999.00.00.000", coordinate.latitude);
-            Assert.Equal("E999.00.00.000", coordinate.longitude);
+            Assert.Equal(new Coordinate(latitude, longitude), CoordinateParser.Parse(latitude, longitude));
         }
 
         public static IEnumerable<object[]> BadData => new List<object[]>
@@ -32,7 +26,7 @@ namespace CompilerTest.Parser
             new object[] {"N054.39.27a.000", "W006.12.57.000"}, // Invalid latitude seconds
             new object[] {"N054.39.27.a2", "W006.12.57.000"}, // Invalid latitude fractions
             new object[] {"N054.39.27.000", "S006.12.57.000"}, // Invalid longitude north south
-            new object[] {"N054.39.27.000", "S006.12.57.000"}, // Invalid longitude north south
+            new object[] {"S054.39.27.000", "N006.12.57.000"}, // Invalid longitude north south
             new object[] {"N054.39.27.000", "W006.57.000"}, // Invalid longitude parts
             new object[] {"N054.39.27.000", "W0a6.12.57.000"}, // Invalid longitude degrees
             new object[] {"N054.39.27.000", "W006.12a.57.000"}, // Invalid longitude minutes
@@ -58,7 +52,7 @@ namespace CompilerTest.Parser
         public void ItReturnsInvalidOnBadData(string latitude, string longitude)
         {
             Coordinate coordinate = CoordinateParser.Parse(latitude, longitude);
-            Assert.Equal(CoordinateParser.invalidCoordinate, coordinate);
+            Assert.Equal(CoordinateParser.InvalidCoordinate, coordinate);
         }
     }
 }

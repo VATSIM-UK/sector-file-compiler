@@ -1,120 +1,122 @@
-﻿using System.Collections.Generic;
-using Compiler.Model;
+﻿using Compiler.Model;
 using Compiler.Error;
 using Compiler.Event;
-using System;
+using Compiler.Input;
 
 namespace Compiler.Parser
 {
-    public class CoordinationPointParser: AbstractEseAirspaceParser
+    public class CoordinationPointParser: ISectorDataParser
     {
-        private readonly ISectorLineParser sectorLineParser;
         private readonly SectorElementCollection sectorElements;
         private readonly IEventLogger errorLog;
 
         public CoordinationPointParser(
-            MetadataParser metadataParser,
-            ISectorLineParser sectorLineParser,
             SectorElementCollection sectorElements,
             IEventLogger errorLog
-        ) : base(metadataParser)
-        {
-            this.sectorLineParser = sectorLineParser;
+        ) {
             this.sectorElements = sectorElements;
             this.errorLog = errorLog;
         }
 
-        public void ParseData(List<(int, string)> lines, string filename)
+        public void ParseData(AbstractSectorDataFile file)
         {
-            int lineNumber = lines[0].Item1;
-            SectorFormatLine sectorData = this.sectorLineParser.ParseLine(lines[0].Item2);
-            if (sectorData.dataSegments.Count != 11)
+            foreach (SectorData line in file)
             {
-                this.errorLog.AddEvent(
-                    new SyntaxError("Incorrect number of Coordination Point segments", filename, lineNumber)
-                );
-                throw new Exception();
-            }
+                if (line.dataSegments.Count != 11)
+                {
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Incorrect number of Coordination Point segments", line)
+                    );
+                    return;
+                }
 
-            if (
-                sectorData.dataSegments[0] != CoordinationPoint.POINT_TYPE_FIR &&
-                sectorData.dataSegments[0] != CoordinationPoint.POINT_TYPE_INTERNAL
-            ) {
-                this.errorLog.AddEvent(
-                    new SyntaxError("Unknown Coordination point type " + sectorData.dataSegments[0], filename, lineNumber)
-                );
-                throw new Exception();
-            }
-
-            if (
-                sectorData.dataSegments[1].Length != 4 &&
-                sectorData.dataSegments[2] != "*"
-            ) {
-                this.errorLog.AddEvent(
-                    new SyntaxError("Cannot specify a runway without a departure airport " + sectorData.dataSegments[0], filename, lineNumber)
-                );
-                throw new Exception();
-            }
-
-            if (
-                sectorData.dataSegments[4].Length != 4 &&
-                sectorData.dataSegments[5] != "*"
-            )
-                        {
-                this.errorLog.AddEvent(
-                    new SyntaxError("Cannot specify a runway without an arrival airport " + sectorData.dataSegments[0], filename, lineNumber)
-                );
-                throw new Exception();
-            }
-
-            if (
-                sectorData.dataSegments[8] != CoordinationPoint.DATA_NOT_SPECIFIED &&
-                sectorData.dataSegments[9] != CoordinationPoint.DATA_NOT_SPECIFIED
-            ) {
-                this.errorLog.AddEvent(
-                    new SyntaxError("Cannot set both descend and climb level " + sectorData.dataSegments[0], filename, lineNumber)
-                );
-                throw new Exception();
-            }
-
-            if (
-                sectorData.dataSegments[8] != CoordinationPoint.DATA_NOT_SPECIFIED &&
-                (!int.TryParse(sectorData.dataSegments[8], out int climbLevel) ||
-                climbLevel < 0)
-            ) {
-                this.errorLog.AddEvent(
-                    new SyntaxError("Invalid coordination point climb level " + sectorData.dataSegments[0], filename, lineNumber)
-                );
-                throw new Exception();
-            }
-
-            if (
-                sectorData.dataSegments[9] != CoordinationPoint.DATA_NOT_SPECIFIED &&
-                (!int.TryParse(sectorData.dataSegments[9], out int descendLevel) ||
-                descendLevel < 0)
-            ) {
-                this.errorLog.AddEvent(
-                    new SyntaxError("Invalid coordination point descend level " + sectorData.dataSegments[0], filename, lineNumber)
-                );
-                throw new Exception();
-            }
-
-            this.sectorElements.Add(
-                new CoordinationPoint(
-                    sectorData.dataSegments[0] == CoordinationPoint.POINT_TYPE_FIR,
-                    sectorData.dataSegments[1],
-                    sectorData.dataSegments[2],
-                    sectorData.dataSegments[3],
-                    sectorData.dataSegments[4],
-                    sectorData.dataSegments[5],
-                    sectorData.dataSegments[6],
-                    sectorData.dataSegments[7],
-                    sectorData.dataSegments[8],
-                    sectorData.dataSegments[9],
-                    sectorData.dataSegments[10],
-                    sectorData.comment
+                if (
+                    line.dataSegments[0] != CoordinationPoint.PointTypeFir &&
+                    line.dataSegments[0] != CoordinationPoint.PointTypeInternal
                 )
-            );
+                {
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Unknown Coordination point type " + line.dataSegments[0], line)
+                    );
+                    return;
+                }
+
+                if (
+                    line.dataSegments[1].Length != 4 &&
+                    line.dataSegments[2] != "*"
+                )
+                {
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Cannot specify a runway without a departure airport " + line.dataSegments[0], line)
+                    );
+                    return;
+                }
+
+                if (
+                    line.dataSegments[4].Length != 4 &&
+                    line.dataSegments[5] != "*"
+                )
+                {
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Cannot specify a runway without an arrival airport " + line.dataSegments[0], line)
+                    );
+                    return;
+                }
+
+                if (
+                    line.dataSegments[8] != CoordinationPoint.DataNotSpecified &&
+                    line.dataSegments[9] != CoordinationPoint.DataNotSpecified
+                )
+                {
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Cannot set both descend and climb level " + line.dataSegments[0], line)
+                    );
+                    return;
+                }
+
+                if (
+                    line.dataSegments[8] != CoordinationPoint.DataNotSpecified &&
+                    (!int.TryParse(line.dataSegments[8], out int climbLevel) ||
+                    climbLevel < 0)
+                )
+                {
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Invalid coordination point climb level " + line.dataSegments[0], line)
+                    );
+                    return;
+                }
+
+                if (
+                    line.dataSegments[9] != CoordinationPoint.DataNotSpecified &&
+                    (!int.TryParse(line.dataSegments[9], out int descendLevel) ||
+                    descendLevel < 0)
+                )
+                {
+                    this.errorLog.AddEvent(
+                        new SyntaxError("Invalid coordination point descend level " + line.dataSegments[0], line)
+                    );
+                    return;
+                }
+
+                this.sectorElements.Add(
+                    new CoordinationPoint(
+                        line.dataSegments[0] == CoordinationPoint.PointTypeFir,
+                        line.dataSegments[1],
+                        line.dataSegments[2],
+                        line.dataSegments[3],
+                        line.dataSegments[4],
+                        line.dataSegments[5],
+                        line.dataSegments[6],
+                        line.dataSegments[7],
+                        line.dataSegments[8],
+                        line.dataSegments[9],
+                        line.dataSegments[10],
+                        line.definition,
+                        line.docblock,
+                        line.inlineComment
+                    )
+                );
+            }
         }
     }
 }

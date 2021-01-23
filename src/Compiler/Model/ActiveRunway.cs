@@ -1,10 +1,16 @@
-﻿using System;
-
-namespace Compiler.Model
+﻿namespace Compiler.Model
 {
-    public class ActiveRunway : AbstractSectorElement, ICompilable
+    public class ActiveRunway : AbstractCompilableElement
     {
-        public ActiveRunway(string identifier, string airfield, int mode, string comment) : base(comment)
+        public ActiveRunway(
+            string identifier,
+            string airfield,
+            int mode,
+            Definition definition,
+            Docblock docblock,
+            Comment inlineComment
+
+        ) : base(definition, docblock, inlineComment)
         {
             Identifier = identifier;
             Airfield = airfield;
@@ -13,17 +19,15 @@ namespace Compiler.Model
 
         public string Identifier { get; }
         public string Airfield { get; }
+        
+        /*
+         * 0 for active for arrival, 1 for active for departure
+         */
         public int Mode { get; }
 
-        public string Compile()
+        public override string GetCompileData(SectorElementCollection elements)
         {
-            return String.Format(
-                "ACTIVE_RUNWAY:{0}:{1}:{2}{3}\r\n",
-                this.Airfield,
-                this.Identifier,
-                this.Mode,
-                this.CompileComment()
-            );
+            return $"ACTIVE_RUNWAY:{this.Airfield}:{this.Identifier}:{this.Mode}";
         }
     }
 }

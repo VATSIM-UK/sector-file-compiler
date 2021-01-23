@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -15,19 +13,19 @@ namespace Compiler.Validate
             List<string> checkedFixes = new List<string>();
             foreach (Fix fix in sectorElements.Fixes)
             {
-                if (checkedFixes.Contains(this.GetFixKey(fix)))
+                if (checkedFixes.Contains(GetFixKey(fix)))
                 {
-                    events.AddEvent(new ValidationRuleFailure("Duplicate fix found: " + fix.Identifier));
+                    events.AddEvent(new ValidationRuleFailure("Duplicate fix found: " + fix.Identifier, fix));
                     continue;
                 }
 
-                checkedFixes.Add(this.GetFixKey(fix));           
+                checkedFixes.Add(GetFixKey(fix));           
             }
         }
 
-        private string GetFixKey(Fix fix)
+        private static string GetFixKey(Fix fix)
         {
-            return fix.Identifier + "." + fix.Coordinate.ToString();
+            return fix.Identifier + "." + fix.Coordinate;
         }
     }
 }

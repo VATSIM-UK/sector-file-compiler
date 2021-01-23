@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
@@ -20,35 +18,25 @@ namespace Compiler.Validate
                 {
                     if (!sectors.Contains(rule.ControlledSector))
                     {
-                        string message = String.Format(
-                            "Invalid controlled sector {0} for SECTORLINE display rule: {1}",
-                            rule.ControlledSector,
-                            rule.Compile()
-                        );
-                        events.AddEvent(new ValidationRuleFailure(message));
+                        string message =
+                            $"Invalid controlled sector {rule.ControlledSector} for SECTORLINE display rule: {rule.GetCompileData(sectorElements)}";
+                        events.AddEvent(new ValidationRuleFailure(message, sectorline));
                         continue;
                     }
 
                     if (!sectors.Contains(rule.CompareSectorFirst))
                     {
-                        string message = String.Format(
-                            "Invalid first compare sector {0} for SECTORLINE display rule: {1}",
-                            rule.CompareSectorFirst,
-                            rule.Compile()
-                        );
-                        events.AddEvent(new ValidationRuleFailure(message));
+                        string message =
+                            $"Invalid first compare sector {rule.CompareSectorFirst} for SECTORLINE display rule: {rule.GetCompileData(sectorElements)}";
+                        events.AddEvent(new ValidationRuleFailure(message, sectorline));
                         continue;
                     }
 
                     if (!sectors.Contains(rule.CompareSectorSecond))
                     {
-                        string message = String.Format(
-                            "Invalid second compare sector {0} for SECTORLINE display rule: {1}",
-                            rule.CompareSectorSecond,
-                            rule.Compile()
-                        );
-                        events.AddEvent(new ValidationRuleFailure(message));
-                        continue;
+                        string message =
+                            $"Invalid second compare sector {rule.CompareSectorSecond} for SECTORLINE display rule: {rule.GetCompileData(sectorElements)}";
+                        events.AddEvent(new ValidationRuleFailure(message, sectorline));
                     }
                 }
             }

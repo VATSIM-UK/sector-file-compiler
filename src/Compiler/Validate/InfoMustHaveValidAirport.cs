@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Compiler.Event;
+﻿using Compiler.Event;
 using Compiler.Model;
 using Compiler.Error;
 using Compiler.Argument;
@@ -14,14 +11,14 @@ namespace Compiler.Validate
         {
             foreach(Airport airport in sectorElements.Airports)
             {
-                if (airport.Icao == sectorElements.Info.Airport)
+                if (airport.Icao == sectorElements.Info.Airport.AirportIcao)
                 {
                     return;
                 }
             }
 
             events.AddEvent(
-                new ValidationRuleFailure("Invalid airport in INFO definition")
+                new ValidationRuleFailure("Invalid airport in INFO definition", sectorElements.Info.Airport)
             );
         }       
     }
