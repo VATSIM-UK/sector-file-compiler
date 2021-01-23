@@ -46,6 +46,7 @@ namespace Compiler.Argument
 
             return true;
         }
+        
         public override int GetHashCode()
         {
             return base.GetHashCode();
@@ -58,18 +59,12 @@ namespace Compiler.Argument
         public bool ValidateOutput { set; get; } = true;
 
         // Should we strip comments out of the final output
-        public bool StripComments { set; get; } = false;
-
-        // Should we strip blank lines out of the final output
-        public bool RemoveBlankLines { set; get; } = false;
+        public bool StripComments { set; get; }
 
         // Replace tokens in the output
         public List<ITokenReplacer> TokenReplacers { get; } = new();
         
         // The version being built
         public string BuildVersion { get; set; } = DefaultBuildVersion;
-
-        // The token to replace with the build version
-        public string VersionToken { get; set; } = "{VERSION}";
     }
 }
