@@ -31,13 +31,14 @@ namespace CompilerTest.Transformer
         }
 
         [Theory]
-        [InlineData("abc ; @preserveComment comment")]
-        [InlineData("abc ;  @preserveComment comment")]
-        [InlineData("abc ;   @preserveComment comment")]
-        [InlineData("abc ;   @preserveComment  comment")]
-        public void TestItPreservesAnnotatedComments(string input)
+        [InlineData("abc ; @preserveComment comment", "abc ; comment")]
+        [InlineData("abc ;  @preserveComment comment", "abc ; comment")]
+        [InlineData("abc ;   @preserveComment comment", "abc ; comment")]
+        [InlineData("abc ;   @preserveComment  comment", "abc ; comment")]
+        [InlineData("; @preserveComment", ";")]
+        public void TestItPreservesAnnotatedComments(string input, string expected)
         {
-            Assert.Equal("abc ; comment", transformer.Transform(input));
+            Assert.Equal(expected, transformer.Transform(input));
         }
     }
 }

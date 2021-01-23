@@ -41,7 +41,7 @@ namespace Compiler.Parser
                 );
             }
 
-            this.sectorElements.Add(
+            sectorElements.Add(
                 new Header(
                     new Definition(data.FullPath, 0),
                     lines
