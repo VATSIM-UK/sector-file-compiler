@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using Compiler.Argument;
 using Compiler.Exception;
 using Compiler.Output;
@@ -13,26 +12,38 @@ namespace Compiler.Config
             CompilerArguments arguments,
             JObject config,
             string fileName
-        )
-        {
+        ) {
             ProcessFile(
                 config,
                 "sct_output",
-                file => arguments.OutputFiles.Add(new SctOutput(new StreamWriter(file))),
+                file => arguments.OutputFiles.Add(new SctOutput(MakeOutputWriter(arguments, file))),
                 fileName
             );
             ProcessFile(
                 config,
                 "ese_output",
-                file => arguments.OutputFiles.Add(new EseOutput(new StreamWriter(file))),
+                file => arguments.OutputFiles.Add(new EseOutput(MakeOutputWriter(arguments, file))),
                 fileName
                 
             );
             ProcessFile(
                 config,
                 "rwy_output",
-                file => arguments.OutputFiles.Add(new RwyOutput(new StreamWriter(file))),
+                file => arguments.OutputFiles.Add(new RwyOutput(MakeOutputWriter(arguments, file))),
                 fileName
+            );
+        }
+
+
+        /**
+         * Makes an output writer.
+         */
+        private OutputWriter MakeOutputWriter(CompilerArguments arguments, string file)
+        {
+            return OutputWriterFactory.Make(
+                arguments,
+                file,
+                new OutputFileStreamFactory()
             );
         }
 

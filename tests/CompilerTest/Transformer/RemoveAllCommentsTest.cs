@@ -9,25 +9,25 @@ namespace CompilerTest.Transformer
 
         public RemoveAllCommentsTest()
         {
-            this.transformer = new RemoveAllComments();
+            transformer = new RemoveAllComments();
         }
 
         [Fact]
         public void TestItDoesntAlterNonCommentLines()
         {
-            Assert.Equal("abc", this.transformer.Transform("abc"));
+            Assert.Equal("abc", transformer.Transform("abc"));
         }
 
         [Fact]
         public void TestItRemovesCommentsFromEndOfLines()
         {
-            Assert.Equal("abc", this.transformer.Transform("abc; comment"));
+            Assert.Equal("abc", transformer.Transform("abc; comment"));
         }
 
         [Fact]
-        public void TestItRemovesCommentLinesEntirely()
+        public void TestItReturnsNullIfNoDataOnLines()
         {
-            Assert.Equal("", this.transformer.Transform(" ; comment"));
+            Assert.Null(transformer.Transform(" ; comment"));
         }
     }
 }

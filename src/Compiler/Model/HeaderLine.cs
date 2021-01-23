@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using Compiler.Output;
 
 namespace Compiler.Model
 {
@@ -18,7 +18,7 @@ namespace Compiler.Model
             return this.definition;
         }
 
-        public void Compile(SectorElementCollection elements, TextWriter output)
+        public void Compile(SectorElementCollection elements, IOutputWriter output)
         {
             output.WriteLine(Line.ToString());
         }

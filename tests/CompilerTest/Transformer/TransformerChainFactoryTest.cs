@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Xunit;
 using Compiler.Transformer;
 using Compiler.Argument;
-using Compiler.Output;
 
 namespace CompilerTest.Transformer
 {
@@ -19,34 +18,31 @@ namespace CompilerTest.Transformer
         [Fact]
         public void TestItAddsCommentStripper()
         {
-            this.arguments.StripComments = true;
+            arguments.StripComments = true;
             List<Type> expected = new(new[]
                 {
                     typeof(RemoveAllComments),
-                    typeof(ReplaceTokens),
-                    typeof(TokenBuildVersionReplacer)
+                    typeof(ReplaceTokens)
                 }
             );
 
             Assert.Equal(
                 expected,
-                TransformerChainFactory.Create(arguments, OutputSectionKeys.SCT_VOR).GetTransformerTypes()
+                TransformerChainFactory.Create(arguments).GetTransformerTypes()
             );
         }
 
         [Fact]
-        public void TestItDoesntAddCommentStripperOnHeader()
+        public void TestItDoesntAddCommentStripperIfDisabled()
         {
-            this.arguments.StripComments = true;
             List<Type> expected = new(new[]
             {
-                typeof(ReplaceTokens),
-                typeof(TokenBuildVersionReplacer)
+                typeof(ReplaceTokens)
             });
 
             Assert.Equal(
                 expected,
-                TransformerChainFactory.Create(arguments, OutputSectionKeys.FILE_HEADER).GetTransformerTypes()
+                TransformerChainFactory.Create(arguments).GetTransformerTypes()
             );
         }
     }

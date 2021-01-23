@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Compiler.Output;
+﻿using Compiler.Output;
 using Moq;
 using Xunit;
 
@@ -16,7 +15,7 @@ namespace CompilerTest.Output
                 OutputSectionKeys.RWY_ACTIVE_RUNWAYS
             };
             
-            Assert.Equal(expected, new RwyOutput(new Mock<TextWriter>().Object).GetOutputSections());
+            Assert.Equal(expected, new RwyOutput(new Mock<IOutputWriter>().Object).GetOutputSections());
         }
     }
 }

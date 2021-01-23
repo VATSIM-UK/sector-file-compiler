@@ -1,5 +1,5 @@
-﻿using System.IO;
-using Compiler.Model;
+﻿using Compiler.Model;
+using Compiler.Output;
 using CompilerTest.Bogus.Factory;
 using Moq;
 using Xunit;
@@ -28,7 +28,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompilesHeaderLines()
         {
-            Mock<TextWriter> mockWriter = new();
+            Mock<IOutputWriter> mockWriter = new();
             this.headerLine.Compile(new SectorElementCollection(), mockWriter.Object);
             mockWriter.Verify(foo => foo.WriteLine(this.comment.ToString()), Times.Once());
         }

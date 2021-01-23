@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Compiler.Output;
+﻿using Compiler.Output;
 using Moq;
 using Xunit;
 
@@ -31,7 +30,7 @@ namespace CompilerTest.Output
                 OutputSectionKeys.SCT_REGIONS
             };
             
-            Assert.Equal(expected, new SctOutput(new Mock<TextWriter>().Object).GetOutputSections());
+            Assert.Equal(expected, new SctOutput(new Mock<IOutputWriter>().Object).GetOutputSections());
         }
     }
 }

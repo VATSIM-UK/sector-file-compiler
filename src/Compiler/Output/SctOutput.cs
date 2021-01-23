@@ -1,10 +1,8 @@
-﻿using System.IO;
-
-namespace Compiler.Output
+﻿namespace Compiler.Output
 {
     public class SctOutput : AbstractOutputFile
     {
-        public SctOutput(TextWriter outputFile)
+        public SctOutput(IOutputWriter outputFile)
             : base(outputFile)
         {
 

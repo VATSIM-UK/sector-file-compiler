@@ -1,6 +1,5 @@
 ﻿using Xunit;
 using Moq;
-using System.IO;
 using Compiler.Argument;
 using Compiler.Event;
 using Compiler.Error;
@@ -16,11 +15,11 @@ namespace CompilerTest.Argument
 
         private readonly Mock<IEventLogger> eventLogger;
 
-        private readonly Mock<TextWriter> mockOutputWriter;
+        private readonly Mock<IOutputWriter> mockOutputWriter;
 
         public CompilerArgumentsValidatorTest()
         {
-            this.mockOutputWriter = new Mock<TextWriter>();
+            this.mockOutputWriter = new Mock<IOutputWriter>();
             this.eventLogger = new Mock<IEventLogger>();
             this.arguments = new CompilerArguments();
             this.mockConfigFile = "/foo/bar";

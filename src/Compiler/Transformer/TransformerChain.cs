@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Compiler.Transformer
 {
@@ -7,27 +8,25 @@ namespace Compiler.Transformer
     {
         private readonly List<ITransformer> transformers = new();
 
-        public void AddTransformer(ITransformer transformer)
+        public TransformerChain AddTransformer(ITransformer transformer)
         {
-            this.transformers.Add(transformer);
+            transformers.Add(transformer);
+            return this;
         }
 
         public List<Type> GetTransformerTypes()
         {
-            List<Type> types = new List<Type>();
-            foreach (ITransformer transformer in this.transformers)
-            {
-                types.Add(transformer.GetType());
-            }
-
-            return types;
+            return transformers.Select(transformer => transformer.GetType()).ToList();
         }
 
         public string Transform(string data)
         {
             foreach (ITransformer transformer in transformers)
             {
-                data = transformer.Transform(data);
+                if ((data = transformer.Transform(data)) == null)
+                {
+                    return null;
+                }
             }
 
             return data;

@@ -1,10 +1,8 @@
-﻿using System.IO;
-
-namespace Compiler.Output
+﻿namespace Compiler.Output
 {
     public class RwyOutput : AbstractOutputFile
     {
-        public RwyOutput(TextWriter outputFile)
+        public RwyOutput(IOutputWriter outputFile)
             : base(outputFile)
         { 
         

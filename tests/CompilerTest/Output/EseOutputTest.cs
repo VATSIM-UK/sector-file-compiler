@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Compiler.Output;
+﻿using Compiler.Output;
 using Moq;
 using Xunit;
 
@@ -18,7 +17,7 @@ namespace CompilerTest.Output
                 OutputSectionKeys.ESE_AIRSPACE,
             };
             
-            Assert.Equal(expected, new EseOutput(new Mock<TextWriter>().Object).GetOutputSections());
+            Assert.Equal(expected, new EseOutput(new Mock<IOutputWriter>().Object).GetOutputSections());
         }
     }
 }

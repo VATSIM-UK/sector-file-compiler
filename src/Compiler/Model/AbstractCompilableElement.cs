@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Compiler.Output;
 
 namespace Compiler.Model
@@ -38,7 +37,7 @@ namespace Compiler.Model
         /*
          * Compiles the data, along with inline comments and docblocks
          */
-        public virtual void Compile(SectorElementCollection elements, TextWriter output)
+        public virtual void Compile(SectorElementCollection elements, IOutputWriter output)
         {
             // Process each line in the docblock
             foreach (Comment line in this.Docblock)
@@ -48,11 +47,6 @@ namespace Compiler.Model
 
             // Compile each data item along with its inline comment
             output.WriteLine($"{this.GetCompileData(elements)} {this.InlineComment}".Trim());
-        }
-
-        public OutputGroup GetDataGroup()
-        {
-            throw new System.NotImplementedException();
         }
 
         /*

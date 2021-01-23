@@ -1,10 +1,8 @@
-﻿using System.IO;
-
-namespace Compiler.Output
+﻿namespace Compiler.Output
 {
     public class EseOutput : AbstractOutputFile
     {
-        public EseOutput(TextWriter outputFile)
+        public EseOutput(IOutputWriter outputFile)
             : base(outputFile)
         { 
         }

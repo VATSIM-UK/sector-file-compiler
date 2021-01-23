@@ -6,13 +6,13 @@
 
         public string Transform(string data)
         {
-            if (!data.Contains(RemoveAllComments.CommentDelimter))
+            if (!data.Contains(CommentDelimter))
             {
                 return data;
             }
 
-            int commentPos = data.IndexOf(RemoveAllComments.CommentDelimter);
-            return data.Substring(0, commentPos).Trim();
+            data = data.Substring(0, data.IndexOf(CommentDelimter)).Trim();
+            return data == "" ? null : data;
         }
     }
 }

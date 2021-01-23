@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using Compiler.Output;
 
 namespace Compiler.Model
 {
@@ -32,7 +32,7 @@ namespace Compiler.Model
          * 
          * Therefore, we disregard any comments or docblocks in this section.
          */
-        public override void Compile(SectorElementCollection elements, TextWriter output)
+        public override void Compile(SectorElementCollection elements, IOutputWriter output)
         {
             output.WriteLine(
                 $"{this.GetCompileData(elements)} ;{this.Name}"

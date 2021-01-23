@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Compiler.Model;
 using System.Linq;
 using Compiler.Collector;
@@ -24,7 +23,7 @@ namespace Compiler.Output
 
         public void GenerateOutput(AbstractOutputFile outputFile)
         {
-            TextWriter outputStream = outputFile.GetOutputStream();
+            IOutputWriter outputStream = outputFile.GetOutputStream();
 
             // Process each section in the output
             foreach (OutputSectionKeys section in outputFile.GetOutputSections())
@@ -35,7 +34,7 @@ namespace Compiler.Output
                 if (sectionConfig.header != null)
                 {
                     outputStream.WriteLine(sectionConfig.header);
-                    outputStream.WriteLine("");
+                    outputStream.WriteLine();
                 }
 
                 // Get the element providers and compile each element
@@ -53,7 +52,7 @@ namespace Compiler.Output
                             !group.Equals(currentDataGroup)
                         ) {
                             currentDataGroup = group;
-                            outputStream.WriteLine(new Comment(group.HeaderDescription));
+                            outputStream.WriteLine(new Comment(group.HeaderDescription).ToString());
                         }
 
                         element.Compile(sectorElements, outputStream);

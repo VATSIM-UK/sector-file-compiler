@@ -1,22 +1,22 @@
 ﻿using Compiler.Argument;
-using Compiler.Output;
 
 namespace Compiler.Transformer
 {
-    public class TransformerChainFactory
+    public static class TransformerChainFactory
     {
-        public static TransformerChain Create(CompilerArguments arguments, OutputSectionKeys section)
+        public static TransformerChain Create(CompilerArguments arguments)
         {
-            TransformerChain chain = new TransformerChain();
+            return AddRemoveAllComments(
+                new TransformerChain(),
+                arguments
+            ).AddTransformer(ReplaceTokensFactory.Make(arguments));
+        }
 
-            if (arguments.StripComments && section != OutputSectionKeys.FILE_HEADER)
-            {
-                chain.AddTransformer(new RemoveAllComments());
-            }
-
-            chain.AddTransformer(ReplaceTokensFactory.Make(arguments));
-
-            return chain;
+        private static TransformerChain AddRemoveAllComments(TransformerChain chain, CompilerArguments arguments)
+        {
+            return arguments.StripComments
+                ? chain.AddTransformer(new RemoveAllComments())
+                : chain;
         }
     }
 }

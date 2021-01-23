@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace Compiler.Output
+﻿namespace Compiler.Output
 {
     /*
      * Represents a possible output file (SCT, ESE, RWY) and defines
@@ -8,16 +6,16 @@ namespace Compiler.Output
      */
     public abstract class AbstractOutputFile
     {
-        private readonly TextWriter outputStream;
+        private readonly IOutputWriter outputStream;
 
-        public AbstractOutputFile(TextWriter outputStream)
+        public AbstractOutputFile(IOutputWriter outputStream)
         {
             this.outputStream = outputStream;
         }
 
         public abstract OutputSectionKeys[] GetOutputSections();
 
-        public TextWriter GetOutputStream()
+        public IOutputWriter GetOutputStream()
         {
             return this.outputStream;
         }
