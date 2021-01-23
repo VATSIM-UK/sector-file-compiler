@@ -6,47 +6,46 @@ namespace CompilerCliTest.Cli
 {
     public class AbstractCliArgumentTest
     {
-        private NoWaitCliArgument compilerArgument;
+        private AbstractCliArgument cliArgument;
 
         public AbstractCliArgumentTest()
         {
-            compilerArgument = new NoWaitCliArgument();
+            cliArgument = new NoWaitCliArgument();
         }
 
         [Fact]
         public void TestEqualityReturnsFalseNotAbstractArgument()
         {
-            Assert.NotEqual(compilerArgument, new object());
+            Assert.False(cliArgument.Equals(new object()));
         }
         
         [Fact]
         public void TestEqualityReturnsFalseDifferentKeys()
         {
-            Assert.NotEqual<AbstractCliArgument>(compilerArgument, new DefaultCliArgument());
+            Assert.False(cliArgument.Equals(new DefaultCliArgument()));
         }
         
         [Fact]
         public void TestEqualityReturnsTrueSameObject()
         {
-            Assert.Equal(compilerArgument, new NoWaitCliArgument());
+            Assert.True(cliArgument.Equals(new NoWaitCliArgument()));
         }
-
         [Fact]
         public void TestHashCodeReturnsHashOfSpecifier()
         {
-            Assert.Equal(compilerArgument.GetSpecifier().GetHashCode(), compilerArgument.GetHashCode());
+            Assert.Equal(cliArgument.GetSpecifier().GetHashCode(), cliArgument.GetHashCode());
         }
 
         [Fact]
         public void TestCompareToReturns1IfObjectNull()
         {
-            Assert.Equal(1, compilerArgument.CompareTo(null));
+            Assert.Equal(1, cliArgument.CompareTo(null));
         }
         
         [Fact]
         public void TestCompareToReturns1IfObjectNotAbstractArgument()
         {
-            Assert.Equal(1, compilerArgument.CompareTo(new object()));
+            Assert.Equal(1, cliArgument.CompareTo(new object()));
         }
         
         [Fact]
@@ -54,8 +53,8 @@ namespace CompilerCliTest.Cli
         {
             var defaultArgument = new DefaultCliArgument();
             Assert.Equal(
-                string.Compare(compilerArgument.GetSpecifier(), defaultArgument.GetSpecifier(), StringComparison.Ordinal),
-                compilerArgument.CompareTo(defaultArgument)
+                string.Compare(cliArgument.GetSpecifier(), defaultArgument.GetSpecifier(), StringComparison.Ordinal),
+                cliArgument.CompareTo(defaultArgument)
             );
         }
     }

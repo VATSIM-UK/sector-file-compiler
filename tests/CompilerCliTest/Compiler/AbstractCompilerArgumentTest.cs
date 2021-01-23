@@ -6,7 +6,7 @@ namespace CompilerCliTest.Compiler
 {
     public class AbstractArgumentTest
     {
-        private ConfigFileCompilerArgument compilerArgument;
+        private AbstractCompilerArgument compilerArgument;
 
         public AbstractArgumentTest()
         {
@@ -16,19 +16,19 @@ namespace CompilerCliTest.Compiler
         [Fact]
         public void TestEqualityReturnsFalseNotAbstractArgument()
         {
-            Assert.NotEqual(compilerArgument, new object());
+            Assert.False(compilerArgument.Equals(new object()));
         }
         
         [Fact]
         public void TestEqualityReturnsFalseDifferentKeys()
         {
-            Assert.NotEqual<AbstractCompilerArgument>(compilerArgument, new StripCommentsCompilerArgument());
+            Assert.False(compilerArgument.Equals(new StripCommentsCompilerArgument()));
         }
         
         [Fact]
         public void TestEqualityReturnsTrueSameObject()
         {
-            Assert.Equal(compilerArgument, new ConfigFileCompilerArgument());
+            Assert.True(compilerArgument.Equals(new ConfigFileCompilerArgument()));
         }
 
         [Fact]
