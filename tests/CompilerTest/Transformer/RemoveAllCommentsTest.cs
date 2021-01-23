@@ -29,5 +29,15 @@ namespace CompilerTest.Transformer
         {
             Assert.Null(transformer.Transform(" ; comment"));
         }
+
+        [Theory]
+        [InlineData("abc ; @preserveComment comment")]
+        [InlineData("abc ;  @preserveComment comment")]
+        [InlineData("abc ;   @preserveComment comment")]
+        [InlineData("abc ;   @preserveComment  comment")]
+        public void TestItPreservesAnnotatedComments(string input)
+        {
+            Assert.Equal("abc ; comment", transformer.Transform(input));
+        }
     }
 }
