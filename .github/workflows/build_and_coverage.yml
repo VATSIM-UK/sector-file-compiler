@@ -38,7 +38,7 @@ jobs:
         if: matrix.platform == 'ubuntu-latest'
         run: |
           cd tests/CompilerCliTest
-          dotnet dotcover test --dcReportType=DetailedXml --dcOutput=../../coverage/Compiler.xml
+          dotnet dotcover test --dcReportType=DetailedXml --dcOutput=../../coverage/CompilerCli.xml
 
       - name: Run Compiler CLI Tests
         if: matrix.platform != 'ubuntu-latest'
