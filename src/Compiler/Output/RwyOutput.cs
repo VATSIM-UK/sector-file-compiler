@@ -15,5 +15,10 @@
                 OutputSectionKeys.RWY_ACTIVE_RUNWAYS
             };
         }
+        
+        public override string GetFileDescriptor()
+        {
+            return "RWY";
+        }
     }
 }

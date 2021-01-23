@@ -31,5 +31,10 @@
                 OutputSectionKeys.SCT_REGIONS
             };
         }
+        
+        public override string GetFileDescriptor()
+        {
+            return "SCT";
+        }
     }
 }

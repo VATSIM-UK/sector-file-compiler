@@ -6,6 +6,13 @@ namespace CompilerTest.Output
 {
     public class RwyOutputTest
     {
+        private RwyOutput output;
+
+        public RwyOutputTest()
+        {
+            output = new RwyOutput(new Mock<IOutputWriter>().Object);
+        }
+        
         [Fact]
         public void TestItHasOutputSections()
         {
@@ -15,7 +22,13 @@ namespace CompilerTest.Output
                 OutputSectionKeys.RWY_ACTIVE_RUNWAYS
             };
             
-            Assert.Equal(expected, new RwyOutput(new Mock<IOutputWriter>().Object).GetOutputSections());
+            Assert.Equal(expected, output.GetOutputSections());
+        }
+
+        [Fact]
+        public void TestItReturnsAFileDescriptor()
+        {
+            Assert.Equal("RWY", output.GetFileDescriptor());
         }
     }
 }

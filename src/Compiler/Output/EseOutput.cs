@@ -17,5 +17,10 @@
                 OutputSectionKeys.ESE_AIRSPACE,
             };
         }
+
+        public override string GetFileDescriptor()
+        {
+            return "ESE";
+        }
     }
 }

@@ -6,6 +6,13 @@ namespace CompilerTest.Output
 {
     public class EseOutputTest
     {
+        private EseOutput output;
+
+        public EseOutputTest()
+        {
+            output = new EseOutput(new Mock<IOutputWriter>().Object);
+        }
+        
         [Fact]
         public void TestItHasOutputSections()
         {
@@ -17,7 +24,13 @@ namespace CompilerTest.Output
                 OutputSectionKeys.ESE_AIRSPACE,
             };
             
-            Assert.Equal(expected, new EseOutput(new Mock<IOutputWriter>().Object).GetOutputSections());
+            Assert.Equal(expected, output.GetOutputSections());
+        }
+        
+        [Fact]
+        public void TestItReturnsAFileDescriptor()
+        {
+            Assert.Equal("ESE", output.GetFileDescriptor());
         }
     }
 }

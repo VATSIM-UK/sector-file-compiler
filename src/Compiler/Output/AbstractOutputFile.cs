@@ -15,9 +15,11 @@
 
         public abstract OutputSectionKeys[] GetOutputSections();
 
+        public abstract string GetFileDescriptor();
+
         public IOutputWriter GetOutputStream()
         {
-            return this.outputStream;
+            return outputStream;
         }
     }
 }

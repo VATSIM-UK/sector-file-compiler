@@ -28,12 +28,12 @@ namespace Compiler
          */
         public int Compile()
         {
-            this.events.AddEvent(new ComplilationStartedEvent());
+            events.AddEvent(new ComplilationStartedEvent());
 
-            CompilerArgumentsValidator.Validate(this.events, this.arguments);
-            if (this.events.HasFatalError())
+            CompilerArgumentsValidator.Validate(events, arguments);
+            if (events.HasFatalError())
             {
-                this.events.AddEvent(new CompilationFinishedEvent(false));
+                events.AddEvent(new CompilationFinishedEvent(false));
                 return 1;
             }
 
@@ -43,20 +43,22 @@ namespace Compiler
             ConfigInclusionRules config;
             try
             {
-                config = ConfigFileLoaderFactory.Make().LoadConfigFiles(this.arguments.ConfigFiles, this.arguments);
+                events.AddEvent(new CompilationMessage("Loading config files"));
+                config = ConfigFileLoaderFactory.Make().LoadConfigFiles(arguments.ConfigFiles, arguments);
             } catch (ConfigFileInvalidException e)
             {
-                this.events.AddEvent(new CompilationMessage(e.Message));
-                this.events.AddEvent(new CompilationFinishedEvent(false));
+                events.AddEvent(new CompilationMessage(e.Message));
+                events.AddEvent(new CompilationFinishedEvent(false));
                 return 1;
             }
 
             // Parse all the input files and create elements
             SectorElementCollection sectorElements = new SectorElementCollection();
-            DataParserFactory parserFactory = new DataParserFactory(sectorElements, this.events);
+            DataParserFactory parserFactory = new DataParserFactory(sectorElements, events);
             InputFileList fileList;
             try
             {
+                events.AddEvent(new CompilationMessage("Building input file list"));
                 fileList = InputFileListFactory.CreateFromInclusionRules(
                     new SectorDataFileFactory(new InputFileStreamFactory()),
                     config,
@@ -65,39 +67,42 @@ namespace Compiler
             }
             catch (System.Exception exception)
             {
-                this.events.AddEvent(new CompilationMessage(exception.Message));
-                this.events.AddEvent(new CompilationFinishedEvent(false));
+                events.AddEvent(new CompilationMessage(exception.Message));
+                events.AddEvent(new CompilationFinishedEvent(false));
                 return 1;
             }
             
+            events.AddEvent(new CompilationMessage("Parsing input files"));
             foreach (AbstractSectorDataFile dataFile in fileList)
             {
                 parserFactory.GetParserForFile(dataFile).ParseData(dataFile);
             }
 
-            if (this.events.HasFatalError())
+            if (events.HasFatalError())
             {
-                this.events.AddEvent(new CompilationFinishedEvent(false));
+                events.AddEvent(new CompilationFinishedEvent(false));
                 return 1;
             }
             
             // There's some static data we need to inject to the collection for adjacent airports...
+            events.AddEvent(new CompilationMessage("Injecting static data"));
             AdjacentAirportsInjector.InjectAdjacentAirportsData(sectorElements);
             
 
             // Now all the data is loaded, validate that there are no broken references etc.
-            if (this.arguments.ValidateOutput)
+            if (arguments.ValidateOutput)
             {
-                OutputValidator.Validate(sectorElements, this.arguments, this.events);
-                if (this.events.HasFatalError())
+                events.AddEvent(new CompilationMessage("Validating data"));
+                OutputValidator.Validate(sectorElements, arguments, events);
+                if (events.HasFatalError())
                 {
-                    this.events.AddEvent(new CompilationFinishedEvent(false));
+                    events.AddEvent(new CompilationFinishedEvent(false));
                     return 1;
                 }
             } 
             else
             {
-                this.events.AddEvent(new CompilationMessage("Skipping output validation"));
+                events.AddEvent(new CompilationMessage("Skipping output validation"));
             }
 
             // Generate the output
@@ -106,12 +111,14 @@ namespace Compiler
                 outputGroups,
                 new CompilableElementCollectorFactory(sectorElements, outputGroups)
             );
-            foreach(AbstractOutputFile output in this.arguments.OutputFiles)
+            
+            foreach(AbstractOutputFile output in arguments.OutputFiles)
             {
+                events.AddEvent(new CompilationMessage($"Generating {output.GetFileDescriptor()} output"));
                 generator.GenerateOutput(output);
             }
 
-            this.events.AddEvent(new CompilationFinishedEvent(true));
+            events.AddEvent(new CompilationFinishedEvent(true));
             return 0;
         }
     }

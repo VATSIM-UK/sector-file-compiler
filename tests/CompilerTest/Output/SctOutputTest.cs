@@ -6,6 +6,13 @@ namespace CompilerTest.Output
 {
     public class SctOutputTest
     {
+        private SctOutput output;
+
+        public SctOutputTest()
+        {
+            output = new SctOutput(new Mock<IOutputWriter>().Object);
+        }
+        
         [Fact]
         public void TestItHasOutputSections()
         {
@@ -30,7 +37,13 @@ namespace CompilerTest.Output
                 OutputSectionKeys.SCT_REGIONS
             };
             
-            Assert.Equal(expected, new SctOutput(new Mock<IOutputWriter>().Object).GetOutputSections());
+            Assert.Equal(expected, output.GetOutputSections());
+        }
+        
+        [Fact]
+        public void TestItReturnsAFileDescriptor()
+        {
+            Assert.Equal("SCT", output.GetFileDescriptor());
         }
     }
 }
