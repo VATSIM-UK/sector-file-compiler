@@ -437,8 +437,6 @@ namespace Compiler.Config
             );
         }
 
-
-
         private string NormaliseFilePath(string configFileFolder, string relativeInputFilePath)
         {
             return Path.GetFullPath(configFileFolder + Path.DirectorySeparatorChar + relativeInputFilePath);

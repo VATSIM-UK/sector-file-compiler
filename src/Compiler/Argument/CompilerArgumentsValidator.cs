@@ -13,13 +13,6 @@ namespace Compiler.Argument
                     new CompilerArgumentError("No config files specified")
                 );
             }
-
-            if (arguments.OutputFiles.Count == 0)
-            {
-                events.AddEvent(
-                    new CompilerArgumentError("No output files specified")
-                );
-            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Compiler.Argument;
 using Compiler.Exception;
 using Compiler.Output;
@@ -16,20 +17,20 @@ namespace Compiler.Config
             ProcessFile(
                 config,
                 "sct_output",
-                file => arguments.OutputFiles.Add(new SctOutput(MakeOutputWriter(arguments, file))),
+                file => arguments.OutputFiles.Add(new SctOutput(MakeOutputWriter(arguments, file, fileName))),
                 fileName
             );
             ProcessFile(
                 config,
                 "ese_output",
-                file => arguments.OutputFiles.Add(new EseOutput(MakeOutputWriter(arguments, file))),
+                file => arguments.OutputFiles.Add(new EseOutput(MakeOutputWriter(arguments, file, fileName))),
                 fileName
                 
             );
             ProcessFile(
                 config,
                 "rwy_output",
-                file => arguments.OutputFiles.Add(new RwyOutput(MakeOutputWriter(arguments, file))),
+                file => arguments.OutputFiles.Add(new RwyOutput(MakeOutputWriter(arguments, file, fileName))),
                 fileName
             );
         }
@@ -38,11 +39,11 @@ namespace Compiler.Config
         /**
          * Makes an output writer.
          */
-        private OutputWriter MakeOutputWriter(CompilerArguments arguments, string file)
+        private OutputWriter MakeOutputWriter(CompilerArguments arguments, string file, string configFilePath)
         {
             return OutputWriterFactory.Make(
                 arguments,
-                file,
+                NormaliseFilePath(configFilePath, file),
                 new OutputFileStreamFactory()
             );
         }
@@ -63,6 +64,18 @@ namespace Compiler.Config
             }
 
             addToArguments(file.ToString());
+        }
+        
+        private string GetFolderForConfigFile(string pathToConfigFile)
+        {
+            return Path.GetFullPath(Path.GetDirectoryName(pathToConfigFile) ?? string.Empty);
+        }
+        
+        private string NormaliseFilePath(string configFilePath, string relativeInputFilePath)
+        {
+            return Path.GetFullPath(
+                GetFolderForConfigFile(configFilePath) + Path.DirectorySeparatorChar + relativeInputFilePath
+            );
         }
         
         private bool OptionValid(JToken token)

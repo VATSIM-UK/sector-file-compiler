@@ -7,13 +7,14 @@ namespace CompilerCli.Input
     {
         public static ArgumentParser Make()
         {
-            return new ArgumentParser(
+            return new(
                 new SortedSet<AbstractArgument>
                 {
                     new DefaultArgument(),
                     new SkipValidationArgument(),
                     new StripCommentsArgument(),
-                    new ConfigFileArgument()
+                    new ConfigFileArgument(),
+                    new BuildVersionArgument()
                 },
                 CompilerArgumentsFactory.Make()
             );

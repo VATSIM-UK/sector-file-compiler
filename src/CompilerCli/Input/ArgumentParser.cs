@@ -44,6 +44,11 @@ namespace CompilerCli.Input
             return compilerArguments;
         }
 
+        public bool HasArgument(Type type)
+        {
+            return availableArguments.Select(arg => arg.GetType() == type).Count() != 0;
+        }
+
         /**
          * Given an argument specifier, try and find that argument
          */
