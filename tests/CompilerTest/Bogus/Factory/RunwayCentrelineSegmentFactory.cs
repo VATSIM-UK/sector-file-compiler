@@ -9,7 +9,7 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<RunwayCentrelineSegment>()
                 .CustomInstantiator(
-                    f => new RunwayCentrelineSegment(
+                    _ => new RunwayCentrelineSegment(
                         CoordinateFactory.Make(),
                         CoordinateFactory.Make()
                     )
