@@ -32,7 +32,7 @@ namespace Compiler.Parser
         public static bool TryParse(string latitude, string longitude, out Coordinate coordinate)
         {
             coordinate = Parse(latitude, longitude);
-            return coordinate.Equals(InvalidCoordinate);
+            return !coordinate.Equals(InvalidCoordinate);
         }
 
         private static string ParseCoordinate(bool latitude, string coordinate)
