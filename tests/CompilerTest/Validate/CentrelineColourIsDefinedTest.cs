@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Compiler.Injector;
+﻿using Compiler.Injector;
 using Xunit;
-using Compiler.Model;
 using Compiler.Validate;
 using CompilerTest.Bogus.Factory;
 
