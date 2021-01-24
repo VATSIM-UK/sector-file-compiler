@@ -1,6 +1,5 @@
 ﻿using Xunit;
 using System.Collections.Generic;
-using System.Reflection.PortableExecutable;
 using Compiler.Parser;
 using Compiler.Model;
 
