@@ -64,7 +64,7 @@ namespace CompilerTest.Parser
 
         protected override InputDataType GetInputDataType()
         {
-            return InputDataType.SCT_EXTENDED_CENTRELINES;
+            return InputDataType.SCT_RUNWAY_CENTRELINES;
         }
     }
 }

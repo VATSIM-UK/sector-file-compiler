@@ -41,7 +41,7 @@ namespace Compiler.Parser
                 InputDataType.SCT_REGIONS => new RegionParser(sectorElements, logger),
                 InputDataType.SCT_INFO => new InfoParser(sectorElements, logger),
                 InputDataType.SCT_RUNWAYS => new RunwayParser(sectorElements, logger),
-                InputDataType.SCT_EXTENDED_CENTRELINES => new RunwayCentrelineParser(sectorElements, logger),
+                InputDataType.SCT_RUNWAY_CENTRELINES => new RunwayCentrelineParser(sectorElements, logger),
                 InputDataType.ESE_POSITIONS => new EsePositionParser(
                     new VatsimRtfFrequencyParser(),
                     sectorElements,

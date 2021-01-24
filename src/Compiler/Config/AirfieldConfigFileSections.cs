@@ -10,7 +10,7 @@ namespace Compiler.Config
             new ConfigFileSection("active_runways", InputDataType.RWY_ACTIVE_RUNWAY, "Active Runways"),
             new ConfigFileSection("airspace", InputDataType.SCT_ARTCC_LOW, "Airspace"),
             new ConfigFileSection("basic", InputDataType.SCT_AIRPORT_BASIC, "Basic"),
-            new ConfigFileSection("centrelines", InputDataType.SCT_EXTENDED_CENTRELINES, "Centrelines"),
+            new ConfigFileSection("centrelines", InputDataType.SCT_RUNWAY_CENTRELINES, "Centrelines"),
             new ConfigFileSection("fixes", InputDataType.SCT_FIXES, "Fixes"),
             new ConfigFileSection("freetext", InputDataType.ESE_FREETEXT, "Freetext"),
             new ConfigFileSection("ownership", InputDataType.ESE_OWNERSHIP, "Ownership"),

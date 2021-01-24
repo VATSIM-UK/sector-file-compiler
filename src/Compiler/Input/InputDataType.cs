@@ -12,7 +12,7 @@
         SCT_ARTCC_LOW,
         SCT_ARTCC_HIGH,
         SCT_COLOUR_DEFINITIONS,
-        SCT_EXTENDED_CENTRELINES,
+        SCT_RUNWAY_CENTRELINES,
         SCT_FIXES,
         SCT_GEO,
         SCT_INFO,

@@ -24,7 +24,7 @@ namespace Compiler.Input
                 InputDataType.SCT_ARTCC_HIGH => new SctSectorDataReader(),
                 InputDataType.SCT_ARTCC_LOW => new SctSectorDataReader(),
                 InputDataType.SCT_COLOUR_DEFINITIONS => new SctSectorDataReader(),
-                InputDataType.SCT_EXTENDED_CENTRELINES => new SctSectorDataReader(),
+                InputDataType.SCT_RUNWAY_CENTRELINES => new SctSectorDataReader(),
                 InputDataType.SCT_FIXES => new SctSectorDataReader(),
                 InputDataType.SCT_GEO => new SctSectorDataReader(),
                 InputDataType.SCT_INFO => new SctSectorDataReader(),
