@@ -18,6 +18,7 @@ namespace CompilerTest.Injector
         {
             Assert.Single(sectorElementCollection.RunwayCentrelines);
             RunwayCentreline firstResult = sectorElementCollection.RunwayCentrelines[0];
+            Assert.True(((CentrelineStarter) firstResult).IsExtended);
             Assert.Equal(
                 new Coordinate("N000.00.00.000", "E000.00.00.000"),
                 firstResult.CentrelineSegment.FirstCoordinate
@@ -34,7 +35,9 @@ namespace CompilerTest.Injector
             
             // The fixed colour centreline should have the same base segment as the main one
             Assert.Single(sectorElementCollection.FixedColourRunwayCentrelines);
-            FixedColourRunwayCentreline secondResult = sectorElementCollection.FixedColourRunwayCentrelines[0];
+            RunwayCentreline secondResult = sectorElementCollection.FixedColourRunwayCentrelines[0];
+            Assert.IsType<CentrelineStarter>(secondResult);
+            Assert.False(((CentrelineStarter) secondResult).IsExtended);
             Assert.Equal(
                 new Coordinate("N000.00.00.000", "E000.00.00.000"),
                 secondResult.CentrelineSegment.FirstCoordinate

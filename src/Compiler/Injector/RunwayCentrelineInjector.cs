@@ -7,8 +7,9 @@ namespace Compiler.Injector
         public static void InjectRunwayCentrelineData(SectorElementCollection collection)
         {
             // Add normal one
-            collection.Add(
-                new RunwayCentreline(
+            collection.RunwayCentrelines.Add(
+                new CentrelineStarter(
+                    true,
                     GetStarterSegment(),
                     new Definition("Defined by compiler", 0),
                     new Docblock(),
@@ -17,8 +18,9 @@ namespace Compiler.Injector
             );
             
             // Add fixed colour
-            collection.Add(
-                new FixedColourRunwayCentreline(
+            collection.FixedColourRunwayCentrelines.Add(
+                new CentrelineStarter(
+                    false,
                     GetStarterSegment(),
                     new Definition("Defined by compiler", 0),
                     new Docblock(),

@@ -57,7 +57,8 @@ namespace CompilerTest.Parser
             
             // The fixed colour centreline should have the same base segment as the main one
             Assert.Single(sectorElementCollection.FixedColourRunwayCentrelines);
-            FixedColourRunwayCentreline secondResult = sectorElementCollection.FixedColourRunwayCentrelines[0];
+            RunwayCentreline secondResult = sectorElementCollection.FixedColourRunwayCentrelines[0];
+            Assert.IsType<FixedColourRunwayCentreline>(secondResult);
             Assert.Same(firstResult.CentrelineSegment, secondResult.CentrelineSegment);
             AssertExpectedMetadata(secondResult);
         }
