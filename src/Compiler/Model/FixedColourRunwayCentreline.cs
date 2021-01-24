@@ -1,8 +1,8 @@
 ﻿namespace Compiler.Model
 {
-    public class ExtendedRunwayCentreline: RunwayCentreline
+    public class FixedColourRunwayCentreline: RunwayCentreline
     {
-        public ExtendedRunwayCentreline(
+        public FixedColourRunwayCentreline(
             RunwayCentrelineSegment centrelineSegment,
             Definition definition,
             Docblock docblock,

@@ -43,7 +43,7 @@ namespace Compiler.Parser
                 // Create the segment once and share it to save memory
                 RunwayCentrelineSegment segment = new(firstCoordinate, secondCoordinate);
                 sectorElements.Add(new RunwayCentreline(segment, line.definition, line.docblock, line.inlineComment));
-                sectorElements.Add(new ExtendedRunwayCentreline(segment, line.definition, line.docblock, line.inlineComment));
+                sectorElements.Add(new FixedColourRunwayCentreline(segment, line.definition, line.docblock, line.inlineComment));
             }
         }
     }

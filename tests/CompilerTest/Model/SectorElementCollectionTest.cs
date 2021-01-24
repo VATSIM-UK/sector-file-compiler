@@ -248,10 +248,10 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsExtendedRunwayCentrelines()
         {
-            ExtendedRunwayCentreline centreline = ExtendedRunwayCentrelineFactory.Make();
+            FixedColourRunwayCentreline centreline = ExtendedRunwayCentrelineFactory.Make();
 
             collection.Add(centreline);
-            Assert.Equal(centreline, this.collection.ExtendedRunwayCentrelines[0]);
+            Assert.Equal(centreline, this.collection.FixedColourRunwayCentrelines[0]);
         }
     }
 }

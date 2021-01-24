@@ -32,7 +32,7 @@ namespace CompilerTest.Parser
             RunParserOnLines(lines);
 
             Assert.Empty(sectorElementCollection.RunwayCentrelines);
-            Assert.Empty(sectorElementCollection.ExtendedRunwayCentrelines);
+            Assert.Empty(sectorElementCollection.FixedColourRunwayCentrelines);
             logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
@@ -55,9 +55,9 @@ namespace CompilerTest.Parser
             
             AssertExpectedMetadata(firstResult);
             
-            // The extended centreline should have the same base segment as the main one
-            Assert.Single(sectorElementCollection.ExtendedRunwayCentrelines);
-            RunwayCentreline secondResult = sectorElementCollection.ExtendedRunwayCentrelines[0];
+            // The fixed colour centreline should have the same base segment as the main one
+            Assert.Single(sectorElementCollection.FixedColourRunwayCentrelines);
+            FixedColourRunwayCentreline secondResult = sectorElementCollection.FixedColourRunwayCentrelines[0];
             Assert.Same(firstResult.CentrelineSegment, secondResult.CentrelineSegment);
             AssertExpectedMetadata(secondResult);
         }

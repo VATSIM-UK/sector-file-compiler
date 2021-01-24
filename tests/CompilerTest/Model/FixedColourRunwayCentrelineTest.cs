@@ -4,15 +4,15 @@ using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Model
 {
-    public class ExtendedRunwayCentrelineTest
+    public class FixedColourRunwayCentrelineTest
     {
-        private readonly ExtendedRunwayCentreline centreline;
+        private readonly FixedColourRunwayCentreline centreline;
         private readonly RunwayCentrelineSegment segment;
 
-        public ExtendedRunwayCentrelineTest()
+        public FixedColourRunwayCentrelineTest()
         {
             segment = RunwayCentrelineSegmentFactory.Make();
-            centreline = new ExtendedRunwayCentreline(
+            centreline = new FixedColourRunwayCentreline(
                 segment,
                 DefinitionFactory.Make(),
                 DocblockFactory.Make(),

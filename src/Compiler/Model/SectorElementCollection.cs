@@ -48,7 +48,7 @@ namespace Compiler.Model
 
         public List<RunwayCentreline> RunwayCentrelines { get; } = new();
         
-        public List<ExtendedRunwayCentreline> ExtendedRunwayCentrelines { get; } = new();
+        public List<FixedColourRunwayCentreline> FixedColourRunwayCentrelines { get; } = new();
 
         public void Add(Airport airport)
         {
@@ -193,9 +193,9 @@ namespace Compiler.Model
             RunwayCentrelines.Add(centreline);
         }
         
-        public void Add(ExtendedRunwayCentreline centreline)
+        public void Add(FixedColourRunwayCentreline centreline)
         {
-            ExtendedRunwayCentrelines.Add(centreline);
+            FixedColourRunwayCentrelines.Add(centreline);
         }
     }
 }

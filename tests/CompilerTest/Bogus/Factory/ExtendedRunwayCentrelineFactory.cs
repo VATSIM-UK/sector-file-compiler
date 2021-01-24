@@ -5,11 +5,11 @@ namespace CompilerTest.Bogus.Factory
 {
     static class ExtendedRunwayCentrelineFactory
     {
-        public static ExtendedRunwayCentreline Make()
+        public static FixedColourRunwayCentreline Make()
         {
-            return new Faker<ExtendedRunwayCentreline>()
+            return new Faker<FixedColourRunwayCentreline>()
                 .CustomInstantiator(
-                    _ => new ExtendedRunwayCentreline(
+                    _ => new FixedColourRunwayCentreline(
                         RunwayCentrelineSegmentFactory.Make(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
