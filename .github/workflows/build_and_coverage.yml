@@ -10,7 +10,7 @@ jobs:
   Build_Test_Coverage:
     strategy:
       matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
+        platform: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout Code
@@ -45,6 +45,20 @@ jobs:
         run: |
           cd tests/CompilerCliTest
           dotnet test
+          
+      - name: Publish Assets (Windows)
+        if: matrix.platform == 'windows-latest'
+        run: dotnet publish -r win10-x64 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish src/CompilerCli/CompilerCli.csproj
+
+      - name: Publish Assets (Linux)
+        if: matrix.platform == 'ubuntu-latest'
+        run: dotnet publish -r linux-x64 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish src/CompilerCli/CompilerCli.csproj
+        
+      - name: Upload Assets
+        uses: actions/upload-artifact@v2
+        with:
+          name: "CompilerCli.exe"
+          path: "publish/CompilerCli.exe"
 
       - name: Upload Code Coverage Reports
         if: matrix.platform == 'ubuntu-latest'
