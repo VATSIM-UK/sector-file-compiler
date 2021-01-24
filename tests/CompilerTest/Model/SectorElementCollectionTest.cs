@@ -248,7 +248,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItAddsExtendedRunwayCentrelines()
         {
-            FixedColourRunwayCentreline centreline = ExtendedRunwayCentrelineFactory.Make();
+            FixedColourRunwayCentreline centreline = FixedColourRunwayCentrelineFactory.Make();
 
             collection.Add(centreline);
             Assert.Equal(centreline, this.collection.FixedColourRunwayCentrelines[0]);

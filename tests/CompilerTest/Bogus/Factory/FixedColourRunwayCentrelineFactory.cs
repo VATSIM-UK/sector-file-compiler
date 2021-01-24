@@ -3,7 +3,7 @@ using Compiler.Model;
 
 namespace CompilerTest.Bogus.Factory
 {
-    static class ExtendedRunwayCentrelineFactory
+    static class FixedColourRunwayCentrelineFactory
     {
         public static FixedColourRunwayCentreline Make()
         {
