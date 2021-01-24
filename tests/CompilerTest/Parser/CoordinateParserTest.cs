@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using System.Collections.Generic;
+using System.Reflection.PortableExecutable;
 using Compiler.Parser;
 using Compiler.Model;
 
@@ -49,10 +50,28 @@ namespace CompilerTest.Parser
 
         [Theory]
         [MemberData(nameof(BadData))]
-        public void ItReturnsInvalidOnBadData(string latitude, string longitude)
+        public void TestItReturnsInvalidOnBadData(string latitude, string longitude)
         {
             Coordinate coordinate = CoordinateParser.Parse(latitude, longitude);
             Assert.Equal(CoordinateParser.InvalidCoordinate, coordinate);
+        }
+
+        [Fact]
+        public void TestItReturnsTrueOnValidTryParse()
+        {
+            Assert.True(
+                CoordinateParser.TryParse("N054.39.27.000", "W006.12.57.000", out Coordinate returnedCoordinate)
+            );
+            Assert.Equal(new Coordinate("N054.39.27.000", "W006.12.57.000"), returnedCoordinate);
+        }
+        
+        [Fact]
+        public void TestItReturnsFalseOnInvalidTryParse()
+        {
+            Assert.False(
+                CoordinateParser.TryParse("abd", "def", out Coordinate returnedCoordinate)
+            );
+            Assert.Equal(CoordinateParser.InvalidCoordinate, returnedCoordinate);
         }
     }
 }
