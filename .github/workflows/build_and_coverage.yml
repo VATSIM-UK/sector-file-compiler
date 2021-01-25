@@ -20,8 +20,10 @@ jobs:
         run: dotnet restore SectorFileCompiler.sln --packages packages
         
       - name: Set Base Version
+        if: matrix.platform == 'windows-latest'
         run: |
           $tagVersion = "${env:GITHUB_SHA}"
+          echo "Base version is $tagVersion"
 
       # If we're running on main, get the next release version
       - name: Setup Build Version
