@@ -65,14 +65,14 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: "CompilerCli-linux-x64.exe"
-          path: "publish/linux/CompilerCli.exe"
+          path: "publish/linux/CompilerCli"
           
       - name: Upload OSX Assets
         if: matrix.platform == 'windows-latest'
         uses: actions/upload-artifact@v2
         with:
           name: "CompilerCli-osx-x64.exe"
-          path: "publish/osx/CompilerCli.exe"
+          path: "publish/osx/CompilerCli"
 
       - name: Upload Code Coverage Reports
         if: matrix.platform == 'ubuntu-latest'
