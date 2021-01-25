@@ -53,7 +53,7 @@
             },
             {
               "path": "publish/osx/CompilerCli",
-              "label": "OSX x64 Build"
+              "label": "Mac x64 Build"
             }
           ]
         }
