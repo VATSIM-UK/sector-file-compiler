@@ -29,6 +29,12 @@ namespace Compiler.Parser
             return new Coordinate(parsedLatitude, parsedLongitude);
         }
 
+        public static bool TryParse(string latitude, string longitude, out Coordinate coordinate)
+        {
+            coordinate = Parse(latitude, longitude);
+            return !coordinate.Equals(InvalidCoordinate);
+        }
+
         private static string ParseCoordinate(bool latitude, string coordinate)
         {
             string[] parts = coordinate.Split(CoordinateSeparator);

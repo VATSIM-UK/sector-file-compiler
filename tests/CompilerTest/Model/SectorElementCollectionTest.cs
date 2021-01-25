@@ -235,5 +235,23 @@ namespace CompilerTest.Model
             this.collection.Add(coordinationPoint);
             Assert.Equal(coordinationPoint, this.collection.CoordinationPoints[0]);
         }
+        
+        [Fact]
+        public void TestItAddsRunwayCentrelines()
+        {
+            RunwayCentreline centreline = RunwayCentrelineFactory.Make();
+
+            collection.Add(centreline);
+            Assert.Equal(centreline, this.collection.RunwayCentrelines[0]);
+        }
+        
+        [Fact]
+        public void TestItAddsExtendedRunwayCentrelines()
+        {
+            FixedColourRunwayCentreline centreline = FixedColourRunwayCentrelineFactory.Make();
+
+            collection.Add(centreline);
+            Assert.Equal(centreline, this.collection.FixedColourRunwayCentrelines[0]);
+        }
     }
 }

@@ -46,6 +46,10 @@ namespace Compiler.Model
 
         public List<Header> FileHeaders { get; } = new();
 
+        public List<RunwayCentreline> RunwayCentrelines { get; } = new();
+        
+        public List<RunwayCentreline> FixedColourRunwayCentrelines { get; } = new();
+
         public void Add(Airport airport)
         {
             this.Airports.Add(airport);
@@ -182,6 +186,16 @@ namespace Compiler.Model
         public void Add(Header header)
         {
             this.FileHeaders.Add(header);
+        }
+        
+        public void Add(RunwayCentreline centreline)
+        {
+            RunwayCentrelines.Add(centreline);
+        }
+        
+        public void Add(FixedColourRunwayCentreline centreline)
+        {
+            FixedColourRunwayCentrelines.Add(centreline);
         }
     }
 }

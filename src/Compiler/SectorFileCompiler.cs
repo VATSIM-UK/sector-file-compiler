@@ -74,6 +74,9 @@ namespace Compiler
                 return 1;
             }
             
+            events.AddEvent(new CompilationMessage("Injecting pre-parse static data"));
+            RunwayCentrelineInjector.InjectRunwayCentrelineData(sectorElements);
+            
             events.AddEvent(new CompilationMessage("Parsing input files"));
             foreach (AbstractSectorDataFile dataFile in fileList)
             {
@@ -87,7 +90,7 @@ namespace Compiler
             }
             
             // There's some static data we need to inject to the collection for adjacent airports...
-            events.AddEvent(new CompilationMessage("Injecting static data"));
+            events.AddEvent(new CompilationMessage("Injecting post-parse static data"));
             AdjacentAirportsInjector.InjectAdjacentAirportsData(sectorElements);
             
 

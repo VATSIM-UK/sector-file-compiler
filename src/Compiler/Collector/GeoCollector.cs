@@ -18,7 +18,12 @@ namespace Compiler.Collector
 
         public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-            return this.sectorElements.GeoElements.OrderBy(geo => this.repository.GetForDefinitionFile(geo.GetDefinition()));
+            return new List<ICompilableElementProvider>(
+                sectorElements.GeoElements.OrderBy(geo => repository.GetForDefinitionFile(geo.GetDefinition()))
+                    .ToList()
+            )
+                .Concat(sectorElements.FixedColourRunwayCentrelines)
+                .Concat(sectorElements.RunwayCentrelines);
         }
     }
 }

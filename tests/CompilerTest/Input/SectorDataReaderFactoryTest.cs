@@ -23,7 +23,7 @@ namespace CompilerTest.Input
         [InlineData(InputDataType.SCT_ARTCC_LOW, typeof(SctSectorDataReader))]
         [InlineData(InputDataType.SCT_ARTCC_HIGH, typeof(SctSectorDataReader))]
         [InlineData(InputDataType.SCT_COLOUR_DEFINITIONS, typeof(SctSectorDataReader))]
-        [InlineData(InputDataType.SCT_EXTENDED_CENTRELINES, typeof(SctSectorDataReader))]
+        [InlineData(InputDataType.SCT_RUNWAY_CENTRELINES, typeof(SctSectorDataReader))]
         [InlineData(InputDataType.SCT_FIXES, typeof(SctSectorDataReader))]
         [InlineData(InputDataType.SCT_GEO, typeof(SctSectorDataReader))]
         [InlineData(InputDataType.SCT_INFO, typeof(SctSectorDataReader))]
