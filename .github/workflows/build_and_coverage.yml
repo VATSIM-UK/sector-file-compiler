@@ -10,7 +10,7 @@ jobs:
   Build_Test_Coverage:
     strategy:
       matrix:
-        platform: [ubuntu-latest, windows-latest]
+        platform: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout Code
@@ -20,7 +20,7 @@ jobs:
         run: dotnet restore SectorFileCompiler.sln --packages packages
 
       - name: Run Build
-        run: dotnet build /p:Configuration=Debug SectorFileCompiler.sln --nologo --no-restore /warnaserror;
+        run: dotnet build /p:Configuration=Release SectorFileCompiler.sln --nologo --no-restore /warnaserror;
       
       - name: Run Compiler Tests With Coverage
         if: matrix.platform == 'ubuntu-latest'
@@ -46,19 +46,33 @@ jobs:
           cd tests/CompilerCliTest
           dotnet test
           
-      - name: Publish Assets (Windows)
+      - name: Publish Assets
         if: matrix.platform == 'windows-latest'
-        run: dotnet publish -r win10-x64 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish src/CompilerCli/CompilerCli.csproj
-
-      - name: Publish Assets (Linux)
-        if: matrix.platform == 'ubuntu-latest'
-        run: dotnet publish -r linux-x64 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish src/CompilerCli/CompilerCli.csproj
-        
-      - name: Upload Assets
+        run: | 
+          dotnet publish -r win-x64 -c Release -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish/windows src/CompilerCli/CompilerCli.csproj
+          dotnet publish -r linux-x64 -c Release -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish/linux src/CompilerCli/CompilerCli.csproj
+          dotnet publish -r osx-x64 -c Release -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish/osx src/CompilerCli/CompilerCli.csproj
+                
+      - name: Upload Windows Assets
+        if: matrix.platform == 'windows-latest'
         uses: actions/upload-artifact@v2
         with:
-          name: "CompilerCli.exe"
-          path: "publish/CompilerCli.exe"
+          name: "CompilerCli-windows-x64.exe"
+          path: "publish/windows/CompilerCli.exe"
+          
+      - name: Upload Linux Assets
+        if: matrix.platform == 'windows-latest'
+        uses: actions/upload-artifact@v2
+        with:
+          name: "CompilerCli-linux-x64.exe"
+          path: "publish/linux/CompilerCli.exe"
+          
+      - name: Upload OSX Assets
+        if: matrix.platform == 'windows-latest'
+        uses: actions/upload-artifact@v2
+        with:
+          name: "CompilerCli-osx-x64.exe"
+          path: "publish/osx/CompilerCli.exe"
 
       - name: Upload Code Coverage Reports
         if: matrix.platform == 'ubuntu-latest'
