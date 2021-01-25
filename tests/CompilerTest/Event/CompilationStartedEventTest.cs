@@ -1,5 +1,4 @@
 ﻿using Compiler.Event;
-using Compiler.Argument;
 using Xunit;
 
 namespace CompilerTest.Event
@@ -9,9 +8,12 @@ namespace CompilerTest.Event
         [Fact]
         public void TestFormat()
         {
+            var version = typeof(ComplilationStartedEvent).Assembly.GetName().Version;
+            string versionString = $"{version!.Major}.{version.Minor}.{version.Build}";
+            
             ComplilationStartedEvent eventObject = new();
             Assert.Equal(
-                "Sector File Compiler version " + CompilerArguments.CompilerVersion + ": Starting compilation",
+                "Sector File Compiler version " + versionString + ": Starting compilation",
                 eventObject.GetMessage()
             );
         }

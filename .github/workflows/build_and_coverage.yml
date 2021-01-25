@@ -22,7 +22,7 @@ jobs:
       - name: Set Base Version
         if: matrix.platform == 'windows-latest'
         run: |
-          $tagVersion = "${env:GITHUB_SHA}"
+          $tagVersion = "1.0.0"
           echo "Base version is $tagVersion"
 
       # If we're running on main, get the next release version
