@@ -45,15 +45,18 @@
           "assets": [
             {
               "path": "publish/windows/CompilerCli.exe",
-              "label": "cli-windows-x64"
+              "label": "cli-windows-x64",
+              "name": "cli-windows-x64"
             },
             {
               "path": "publish/linux/CompilerCli",
-              "label": "cli-linux-x64"
+              "label": "cli-linux-x64",
+              "name": "cli-linux-x64"
             },
             {
               "path": "publish/osx/CompilerCli",
-              "label": "cli-mac-x64"
+              "label": "cli-mac-x64",
+              "name": "cli-mac-x64"
             }
           ]
         }
