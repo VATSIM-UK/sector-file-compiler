@@ -23,25 +23,25 @@ jobs:
         run: dotnet build /p:Configuration=Release SectorFileCompiler.sln --nologo --no-restore /warnaserror;
       
       - name: Run Compiler Tests With Coverage
-        if: matrix.platform == 'ubuntu-latest'
+        if: matrix.platform == 'windows-latest'
         run: |
           cd tests/CompilerTest
           dotnet dotcover test --dcReportType=DetailedXml --dcOutput=../../coverage/Compiler.xml
 
       - name: Run Compiler Tests
-        if: matrix.platform != 'ubuntu-latest'
+        if: matrix.platform != 'windows-latest'
         run: |
           cd tests/CompilerTest
           dotnet test
 
       - name: Run Compiler CLI Tests With Coverage
-        if: matrix.platform == 'ubuntu-latest'
+        if: matrix.platform == 'windows-latest'
         run: |
           cd tests/CompilerCliTest
           dotnet dotcover test --dcReportType=DetailedXml --dcOutput=../../coverage/CompilerCli.xml
 
       - name: Run Compiler CLI Tests
-        if: matrix.platform != 'ubuntu-latest'
+        if: matrix.platform != 'windows-latest'
         run: |
           cd tests/CompilerCliTest
           dotnet test
