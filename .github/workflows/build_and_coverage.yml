@@ -80,7 +80,7 @@ jobs:
 
       # If we're building on main, lets do a release
       - name: Create Release
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && matrix.platform == 'windows-latest'
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release@17
