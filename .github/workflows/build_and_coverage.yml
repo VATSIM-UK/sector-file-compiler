@@ -48,7 +48,7 @@ jobs:
           
       - name: Publish Assets
         if: matrix.platform == 'windows-latest'
-        run: .\publish.ps1
+        run: .\.github\workflows\publish.ps1
         shell: powershell
                 
       - name: Upload Windows Assets
