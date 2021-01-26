@@ -18,22 +18,6 @@ jobs:
       
       - name: Restore Nuget Packages
         run: dotnet restore SectorFileCompiler.sln --packages packages
-        
-      - name: Set Base Version
-        if: matrix.platform == 'windows-latest'
-        run: |
-          $tagVersion = "1.0.0"
-          echo "Base version is $tagVersion"
-
-      # If we're running on main, get the next release version
-      - name: Setup Build Version
-        if: github.ref == 'refs/heads/main'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          $semanticRelease = npx semantic-release@17 --dry-run | Select-String -Pattern "Published release ((0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)"
-          $tagVersion = $semanticRelease.Matches.Groups[1].value
-          echo "Building version $tagVersion"
 
       - name: Run Build
         run: dotnet build /p:Configuration=Release SectorFileCompiler.sln --nologo --no-restore /warnaserror;
@@ -64,10 +48,8 @@ jobs:
           
       - name: Publish Assets
         if: matrix.platform == 'windows-latest'
-        run: | 
-          dotnet publish -r win-x64 -c Release -p:Version="$tagVersion" -p:PublishSingleFile=true -p:IncludeAllContentForSelfExtract=true -p:SelfContained=true -p:PublishTrimmed=true -o publish/windows src/CompilerCli/CompilerCli.csproj
-          dotnet publish -r linux-x64 -c Release -p:Version="$tagVersion" -p:PublishSingleFile=true -p:IncludeAllContentForSelfExtract=true -p:SelfContained=true -p:PublishTrimmed=true -o publish/linux src/CompilerCli/CompilerCli.csproj
-          dotnet publish -r osx-x64 -c Release -p:Version="$tagVersion" -p:PublishSingleFile=true -p:IncludeAllContentForSelfExtract=true -p:SelfContained=true -p:PublishTrimmed=true -o publish/osx src/CompilerCli/CompilerCli.csproj
+        run: .\publish.ps1
+        shell: powershell
                 
       - name: Upload Windows Assets
         if: matrix.platform == 'windows-latest'
