@@ -73,7 +73,7 @@ jobs:
           path: "publish/osx/CompilerCli"
 
       - name: Upload Code Coverage Reports
-        if: matrix.platform == 'ubuntu-latest'
+        if: matrix.platform == 'windows-latest'
         run: |
           cd coverage
           bash <(curl -s https://codecov.io/bash) -f *.xml
