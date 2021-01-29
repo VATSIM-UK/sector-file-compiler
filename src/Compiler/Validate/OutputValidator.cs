@@ -50,7 +50,8 @@ namespace Compiler.Validate
             new AllCoordinationPointsMustHaveValidDepartureRunways(),
             new AllCoordinationPointsMustHaveValidArrivalRunways(),
             new CentrelineColourIsDefined(),
-            new AllActiveRunwaysMustReferenceAnAirport()
+            new AllActiveRunwaysMustReferenceAnAirport(),
+            new AllActiveRunwaysMustReferenceARunway(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
