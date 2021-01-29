@@ -13,9 +13,10 @@ namespace Compiler.Validate
             var missingRunways = sectorElements.ActiveRunways
                 .Where(
                     activeRunway => !sectorElements.Runways.Exists(runway => IsSameRunway(activeRunway, runway))
-                );
+                )
+                .ToList();
 
-            if (missingRunways.Count() == 0)
+            if (!missingRunways.Any())
             {
                 return;
             }

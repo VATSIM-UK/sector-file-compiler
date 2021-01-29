@@ -52,6 +52,7 @@ namespace Compiler.Validate
             new CentrelineColourIsDefined(),
             new AllActiveRunwaysMustReferenceAnAirport(),
             new AllActiveRunwaysMustReferenceARunway(),
+            new AllActiveRunwaysMustBeUnique(),
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)

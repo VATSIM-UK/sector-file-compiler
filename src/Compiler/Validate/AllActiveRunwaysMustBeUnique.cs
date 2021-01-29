@@ -6,25 +6,27 @@ using Compiler.Model;
 
 namespace Compiler.Validate
 {
-    public class AllActiveRunwaysMustReferenceAnAirport: IValidationRule
+    public class AllActiveRunwaysMustBeUnique: IValidationRule
     {
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            var airports = sectorElements.Airports.Select(airport => airport.Icao).ToList();
-            var missingAirports = sectorElements.ActiveRunways
-                .Where(activeRunway => !airports.Contains(activeRunway.Airfield))
+            var duplicates = sectorElements.ActiveRunways.GroupBy(
+                    runway => runway
+                )
+                .Where(g => g.Count() > 1)
                 .ToList();
 
-            if (!missingAirports.Any())
+            if (!duplicates.Any())
             {
                 return;
             }
 
-            foreach (ActiveRunway runway in missingAirports)
+            foreach (var duplicate in duplicates)
             {
+                ActiveRunway runway = duplicate.First();
                 events.AddEvent(
                     new ValidationRuleFailure(
-                        $"Airport {runway.Airfield} specified in active runway does not exist",
+                        $"Duplicate ACTIVE_RUNWAY {runway.Airfield}:{runway.Identifier}:{runway.Mode}",
                         runway
                     )
                 );
