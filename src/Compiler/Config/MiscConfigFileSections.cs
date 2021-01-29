@@ -25,6 +25,7 @@ namespace Compiler.Config
             new ConfigFileSection("star_airspace", InputDataType.SCT_STARS, "STAR Airspace"),
             new ConfigFileSection("geo", InputDataType.SCT_GEO, "Geo"),
             new ConfigFileSection("regions", InputDataType.SCT_REGIONS, "Regions"),
+            new ConfigFileSection("active_runways", InputDataType.RWY_ACTIVE_RUNWAY, "Active Runways"),
         };
     }
 }
