@@ -1,6 +1,5 @@
 
-function getBuildVersion()
-{
+Function Build-Version {
     # If we're on main, invoke semantic release to get the next version
     if (${env:GITHUB_REF} -eq "refs/head/main")
     {
@@ -12,7 +11,7 @@ function getBuildVersion()
     }
 }
 
-$buildVersion = getBuildVersion();
+$buildVersion = Build-Version;
 echo "Building version $buildVersion"
 
 # Publish all the versions
