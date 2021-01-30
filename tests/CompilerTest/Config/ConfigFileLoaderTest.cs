@@ -17,20 +17,20 @@ namespace CompilerTest.Config
 
         public ConfigFileLoaderTest()
         {
-            this.fileLoader = ConfigFileLoaderFactory.Make();
-            this.arguments = new CompilerArguments();
+            fileLoader = ConfigFileLoaderFactory.Make();
+            arguments = new CompilerArguments();
         }
         
         [Theory]
         [InlineData("xyz", "Config file not found")]
-        [InlineData("_TestData/ConfigFileLoader/InvalidJson/config.json", "Invalid JSON in _TestData/ConfigFileLoader/InvalidJson/config.json: Error reading JObject from JsonReader. Current JsonReader item is not an object: StartArray. Path '', line 1, position 1.")]
-        [InlineData("_TestData/ConfigFileLoader/NotObject/config.json", "Invalid JSON in _TestData/ConfigFileLoader/NotObject/config.json: Error reading JObject from JsonReader. Current JsonReader item is not an object: StartArray. Path '', line 1, position 1.")]
+        [InlineData("_TestData/ConfigFileLoader/InvalidJson/config.json", "Invalid JSON in .*?: Error reading JObject from JsonReader. Current JsonReader item is not an object: StartArray\\. Path '', line 1, position 1\\.")]
+        [InlineData("_TestData/ConfigFileLoader/NotObject/config.json", "Invalid JSON in .*?: Error reading JObject from JsonReader. Current JsonReader item is not an object: StartArray\\. Path '', line 1, position 1\\.")]
         public void TestItThrowsExceptionOnBadData(string fileToLoad, string expectedMessage)
         {
             ConfigFileInvalidException exception = Assert.Throws<ConfigFileInvalidException>(
-                () => fileLoader.LoadConfigFiles(new List<string> {fileToLoad}, this.arguments)
+                () => fileLoader.LoadConfigFiles(new List<string> {fileToLoad}, arguments)
             );
-            Assert.Equal(expectedMessage, exception.Message);
+            Assert.Matches(expectedMessage, exception.Message);
         }
 
         private string GetFullFilePath(string relative)
@@ -42,7 +42,7 @@ namespace CompilerTest.Config
         public void TestItLoadsAConfigFile()
         {
             ConfigInclusionRules rules = fileLoader.LoadConfigFiles(
-                new List<string> {"_TestData/ConfigFileLoader/ValidConfig/config.json"}, this.arguments
+                new List<string> {"_TestData/ConfigFileLoader/ValidConfig/config.json"}, arguments
             );
 
             List<IInclusionRule> ruleList = rules.ToList();
