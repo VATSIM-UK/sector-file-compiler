@@ -48,6 +48,8 @@ jobs:
           
       - name: Publish Assets
         if: matrix.platform == 'windows-latest'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: .\.github\workflows\publish.ps1
         shell: powershell
                 
