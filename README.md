@@ -199,17 +199,20 @@ This rule includes all files within a given folder.
     "type": "folder",
     "folder": "Ownership/Alternate",
     "recursive": true,
+    "pattern":  "SomeRegex",
     "exclude": [
       "EUR Islands.txt"
     ]
 }
 ```
 
-There are two optional flags available for the folder rule:
+There are three optional flags available for the folder rule:
 
 - `recursive` (default: `false`) will cause the compiler to include all files in any subfolders
 contained within the main folder.
-- `exclude` will cause the compiler to ignore any files with a particular name.
+- `exclude` will cause the compiler to ignore any files with a particular name. Conversely, specifying `include`
+will only include files with a certain name.
+- `pattern` allows you to provide a regular expression, with only files matching the pattern being included.
 
 ## Comment Annotations
 

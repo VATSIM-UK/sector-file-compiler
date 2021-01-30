@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Compiler.Exception;
 using Compiler.Output;
 
@@ -15,6 +16,7 @@ namespace Compiler.Input
         public bool ExcludeList { get; }
         public List<string> IncludeExcludeFiles { get; }
         private readonly OutputGroup outputGroup;
+        public Regex IncludePattern { get; }
 
         public FolderInclusionRule(
             string folder,
@@ -22,38 +24,47 @@ namespace Compiler.Input
             InputDataType inputDataType,
             OutputGroup outputGroup,
             bool excludeList = true,
-            List<string> includeExcludeFiles = null
+            List<string> includeExcludeFiles = null,
+            Regex includePattern = null
         ) {
-            this.Folder = folder;
-            this.Recursive = recursive;
-            this.InputDataType = inputDataType;
+            Folder = folder;
+            Recursive = recursive;
+            InputDataType = inputDataType;
             this.outputGroup = outputGroup;
-            this.ExcludeList = excludeList;
-            this.IncludeExcludeFiles = includeExcludeFiles != null 
+            IncludePattern = includePattern;
+            ExcludeList = excludeList;
+            IncludeExcludeFiles = includeExcludeFiles != null 
                 ? includeExcludeFiles.ToList()
                 : new List<string>();
         }
 
         public IEnumerable<AbstractSectorDataFile> GetFilesToInclude(SectorDataFileFactory dataFileFactory)
         {
-            if (!Directory.Exists(this.Folder))
+            if (!Directory.Exists(Folder))
             {
                 throw new InputDirectoryNotFoundException(Folder);
             }
 
             string[] allFiles = Directory.GetFiles(
-                this.Folder,
+                Folder,
                 "*.*",
-                this.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
+                Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
             );
+            
+            // Match on include patterns
+            if (IncludePattern != null)
+            {
+                allFiles = allFiles.Where(file => IncludePattern.IsMatch(file)).ToArray();
+            }
+            
             Array.Sort(allFiles, StringComparer.InvariantCulture);
 
             List<AbstractSectorDataFile> files = new List<AbstractSectorDataFile>();
             foreach (string path in allFiles)
             {
-                if (this.ShouldInclude(path))
+                if (ShouldInclude(path))
                 {
-                    files.Add(dataFileFactory.Create(path, this.InputDataType));
+                    files.Add(dataFileFactory.Create(path, InputDataType));
                 }
             }
 
@@ -62,14 +73,14 @@ namespace Compiler.Input
 
         private bool ShouldInclude(string path)
         {
-            return this.ExcludeList
-                ? !this.IncludeExcludeFiles.Contains(Path.GetFileName(path))
-                : this.IncludeExcludeFiles.Contains(Path.GetFileName(path));
+            return ExcludeList
+                ? !IncludeExcludeFiles.Contains(Path.GetFileName(path))
+                : IncludeExcludeFiles.Contains(Path.GetFileName(path));
         }
 
         public OutputGroup GetOutputGroup()
         {
-            return this.outputGroup;
+            return outputGroup;
         }
     }
 }

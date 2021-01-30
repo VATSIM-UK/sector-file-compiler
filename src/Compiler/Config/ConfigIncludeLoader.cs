@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using Compiler.Exception;
 using Compiler.Input;
 using Compiler.Output;
@@ -19,14 +20,14 @@ namespace Compiler.Config
             JToken airportData = jsonConfig.SelectToken("includes.airports");
             if (airportData != null)
             {
-                this.IterateAirportConfig(airportData, inclusionRules, fileName);
+                IterateAirportConfig(airportData, inclusionRules, fileName);
             }
 
             // Load enroute data
             JToken enrouteData = jsonConfig.SelectToken("includes.enroute");
             if (enrouteData != null)
             {
-                this.IterateConfigFileSections(
+                IterateConfigFileSections(
                     enrouteData,
                     EnrouteConfigFileSections.ConfigFileSections,
                     OutputGroupFactory.CreateEnroute,
@@ -40,7 +41,7 @@ namespace Compiler.Config
             JToken miscData = jsonConfig.SelectToken("includes.misc");
             if (miscData != null)
             {
-                this.IterateConfigFileSections(
+                IterateConfigFileSections(
                     miscData,
                     MiscConfigFileSections.ConfigFileSections,
                     OutputGroupFactory.CreateMisc,
@@ -64,6 +65,11 @@ namespace Compiler.Config
         private string GetInvalidFolderMessage(string section)
         {
             return $"Folder invalid in section {section} - must be string under key \"folder\"";
+        }
+        
+        private string GetInvalidPatternMessage(string section)
+        {
+            return $"Pattern invalid in section {section} - must be a regular expression string";
         }
 
         private string GetRecursiveMessage(string section)
@@ -134,13 +140,13 @@ namespace Compiler.Config
                 }
 
                 // Get the airport folders
-                string configFileFolder = this.GetFolderForConfigFile(configFilePath);
+                string configFileFolder = GetFolderForConfigFile(configFilePath);
                 string[] directories = Directory.GetDirectories(configFileFolder + Path.DirectorySeparatorChar + configItem.Key);
 
                 // For each airport, iterate the config file sections
                 foreach (string directory in directories)
                 {
-                    this.IterateConfigFileSections(
+                    IterateConfigFileSections(
                         configItem.Value,
                         AirfieldConfigFileSections.ConfigFileSections,
                         x => OutputGroupFactory.CreateAirport(x, Path.GetFileName(directory)),
@@ -168,7 +174,7 @@ namespace Compiler.Config
                     continue;
                 }
 
-                this.LoadConfigSection(
+                LoadConfigSection(
                     configObjectSection,
                     configSection,
                     createOutputGroup(configSection),
@@ -194,7 +200,7 @@ namespace Compiler.Config
             {
                 foreach (JToken token in (JArray) jsonConfig)
                 {
-                    this.ProcessConfigSectionObject(
+                    ProcessConfigSectionObject(
                         token,
                         configFileSection,
                         outputGroup,
@@ -204,7 +210,7 @@ namespace Compiler.Config
                     );
                 }
             } else {
-                this.ProcessConfigSectionObject(
+                ProcessConfigSectionObject(
                     jsonConfig,
                     configFileSection,
                     outputGroup,
@@ -243,7 +249,7 @@ namespace Compiler.Config
 
             if ((string)typeToken == "files")
             {
-                this.ProcessFilesList(
+                ProcessFilesList(
                     configObject,
                     configFileSection,
                     outputGroup,
@@ -253,7 +259,7 @@ namespace Compiler.Config
                 );
             } else
             {
-                this.ProcessFolder(
+                ProcessFolder(
                     configObject,
                     configFileSection,
                     outputGroup,
@@ -276,9 +282,8 @@ namespace Compiler.Config
             string sectionRootString
         ) {
             // Get the folder
-            JToken folder;
             if (
-                !folderObject.TryGetValue("folder", out folder) ||
+                !folderObject.TryGetValue("folder", out JToken folder) ||
                 folder.Type != JTokenType.String
             ) {
                 throw new ConfigFileInvalidException(
@@ -300,6 +305,28 @@ namespace Compiler.Config
 
                 recursive = (bool)recursiveToken;
             }
+            
+            // Handle inclusion patterns
+            Regex patternRegex = null;
+            if (folderObject.TryGetValue("pattern", out JToken pattern)) {
+                if (pattern.Type != JTokenType.String)
+                {
+                    throw new ConfigFileInvalidException(
+                        GetInvalidPatternMessage($"{sectionRootString}.{configFileSection.JsonPath}")
+                    );
+                }
+
+                try
+                {
+                    patternRegex = new Regex(pattern.ToString());
+                }
+                catch (ArgumentException)
+                {
+                    throw new ConfigFileInvalidException(
+                        GetInvalidPatternMessage($"{sectionRootString}.{configFileSection.JsonPath}")
+                    );
+                }
+            }
 
 
             // Get the include and exclude lists and check both aren't there
@@ -317,10 +344,11 @@ namespace Compiler.Config
             if (!isInclude && !isExclude) {
                 addInclusionRule(
                     new FolderInclusionRule(
-                        this.NormaliseFilePath(rootPath, (string)folder),
+                        NormaliseFilePath(rootPath, (string)folder),
                         recursive,
                         configFileSection.DataType,
-                        outputGroup
+                        outputGroup,
+                        includePattern: patternRegex
                     )
                 );
                 return;
@@ -350,12 +378,13 @@ namespace Compiler.Config
 
             addInclusionRule(
                 new FolderInclusionRule(
-                    this.NormaliseFilePath(rootPath, (string)folder),
+                    NormaliseFilePath(rootPath, (string)folder),
                     recursive,
                     configFileSection.DataType,
                     outputGroup,
                     isExclude,
-                    files
+                    files,
+                    patternRegex
                 )
             );
         }
@@ -408,7 +437,7 @@ namespace Compiler.Config
                     );
                 }
 
-                exceptWhereExists = this.NormaliseFilePath(rootPath, (string) exceptWhereExistsToken);
+                exceptWhereExists = NormaliseFilePath(rootPath, (string) exceptWhereExistsToken);
             }
 
             // Get the file paths and normalise against the config files folder
@@ -422,7 +451,7 @@ namespace Compiler.Config
                     );
                 }
 
-                filePaths.Add(this.NormaliseFilePath(rootPath, (string)file));
+                filePaths.Add(NormaliseFilePath(rootPath, (string)file));
             }
 
             // Add the rule

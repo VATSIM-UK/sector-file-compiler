@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Compiler.Input;
 using Compiler.Output;
 using Compiler.Exception;
@@ -44,9 +45,27 @@ namespace CompilerTest.Input
             IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);
             List<AbstractSectorDataFile> files = includeFiles.ToList();
             Assert.Equal(3, files.Count);
-            Assert.Equal(this.GetFilePath("File1.txt"), files[0].FullPath);
-            Assert.Equal(this.GetFilePath("File2.txt"), files[1].FullPath);
-            Assert.Equal(this.GetFilePath("File3.txt"), files[2].FullPath);
+            Assert.Equal(GetFilePath("File1.txt"), files[0].FullPath);
+            Assert.Equal(GetFilePath("File2.txt"), files[1].FullPath);
+            Assert.Equal(GetFilePath("File3.txt"), files[2].FullPath);
+        }
+        
+        [Fact]
+        public void TestItLoadsFilesBasedOnARegularExpression()
+        {
+            FolderInclusionRule rule = new (
+                "_TestData/FolderInclusionRule",
+                false,
+                InputDataType.ESE_AGREEMENTS,
+                new OutputGroup("test"),
+                includePattern: new Regex("File[1|3].txt")
+            );
+
+            IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);
+            List<AbstractSectorDataFile> files = includeFiles.ToList();
+            Assert.Equal(2, files.Count);
+            Assert.Equal(GetFilePath("File1.txt"), files[0].FullPath);
+            Assert.Equal(GetFilePath("File3.txt"), files[1].FullPath);
         }
         
         [Fact]
@@ -62,10 +81,10 @@ namespace CompilerTest.Input
             IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);
             List<AbstractSectorDataFile> files = includeFiles.ToList();
             Assert.Equal(4, files.Count);
-            Assert.Equal(this.GetFilePath("File1.txt"), files[0].FullPath);
-            Assert.Equal(this.GetFilePath("File2.txt"), files[1].FullPath);
-            Assert.Equal(this.GetFilePath("File3.txt"), files[2].FullPath);
-            Assert.Equal(this.GetFilePath($"Level2{Path.DirectorySeparatorChar}File4.txt"), files[3].FullPath);
+            Assert.Equal(GetFilePath("File1.txt"), files[0].FullPath);
+            Assert.Equal(GetFilePath("File2.txt"), files[1].FullPath);
+            Assert.Equal(GetFilePath("File3.txt"), files[2].FullPath);
+            Assert.Equal(GetFilePath($"Level2{Path.DirectorySeparatorChar}File4.txt"), files[3].FullPath);
         }
         
         [Fact]
@@ -83,8 +102,8 @@ namespace CompilerTest.Input
             IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);
             List<AbstractSectorDataFile> files = includeFiles.ToList();
             Assert.Equal(2, files.Count);
-            Assert.Equal(this.GetFilePath("File1.txt"), files[0].FullPath);
-            Assert.Equal(this.GetFilePath("File3.txt"), files[1].FullPath);
+            Assert.Equal(GetFilePath("File1.txt"), files[0].FullPath);
+            Assert.Equal(GetFilePath("File3.txt"), files[1].FullPath);
         }
 
         [Fact]
@@ -102,7 +121,7 @@ namespace CompilerTest.Input
             IEnumerable<AbstractSectorDataFile> includeFiles = rule.GetFilesToInclude(fileFactory);
             List<AbstractSectorDataFile> files = includeFiles.ToList();
             Assert.Single(files);
-            Assert.Equal(this.GetFilePath("File2.txt"), files[0].FullPath);
+            Assert.Equal(GetFilePath("File2.txt"), files[0].FullPath);
         }
 
         [Fact]
