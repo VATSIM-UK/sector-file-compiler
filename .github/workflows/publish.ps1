@@ -4,7 +4,7 @@ Function Build-Version {
     if (${env:GITHUB_REF} -eq "refs/heads/main")
     {
         $semanticRelease = npx semantic-release@17 --dry-run | Select-String -Pattern "Published release ((0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)"
-        return If ($semanticRelease.Matches -eq $null) {"1.0.0"} else {$semanticRelease.Matches.Groups[1].value}
+        return if ($semanticRelease.Matches -eq $null) ? "1.0.0" : $semanticRelease.Matches.Groups[1].value
     } else
     {
         return "1.0.0"
