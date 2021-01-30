@@ -29,23 +29,26 @@ namespace Compiler.Config
 
             foreach (string file in files)
             {
+                // Get the full path to the config file
+                string fullPath = Path.GetFullPath(file);
+
                 // Parse the config file as JSON
                 JObject jsonConfig;
                 try
                 {
-                    jsonConfig = JObject.Parse(File.ReadAllText(file));
+                    jsonConfig = JObject.Parse(File.ReadAllText(fullPath));
                 }
                 catch (Newtonsoft.Json.JsonReaderException e)
                 {
-                    throw new ConfigFileInvalidException("Invalid JSON in " + file + ": " + e.Message);
+                    throw new ConfigFileInvalidException("Invalid JSON in " + fullPath + ": " + e.Message);
                 }
                 catch (FileNotFoundException)
                 {
                     throw new ConfigFileInvalidException("Config file not found");
                 }
 
-                includeLoader.LoadConfig(config, jsonConfig, file);
-                optionsLoader.LoadOptions(arguments, jsonConfig, file);
+                includeLoader.LoadConfig(config, jsonConfig, fullPath);
+                optionsLoader.LoadOptions(arguments, jsonConfig, fullPath);
             }
             
             return config;
