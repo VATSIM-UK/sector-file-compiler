@@ -5,6 +5,11 @@ Compiler and validator for the [VATSIM UK Sector File](https://github.com/VATSIM
 [![codecov](https://codecov.io/gh/AndyTWF/sector-file-compiler/branch/main/graph/badge.svg)](https://codecov.io/gh/AndyTWF/sector-file-compiler)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+![release](https://img.shields.io/github/v/release/AndyTWF/sector-file-compiler)
+![license](https://img.shields.io/github/license/AndyTWF/sector-file-compiler)
+![issues](https://img.shields.io/github/issues/AndyTWF/sector-file-compiler)
+![pull requests](https://img.shields.io/github/issues-pr/AndyTWF/sector-file-compiler)
+![language](https://img.shields.io/github/languages/top/AndyTWF/sector-file-compiler)
 
 ## What Does It Do?
 
