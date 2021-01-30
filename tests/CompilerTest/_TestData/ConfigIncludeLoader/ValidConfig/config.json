@@ -38,6 +38,7 @@
         {
           "type": "folder",
           "folder": "Ownership/Non-UK",
+          "pattern": ".*?",
           "exclude": [
             "EUR Islands.txt"
           ]

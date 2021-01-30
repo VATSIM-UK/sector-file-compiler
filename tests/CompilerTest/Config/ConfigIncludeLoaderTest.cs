@@ -17,8 +17,8 @@ namespace CompilerTest.Config
 
         public ConfigIncludeLoaderTest()
         {
-            this.fileLoader = new ConfigIncludeLoader();
-            this.includes = new ConfigInclusionRules();
+            fileLoader = new ConfigIncludeLoader();
+            includes = new ConfigInclusionRules();
         }
         
         [Theory]
@@ -41,10 +41,12 @@ namespace CompilerTest.Config
         [InlineData("_TestData/ConfigIncludeLoader/FilePathInvalid/config.json", "Invalid file path in section misc.regions - must be a string")]
         [InlineData("_TestData/ConfigIncludeLoader/ParentSectionNotArrayOrObject/config.json", "Invalid config section for enroute - must be an object or array of objects") ]
         [InlineData("_TestData/ConfigIncludeLoader/ParentSectionNotArrayOfObjects/config.json", "Invalid config section for enroute - must be an object or array of objects")]
+        [InlineData("_TestData/ConfigIncludeLoader/PatternNotAString/config.json", "Pattern invalid in section enroute.ownership - must be a regular expression string")]
+        [InlineData("_TestData/ConfigIncludeLoader/PatternInvalid/config.json", "Pattern invalid in section enroute.ownership - must be a regular expression string")]
         public void TestItThrowsExceptionOnBadData(string fileToLoad, string expectedMessage)
         {
             ConfigFileInvalidException exception = Assert.Throws<ConfigFileInvalidException>(
-                () => fileLoader.LoadConfig(this.includes, JObject.Parse(File.ReadAllText(fileToLoad)), fileToLoad)
+                () => fileLoader.LoadConfig(includes, JObject.Parse(File.ReadAllText(fileToLoad)), fileToLoad)
             );
             Assert.Equal(expectedMessage, exception.Message);
         }
@@ -58,18 +60,18 @@ namespace CompilerTest.Config
         public void TestItHandlesNoIncludes()
         {
             fileLoader.LoadConfig(
-                this.includes,
+                includes,
                 JObject.Parse(File.ReadAllText("_TestData/ConfigIncludeLoader/NoIncludes/config.json")),
                 "_TestData/ConfigIncludeLoader/NoIncludes/config.json"
             );
-            Assert.Empty(this.includes);
+            Assert.Empty(includes);
         }
 
         [Fact]
         public void TestItLoadsAConfigFile()
         {
             fileLoader.LoadConfig(
-                this.includes,
+                includes,
                 JObject.Parse(File.ReadAllText("_TestData/ConfigIncludeLoader/ValidConfig/config.json")),
                 "_TestData/ConfigIncludeLoader/ValidConfig/config.json"
             );
@@ -133,6 +135,7 @@ namespace CompilerTest.Config
             Assert.True(ownershipRule3.ExcludeList);
             Assert.Single(ownershipRule3.IncludeExcludeFiles);
             Assert.Equal("EUR Islands.txt", ownershipRule3.IncludeExcludeFiles[0]);
+            Assert.Equal(".*?", ownershipRule3.IncludePattern.ToString());
             Assert.Equal(new OutputGroup("enroute.ESE_OWNERSHIP", "Start enroute Ownership"), ownershipRule3.GetOutputGroup());
             
             // Misc regions
