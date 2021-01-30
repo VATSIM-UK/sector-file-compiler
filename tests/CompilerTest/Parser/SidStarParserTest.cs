@@ -26,24 +26,38 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Empty(this.sectorElementCollection.Runways);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.Runways);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsSidStarData()
         {
-            this.RunParserOnLines(new List<string>(new[] { "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 ;comment" }));
+            RunParserOnLines(new List<string>(new[] { "SID:EGKK:26L:ADMAG2X:FIX1 FIX2 ;comment" }));
 
-            SidStar result = this.sectorElementCollection.SidStars[0];
+            SidStar result = sectorElementCollection.SidStars[0];
             Assert.Equal("SID", result.Type);
             Assert.Equal("EGKK", result.Airport);
             Assert.Equal("26L", result.Runway);
             Assert.Equal("ADMAG2X", result.Identifier);
             Assert.Equal(new List<string>(new[] { "FIX1", "FIX2" }), result.Route);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
+        }
+        
+        [Fact]
+        public void TestItAddsSidStarWithNoRoute()
+        {
+            RunParserOnLines(new List<string>(new[] { "SID:EGKK:26L:ADMAG2X: ;comment" }));
+
+            SidStar result = sectorElementCollection.SidStars[0];
+            Assert.Equal("SID", result.Type);
+            Assert.Equal("EGKK", result.Airport);
+            Assert.Equal("26L", result.Runway);
+            Assert.Equal("ADMAG2X", result.Identifier);
+            Assert.Empty(result.Route);
+            AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

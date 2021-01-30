@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using Compiler.Model;
 using Compiler.Error;
 using Compiler.Event;
@@ -45,7 +45,7 @@ namespace Compiler.Parser
                         line.dataSegments[1],
                         line.dataSegments[2],
                         line.dataSegments[3],
-                        new List<string>(line.dataSegments[4].Split(' ')),
+                        line.dataSegments[4].Split(' ').Where(s => !string.IsNullOrEmpty(s)).ToList(),
                         line.definition,
                         line.docblock,
                         line.inlineComment
