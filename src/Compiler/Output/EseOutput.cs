@@ -15,6 +15,7 @@
                 OutputSectionKeys.ESE_FREETEXT,
                 OutputSectionKeys.ESE_SIDSSTARS,
                 OutputSectionKeys.ESE_AIRSPACE,
+                OutputSectionKeys.ESE_GROUND_NETWORK
             };
         }
 

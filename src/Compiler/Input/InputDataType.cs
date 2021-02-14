@@ -37,6 +37,7 @@
         ESE_SIDS,
         ESE_STARS,
         ESE_VRPS,
+        ESE_GROUND_NETWORK,
 
         // EuroScope RWY file
         RWY_ACTIVE_RUNWAY,
