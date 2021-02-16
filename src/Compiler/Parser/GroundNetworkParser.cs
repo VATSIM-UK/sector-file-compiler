@@ -109,7 +109,7 @@ namespace Compiler.Parser
             
             if (
                 !int.TryParse(declarationLine.dataSegments[2], out int maximumSpeed) ||
-                maximumSpeed < 0
+                maximumSpeed < 1
             ) {
                 errorLog.AddEvent(
                     new SyntaxError("Invalid maximum speed in TAXI declaration", declarationLine)
@@ -184,8 +184,10 @@ namespace Compiler.Parser
                 throw new ArgumentException();
             }
 
-            if (!int.TryParse(declarationLine.dataSegments[4], out int maximumSpeed))
-            {
+            if (
+                !int.TryParse(declarationLine.dataSegments[4], out int maximumSpeed) ||
+                maximumSpeed < 1
+            ) {
                 errorLog.AddEvent(
                     new SyntaxError("Invalid maximum speed in EXIT declaration", declarationLine)
                 );

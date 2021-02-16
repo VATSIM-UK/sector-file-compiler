@@ -30,6 +30,12 @@ namespace CompilerTest.Parser
                 "EXIT:27L:N3W:LEFT:abc"
             }}, // Invalid speed
             new object[] { new List<string>{
+                "EXIT:27L:N3W:LEFT:0"
+            }}, // Speed to low
+            new object[] { new List<string>{
+                "EXIT:27L:N3W:LEFT:-1"
+            }}, // Speed negative
+            new object[] { new List<string>{
                 "EXIT:27L:N3W:LEFT:15"
             }}, // No coordinates for exit
             new object[] { new List<string>{
@@ -57,6 +63,12 @@ namespace CompilerTest.Parser
             new object[] { new List<string>{
                 "TAXI:A:a:1:54L"
             }}, // Maximum speed invalid
+            new object[] { new List<string>{
+                "TAXI:A:a:0:54L"
+            }}, // Maximum speed too low
+            new object[] { new List<string>{
+                "TAXI:A:-1:1:54L"
+            }}, // Maximum speed negative
             new object[] { new List<string>{
                 "TAXI:A:15:1:54L"
             }}, // Too few TAXI segments
