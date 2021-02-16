@@ -41,12 +41,13 @@ namespace CompilerTest.Collector
         [InlineData(OutputSectionKeys.ESE_FREETEXT, typeof(FreetextCollector))]
         [InlineData(OutputSectionKeys.ESE_SIDSSTARS, typeof(SidStarsCollector))]
         [InlineData(OutputSectionKeys.ESE_AIRSPACE, typeof(AirspaceCollector))]
+        [InlineData(OutputSectionKeys.ESE_GROUND_NETWORK, typeof(GroundNetworkCollector))]
         [InlineData(OutputSectionKeys.RWY_ACTIVE_RUNWAYS, typeof(ActiveRunwaysCollector))]
         public void TestItReturnsCorrectCollector(OutputSectionKeys outputType, Type expectedType)
         {
             Assert.Equal(
                 expectedType,
-                this.factory.GetCollectorForOutputSection(outputType).GetType()
+                factory.GetCollectorForOutputSection(outputType).GetType()
             );
         }
     }

@@ -10,194 +10,194 @@ namespace CompilerTest.Model
 
         public SectorElementCollectionTest()
         {
-            this.collection = new SectorElementCollection();
+            collection = new SectorElementCollection();
         }
 
         [Fact]
         public void TestItAddsSidStars()
         {
             SidStar sidStar = SidStarFactory.Make();
-            this.collection.Add(sidStar);
+            collection.Add(sidStar);
 
-            Assert.Equal(sidStar, this.collection.SidStars[0]);
+            Assert.Equal(sidStar, collection.SidStars[0]);
         }
 
         [Fact]
         public void TestItAddsColours()
         {
             Colour colour = ColourFactory.Make();
-            this.collection.Add(colour);
+            collection.Add(colour);
 
-            Assert.Equal(colour, this.collection.Colours[0]);
+            Assert.Equal(colour, collection.Colours[0]);
         }
 
         [Fact]
         public void TestItAddsAirports()
         {
             Airport airport = AirportFactory.Make();
-            this.collection.Add(airport);
+            collection.Add(airport);
 
-            Assert.Equal(airport, this.collection.Airports[0]);
+            Assert.Equal(airport, collection.Airports[0]);
         }
 
         [Fact]
         public void TestItAddsRunways()
         {
             Runway runway = RunwayFactory.Make();
-            this.collection.Add(runway);
+            collection.Add(runway);
 
-            Assert.Equal(runway, this.collection.Runways[0]);
+            Assert.Equal(runway, collection.Runways[0]);
         }
 
         [Fact]
         public void TestItAddsActiveRunways()
         {
             ActiveRunway runway = ActiveRunwayFactory.Make();
-            this.collection.Add(runway);
+            collection.Add(runway);
 
-            Assert.Equal(runway, this.collection.ActiveRunways[0]);
+            Assert.Equal(runway, collection.ActiveRunways[0]);
         }
 
         [Fact]
         public void TestItAddsArtccs()
         {
             ArtccSegment artcc = ArtccSegmentFactory.Make();
-            this.collection.Add(artcc);
+            collection.Add(artcc);
 
-            Assert.Equal(artcc, this.collection.Artccs[0]);
+            Assert.Equal(artcc, collection.Artccs[0]);
         }
 
         [Fact]
         public void TestItAddsLowArtccs()
         {
             ArtccSegment artcc = ArtccSegmentFactory.Make(ArtccType.LOW);
-            this.collection.Add(artcc);
+            collection.Add(artcc);
 
-            Assert.Equal(artcc, this.collection.LowArtccs[0]);
+            Assert.Equal(artcc, collection.LowArtccs[0]);
         }
 
         [Fact]
         public void TestItAddsHighArtccs()
         {
             ArtccSegment artcc = ArtccSegmentFactory.Make(ArtccType.HIGH);
-            this.collection.Add(artcc);
+            collection.Add(artcc);
 
-            Assert.Equal(artcc, this.collection.HighArtccs[0]);
+            Assert.Equal(artcc, collection.HighArtccs[0]);
         }
 
         [Fact]
         public void TestItAddsLowAirways()
         {
             AirwaySegment airway = AirwaySegmentFactory.Make();
-            this.collection.Add(airway);
+            collection.Add(airway);
 
-            Assert.Equal(airway, this.collection.LowAirways[0]);
+            Assert.Equal(airway, collection.LowAirways[0]);
         }
 
         [Fact]
         public void TestItAddsHighAirways()
         {
             AirwaySegment airway = AirwaySegmentFactory.Make(AirwayType.HIGH);
-            this.collection.Add(airway);
+            collection.Add(airway);
 
-            Assert.Equal(airway, this.collection.HighAirways[0]);
+            Assert.Equal(airway, collection.HighAirways[0]);
         }
 
         [Fact]
         public void TestItAddsFixes()
         {
             Fix fix = FixFactory.Make();
-            this.collection.Add(fix);
+            collection.Add(fix);
 
-            Assert.Equal(fix, this.collection.Fixes[0]);
+            Assert.Equal(fix, collection.Fixes[0]);
         }
 
         [Fact]
         public void TestItAddsGeo()
         {
             Geo geo = GeoFactory.Make();
-            this.collection.Add(geo);
+            collection.Add(geo);
 
-            Assert.Equal(geo, this.collection.GeoElements[0]);
+            Assert.Equal(geo, collection.GeoElements[0]);
         }
 
         [Fact]
         public void TestItAddsLabel()
         {
             Label label = LabelFactory.Make();
-            this.collection.Add(label);
+            collection.Add(label);
 
-            Assert.Equal(label, this.collection.Labels[0]);
+            Assert.Equal(label, collection.Labels[0]);
         }
 
         [Fact]
         public void TestItAddsRegions()
         {
             Region region = RegionFactory.Make();
-            this.collection.Add(region);
+            collection.Add(region);
 
-            Assert.Equal(region, this.collection.Regions[0]);
+            Assert.Equal(region, collection.Regions[0]);
         }
 
         [Fact]
         public void TestItAddsVors()
         {
             Vor vor = VorFactory.Make();
-            this.collection.Add(vor);
+            collection.Add(vor);
 
-            Assert.Equal(vor, this.collection.Vors[0]);
+            Assert.Equal(vor, collection.Vors[0]);
         }
 
         [Fact]
         public void TestItAddsNdbs()
         {
             Ndb ndb = NdbFactory.Make();
-            this.collection.Add(ndb);
+            collection.Add(ndb);
 
-            Assert.Equal(ndb, this.collection.Ndbs[0]);
+            Assert.Equal(ndb, collection.Ndbs[0]);
         }
 
         [Fact]
         public void TestItAddsInfo()
         {
             Info info = InfoFactory.Make();
-            this.collection.Add(info);
+            collection.Add(info);
 
-            Assert.Equal(info, this.collection.Info);
+            Assert.Equal(info, collection.Info);
         }
 
         [Fact]
         public void TestItAddsFreetext()
         {
             Freetext freetext = FreetextFactory.Make();
-            this.collection.Add(freetext);
+            collection.Add(freetext);
 
-            Assert.Equal(freetext, this.collection.Freetext[0]);
+            Assert.Equal(freetext, collection.Freetext[0]);
         }
 
         [Fact]
         public void TestItAddsEsePositions()
         {
             ControllerPosition esePosition = ControllerPositionFactory.Make();
-            this.collection.Add(esePosition);
+            collection.Add(esePosition);
 
-            Assert.Equal(esePosition, this.collection.EsePositions[0]);
+            Assert.Equal(esePosition, collection.EsePositions[0]);
         }
 
         [Fact]
         public void TestItAddsSidRoutes()
         {
             SidStarRoute route = SidStarRouteFactory.Make();
-            this.collection.Add(route);
-            Assert.Equal(route, this.collection.SidRoutes[0]);
+            collection.Add(route);
+            Assert.Equal(route, collection.SidRoutes[0]);
         }
 
         [Fact]
         public void TestItAddsStarRoutes()
         {
             SidStarRoute route = SidStarRouteFactory.Make(SidStarType.STAR);
-            this.collection.Add(route);
-            Assert.Equal(route, this.collection.StarRoutes[0]);
+            collection.Add(route);
+            Assert.Equal(route, collection.StarRoutes[0]);
         }
 
         [Fact]
@@ -205,8 +205,8 @@ namespace CompilerTest.Model
         {
             Sectorline sectorline = SectorlineFactory.Make();
 
-            this.collection.Add(sectorline);
-            Assert.Equal(sectorline, this.collection.SectorLines[0]);
+            collection.Add(sectorline);
+            Assert.Equal(sectorline, collection.SectorLines[0]);
         }
 
         [Fact]
@@ -214,8 +214,8 @@ namespace CompilerTest.Model
         {
             CircleSectorline sectorline = CircleSectorlineFactory.Make();
 
-            this.collection.Add(sectorline);
-            Assert.Equal(sectorline, this.collection.CircleSectorLines[0]);
+            collection.Add(sectorline);
+            Assert.Equal(sectorline, collection.CircleSectorLines[0]);
         }
 
         [Fact]
@@ -223,8 +223,8 @@ namespace CompilerTest.Model
         {
             Sector sector = SectorFactory.Make();
 
-            this.collection.Add(sector);
-            Assert.Equal(sector, this.collection.Sectors[0]);
+            collection.Add(sector);
+            Assert.Equal(sector, collection.Sectors[0]);
         }
 
         [Fact]
@@ -232,8 +232,8 @@ namespace CompilerTest.Model
         {
             CoordinationPoint coordinationPoint = CoordinationPointFactory.Make();
 
-            this.collection.Add(coordinationPoint);
-            Assert.Equal(coordinationPoint, this.collection.CoordinationPoints[0]);
+            collection.Add(coordinationPoint);
+            Assert.Equal(coordinationPoint, collection.CoordinationPoints[0]);
         }
         
         [Fact]
@@ -242,7 +242,7 @@ namespace CompilerTest.Model
             RunwayCentreline centreline = RunwayCentrelineFactory.Make();
 
             collection.Add(centreline);
-            Assert.Equal(centreline, this.collection.RunwayCentrelines[0]);
+            Assert.Equal(centreline, collection.RunwayCentrelines[0]);
         }
         
         [Fact]
@@ -251,7 +251,16 @@ namespace CompilerTest.Model
             FixedColourRunwayCentreline centreline = FixedColourRunwayCentrelineFactory.Make();
 
             collection.Add(centreline);
-            Assert.Equal(centreline, this.collection.FixedColourRunwayCentrelines[0]);
+            Assert.Equal(centreline, collection.FixedColourRunwayCentrelines[0]);
+        }
+
+        [Fact]
+        public void TestItAddsGroundNetworks()
+        {
+            GroundNetwork network = GroundNetworkFactory.Make();
+            collection.Add(network);
+            Assert.Single(collection.GroundNetworks);
+            Assert.Equal(network, collection.GroundNetworks[0]);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace CompilerTest.Output
         [Fact]
         public void TestItHasCorrectNumberOfSections()
         {
-            Assert.Equal(23, OutputSectionsConfig.Sections.Length);
+            Assert.Equal(24, OutputSectionsConfig.Sections.Length);
         }
 
         [Theory]

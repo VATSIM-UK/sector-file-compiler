@@ -29,22 +29,22 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Empty(this.sectorElementCollection.Labels);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.Labels);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsLabelData()
         {
-            this.RunParserOnLines(new List<string>(new[] { "\"test label\" N050.57.00.000 W001.21.24.490 red ;comment" }));
+            RunParserOnLines(new List<string>(new[] { "\"test label\" N050.57.00.000 W001.21.24.490 red ;comment" }));
 
-            Label result = this.sectorElementCollection.Labels[0];
+            Label result = sectorElementCollection.Labels[0];
             Assert.Equal("test label", result.Text);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.Position);
             Assert.Equal("red", result.Colour);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

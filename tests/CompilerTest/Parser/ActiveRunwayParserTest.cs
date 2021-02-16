@@ -23,34 +23,34 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Empty(this.sectorElementCollection.ActiveRunways);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.ActiveRunways);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsDataInMode0()
         {
-            this.RunParserOnLines(new List<string>(new[] { "ACTIVE_RUNWAY:EGHI:20:0 ;comment" }));
+            RunParserOnLines(new List<string>(new[] { "ACTIVE_RUNWAY:EGHI:20:0 ;comment" }));
 
-            ActiveRunway result = this.sectorElementCollection.ActiveRunways[0];
+            ActiveRunway result = sectorElementCollection.ActiveRunways[0];
             Assert.Equal("EGHI", result.Airfield);
             Assert.Equal("20", result.Identifier);
             Assert.Equal(0, result.Mode);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         [Fact]
         public void TestItAddsDataInMode1()
         {
-            this.RunParserOnLines(new List<string>(new[] { "ACTIVE_RUNWAY:EGHI:20:1 ;comment" }));
+            RunParserOnLines(new List<string>(new[] { "ACTIVE_RUNWAY:EGHI:20:1 ;comment" }));
 
-            ActiveRunway result = this.sectorElementCollection.ActiveRunways[0];
+            ActiveRunway result = sectorElementCollection.ActiveRunways[0];
             Assert.Equal("EGHI", result.Airfield);
             Assert.Equal("20", result.Identifier);
             Assert.Equal(1, result.Mode);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

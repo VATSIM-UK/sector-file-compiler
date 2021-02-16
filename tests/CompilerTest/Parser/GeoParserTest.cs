@@ -29,19 +29,19 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
-            Assert.Empty(this.sectorElementCollection.GeoElements);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            RunParserOnLines(lines);
+            Assert.Empty(sectorElementCollection.GeoElements);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsGeoDataWithOneSegment()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[] { "TestGeo                     N050.57.00.000 W001.21.24.490 BCN BCN test ;comment" })
             );
 
-            Geo result = this.sectorElementCollection.GeoElements[0];
+            Geo result = sectorElementCollection.GeoElements[0];
             Assert.Equal(
                 new Point(new Coordinate("N050.57.00.000", "W001.21.24.490")),
                 result.FirstPoint
@@ -55,13 +55,13 @@ namespace CompilerTest.Parser
                 result.Colour
             );
             Assert.Empty(result.AdditionalSegments);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
         
         [Fact]
         public void TestItAddsGeoDataWithMultipleSegment()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[]
                 {
                     "TestGeo                     N050.57.00.000 W001.21.24.490 BCN BCN test ;comment",
@@ -70,7 +70,7 @@ namespace CompilerTest.Parser
                 })
             );
 
-            Geo result = this.sectorElementCollection.GeoElements[0];
+            Geo result = sectorElementCollection.GeoElements[0];
             Assert.Equal(
                 new Point(new Coordinate("N050.57.00.000", "W001.21.24.490")),
                 result.FirstPoint
@@ -83,7 +83,7 @@ namespace CompilerTest.Parser
                 "test",
                 result.Colour
             );
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
             
             // Segment 1
             Assert.Equal(2, result.AdditionalSegments.Count);
@@ -99,7 +99,7 @@ namespace CompilerTest.Parser
                 "test2",
                 result.AdditionalSegments[0].Colour
             );
-            this.AssertExpectedMetadata(result.AdditionalSegments[0], 2, "comment1");
+            AssertExpectedMetadata(result.AdditionalSegments[0], 2, "comment1");
             
             // Segment 2
             Assert.Equal(
@@ -114,17 +114,17 @@ namespace CompilerTest.Parser
                 "test3",
                 result.AdditionalSegments[1].Colour
             );
-            this.AssertExpectedMetadata(result.AdditionalSegments[1], 3, "comment2");
+            AssertExpectedMetadata(result.AdditionalSegments[1], 3, "comment2");
         }
 
         [Fact]
         public void TestItAddsFakePoint()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[] { "TestGeo                     S999.00.00.000 E999.00.00.000 S999.00.00.000 E999.00.00.000 ;comment" })
             );
             
-            Geo result = this.sectorElementCollection.GeoElements[0];
+            Geo result = sectorElementCollection.GeoElements[0];
             Assert.Equal(
                 new Point(new Coordinate("S999.00.00.000", "E999.00.00.000")),
                 result.FirstPoint
@@ -134,7 +134,7 @@ namespace CompilerTest.Parser
                 result.SecondPoint
             );
             Assert.Null(result.Colour);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

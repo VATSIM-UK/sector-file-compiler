@@ -12,14 +12,14 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsPositionData()
         {
-            this.RunParserOnLines(new List<string>() {"LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:W002.43.29.830:N051.32.26.871:W002.43.29.831:N051.32.26.872:W002.43.29.832:N051.32.26.873:W002.43.29.833 ;comment"});
+            RunParserOnLines(new List<string>() {"LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:W002.43.29.830:N051.32.26.871:W002.43.29.831:N051.32.26.872:W002.43.29.832:N051.32.26.873:W002.43.29.833 ;comment"});
 
             List<Coordinate> coordinateList = new();
             coordinateList.Add(new Coordinate("N051.32.26.870", "W002.43.29.830"));
             coordinateList.Add(new Coordinate("N051.32.26.871", "W002.43.29.831"));
             coordinateList.Add(new Coordinate("N051.32.26.872", "W002.43.29.832"));
             coordinateList.Add(new Coordinate("N051.32.26.873", "W002.43.29.833"));
-            ControllerPosition position = this.sectorElementCollection.EsePositions[0];
+            ControllerPosition position = sectorElementCollection.EsePositions[0];
             Assert.Equal("LON_CTR", position.Callsign);
             Assert.Equal("London Control", position.RtfCallsign);
             Assert.Equal("127.820", position.Frequency);
@@ -30,17 +30,17 @@ namespace CompilerTest.Parser
             Assert.Equal("0301", position.SquawkRangeStart);
             Assert.Equal("0377", position.SquawkRangeEnd);
             Assert.Equal(coordinateList, position.VisCentres);
-            this.AssertExpectedMetadata(position);
+            AssertExpectedMetadata(position);
         }
 
         [Fact]
         public void TestItAddsPositionDataSkippedCenters()
         {
-            this.RunParserOnLines(new List<string>() {"LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:W002.43.29.830:::::: ;comment"});
+            RunParserOnLines(new List<string>() {"LON_CTR:London Control:127.820:L:9:LON:CTR:-:-:0301:0377:N051.32.26.870:W002.43.29.830:::::: ;comment"});
 
             List<Coordinate> coordinateList = new();
             coordinateList.Add(new Coordinate("N051.32.26.870", "W002.43.29.830"));
-            ControllerPosition position = this.sectorElementCollection.EsePositions[0];
+            ControllerPosition position = sectorElementCollection.EsePositions[0];
             Assert.Equal("LON_CTR", position.Callsign);
             Assert.Equal("London Control", position.RtfCallsign);
             Assert.Equal("127.820", position.Frequency);
@@ -51,17 +51,17 @@ namespace CompilerTest.Parser
             Assert.Equal("0301", position.SquawkRangeStart);
             Assert.Equal("0377", position.SquawkRangeEnd);
             Assert.Equal(coordinateList, position.VisCentres);
-            this.AssertExpectedMetadata(position);
+            AssertExpectedMetadata(position);
         }
 
         [Fact]
         public void TestItAddsPositionDataSkippedSquawks()
         {
-            this.RunParserOnLines(new List<string>() {"LON_CTR:London Control:127.820:L:9:LON:CTR:-:-::-:N051.32.26.870:W002.43.29.830 ;comment"});
+            RunParserOnLines(new List<string>() {"LON_CTR:London Control:127.820:L:9:LON:CTR:-:-::-:N051.32.26.870:W002.43.29.830 ;comment"});
 
             List<Coordinate> coordinateList = new();
             coordinateList.Add(new Coordinate("N051.32.26.870", "W002.43.29.830"));
-            ControllerPosition position = this.sectorElementCollection.EsePositions[0];
+            ControllerPosition position = sectorElementCollection.EsePositions[0];
             Assert.Equal("LON_CTR", position.Callsign);
             Assert.Equal("London Control", position.RtfCallsign);
             Assert.Equal("127.820", position.Frequency);
@@ -152,10 +152,10 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Empty(this.sectorElementCollection.EsePositions);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.EsePositions);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         protected override InputDataType GetInputDataType()

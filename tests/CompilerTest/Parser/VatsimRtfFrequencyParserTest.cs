@@ -9,7 +9,7 @@ namespace CompilerTest.Parser
 
         public VatsimRtfFrequencyParserTest()
         {
-            this.parser = new VatsimRtfFrequencyParser();
+            parser = new VatsimRtfFrequencyParser();
         }
 
         [Theory]
@@ -27,7 +27,7 @@ namespace CompilerTest.Parser
         [InlineData("119.720", "119.720")] // Everything ok - round up
         public void TestItParsesFrequencies(string frequency, string expected)
         {
-            Assert.Equal(expected, this.parser.ParseFrequency(frequency));
+            Assert.Equal(expected, parser.ParseFrequency(frequency));
         }
     }
 }

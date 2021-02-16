@@ -29,37 +29,37 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Empty(this.sectorElementCollection.HighAirways);
-            Assert.Empty(this.sectorElementCollection.LowAirways);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.HighAirways);
+            Assert.Empty(sectorElementCollection.LowAirways);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
         
         [Fact]
         public void TestItAddsAirwayData()
         {
-            this.RunParserOnLines(new List<string>(new[] { "N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" }));
+            RunParserOnLines(new List<string>(new[] { "N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" }));
 
-            AirwaySegment result = this.sectorElementCollection.LowAirways[0];
+            AirwaySegment result = sectorElementCollection.LowAirways[0];
             Assert.Equal("TEST", result.Identifier);
             Assert.Equal(AirwayType.LOW, result.Type);
             Assert.Equal(new Point(new Coordinate("N050.57.00.001", "W001.21.24.490")), result.StartPoint);
             Assert.Equal(new Point(new Coordinate("N050.57.00.002", "W001.21.24.490")), result.EndPoint);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         [Fact]
         public void TestItAddsAirwayDataWithIdentifiers()
         {
-            this.RunParserOnLines(new List<string>(new[] { "DIKAS DIKAS BHD BHD;comment" }));
+            RunParserOnLines(new List<string>(new[] { "DIKAS DIKAS BHD BHD;comment" }));
             
-            AirwaySegment result = this.sectorElementCollection.LowAirways[0];
+            AirwaySegment result = sectorElementCollection.LowAirways[0];
             Assert.Equal("TEST", result.Identifier);
             Assert.Equal(AirwayType.LOW, result.Type);
             Assert.Equal(new Point("DIKAS"), result.StartPoint);
             Assert.Equal(new Point("BHD"), result.EndPoint);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

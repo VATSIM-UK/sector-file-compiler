@@ -12,31 +12,31 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItRaisesASyntaxErrorIfIncorrectNumberOfSegments()
         {
-            this.RunParserOnLines(new List<string>(new[] { "abc:def:ghi" }));
+            RunParserOnLines(new List<string>(new[] { "abc:def:ghi" }));
             
-            Assert.Empty(this.sectorElementCollection.Fixes);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.Fixes);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItRaisesAnErrorIfInvalidCoordinate()
         {
-            this.RunParserOnLines(new List<string>(new[] { "abc:def:Title:Text" }));
+            RunParserOnLines(new List<string>(new[] { "abc:def:Title:Text" }));
             
-            Assert.Empty(this.sectorElementCollection.Fixes);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.Fixes);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsFreetextData()
         {
-            this.RunParserOnLines(new List<string>(new[] { "N054.28.46.319:W006.15.33.933:Title:Text ;comment" }));
+            RunParserOnLines(new List<string>(new[] { "N054.28.46.319:W006.15.33.933:Title:Text ;comment" }));
 
-            Freetext result = this.sectorElementCollection.Freetext[0];
+            Freetext result = sectorElementCollection.Freetext[0];
             Assert.Equal(new Coordinate("N054.28.46.319", "W006.15.33.933"), result.Coordinate);
             Assert.Equal("Title", result.Title);
             Assert.Equal("Text", result.Text);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

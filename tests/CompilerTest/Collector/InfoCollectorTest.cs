@@ -13,13 +13,13 @@ namespace CompilerTest.Collector
         {
             Info info = InfoFactory.Make();
 
-            this.sectorElements.Add(info);
+            sectorElements.Add(info);
 
             IEnumerable<ICompilableElementProvider> expected = new List<ICompilableElementProvider>()
             {
                 info
             };
-            this.AssertCollectedItems(expected);
+            AssertCollectedItems(expected);
         }
 
         protected override OutputSectionKeys GetOutputSection()

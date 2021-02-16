@@ -26,42 +26,42 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Empty(this.sectorElementCollection.Artccs);
-            Assert.Empty(this.sectorElementCollection.HighArtccs);
-            Assert.Empty(this.sectorElementCollection.LowArtccs);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.Artccs);
+            Assert.Empty(sectorElementCollection.HighArtccs);
+            Assert.Empty(sectorElementCollection.LowArtccs);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsArtccData()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[] { "EGTT London FIR   N050.57.00.001 W001.21.24.490 N050.57.00.002 W001.21.24.490;comment" })
             );
 
-            ArtccSegment result = this.sectorElementCollection.Artccs[0];
+            ArtccSegment result = sectorElementCollection.Artccs[0];
             Assert.Equal("EGTT London FIR", result.Identifier);
             Assert.Equal(ArtccType.REGULAR, result.Type);
             Assert.Equal(new Point(new Coordinate("N050.57.00.001", "W001.21.24.490")), result.StartPoint);
             Assert.Equal(new Point(new Coordinate("N050.57.00.002", "W001.21.24.490")), result.EndPoint);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         [Fact]
         public void TestItAddsArtccDataWithIdentifiers()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[] { "EGTT London FIR   DIKAS DIKAS BHD BHD;comment" })
             );
 
-            ArtccSegment result = this.sectorElementCollection.Artccs[0];
+            ArtccSegment result = sectorElementCollection.Artccs[0];
             Assert.Equal("EGTT London FIR", result.Identifier);
             Assert.Equal(ArtccType.REGULAR, result.Type);
             Assert.Equal(new Point("DIKAS"), result.StartPoint);
             Assert.Equal(new Point("BHD"), result.EndPoint);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

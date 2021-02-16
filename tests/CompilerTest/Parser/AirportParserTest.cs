@@ -11,7 +11,7 @@ namespace CompilerTest.Parser
     {
         public AirportParserTest()
         {
-            this.SetInputFileName("EGHI/Basic.txt");
+            SetInputFileName("EGHI/Basic.txt");
         }
         
         public static IEnumerable<object[]> BadData => new List<object[]>
@@ -42,37 +42,37 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
-            Assert.Empty(this.sectorElementCollection.ActiveRunways);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            RunParserOnLines(lines);
+            Assert.Empty(sectorElementCollection.ActiveRunways);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
         
         [Fact]
         public void ItRaisesSyntaxErrorOnBadFolderName()
         {
-            this.SetInputFileName("1234/Basic.txt");
-            this.RunParserOnLines(new List<string>{
+            SetInputFileName("1234/Basic.txt");
+            RunParserOnLines(new List<string>{
                 "Southampton; comment1",
                 "N050.57.00.000 W001.21.24.490 ;comment2",
                 "120.220 ;comment3"
             });
-            Assert.Empty(this.sectorElementCollection.ActiveRunways);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.ActiveRunways);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsAirportData()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[] {"Southampton; comment1", "N050.57.00.000 W001.21.24.490 ;comment2", "120.220 ;comment3" })
             );
 
-            Airport result = this.sectorElementCollection.Airports[0];
+            Airport result = sectorElementCollection.Airports[0];
             Assert.Equal("Southampton", result.Name);
             Assert.Equal("EGHI", result.Icao);
             Assert.Equal("120.220", result.Frequency);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.LatLong);
-            this.AssertExpectedMetadata(result, commentString: "comment1");
+            AssertExpectedMetadata(result, commentString: "comment1");
         }
 
         protected override InputDataType GetInputDataType()

@@ -16,7 +16,7 @@ namespace CompilerTest.Parser
 
         public DataParserFactoryTest()
         {
-            this.factory = new DataParserFactory(new SectorElementCollection(), new Mock<IEventLogger>().Object);
+            factory = new DataParserFactory(new SectorElementCollection(), new Mock<IEventLogger>().Object);
         }
 
         [Theory]
@@ -40,6 +40,7 @@ namespace CompilerTest.Parser
         [InlineData(InputDataType.ESE_POSITIONS, typeof(EsePositionParser))]
         [InlineData(InputDataType.ESE_POSITIONS_MENTOR, typeof(EsePositionParser))]
         [InlineData(InputDataType.ESE_FREETEXT, typeof(FreetextParser))]
+        [InlineData(InputDataType.ESE_GROUND_NETWORK, typeof(GroundNetworkParser))]
         [InlineData(InputDataType.ESE_SIDS, typeof(SidStarParser))]
         [InlineData(InputDataType.ESE_STARS, typeof(SidStarParser))]
         [InlineData(InputDataType.ESE_SECTORLINES, typeof(SectorlineParser))]
@@ -53,7 +54,7 @@ namespace CompilerTest.Parser
         {
             Assert.Equal(
                 expectedParserType,
-                this.factory.GetParserForFile(
+                factory.GetParserForFile(
                     SectorDataFileFactoryFactory.Make(new List<string>()).Create("Test", dataType)
                 ).GetType()
             );

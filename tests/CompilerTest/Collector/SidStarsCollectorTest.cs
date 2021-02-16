@@ -18,12 +18,12 @@ namespace CompilerTest.Collector
             SidStar fifth = SidStarFactory.Make(false, "EGCC", identifier: "SANBA1R");
             SidStar sixth = SidStarFactory.Make(false, "EGCC", identifier: "LISTO1S");
 
-            this.sectorElements.Add(first);
-            this.sectorElements.Add(second);
-            this.sectorElements.Add(third);
-            this.sectorElements.Add(fourth);
-            this.sectorElements.Add(fifth);
-            this.sectorElements.Add(sixth);
+            sectorElements.Add(first);
+            sectorElements.Add(second);
+            sectorElements.Add(third);
+            sectorElements.Add(fourth);
+            sectorElements.Add(fifth);
+            sectorElements.Add(sixth);
 
             IEnumerable<ICompilableElementProvider> expected = new List<ICompilableElementProvider>()
             {
@@ -34,7 +34,7 @@ namespace CompilerTest.Collector
                 sixth,
                 fifth
             };
-            this.AssertCollectedItems(expected);
+            AssertCollectedItems(expected);
         }
 
         protected override OutputSectionKeys GetOutputSection()

@@ -15,9 +15,9 @@ namespace CompilerTest.Collector
             Colour second = ColourFactory.Make("green");
             Colour third = ColourFactory.Make("blue");
 
-            this.sectorElements.Add(first);
-            this.sectorElements.Add(second);
-            this.sectorElements.Add(third);
+            sectorElements.Add(first);
+            sectorElements.Add(second);
+            sectorElements.Add(third);
 
             IEnumerable<ICompilableElementProvider> expected = new List<ICompilableElementProvider>()
             {
@@ -25,7 +25,7 @@ namespace CompilerTest.Collector
                 second,
                 first
             };
-            this.AssertCollectedItems(expected);
+            AssertCollectedItems(expected);
         }
 
         protected override OutputSectionKeys GetOutputSection()

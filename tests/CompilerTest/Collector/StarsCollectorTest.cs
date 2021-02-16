@@ -13,16 +13,16 @@ namespace CompilerTest.Collector
         {
             OutputGroup group1 = new("1");
             OutputGroup group2 = new("2");
-            this.outputGroups.AddGroupWithFiles(group1, new List<string>{"foo.txt"});
-            this.outputGroups.AddGroupWithFiles(group2, new List<string>{"goo.txt"});
+            outputGroups.AddGroupWithFiles(group1, new List<string>{"foo.txt"});
+            outputGroups.AddGroupWithFiles(group2, new List<string>{"goo.txt"});
 
             SidStarRoute first = SidStarRouteFactory.Make(SidStarType.STAR, definition: DefinitionFactory.Make("foo.txt"));
             SidStarRoute second = SidStarRouteFactory.Make(SidStarType.STAR, definition: DefinitionFactory.Make("goo.txt"));
             SidStarRoute third = SidStarRouteFactory.Make(SidStarType.STAR, definition: DefinitionFactory.Make("foo.txt"));
 
-            this.sectorElements.Add(first);
-            this.sectorElements.Add(second);
-            this.sectorElements.Add(third);
+            sectorElements.Add(first);
+            sectorElements.Add(second);
+            sectorElements.Add(third);
 
             IEnumerable<ICompilableElementProvider> expected = new List<ICompilableElementProvider>()
             {
@@ -30,7 +30,7 @@ namespace CompilerTest.Collector
                 third,
                 second
             };
-            this.AssertCollectedItems(expected);
+            AssertCollectedItems(expected);
         }
 
         protected override OutputSectionKeys GetOutputSection()

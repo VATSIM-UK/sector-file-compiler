@@ -19,20 +19,20 @@ namespace CompilerTest.Parser
 
         protected AbstractParserTestCase()
         {
-            this.logger = new Moq.Mock<IEventLogger>();
-            this.sectorElementCollection = new SectorElementCollection();
+            logger = new Moq.Mock<IEventLogger>();
+            sectorElementCollection = new SectorElementCollection();
         }
         
         private AbstractSectorDataFile GetInputFile(List<string> lines)
         {
             return SectorDataFileFactoryFactory.Make(lines)
-                .Create(this.inputFileName, GetInputDataType());
+                .Create(inputFileName, GetInputDataType());
         }
 
         protected void RunParserOnLines(List<string> lines)
         {
-            AbstractSectorDataFile file = this.GetInputFile(lines);
-            new DataParserFactory(this.sectorElementCollection, this.logger.Object).GetParserForFile(file).ParseData(file);
+            AbstractSectorDataFile file = GetInputFile(lines);
+            new DataParserFactory(sectorElementCollection, logger.Object).GetParserForFile(file).ParseData(file);
         }
 
         [SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Local")]
@@ -59,7 +59,7 @@ namespace CompilerTest.Parser
         // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
         private void AssertExpectedDefinition(Definition definition, int lineNumber)
         {
-            Assert.Equal(new Definition(this.inputFileName, lineNumber), definition);
+            Assert.Equal(new Definition(inputFileName, lineNumber), definition);
         }
 
         private static void AssertExpectedDocblockLines(Docblock docblock, List<string> docblockLines)
@@ -72,7 +72,7 @@ namespace CompilerTest.Parser
 
         protected void SetInputFileName(string filename)
         {
-            this.inputFileName = filename;
+            inputFileName = filename;
         }
     }
 }

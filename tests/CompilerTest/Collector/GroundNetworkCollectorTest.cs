@@ -6,15 +6,15 @@ using Xunit;
 
 namespace CompilerTest.Collector
 {
-    public class LowAirwaysCollectorTest: AbstractCollectorTestCase
+    public class GroundNetworkCollectorTest: AbstractCollectorTestCase
     {
         [Fact]
         public void TestItReturnsElementsInOrder()
         {
-            AirwaySegment first = AirwaySegmentFactory.Make(identifier:"N864");
-            AirwaySegment second = AirwaySegmentFactory.Make(identifier: "N862");
-            AirwaySegment third = AirwaySegmentFactory.Make(identifier: "L9");
-
+            GroundNetwork first = GroundNetworkFactory.Make("EGKK");
+            GroundNetwork second = GroundNetworkFactory.Make("EGGD");
+            GroundNetwork third = GroundNetworkFactory.Make("EGAC");
+            
             sectorElements.Add(first);
             sectorElements.Add(second);
             sectorElements.Add(third);
@@ -30,7 +30,7 @@ namespace CompilerTest.Collector
 
         protected override OutputSectionKeys GetOutputSection()
         {
-            return OutputSectionKeys.SCT_LOW_AIRWAY;
+            return OutputSectionKeys.ESE_GROUND_NETWORK;
         }
     }
 }

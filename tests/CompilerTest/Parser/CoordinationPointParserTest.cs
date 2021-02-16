@@ -50,10 +50,10 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Empty(this.sectorElementCollection.CoordinationPoints);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.CoordinationPoints);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Theory]
@@ -80,9 +80,9 @@ namespace CompilerTest.Parser
         ] // Climb unspecified, descend unspecified
         public void TestItAddsInternalCoordinationPoints(string line, string climbLevel, string descendLevel)
         {
-            this.RunParserOnLines(new List<string> {line});
+            RunParserOnLines(new List<string> {line});
 
-            CoordinationPoint result = this.sectorElementCollection.CoordinationPoints[0];
+            CoordinationPoint result = sectorElementCollection.CoordinationPoints[0];
             Assert.False(result.IsFirCopx);
             Assert.Equal(CoordinationPoint.DataNotSpecified, result.DepartureAirportOrFixBefore);
             Assert.Equal(CoordinationPoint.DataNotSpecified, result.DepartureRunway);
@@ -94,17 +94,17 @@ namespace CompilerTest.Parser
             Assert.Equal(climbLevel, result.ClimbLevel);
             Assert.Equal(descendLevel, result.DescendLevel);
             Assert.Equal("|HEMEL20", result.Name);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         [Fact]
         public void TestItAddsFirCoordinationPoints()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[] { "FIR_COPX:*:*:HEMEL:EGBB:*:London AC Worthing:London AC Dover:*:25000:|HEMEL20 ;comment" })
             );
             
-            CoordinationPoint result = this.sectorElementCollection.CoordinationPoints[0];
+            CoordinationPoint result = sectorElementCollection.CoordinationPoints[0];
             Assert.True(result.IsFirCopx);
             Assert.Equal(CoordinationPoint.DataNotSpecified, result.DepartureAirportOrFixBefore);
             Assert.Equal(CoordinationPoint.DataNotSpecified, result.DepartureRunway);
@@ -116,7 +116,7 @@ namespace CompilerTest.Parser
             Assert.Equal(CoordinationPoint.DataNotSpecified, result.ClimbLevel);
             Assert.Equal("25000", result.DescendLevel);
             Assert.Equal("|HEMEL20", result.Name);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

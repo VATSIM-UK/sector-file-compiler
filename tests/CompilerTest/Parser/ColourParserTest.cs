@@ -29,21 +29,21 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Empty(this.sectorElementCollection.Colours);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.Colours);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsColourData()
         {
-            this.RunParserOnLines(new List<string>(new[] {"#define abc 255 ;comment"}));
+            RunParserOnLines(new List<string>(new[] {"#define abc 255 ;comment"}));
 
-            Colour result = this.sectorElementCollection.Colours[0];
+            Colour result = sectorElementCollection.Colours[0];
             Assert.Equal("abc", result.Name);
             Assert.Equal(255, result.Value);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

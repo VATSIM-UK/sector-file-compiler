@@ -35,22 +35,22 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Empty(this.sectorElementCollection.Ndbs);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.Ndbs);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsNdbData()
         {
-            this.RunParserOnLines(new List<string>(new[] { "CDF 388.500 N050.57.00.000 W001.21.24.490;comment" }));
+            RunParserOnLines(new List<string>(new[] { "CDF 388.500 N050.57.00.000 W001.21.24.490;comment" }));
 
-            Ndb result = this.sectorElementCollection.Ndbs[0];
+            Ndb result = sectorElementCollection.Ndbs[0];
             Assert.Equal("CDF", result.Identifier);
             Assert.Equal("388.500", result.Frequency);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.Coordinate);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()
