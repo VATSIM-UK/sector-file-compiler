@@ -7,19 +7,18 @@ using System.Linq;
 
 namespace Compiler.Validate
 {
-    public class AllSectorsMustHaveValidActiveRunway : IValidationRule
+    public class AllRunwayExitsMustHaveAValidRunway : IValidationRule
     {
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            foreach (Sector sector in sectorElements.Sectors)
+            foreach (GroundNetwork groundNetwork in sectorElements.GroundNetworks)
             {
-                foreach (SectorActive active in sector.Active)
+                foreach (GroundNetworkRunwayExit exit in groundNetwork.RunwayExits)
                 {
-                    if (!RunwayValid(sectorElements, active.Runway, active.Airfield))
+                    if (!RunwayValid(sectorElements, exit.Runway, groundNetwork.Airport))
                     {
-                        string message =
-                            $"Invalid ACTIVE runway {active.Airfield}/{active.Runway} on sector {sector.Name}";
-                        events.AddEvent(new ValidationRuleFailure(message, active));
+                        string message =  $"Invalid ground network runway {groundNetwork.Airport}/{exit.Runway}";
+                        events.AddEvent(new ValidationRuleFailure(message, exit));
                         break;
                     }
                 }
@@ -28,11 +27,6 @@ namespace Compiler.Validate
 
         private bool RunwayValid(SectorElementCollection sectorElements, string runwayIdentifier, string airportCode)
         {
-            if (airportCode == "000A" && (runwayIdentifier == "00" || runwayIdentifier == "01"))
-            {
-                return true;
-            }
-
             List<Airport> airport = sectorElements.Airports.Where(airportElement => airportElement.Icao == airportCode).ToList();
 
             return airport.Count != 0 && sectorElements.Runways

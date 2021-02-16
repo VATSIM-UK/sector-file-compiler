@@ -13,7 +13,7 @@ namespace Compiler.Validate
             {
                 foreach (RegionPoint point in region.Points)
                 {
-                    this.CheckPoint(point, region, sectorElements, events);
+                    CheckPoint(point, region, sectorElements, events);
                 }
             }
         }

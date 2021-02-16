@@ -6,9 +6,9 @@ using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllSectorsMustHaveValidActiveRunwayTest: AbstractValidatorTestCase
+    public class AllRunwayExitsMustHaveAValidRunwayTest: AbstractValidatorTestCase
     {
-        public AllSectorsMustHaveValidActiveRunwayTest()
+        public AllRunwayExitsMustHaveAValidRunwayTest()
         {
             sectorElements.Add(AirportFactory.Make("EGKK"));
             sectorElements.Add(AirportFactory.Make("EGLL"));
@@ -28,21 +28,23 @@ namespace CompilerTest.Validate
         public void TestItPassesOnAllValid(string firstAirport, string firstRunway, string secondAirport, string secondRunway)
         {
             sectorElements.Add(
-                SectorFactory.Make(
-                    active: new List<SectorActive>
+                GroundNetworkFactory.Make(
+                    firstAirport,
+                    new List<GroundNetworkRunwayExit>
                     {
-                        SectorActiveFactory.Make(firstAirport, firstRunway),
-                        SectorActiveFactory.Make(secondAirport, secondRunway),
+                        GroundNetworkRunwayExitFactory.Make(firstRunway),
+                        GroundNetworkRunwayExitFactory.Make(firstRunway)
                     }
                 )
             );
             
             sectorElements.Add(
-                SectorFactory.Make(
-                    active: new List<SectorActive>
+                GroundNetworkFactory.Make(
+                    secondAirport,
+                    new List<GroundNetworkRunwayExit>
                     {
-                        SectorActiveFactory.Make(firstAirport, firstRunway),
-                        SectorActiveFactory.Make(secondAirport, secondRunway),
+                        GroundNetworkRunwayExitFactory.Make(secondRunway),
+                        GroundNetworkRunwayExitFactory.Make(secondRunway)
                     }
                 )
             );
@@ -51,29 +53,30 @@ namespace CompilerTest.Validate
         }
 
         [Theory]
-        [InlineData("EGCC", "23R", "EGLL", "27R", 2)]
-        [InlineData("EGKK", "27L", "EGLL", "27R", 2)]
-        [InlineData("EGKK", "26R", "EGKK", "26R", 2)] // Double failures only count once
+        [InlineData("EGCC", "23R", "EGLL", "27R", 1)]
+        [InlineData("EGKK", "27L", "EGLL", "27R", 1)]
         [InlineData("EGLL", "26R", "EGLL", "23L", 2)]
-        [InlineData("000B", "01", "000A", "04", 2)]
+        [InlineData("000A", "01", "000A", "00", 2)]
         public void TestItFailsOnInvalid (string firstAirport, string firstRunway, string secondAirport, string secondRunway, int failTimes)
         {
             sectorElements.Add(
-                SectorFactory.Make(
-                    active: new List<SectorActive>
+                GroundNetworkFactory.Make(
+                    firstAirport,
+                    new List<GroundNetworkRunwayExit>
                     {
-                        SectorActiveFactory.Make(firstAirport, firstRunway),
-                        SectorActiveFactory.Make(secondAirport, secondRunway),
+                        GroundNetworkRunwayExitFactory.Make(firstRunway),
+                        GroundNetworkRunwayExitFactory.Make(firstRunway)
                     }
                 )
             );
             
             sectorElements.Add(
-                SectorFactory.Make(
-                    active: new List<SectorActive>
+                GroundNetworkFactory.Make(
+                    secondAirport,
+                    new List<GroundNetworkRunwayExit>
                     {
-                        SectorActiveFactory.Make(firstAirport, firstRunway),
-                        SectorActiveFactory.Make(secondAirport, secondRunway),
+                        GroundNetworkRunwayExitFactory.Make(secondRunway),
+                        GroundNetworkRunwayExitFactory.Make(secondRunway)
                     }
                 )
             );
@@ -83,7 +86,7 @@ namespace CompilerTest.Validate
 
         protected override IValidationRule GetValidationRule()
         {
-            return new AllSectorsMustHaveValidActiveRunway();
+            return new AllRunwayExitsMustHaveAValidRunway();
         }
     }
 }

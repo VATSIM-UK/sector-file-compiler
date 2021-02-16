@@ -10,28 +10,28 @@ namespace CompilerTest.Validate
     {
         public AllRegionsMustHaveValidPointsTest()
         {
-            this.sectorElements.Add(FixFactory.Make("testfix"));
-            this.sectorElements.Add(VorFactory.Make("testvor"));
-            this.sectorElements.Add(NdbFactory.Make("testndb"));
-            this.sectorElements.Add(AirportFactory.Make("testairport"));
+            sectorElements.Add(FixFactory.Make("testfix"));
+            sectorElements.Add(VorFactory.Make("testvor"));
+            sectorElements.Add(NdbFactory.Make("testndb"));
+            sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
         [Fact]
         public void TestItPassesOnValidPoints()
         {
-            this.sectorElements.Add(RegionFactory.Make(points: new List<Point>() {new("testfix"), new("testndb")}));
-            this.sectorElements.Add(RegionFactory.Make(points: new List<Point>() {new("testvor"), new("testairport")}));
+            sectorElements.Add(RegionFactory.Make(points: new List<Point> {new("testfix"), new("testndb")}));
+            sectorElements.Add(RegionFactory.Make(points: new List<Point> {new("testvor"), new("testairport")}));
 
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidPoint()
         {
-            this.sectorElements.Add(RegionFactory.Make(points: new List<Point>() {new("nottestfix"), new("nottestndb")}));
-            this.sectorElements.Add(RegionFactory.Make(points: new List<Point>() {new("nottestvor"), new("nottestairport")}));
+            sectorElements.Add(RegionFactory.Make(points: new List<Point> {new("nottestfix"), new("nottestndb")}));
+            sectorElements.Add(RegionFactory.Make(points: new List<Point> {new("nottestvor"), new("nottestairport")}));
 
-            this.AssertValidationErrors(4);
+            AssertValidationErrors(4);
         }
 
         protected override IValidationRule GetValidationRule()

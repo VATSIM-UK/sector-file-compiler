@@ -15,34 +15,34 @@ namespace CompilerTest.Validate
 
         public AllColoursMustBeValidTest()
         {
-            this.first = ColourFactory.Make("colour1", -1);
-            this.second = ColourFactory.Make("colour2", 0);
-            this.third = ColourFactory.Make("colour3", 255);
-            this.fourth = ColourFactory.Make("colour4", 16777215);
-            this.fifth = ColourFactory.Make("colour5", 16777216);
+            first = ColourFactory.Make("colour1", -1);
+            second = ColourFactory.Make("colour2", 0);
+            third = ColourFactory.Make("colour3", 255);
+            fourth = ColourFactory.Make("colour4", 16777215);
+            fifth = ColourFactory.Make("colour5", 16777216);
         }
 
         [Fact]
         public void TestItPassesOnValidColours()
         {
-            this.sectorElements.Add(this.second);
-            this.sectorElements.Add(this.third);
-            this.sectorElements.Add(this.fourth);
-            this.AssertNoValidationErrors();
+            sectorElements.Add(second);
+            sectorElements.Add(third);
+            sectorElements.Add(fourth);
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnNegativeValues()
         {
-            this.sectorElements.Add(this.first);
-            this.AssertValidationErrors();
+            sectorElements.Add(first);
+            AssertValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnValuesOverMaximum()
         {
-            this.sectorElements.Add(this.fifth);
-            this.AssertValidationErrors();
+            sectorElements.Add(fifth);
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

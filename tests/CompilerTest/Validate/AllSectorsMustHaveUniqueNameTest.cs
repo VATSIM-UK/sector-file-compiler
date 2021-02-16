@@ -15,30 +15,30 @@ namespace CompilerTest.Validate
 
         public AllSectorsMustHaveUniqueNameTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.first = SectorFactory.Make("ONE");
-            this.second = SectorFactory.Make("ONE");
-            this.third = SectorFactory.Make("NOTONE");
+            sectorElements = new SectorElementCollection();
+            loggerMock = new Mock<IEventLogger>();
+            first = SectorFactory.Make("ONE");
+            second = SectorFactory.Make("ONE");
+            third = SectorFactory.Make("NOTONE");
         }
 
         [Fact]
         public void TestItPassesIfAllNamesDifferent()
         {
-            this.sectorElements.Add(this.first);
-            this.sectorElements.Add(this.third);
+            sectorElements.Add(first);
+            sectorElements.Add(third);
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnNameClash()
         {
-            this.sectorElements.Add(this.first);
-            this.sectorElements.Add(this.second);
-            this.sectorElements.Add(this.third);
+            sectorElements.Add(first);
+            sectorElements.Add(second);
+            sectorElements.Add(third);
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

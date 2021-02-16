@@ -17,13 +17,13 @@ namespace CompilerTest.Validate
 
         protected void AssertNoValidationErrors()
         {
-            this.AssertValidationErrors(0);
+            AssertValidationErrors(0);
         }
 
         protected void AssertValidationErrors(int count = 1)
         {
-            this.GetValidationRule().Validate(sectorElements, args, loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(count));
+            GetValidationRule().Validate(sectorElements, args, loggerMock.Object);
+            loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Exactly(count));
         }
 
         protected abstract IValidationRule GetValidationRule();

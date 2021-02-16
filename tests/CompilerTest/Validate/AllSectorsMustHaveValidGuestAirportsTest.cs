@@ -10,9 +10,9 @@ namespace CompilerTest.Validate
     {
         public AllSectorsMustHaveValidGuestAirportsTest()
         {
-            this.sectorElements.Add(AirportFactory.Make("EGKK"));
-            this.sectorElements.Add(AirportFactory.Make("EGLL"));
-            this.sectorElements.Add(AirportFactory.Make("EGCC"));
+            sectorElements.Add(AirportFactory.Make("EGKK"));
+            sectorElements.Add(AirportFactory.Make("EGLL"));
+            sectorElements.Add(AirportFactory.Make("EGCC"));
         }
 
         [Theory]
@@ -22,18 +22,18 @@ namespace CompilerTest.Validate
         [InlineData("EGKK", "EGLL", "EGCC")]
         public void TestItPassesOnAllValid(string first, string second, string third)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    guests: new List<SectorGuest>()
+                    guests: new List<SectorGuest>
                     {
                         SectorGuestFactory.Make(firstAirport: first, secondAirport: second),
                         SectorGuestFactory.Make(firstAirport: third, secondAirport: "*"),
                     }
                 )
             );
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    guests: new List<SectorGuest>()
+                    guests: new List<SectorGuest>
                     {
                         SectorGuestFactory.Make(firstAirport: third, secondAirport: first),
                         SectorGuestFactory.Make(firstAirport: "*", secondAirport: "*"),
@@ -41,7 +41,7 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Theory]
@@ -52,18 +52,18 @@ namespace CompilerTest.Validate
         [InlineData("WHAT", "WHAT", "WHAT", 2)]
         public void TestItFailsOnInvalid(string first, string second, string third, int timesCalled)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    guests: new List<SectorGuest>()
+                    guests: new List<SectorGuest>
                     {
                         SectorGuestFactory.Make(firstAirport: first, secondAirport: second),
                         SectorGuestFactory.Make(firstAirport: third, secondAirport: "*"),
                     }
                 )
             );
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    guests: new List<SectorGuest>()
+                    guests: new List<SectorGuest>
                     {
                         SectorGuestFactory.Make(firstAirport: third, secondAirport: first),
                         SectorGuestFactory.Make(firstAirport: "*", secondAirport: "*"),
@@ -71,7 +71,7 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertValidationErrors(timesCalled);
+            AssertValidationErrors(timesCalled);
         }
 
         protected override IValidationRule GetValidationRule()

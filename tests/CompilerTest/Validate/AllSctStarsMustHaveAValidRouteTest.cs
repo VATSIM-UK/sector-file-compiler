@@ -10,10 +10,10 @@ namespace CompilerTest.Validate
     {
         public AllSctStarsMustHaveAValidRouteTest()
         {
-            this.sectorElements.Add(FixFactory.Make("testfix"));
-            this.sectorElements.Add(VorFactory.Make("testvor"));
-            this.sectorElements.Add(NdbFactory.Make("testndb"));
-            this.sectorElements.Add(AirportFactory.Make("testairport"));
+            sectorElements.Add(FixFactory.Make("testfix"));
+            sectorElements.Add(VorFactory.Make("testvor"));
+            sectorElements.Add(NdbFactory.Make("testndb"));
+            sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
         [Fact]
@@ -37,9 +37,9 @@ namespace CompilerTest.Validate
                 CommentFactory.Make()
             );
 
-            this.sectorElements.Add(route);
+            sectorElements.Add(route);
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
@@ -63,10 +63,10 @@ namespace CompilerTest.Validate
                 CommentFactory.Make()
             );
 
-            this.sectorElements.Add(route);
-            this.sectorElements.Fixes.Clear();
+            sectorElements.Add(route);
+            sectorElements.Fixes.Clear();
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         [Fact]
@@ -90,10 +90,10 @@ namespace CompilerTest.Validate
                 CommentFactory.Make()
             );
 
-            this.sectorElements.Add(route);
-            this.sectorElements.Vors.Clear();
+            sectorElements.Add(route);
+            sectorElements.Vors.Clear();
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         [Fact]
@@ -117,10 +117,10 @@ namespace CompilerTest.Validate
                 CommentFactory.Make()
             );
 
-            this.sectorElements.Add(route);
-            this.sectorElements.Ndbs.Clear();
+            sectorElements.Add(route);
+            sectorElements.Ndbs.Clear();
             
-            this.AssertValidationErrors(2);
+            AssertValidationErrors(2);
         }
 
         [Fact]
@@ -144,10 +144,10 @@ namespace CompilerTest.Validate
                 CommentFactory.Make()
             );
 
-            this.sectorElements.Add(route);
-            this.sectorElements.Airports.Clear();
+            sectorElements.Add(route);
+            sectorElements.Airports.Clear();
 
-            this.AssertValidationErrors(2);
+            AssertValidationErrors(2);
         }
 
         protected override IValidationRule GetValidationRule()

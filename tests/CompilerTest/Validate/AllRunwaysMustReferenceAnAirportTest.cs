@@ -10,30 +10,30 @@ namespace CompilerTest.Validate
     {
         public AllRunwaysMustReferenceAnAirportTest()
         {
-            this.loggerMock = new Mock<IEventLogger>();
-            this.sectorElements.Add(AirportFactory.Make("EGKK"));
-            this.sectorElements.Add(AirportFactory.Make("EGLL"));
-            this.sectorElements.Add(AirportFactory.Make("000A"));
+            loggerMock = new Mock<IEventLogger>();
+            sectorElements.Add(AirportFactory.Make("EGKK"));
+            sectorElements.Add(AirportFactory.Make("EGLL"));
+            sectorElements.Add(AirportFactory.Make("000A"));
         }
 
         [Fact]
         public void TestItPassesOnValidReferences()
         {
-            this.sectorElements.Add(RunwayFactory.Make("EGKK"));
-            this.sectorElements.Add(RunwayFactory.Make("EGLL"));
-            this.sectorElements.Add(RunwayFactory.Make("000A"));
+            sectorElements.Add(RunwayFactory.Make("EGKK"));
+            sectorElements.Add(RunwayFactory.Make("EGLL"));
+            sectorElements.Add(RunwayFactory.Make("000A"));
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidReferences()
         {
-            this.sectorElements.Add(RunwayFactory.Make("EGSS"));
-            this.sectorElements.Add(RunwayFactory.Make("EGGW"));
-            this.sectorElements.Add(RunwayFactory.Make("000A"));
+            sectorElements.Add(RunwayFactory.Make("EGSS"));
+            sectorElements.Add(RunwayFactory.Make("EGGW"));
+            sectorElements.Add(RunwayFactory.Make("000A"));
 
-            this.AssertValidationErrors(2);
+            AssertValidationErrors(2);
         }
 
         protected override IValidationRule GetValidationRule()

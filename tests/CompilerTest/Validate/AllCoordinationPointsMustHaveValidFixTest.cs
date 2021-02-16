@@ -8,10 +8,10 @@ namespace CompilerTest.Validate
     {
         public AllCoordinationPointsMustHaveValidFixTest()
         {
-            this.sectorElements.Add(FixFactory.Make("testfix"));
-            this.sectorElements.Add(VorFactory.Make("testvor"));
-            this.sectorElements.Add(NdbFactory.Make("testndb"));
-            this.sectorElements.Add(AirportFactory.Make("testairport"));
+            sectorElements.Add(FixFactory.Make("testfix"));
+            sectorElements.Add(VorFactory.Make("testvor"));
+            sectorElements.Add(NdbFactory.Make("testndb"));
+            sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
         [Theory]
@@ -22,10 +22,10 @@ namespace CompilerTest.Validate
         [InlineData("testairport")]
         public void TestItPassesOnValidFix(string fix)
         {
-            this.sectorElements.Add(CoordinationPointFactory.Make(coordinationPoint: fix));
-            this.sectorElements.Add(CoordinationPointFactory.Make(coordinationPoint: fix));
+            sectorElements.Add(CoordinationPointFactory.Make(coordinationPoint: fix));
+            sectorElements.Add(CoordinationPointFactory.Make(coordinationPoint: fix));
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Theory]
@@ -35,10 +35,10 @@ namespace CompilerTest.Validate
         [InlineData("testairport", "nottestairport")]
         public void TestItFailsOnInvalidFix(string firstFix, string secondFix)
         {
-            this.sectorElements.Add(CoordinationPointFactory.Make(coordinationPoint: firstFix));
-            this.sectorElements.Add(CoordinationPointFactory.Make(coordinationPoint: secondFix));
+            sectorElements.Add(CoordinationPointFactory.Make(coordinationPoint: firstFix));
+            sectorElements.Add(CoordinationPointFactory.Make(coordinationPoint: secondFix));
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

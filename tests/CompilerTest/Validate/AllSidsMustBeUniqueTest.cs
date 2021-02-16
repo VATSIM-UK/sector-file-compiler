@@ -15,35 +15,35 @@ namespace CompilerTest.Validate
 
         public AllSidsMustBeUniqueTest()
         {
-            this.first = SidStarFactory.Make(true, "EGKK", "26L", "ADMAG2X", new List<string>());
-            this.second = SidStarFactory.Make(false, "EGKK", "26L", "ADMAG2X", new List<string>());
-            this.third = SidStarFactory.Make(true, "EGKK", "26L", "ADMAG2X", new List<string>());
-            this.fourth = SidStarFactory.Make(true, "EGKK", "26L", "ADMAG2X", new List<string>() {"a"});
+            first = SidStarFactory.Make(true, "EGKK", "26L", "ADMAG2X", new List<string>());
+            second = SidStarFactory.Make(false, "EGKK", "26L", "ADMAG2X", new List<string>());
+            third = SidStarFactory.Make(true, "EGKK", "26L", "ADMAG2X", new List<string>());
+            fourth = SidStarFactory.Make(true, "EGKK", "26L", "ADMAG2X", new List<string> {"a"});
         }
 
         [Fact]
         public void TestItPassesIfNoDuplicates()
         {
-            this.sectorElements.Add(this.first);
-            this.sectorElements.Add(this.second);
-            this.AssertNoValidationErrors();
+            sectorElements.Add(first);
+            sectorElements.Add(second);
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItPassesOnDifferentRoutes()
         {
-            this.sectorElements.Add(this.first);
-            this.sectorElements.Add(this.fourth);
-            this.AssertNoValidationErrors();
+            sectorElements.Add(first);
+            sectorElements.Add(fourth);
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsIfThereAreDuplicates()
         {
-            this.sectorElements.Add(this.first);
-            this.sectorElements.Add(this.second);
-            this.sectorElements.Add(this.third);
-            this.AssertValidationErrors();
+            sectorElements.Add(first);
+            sectorElements.Add(second);
+            sectorElements.Add(third);
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

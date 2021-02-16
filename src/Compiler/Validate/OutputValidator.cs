@@ -53,11 +53,12 @@ namespace Compiler.Validate
             new AllActiveRunwaysMustReferenceAnAirport(),
             new AllActiveRunwaysMustReferenceARunway(),
             new AllActiveRunwaysMustBeUnique(),
+            new AllRunwayExitsMustHaveAValidRunway()
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            foreach (IValidationRule rule in OutputValidator.ValidationRules)
+            foreach (IValidationRule rule in ValidationRules)
             {
                 rule.Validate(sectorElements, args, events);
             }

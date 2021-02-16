@@ -6,12 +6,12 @@ namespace CompilerTest.Bogus.Factory
 {
     static class GroundNetworkRunwayExitFactory
     {
-        public static GroundNetworkRunwayExit Make()
+        public static GroundNetworkRunwayExit Make(string runway = null)
         {
             return new Faker<GroundNetworkRunwayExit>()
                 .CustomInstantiator(
                     faker => new GroundNetworkRunwayExit(
-                        "27L",
+                        runway ?? "27L",
                         "N3W",
                         faker.Random.ArrayElement(new []{"LEFT", "RIGHT"}),
                         15,

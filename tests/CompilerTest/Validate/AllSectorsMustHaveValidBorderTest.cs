@@ -19,20 +19,20 @@ namespace CompilerTest.Validate
 
         public AllSectorsMustHaveValidBorderTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.loggerMock = new Mock<IEventLogger>();
-            this.rule = new AllSectorsMustHaveValidBorder();
-            this.args = new CompilerArguments();
+            sectorElements = new SectorElementCollection();
+            loggerMock = new Mock<IEventLogger>();
+            rule = new AllSectorsMustHaveValidBorder();
+            args = new CompilerArguments();
 
-            this.sectorElements.Add(SectorlineFactory.Make("ONE"));
-            this.sectorElements.Add(SectorlineFactory.Make("TWO"));
-            this.sectorElements.Add(CircleSectorlineFactory.Make("THREE"));
+            sectorElements.Add(SectorlineFactory.Make("ONE"));
+            sectorElements.Add(SectorlineFactory.Make("TWO"));
+            sectorElements.Add(CircleSectorlineFactory.Make("THREE"));
         }
 
         [Fact]
         public void TestItPassesOnValidBorders()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 new Sector(
                     "COOL1",
                     5000,
@@ -41,9 +41,10 @@ namespace CompilerTest.Validate
                     SectorAlternateOwnerHierarchyFactory.MakeList(2),
                     SectorActiveFactory.MakeList(),
                     SectorGuestFactory.MakeList(),
-                    new List<SectorBorder>() {
+                    new List<SectorBorder>
+                    {
                         new(
-                            new List<string>()
+                            new List<string>
                             {
                                 "ONE",
                                 "TWO",
@@ -61,7 +62,7 @@ namespace CompilerTest.Validate
                 )
             );
 
-            this.sectorElements.Add(
+            sectorElements.Add(
                 new Sector(
                     "COOL2",
                     5000,
@@ -70,9 +71,10 @@ namespace CompilerTest.Validate
                     SectorAlternateOwnerHierarchyFactory.MakeList(2),
                     SectorActiveFactory.MakeList(),
                     SectorGuestFactory.MakeList(),
-                    new List<SectorBorder>() {
+                    new List<SectorBorder>
+                    {
                         new(
-                            new List<string>()
+                            new List<string>
                             {
                                 "ONE",
                                 "THREE",
@@ -90,8 +92,8 @@ namespace CompilerTest.Validate
                 )
             );
 
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
+            rule.Validate(sectorElements, args, loggerMock.Object);
+            loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Never);
         }
 
         [Theory]
@@ -100,7 +102,7 @@ namespace CompilerTest.Validate
         [InlineData("THREE", "TWO", "FOUR")]
         public void TestItFailsOnInvalidBorder(string first, string second, string bad)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 new Sector(
                     "COOL1",
                     5000,
@@ -109,9 +111,10 @@ namespace CompilerTest.Validate
                     SectorAlternateOwnerHierarchyFactory.MakeList(2),
                     SectorActiveFactory.MakeList(),
                     SectorGuestFactory.MakeList(),
-                    new List<SectorBorder>() {
+                    new List<SectorBorder>
+                    {
                         new(
-                            new List<string>()
+                            new List<string>
                             {
                                 first,
                                 second,
@@ -129,7 +132,7 @@ namespace CompilerTest.Validate
                 )
             );
 
-            this.sectorElements.Add(
+            sectorElements.Add(
                 new Sector(
                     "COOL2",
                     5000,
@@ -138,9 +141,10 @@ namespace CompilerTest.Validate
                     SectorAlternateOwnerHierarchyFactory.MakeList(2),
                     SectorActiveFactory.MakeList(),
                     SectorGuestFactory.MakeList(),
-                    new List<SectorBorder>() {
+                    new List<SectorBorder>
+                    {
                         new(
-                            new List<string>()
+                            new List<string>
                             {
                                 first,
                                 second,
@@ -159,8 +163,8 @@ namespace CompilerTest.Validate
                 )
             );
 
-            this.rule.Validate(sectorElements, this.args, this.loggerMock.Object);
-            this.loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
+            rule.Validate(sectorElements, args, loggerMock.Object);
+            loggerMock.Verify(foo => foo.AddEvent(It.IsAny<ValidationRuleFailure>()), Times.Once);
         }
     }
 }

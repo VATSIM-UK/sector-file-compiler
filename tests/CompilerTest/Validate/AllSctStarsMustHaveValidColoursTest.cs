@@ -10,16 +10,16 @@ namespace CompilerTest.Validate
     {
         public AllSctStarsMustHaveValidColoursTest()
         {
-            this.sectorElements.Add(ColourFactory.Make("colour1"));
+            sectorElements.Add(ColourFactory.Make("colour1"));
         }
 
         [Fact]
         public void TestItPassesOnValidColoursIntegers()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SidStarRouteFactory.Make(
                     SidStarType.STAR,
-                    new List<RouteSegment>()
+                    new List<RouteSegment>
                     {
                         RouteSegmentFactory.MakeDoublePoint(colour: "255"),
                         RouteSegmentFactory.MakeDoublePoint(colour: "266"),
@@ -28,16 +28,16 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItPassesOnValidDefinedColours()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SidStarRouteFactory.Make(
                     SidStarType.STAR,
-                    new List<RouteSegment>()
+                    new List<RouteSegment>
                     {
                         RouteSegmentFactory.MakeDoublePoint(colour: "colour1"),
                         RouteSegmentFactory.MakeDoublePoint(colour: "colour1"),
@@ -46,16 +46,16 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItPassesOnNullColours()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SidStarRouteFactory.Make(
                     SidStarType.STAR,
-                    new List<RouteSegment>()
+                    new List<RouteSegment>
                     {
                         RouteSegmentFactory.MakeDoublePointWithNoColour(),
                         RouteSegmentFactory.MakeDoublePointWithNoColour(),
@@ -64,16 +64,16 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidDefinedColours()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SidStarRouteFactory.Make(
                     SidStarType.STAR,
-                    new List<RouteSegment>()
+                    new List<RouteSegment>
                     {
                         RouteSegmentFactory.MakeDoublePoint(colour: "colour1"),
                         RouteSegmentFactory.MakeDoublePoint(colour: "colour2"),
@@ -82,16 +82,16 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidDefinedColoursAfterLooping()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SidStarRouteFactory.Make(
                     SidStarType.STAR,
-                    new List<RouteSegment>()
+                    new List<RouteSegment>
                     {
                         RouteSegmentFactory.MakeDoublePoint(colour: "colour1"),
                         RouteSegmentFactory.MakeDoublePoint(colour: "colour1"),
@@ -100,16 +100,16 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidColourIntegers()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SidStarRouteFactory.Make(
                     SidStarType.STAR,
-                    new List<RouteSegment>()
+                    new List<RouteSegment>
                     {
                         RouteSegmentFactory.MakeDoublePoint(colour: "255"),
                         RouteSegmentFactory.MakeDoublePoint(colour: "-1"),
@@ -118,16 +118,16 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidColourIntegersAfterLooping()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SidStarRouteFactory.Make(
                     SidStarType.STAR,
-                    new List<RouteSegment>()
+                    new List<RouteSegment>
                     {
                         RouteSegmentFactory.MakeDoublePoint(colour: "255"),
                         RouteSegmentFactory.MakeDoublePoint(colour: "255"),
@@ -136,7 +136,7 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

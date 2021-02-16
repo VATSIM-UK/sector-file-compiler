@@ -10,9 +10,9 @@ namespace CompilerTest.Validate
     {
         public AllSectorsMustHaveValidDepartureAirportsTest()
         {
-            this.sectorElements.Add(AirportFactory.Make("EGKK"));
-            this.sectorElements.Add(AirportFactory.Make("EGLL"));
-            this.sectorElements.Add(AirportFactory.Make("EGCC"));
+            sectorElements.Add(AirportFactory.Make("EGKK"));
+            sectorElements.Add(AirportFactory.Make("EGLL"));
+            sectorElements.Add(AirportFactory.Make("EGCC"));
         }
 
         [Theory]
@@ -22,24 +22,24 @@ namespace CompilerTest.Validate
         [InlineData("EGKK", "EGLL", "EGCC")]
         public void TestItPassesOnAllValid(string first, string second, string third)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    departureAirports: new List<SectorDepartureAirports>()
+                    departureAirports: new List<SectorDepartureAirports>
                     {
-                        SectorDepartureAirportsFactory.Make(new List<string>() {first, second})
+                        SectorDepartureAirportsFactory.Make(new List<string> {first, second})
                     }
                 )
             );
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    departureAirports: new List<SectorDepartureAirports>()
+                    departureAirports: new List<SectorDepartureAirports>
                     {
-                        SectorDepartureAirportsFactory.Make(new List<string>() {second, third})
+                        SectorDepartureAirportsFactory.Make(new List<string> {second, third})
                     }
                 )
             );
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Theory]
@@ -50,24 +50,24 @@ namespace CompilerTest.Validate
         [InlineData("WHAT", "WHAT", "WHAT", 2)]
         public void TestItFailsOnInvalid(string first, string second, string third, int timesCalled)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    departureAirports: new List<SectorDepartureAirports>()
+                    departureAirports: new List<SectorDepartureAirports>
                     {
-                        SectorDepartureAirportsFactory.Make(new List<string>() {first, second})
+                        SectorDepartureAirportsFactory.Make(new List<string> {first, second})
                     }
                 )
             );
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    departureAirports: new List<SectorDepartureAirports>()
+                    departureAirports: new List<SectorDepartureAirports>
                     {
-                        SectorDepartureAirportsFactory.Make(new List<string>() {second, third})
+                        SectorDepartureAirportsFactory.Make(new List<string> {second, third})
                     }
                 )
             );
             
-            this.AssertValidationErrors(timesCalled);
+            AssertValidationErrors(timesCalled);
         }
 
         protected override IValidationRule GetValidationRule()

@@ -6,7 +6,7 @@ namespace CompilerTest.Bogus.Factory
 {
     static class GroundNetworkFactory
     {
-        public static GroundNetwork Make(string airfield = "EGLL")
+        public static GroundNetwork Make(string airfield = "EGLL", List<GroundNetworkRunwayExit> exits = null)
         {
             return new Faker<GroundNetwork>()
                 .CustomInstantiator(
@@ -18,7 +18,7 @@ namespace CompilerTest.Bogus.Factory
                             GroundNetworkTaxiwayFactory.Make(),
                             GroundNetworkTaxiwayFactory.Make()
                         },
-                        new List<GroundNetworkRunwayExit>
+                        exits ?? new List<GroundNetworkRunwayExit>
                         {
                             GroundNetworkRunwayExitFactory.Make(),
                             GroundNetworkRunwayExitFactory.Make(),

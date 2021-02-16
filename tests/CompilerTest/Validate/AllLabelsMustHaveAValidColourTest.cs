@@ -8,25 +8,25 @@ namespace CompilerTest.Validate
     {
         public AllLabelsMustHaveAValidColourTest()
         {
-            this.sectorElements.Add(ColourFactory.Make("colour1"));
+            sectorElements.Add(ColourFactory.Make("colour1"));
         }
 
         [Fact]
         public void TestItPassesOnValidColours()
         {
-            this.sectorElements.Labels.Add(LabelFactory.Make(colour: "colour1"));
-            this.sectorElements.Labels.Add(LabelFactory.Make(colour: "123"));
+            sectorElements.Labels.Add(LabelFactory.Make(colour: "colour1"));
+            sectorElements.Labels.Add(LabelFactory.Make(colour: "123"));
 
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidColours()
         {
-            this.sectorElements.Labels.Add(LabelFactory.Make(colour: "colour2"));
-            this.sectorElements.Labels.Add(LabelFactory.Make(colour: "-123"));
+            sectorElements.Labels.Add(LabelFactory.Make(colour: "colour2"));
+            sectorElements.Labels.Add(LabelFactory.Make(colour: "-123"));
 
-            this.AssertValidationErrors(2);
+            AssertValidationErrors(2);
         }
 
         protected override IValidationRule GetValidationRule()
