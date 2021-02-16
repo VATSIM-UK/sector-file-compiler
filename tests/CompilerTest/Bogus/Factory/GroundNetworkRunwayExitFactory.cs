@@ -10,10 +10,10 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<GroundNetworkRunwayExit>()
                 .CustomInstantiator(
-                    _ => new GroundNetworkRunwayExit(
+                    faker => new GroundNetworkRunwayExit(
                         "27L",
                         "N3W",
-                        11,
+                        faker.Random.ArrayElement(new []{"LEFT", "RIGHT"}),
                         15,
                         new List<GroundNetworkCoordinate>
                         {

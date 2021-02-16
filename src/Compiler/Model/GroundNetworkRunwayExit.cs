@@ -7,14 +7,14 @@ namespace Compiler.Model
     {
         public string Runway { get; }
         public string ExitName { get; }
-        public int Direction { get; }
+        public string Direction { get; }
         public List<GroundNetworkCoordinate> Coordinates { get; }
         public int MaximumSpeed { get; }
 
         public GroundNetworkRunwayExit(
             string runway,
             string exitName,
-            int direction,
+            string direction,
             int maximumSpeed,
             List<GroundNetworkCoordinate> coordinates,
             Definition definition,

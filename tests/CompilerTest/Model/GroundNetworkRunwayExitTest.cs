@@ -24,7 +24,7 @@ namespace CompilerTest.Model
             exit = new GroundNetworkRunwayExit(
                 "27L",
                 "N3W",
-                11,
+                "LEFT",
                 15,
                 coordinates,
                 DefinitionFactory.Make(),
@@ -48,7 +48,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsDirection()
         {
-            Assert.Equal(11, exit.Direction);
+            Assert.Equal("LEFT", exit.Direction);
         }
         
         [Fact]
@@ -66,7 +66,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("EXIT:27L:N3W:11:15", exit.GetCompileData(new SectorElementCollection()));
+            Assert.Equal("EXIT:27L:N3W:LEFT:15", exit.GetCompileData(new SectorElementCollection()));
         }
 
         [Fact]

@@ -173,10 +173,13 @@ namespace Compiler.Parser
                 throw new ArgumentException();
             }
 
-            if (!HeadingParser.TryParse(declarationLine.dataSegments[3], out int direction))
+            if (declarationLine.dataSegments[3] != "LEFT" && declarationLine.dataSegments[3] != "RIGHT")
             {
                 errorLog.AddEvent(
-                    new SyntaxError("Invalid exit direction in EXIT declaration", declarationLine)
+                    new SyntaxError(
+                        "Invalid exit direction in EXIT declaration, must be LEFT or RIGHT",
+                        declarationLine
+                    )
                 );
                 throw new ArgumentException();
             }
@@ -192,7 +195,7 @@ namespace Compiler.Parser
             return new GroundNetworkRunwayExit(
                 declarationLine.dataSegments[1],
                 declarationLine.dataSegments[2],
-                direction,
+                declarationLine.dataSegments[3],
                 maximumSpeed,
                 ProcessCoordinates(file, lines.GetRange(1, lines.Count - 1), ExitDeclaration),
                 declarationLine.definition,

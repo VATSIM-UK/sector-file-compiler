@@ -15,37 +15,37 @@ namespace CompilerTest.Parser
                 "COORD:N054.39.27.000:W006.12.57.000"
             }}, // Invalid data type
             new object[] { new List<string>{
-                "EXIT:27L:N3W:11:15:16"
+                "EXIT:27L:N3W:LEFT:15:16"
             }}, // Too many segments
             new object[] { new List<string>{
-                "EXIT:27L:N3W:11"
+                "EXIT:27L:N3W:LEFT"
             }}, // Too few segments
             new object[] { new List<string>{
-                "EXIT:ABC:N3W:11:15"
+                "EXIT:ABC:N3W:LEFT:15"
             }}, // Invalid runway
             new object[] { new List<string>{
-                "EXIT:27L:N3W:abc:15"
+                "EXIT:27L:N3W:UP:15"
             }}, // Invalid direction
             new object[] { new List<string>{
-                "EXIT:27L:N3W:11:abc"
+                "EXIT:27L:N3W:LEFT:abc"
             }}, // Invalid speed
             new object[] { new List<string>{
-                "EXIT:27L:N3W:11:15"
+                "EXIT:27L:N3W:LEFT:15"
             }}, // No coordinates for exit
             new object[] { new List<string>{
-                "EXIT:27L:N3W:11:15",
+                "EXIT:27L:N3W:LEFT:15",
                 "COORD:N054.39.27.000:W006.12.57.000:def"
             }}, // Too many COORD segments
             new object[] { new List<string>{
-                "EXIT:27L:N3W:11:15",
+                "EXIT:27L:N3W:LEFT:15",
                 "COORD:N054.39.27.000"
             }}, // To few COORD segments
             new object[] { new List<string>{
-                "EXIT:27L:N3W:11:15",
+                "EXIT:27L:N3W:LEFT:15",
                 "NOTCOORD:N054.39.27.000:W006.12.57.000"
             }}, // Not a coordinate declaration for exit
             new object[] { new List<string>{
-                "EXIT:27L:N3W:11:15",
+                "EXIT:27L:N3W:LEFT:15",
                 "COORD:Nabc.39.27.000:W006.12.57.000"
             }}, // COORD declaration invalid coordinates
             new object[] { new List<string>{
@@ -73,7 +73,7 @@ namespace CompilerTest.Parser
                 "TAXI:A:15:1:54L"
             }}, // No coordinates
             new object[] { new List<string>{
-                "EXIT:26L:A1:123:15;comment", 
+                "EXIT:26L:A1:LEFT:15;comment", 
                 "TAXI:A1:15:1:25L ;comment3",
                 "COORD:N050.57.00.000:W001.21.24.490 ;comment4",
                 "COORD:N050.57.00.000:W001.21.24.491 ;comment5"
@@ -90,13 +90,15 @@ namespace CompilerTest.Parser
             logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
-        [Fact]
-        public void TestItAddsRunwayExits()
+        [Theory]
+        [InlineData("EXIT:26L:A1:LEFT:15;comment", "LEFT")]
+        [InlineData("EXIT:26L:A1:RIGHT:15;comment", "RIGHT")]
+        public void TestItAddsRunwayExits(string exitLine, string expectedDirection)
         {
             RunParserOnLines(
                 new List<string>()
                 {
-                    "EXIT:26L:A1:123:15;comment",
+                    exitLine,
                     "COORD:N050.57.00.000:W001.21.24.490 ;comment1",
                     "COORD:N050.57.00.000:W001.21.24.491 ;comment2"
                 }
@@ -109,7 +111,7 @@ namespace CompilerTest.Parser
             GroundNetworkRunwayExit exit = sectorElementCollection.GroundNetworks[0].RunwayExits[0];
             Assert.Equal("26L", exit.Runway);
             Assert.Equal("A1", exit.ExitName);
-            Assert.Equal(123, exit.Direction);
+            Assert.Equal(expectedDirection, exit.Direction);
             Assert.Equal(15, exit.MaximumSpeed);
             Assert.Equal(2, exit.Coordinates.Count);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), exit.Coordinates[0].Coordinate);
