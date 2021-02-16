@@ -24,7 +24,6 @@ namespace CompilerTest.Validate
         [InlineData("EGLL", "27L", "EGLL", "27R")]
         [InlineData("EGKK", "26L", "EGCC", "23L")]
         [InlineData("EGCC", "23L", "EGCC", "23L")]
-        [InlineData("000A", "00", "000A", "01")]
         public void TestItPassesOnAllValid(string firstAirport, string firstRunway, string secondAirport, string secondRunway)
         {
             sectorElements.Add(
@@ -57,7 +56,7 @@ namespace CompilerTest.Validate
         [InlineData("EGKK", "27L", "EGLL", "27R", 1)]
         [InlineData("EGLL", "26R", "EGLL", "23L", 2)]
         [InlineData("000A", "01", "000A", "00", 2)]
-        public void TestItFailsOnInvalid (string firstAirport, string firstRunway, string secondAirport, string secondRunway, int failTimes)
+        public void TestItFailsOnInvalid(string firstAirport, string firstRunway, string secondAirport, string secondRunway, int failTimes)
         {
             sectorElements.Add(
                 GroundNetworkFactory.Make(
