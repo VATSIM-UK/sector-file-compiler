@@ -11,8 +11,8 @@ namespace Compiler.Parser
 {
     public class GroundNetworkParser: ISectorDataParser
     {
-        private const string TAXI_DECLARATION = "TAXI";
-        private const string EXIT_DECLARATION = "EXIT";
+        private const string TaxiDeclaration = "TAXI";
+        private const string ExitDeclaration = "EXIT";
         private SectorElementCollection sectorElements;
         private IEventLogger errorLog;
 
@@ -84,10 +84,10 @@ namespace Compiler.Parser
         ) {
             switch (lines[0].dataSegments[0])
             {
-                case TAXI_DECLARATION:
+                case TaxiDeclaration:
                     taxiways.Add(ProcessTaxiway(file, lines));
                     break;
-                case EXIT_DECLARATION:
+                case ExitDeclaration:
                     exits.Add(ProcessExit(file, lines));
                     break;
                 default:
@@ -147,7 +147,7 @@ namespace Compiler.Parser
                 maximumSpeed,
                 usageFlag,
                 gateName,
-                ProcessCoordinates(file, lines.GetRange(1, lines.Count - 1), TAXI_DECLARATION),
+                ProcessCoordinates(file, lines.GetRange(1, lines.Count - 1), TaxiDeclaration),
                 declarationLine.definition,
                 declarationLine.docblock,
                 declarationLine.inlineComment
@@ -194,7 +194,7 @@ namespace Compiler.Parser
                 declarationLine.dataSegments[2],
                 direction,
                 maximumSpeed,
-                ProcessCoordinates(file, lines.GetRange(1, lines.Count - 1), EXIT_DECLARATION),
+                ProcessCoordinates(file, lines.GetRange(1, lines.Count - 1), ExitDeclaration),
                 declarationLine.definition,
                 declarationLine.docblock,
                 declarationLine.inlineComment
@@ -265,8 +265,8 @@ namespace Compiler.Parser
 
         private bool IsNewDeclaration(SectorData line)
         {
-            return line.dataSegments[0] == TAXI_DECLARATION ||
-                   line.dataSegments[0] == EXIT_DECLARATION;
+            return line.dataSegments[0] == TaxiDeclaration ||
+                   line.dataSegments[0] == ExitDeclaration;
         }
     }
 }
