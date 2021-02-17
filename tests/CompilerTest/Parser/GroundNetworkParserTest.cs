@@ -179,7 +179,7 @@ namespace CompilerTest.Parser
             RunParserOnLines(
                 new List<string>()
                 {
-                    "EXIT:26L:A1:123:15;comment",
+                    "EXIT:26L:A1:RIGHT:15;comment",
                     "COORD:N050.57.00.000:W001.21.24.490 ;comment1",
                     "COORD:N050.57.00.000:W001.21.24.491 ;comment2",
                     "TAXI:A1:15:1:25L ;comment3",
