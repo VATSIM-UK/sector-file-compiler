@@ -109,6 +109,7 @@ Valid keys in each airports object are as follows:
   "basic": {},
   "fixes": {},
   "freetext": {},
+  "ground_network": {},
   "ownership": {},
   "positions": {},
   "positions_mentor": {},

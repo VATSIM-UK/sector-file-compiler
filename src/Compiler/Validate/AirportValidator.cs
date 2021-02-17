@@ -12,7 +12,7 @@ namespace Compiler.Validate
 
         public static bool IcaoValid(string code)
         {
-            return Regex.IsMatch(code, AirportValidator.IcaoRegex);
+            return Regex.IsMatch(code, IcaoRegex);
         }
 
         /*
@@ -20,8 +20,8 @@ namespace Compiler.Validate
          */
         public static bool ValidEuroscopeAirport(string code)
         {
-            return code == AirportValidator.AnyAirportString ||
-                Regex.IsMatch(code, AirportValidator.IcaoRegex);
+            return code == AnyAirportString ||
+                Regex.IsMatch(code, IcaoRegex);
         }
 
         /*
@@ -29,8 +29,8 @@ namespace Compiler.Validate
          */
         public static bool ValidSectorGuestAirport(string code)
         {
-            return code == AirportValidator.GuestAirportString ||
-                Regex.IsMatch(code, AirportValidator.IcaoRegex);
+            return code == GuestAirportString ||
+                Regex.IsMatch(code, IcaoRegex);
         }
     }
 }

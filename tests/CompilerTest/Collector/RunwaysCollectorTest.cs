@@ -17,11 +17,11 @@ namespace CompilerTest.Collector
             Runway fourth = RunwayFactory.Make("EGCC", "23R");
             Runway fifth = RunwayFactory.Make("EGGD", "09");
 
-            this.sectorElements.Add(first);
-            this.sectorElements.Add(second);
-            this.sectorElements.Add(third);
-            this.sectorElements.Add(fourth);
-            this.sectorElements.Add(fifth);
+            sectorElements.Add(first);
+            sectorElements.Add(second);
+            sectorElements.Add(third);
+            sectorElements.Add(fourth);
+            sectorElements.Add(fifth);
 
             IEnumerable<ICompilableElementProvider> expected = new List<ICompilableElementProvider>()
             {
@@ -31,7 +31,7 @@ namespace CompilerTest.Collector
                 first,
                 third
             };
-            this.AssertCollectedItems(expected);
+            AssertCollectedItems(expected);
         }
 
         protected override OutputSectionKeys GetOutputSection()

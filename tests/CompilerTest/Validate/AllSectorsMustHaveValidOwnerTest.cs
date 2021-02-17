@@ -9,27 +9,27 @@ namespace CompilerTest.Validate
     {
         public AllSectorsMustHaveValidOwnerTest()
         {
-            this.sectorElements.Add(ControllerPositionFactory.Make("BBR"));
-            this.sectorElements.Add(ControllerPositionFactory.Make("BBF"));
-            this.sectorElements.Add(ControllerPositionFactory.Make("LS"));
-            this.sectorElements.Add(ControllerPositionFactory.Make("LC"));
+            sectorElements.Add(ControllerPositionFactory.Make("BBR"));
+            sectorElements.Add(ControllerPositionFactory.Make("BBF"));
+            sectorElements.Add(ControllerPositionFactory.Make("LS"));
+            sectorElements.Add(ControllerPositionFactory.Make("LC"));
         }
 
         [Fact]
         public void TestItPassesOnValidControllers()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    owners: SectorOwnerHierarchyFactory.Make(new List<string>(){"LS", "LC"})
+                    owners: SectorOwnerHierarchyFactory.Make(new List<string> {"LS", "LC"})
                 )
             );
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    owners: SectorOwnerHierarchyFactory.Make(new List<string>(){"LS", "LC", "BBR", "BBF"})
+                    owners: SectorOwnerHierarchyFactory.Make(new List<string> {"LS", "LC", "BBR", "BBF"})
                 )
             );
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Theory]
@@ -39,18 +39,18 @@ namespace CompilerTest.Validate
         [InlineData("BBF","WHAT")]
         public void TestItFailsOnInvalidControllers(string first, string second)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    owners: SectorOwnerHierarchyFactory.Make(new List<string>(){first})
+                    owners: SectorOwnerHierarchyFactory.Make(new List<string> {first})
                 )
             );
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    owners: SectorOwnerHierarchyFactory.Make(new List<string>(){first, second})
+                    owners: SectorOwnerHierarchyFactory.Make(new List<string> {first, second})
                 )
             );
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

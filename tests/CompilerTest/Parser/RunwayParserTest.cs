@@ -38,18 +38,18 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Empty(this.sectorElementCollection.Runways);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.Runways);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsRunwayDataWithDescription()
         {
-            this.RunParserOnLines(new List<string>(new[] { "15 33 148 328 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment" }));
+            RunParserOnLines(new List<string>(new[] { "15 33 148 328 N052.27.48.520 W001.45.31.430 N052.26.46.580 W001.44.22.560 ;comment" }));
 
-            Runway result = this.sectorElementCollection.Runways[0];
+            Runway result = sectorElementCollection.Runways[0];
             Assert.Equal("15", result.FirstIdentifier);
             Assert.Equal(148, result.FirstHeading);
             Assert.Equal(new Coordinate("N052.27.48.520", "W001.45.31.430"), result.FirstThreshold);
@@ -57,7 +57,7 @@ namespace CompilerTest.Parser
             Assert.Equal(328, result.ReverseHeading);
             Assert.Equal(new Coordinate("N052.26.46.580", "W001.44.22.560"), result.ReverseThreshold);
             Assert.Equal("TESTFOLDER", result.AirfieldIcao);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

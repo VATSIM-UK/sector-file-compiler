@@ -8,12 +8,12 @@ namespace CompilerTest.Validate
     {
         public AllCoordinationPointsMustHaveValidDepartureRunwaysTest()
         {
-            this.sectorElements.Add(AirportFactory.Make("EGKK"));
-            this.sectorElements.Add(RunwayFactory.Make("EGKK", "26L", "09"));
-            this.sectorElements.Add(AirportFactory.Make("EGLL"));
-            this.sectorElements.Add(RunwayFactory.Make("EGLL", "09R", "09"));
-            this.sectorElements.Add(RunwayFactory.Make("EGLL", "09L", "09"));
-            this.sectorElements.Add(AirportFactory.Make("EGSS"));
+            sectorElements.Add(AirportFactory.Make("EGKK"));
+            sectorElements.Add(RunwayFactory.Make("EGKK", "26L", "09"));
+            sectorElements.Add(AirportFactory.Make("EGLL"));
+            sectorElements.Add(RunwayFactory.Make("EGLL", "09R", "09"));
+            sectorElements.Add(RunwayFactory.Make("EGLL", "09L", "09"));
+            sectorElements.Add(AirportFactory.Make("EGSS"));
         }
 
         [Theory]
@@ -28,9 +28,9 @@ namespace CompilerTest.Validate
 
         public void TestItPassesOnValidDepartureRunway(string airport, string runway)
         {
-            this.sectorElements.Add(CoordinationPointFactory.MakeAirport(departureAirport: airport, departureRunway: runway));
+            sectorElements.Add(CoordinationPointFactory.MakeAirport(departureAirport: airport, departureRunway: runway));
 
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Theory]
@@ -41,9 +41,9 @@ namespace CompilerTest.Validate
         [InlineData("EGSS", "04")] // Doesn't have a runway
         public void TestItFailsOnInvalidDepartureRunway(string airport, string runway)
         {
-            this.sectorElements.Add(CoordinationPointFactory.MakeAirport(departureAirport: airport, departureRunway: runway));
+            sectorElements.Add(CoordinationPointFactory.MakeAirport(departureAirport: airport, departureRunway: runway));
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

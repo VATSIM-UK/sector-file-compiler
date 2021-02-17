@@ -9,6 +9,7 @@ namespace CompilerTest.Input
         [Theory]
         [InlineData(InputDataType.ESE_AGREEMENTS, typeof(EseSectorDataReader))]
         [InlineData(InputDataType.ESE_FREETEXT, typeof(EseSectorDataReader))]
+        [InlineData(InputDataType.ESE_GROUND_NETWORK, typeof(EseSectorDataReader))]
         [InlineData(InputDataType.ESE_POSITIONS_MENTOR, typeof(EseSectorDataReader))]
         [InlineData(InputDataType.ESE_OWNERSHIP, typeof(EseSectorDataReader))]
         [InlineData(InputDataType.ESE_POSITIONS, typeof(EseSectorDataReader))]

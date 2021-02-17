@@ -69,6 +69,7 @@ namespace Compiler.Parser
                     PositionOrder.PRE_POSITION
                 ),
                 InputDataType.ESE_VRPS => new VrpParser(sectorElements, logger),
+                InputDataType.ESE_GROUND_NETWORK => new GroundNetworkParser(sectorElements, logger),
                 _ => throw new NotImplementedException(
                     $"Parser not not implemented for input data type {file.DataType.ToString()}")
             };

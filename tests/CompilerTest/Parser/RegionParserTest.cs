@@ -12,7 +12,7 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsSinglePointRegionData()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[]
                 {
                     "REGIONNAME TestRegion",
@@ -20,20 +20,20 @@ namespace CompilerTest.Parser
                 })
             );
 
-            Region result = this.sectorElementCollection.Regions[0];
+            Region result = sectorElementCollection.Regions[0];
             Assert.Equal("TestRegion", result.Name);
-            this.AssertExpectedMetadata(result, commentString: "");
+            AssertExpectedMetadata(result, commentString: "");
             
             Assert.Single(result.Points);
             Assert.Equal("Red", result.Points[0].Colour);
             Assert.Equal(new Point("BCN"), result.Points[0].Point);
-            this.AssertExpectedMetadata(result.Points[0], 2);
+            AssertExpectedMetadata(result.Points[0], 2);
         }
 
         [Fact]
         public void TestItAddsMultipleLineRegionData()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[]
                 {
                     "REGIONNAME TestRegion ; comment",
@@ -43,28 +43,28 @@ namespace CompilerTest.Parser
                 })
             );
 
-            Region result = this.sectorElementCollection.Regions[0];
+            Region result = sectorElementCollection.Regions[0];
             Assert.Equal("TestRegion", result.Name);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
             Assert.Equal(3, result.Points.Count);
             
             Assert.Equal("Red", result.Points[0].Colour);
             Assert.Equal(new Point("BCN"), result.Points[0].Point);
-            this.AssertExpectedMetadata(result.Points[0], 2);
+            AssertExpectedMetadata(result.Points[0], 2);
             
             Assert.Null(result.Points[1].Colour);
             Assert.Equal(new Point("BHD"), result.Points[1].Point);
-            this.AssertExpectedMetadata(result.Points[1], 3, "");
+            AssertExpectedMetadata(result.Points[1], 3, "");
             
             Assert.Null(result.Points[2].Colour);
             Assert.Equal(new Point("JSY"), result.Points[2].Point);
-            this.AssertExpectedMetadata(result.Points[2], 4, "");
+            AssertExpectedMetadata(result.Points[2], 4, "");
         }
 
         [Fact]
         public void TestItAddsMultipleRegionsData()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[]
                 {
                     "REGIONNAME TestRegion1",
@@ -75,27 +75,27 @@ namespace CompilerTest.Parser
                 })
             );
             
-            Assert.Equal(2, this.sectorElementCollection.Regions.Count);
-            Region result1 = this.sectorElementCollection.Regions[0];
+            Assert.Equal(2, sectorElementCollection.Regions.Count);
+            Region result1 = sectorElementCollection.Regions[0];
             Assert.Equal("TestRegion1", result1.Name);
-            this.AssertExpectedMetadata(result1, 1, "");
+            AssertExpectedMetadata(result1, 1, "");
 
             Assert.Equal(2, result1.Points.Count);
             Assert.Equal("Red", result1.Points[0].Colour);
             Assert.Equal(new Point("BCN"), result1.Points[0].Point);
-            this.AssertExpectedMetadata(result1.Points[0], 2);
+            AssertExpectedMetadata(result1.Points[0], 2);
             
             Assert.Equal(new Point("BHD"), result1.Points[1].Point);
-            this.AssertExpectedMetadata(result1.Points[1], 3, "");
+            AssertExpectedMetadata(result1.Points[1], 3, "");
 
-            Region result2 = this.sectorElementCollection.Regions[1];
+            Region result2 = sectorElementCollection.Regions[1];
             Assert.Equal("TestRegion2", result2.Name);
-            this.AssertExpectedMetadata(result2, 4, "");
+            AssertExpectedMetadata(result2, 4, "");
             
             Assert.Single(result2.Points);
             Assert.Equal(new Point("JSY"), result2.Points[0].Point);
             Assert.Equal("White", result2.Points[0].Colour);
-            this.AssertExpectedMetadata(result2.Points[0], 5, "");
+            AssertExpectedMetadata(result2.Points[0], 5, "");
         }
 
         public static IEnumerable<object[]> BadData => new List<object[]>
@@ -162,10 +162,10 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Empty(this.sectorElementCollection.Regions);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.Regions);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         protected override InputDataType GetInputDataType()

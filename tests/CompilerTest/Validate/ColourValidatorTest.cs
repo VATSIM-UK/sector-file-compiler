@@ -11,9 +11,9 @@ namespace CompilerTest.Validate
 
         public ColourValidatorTest()
         {
-            this.sectorElements = new SectorElementCollection();
-            this.sectorElements.Add(ColourFactory.Make("colour1"));
-            this.sectorElements.Add(ColourFactory.Make("colour2"));
+            sectorElements = new SectorElementCollection();
+            sectorElements.Add(ColourFactory.Make("colour1"));
+            sectorElements.Add(ColourFactory.Make("colour2"));
         }
 
         [Theory]
@@ -44,7 +44,7 @@ namespace CompilerTest.Validate
         [InlineData("colour2")]
         public void TestItPassesIfColourIsDefined(string colour)
         {
-            Assert.True(ColourValidator.ColourIsDefined(this.sectorElements, colour));
+            Assert.True(ColourValidator.ColourIsDefined(sectorElements, colour));
         }
 
         [Theory]
@@ -53,7 +53,7 @@ namespace CompilerTest.Validate
         [InlineData("colour2")]
         public void TestItValidatesColour(string colour)
         {
-            Assert.True(ColourValidator.ColourValid(this.sectorElements, colour));
+            Assert.True(ColourValidator.ColourValid(sectorElements, colour));
         }
 
         [Theory]
@@ -62,7 +62,7 @@ namespace CompilerTest.Validate
         [InlineData("-1")]
         public void TestItFailsToValidateColour(string colour)
         {
-            Assert.False(ColourValidator.ColourValid(this.sectorElements, colour));
+            Assert.False(ColourValidator.ColourValid(sectorElements, colour));
         }
     }
 }

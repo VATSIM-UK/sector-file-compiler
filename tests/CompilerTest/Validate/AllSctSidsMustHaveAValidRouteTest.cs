@@ -10,18 +10,18 @@ namespace CompilerTest.Validate
     {
         public AllSctSidsMustHaveAValidRouteTest()
         {
-            this.sectorElements.Add(FixFactory.Make("testfix"));
-            this.sectorElements.Add(VorFactory.Make("testvor"));
-            this.sectorElements.Add(NdbFactory.Make("testndb"));
-            this.sectorElements.Add(AirportFactory.Make("testairport"));
+            sectorElements.Add(FixFactory.Make("testfix"));
+            sectorElements.Add(VorFactory.Make("testvor"));
+            sectorElements.Add(NdbFactory.Make("testndb"));
+            sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
         [Fact]
         public void TestItPassesOnValidRoute()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SidStarRouteFactory.Make(
-                    segments: new List<RouteSegment>()
+                    segments: new List<RouteSegment>
                     {
                         RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
                         RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
@@ -32,15 +32,15 @@ namespace CompilerTest.Validate
                 )
             );
            
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnBadFix()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SidStarRouteFactory.Make(
-                    segments: new List<RouteSegment>()
+                    segments: new List<RouteSegment>
                     {
                         RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
                         RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
@@ -51,16 +51,16 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.sectorElements.Fixes.Clear();
-            this.AssertValidationErrors(2);
+            sectorElements.Fixes.Clear();
+            AssertValidationErrors(2);
         }
 
         [Fact]
         public void TestItFailsOnBadVor()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SidStarRouteFactory.Make(
-                    segments: new List<RouteSegment>()
+                    segments: new List<RouteSegment>
                     {
                         RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
                         RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
@@ -71,16 +71,16 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.sectorElements.Vors.Clear();
-            this.AssertValidationErrors(3);
+            sectorElements.Vors.Clear();
+            AssertValidationErrors(3);
         }
 
         [Fact]
         public void TestItFailsOnBadNdb()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SidStarRouteFactory.Make(
-                    segments: new List<RouteSegment>()
+                    segments: new List<RouteSegment>
                     {
                         RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
                         RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
@@ -91,16 +91,16 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.sectorElements.Ndbs.Clear();
-            this.AssertValidationErrors(2);
+            sectorElements.Ndbs.Clear();
+            AssertValidationErrors(2);
         }
 
         [Fact]
         public void TestItFailsOnBadAirport()
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SidStarRouteFactory.Make(
-                    segments: new List<RouteSegment>()
+                    segments: new List<RouteSegment>
                     {
                         RouteSegmentFactory.MakeDoublePoint("testfix", "testvor"),
                         RouteSegmentFactory.MakeDoublePoint("testvor", "testndb"),
@@ -111,8 +111,8 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.sectorElements.Airports.Clear();
-            this.AssertValidationErrors(2);
+            sectorElements.Airports.Clear();
+            AssertValidationErrors(2);
         }
 
         protected override IValidationRule GetValidationRule()

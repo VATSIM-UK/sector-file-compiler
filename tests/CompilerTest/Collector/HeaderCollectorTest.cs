@@ -13,13 +13,13 @@ namespace CompilerTest.Collector
         {
             Header header = new(DefinitionFactory.Make(), new List<HeaderLine>());
 
-            this.sectorElements.Add(header);
+            sectorElements.Add(header);
 
             IEnumerable<ICompilableElementProvider> expected = new List<ICompilableElementProvider>()
             {
                 header
             };
-            this.AssertCollectedItems(expected);
+            AssertCollectedItems(expected);
         }
 
         protected override OutputSectionKeys GetOutputSection()

@@ -9,7 +9,7 @@ namespace CompilerTest.Parser
 
         public FrequencyParserTest()
         {
-            this.parser = new FrequencyParser(117, 137, 50);
+            parser = new FrequencyParser(117, 137, 50);
         }
 
         [Theory]
@@ -24,7 +24,7 @@ namespace CompilerTest.Parser
         [InlineData("135.150", "135.150")] // Everything ok
         public void TestItParsesFrequencies(string frequency, string expected)
         {
-            Assert.Equal(expected, this.parser.ParseFrequency(frequency));
+            Assert.Equal(expected, parser.ParseFrequency(frequency));
         }
     }
 }

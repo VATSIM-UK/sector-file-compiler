@@ -38,34 +38,34 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Empty(this.sectorElementCollection.Vors);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.Vors);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsVorData()
         {
-            this.RunParserOnLines(new List<string>(new[] { "BHD 112.050 N050.57.00.000 W001.21.24.490;comment" }));
+            RunParserOnLines(new List<string>(new[] { "BHD 112.050 N050.57.00.000 W001.21.24.490;comment" }));
 
-            Vor result = this.sectorElementCollection.Vors[0];
+            Vor result = sectorElementCollection.Vors[0];
             Assert.Equal("BHD", result.Identifier);
             Assert.Equal("112.050", result.Frequency);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.Coordinate);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         [Fact]
         public void TestItAddsVorDataTwoLetterIdentifier()
         {
-            this.RunParserOnLines(new List<string>(new[] { "BH 112.050 N050.57.00.000 W001.21.24.490;comment" }));
+            RunParserOnLines(new List<string>(new[] { "BH 112.050 N050.57.00.000 W001.21.24.490;comment" }));
 
-            Vor result = this.sectorElementCollection.Vors[0];
+            Vor result = sectorElementCollection.Vors[0];
             Assert.Equal("BH", result.Identifier);
             Assert.Equal("112.050", result.Frequency);
             Assert.Equal(new Coordinate("N050.57.00.000", "W001.21.24.490"), result.Coordinate);
-            this.AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result);
         }
 
         protected override InputDataType GetInputDataType()

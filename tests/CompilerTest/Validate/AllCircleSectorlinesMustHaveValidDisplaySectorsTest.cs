@@ -10,8 +10,8 @@ namespace CompilerTest.Validate
     {
         public AllCircleSectorlinesMustHaveValidDisplaySectorsTest()
         {
-            this.sectorElements.Add(SectorFactory.Make("COOL1"));
-            this.sectorElements.Add(SectorFactory.Make("COOL2"));
+            sectorElements.Add(SectorFactory.Make("COOL1"));
+            sectorElements.Add(SectorFactory.Make("COOL2"));
         }
 
         [Theory]
@@ -20,7 +20,7 @@ namespace CompilerTest.Validate
         [InlineData("COOL1", "COOL1", "COOL2", "COOL2", "COOL2", "COOL1")]
         public void TestItPassesOnValidSector(string oneA, string twoA, string threeA, string oneB, string twoB, string threeB)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 CircleSectorlineFactory.Make(
                     displayRules: new List<SectorlineDisplayRule> {
                         SectorLineDisplayRuleFactory.Make(oneA, twoA, threeA),
@@ -28,7 +28,7 @@ namespace CompilerTest.Validate
                     }
                 )
             );
-            this.sectorElements.Add(
+            sectorElements.Add(
                 CircleSectorlineFactory.Make(
                     displayRules: new List<SectorlineDisplayRule> {
                         SectorLineDisplayRuleFactory.Make(oneA, twoA, threeA),
@@ -37,7 +37,7 @@ namespace CompilerTest.Validate
                 )
             );
 
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Theory]
@@ -49,14 +49,14 @@ namespace CompilerTest.Validate
         [InlineData("COOL1", "COOL1", "COOL2", "COOL2", "COOL2", "NOTCOOL1")]
         public void TestItFailsOnInvalidSector(string oneA, string twoA, string threeA, string oneB, string twoB, string threeB)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 CircleSectorlineFactory.Make(
                     displayRules: new List<SectorlineDisplayRule> {
                         SectorLineDisplayRuleFactory.Make(oneA, twoA, threeA),
                     }
                 )
             );
-            this.sectorElements.Add(
+            sectorElements.Add(
                 CircleSectorlineFactory.Make(
                     displayRules: new List<SectorlineDisplayRule> {
                         SectorLineDisplayRuleFactory.Make(oneB, twoB, threeB),
@@ -64,7 +64,7 @@ namespace CompilerTest.Validate
                 )
             );
 
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

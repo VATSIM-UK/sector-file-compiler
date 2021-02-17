@@ -8,8 +8,8 @@ namespace CompilerTest.Validate
     {
         public AllCoordinationPointsMustHaveValidFromSectorTest()
         {
-            this.sectorElements.Add(SectorFactory.Make("COOL1"));
-            this.sectorElements.Add(SectorFactory.Make("COOL2"));
+            sectorElements.Add(SectorFactory.Make("COOL1"));
+            sectorElements.Add(SectorFactory.Make("COOL2"));
         }
 
         [Theory]
@@ -17,10 +17,10 @@ namespace CompilerTest.Validate
         [InlineData("COOL2")]
         public void TestItPassesOnValidToSector(string sector)
         {
-            this.sectorElements.Add(CoordinationPointFactory.Make(fromSector: sector));
-            this.sectorElements.Add(CoordinationPointFactory.Make(fromSector: sector));
+            sectorElements.Add(CoordinationPointFactory.Make(fromSector: sector));
+            sectorElements.Add(CoordinationPointFactory.Make(fromSector: sector));
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Theory]
@@ -28,10 +28,10 @@ namespace CompilerTest.Validate
         [InlineData("NOTCOOL2","COOL2")]
         public void TestItFailsOnInvalidToSector(string firstSector, string secondSector)
         {
-            this.sectorElements.Add(CoordinationPointFactory.Make(fromSector: firstSector));
-            this.sectorElements.Add(CoordinationPointFactory.Make(fromSector: secondSector));
+            sectorElements.Add(CoordinationPointFactory.Make(fromSector: firstSector));
+            sectorElements.Add(CoordinationPointFactory.Make(fromSector: secondSector));
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

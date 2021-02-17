@@ -13,32 +13,32 @@ namespace CompilerTest.Validate
 
         public AllSidsMustHaveAValidAirportTest()
         {
-            this.sid1 = SidStarFactory.Make(airport: "EGKK");
-            this.sid2 = SidStarFactory.Make(airport: "EGCC");
-            this.sid3 = SidStarFactory.Make(airport: "EGBB");
+            sid1 = SidStarFactory.Make(airport: "EGKK");
+            sid2 = SidStarFactory.Make(airport: "EGCC");
+            sid3 = SidStarFactory.Make(airport: "EGBB");
 
-            this.sectorElements.Add(AirportFactory.Make("EGKK"));
-            this.sectorElements.Add(AirportFactory.Make("EGLL"));
-            this.sectorElements.Add(AirportFactory.Make("EGCC"));
+            sectorElements.Add(AirportFactory.Make("EGKK"));
+            sectorElements.Add(AirportFactory.Make("EGLL"));
+            sectorElements.Add(AirportFactory.Make("EGCC"));
         }
 
         [Fact]
         public void TestItPassesOnAllValid()
         {
-            this.sectorElements.Add(sid1);
-            this.sectorElements.Add(sid2);
+            sectorElements.Add(sid1);
+            sectorElements.Add(sid2);
 
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidAirport()
         {
-            this.sectorElements.Add(sid1);
-            this.sectorElements.Add(sid2);
-            this.sectorElements.Add(sid3);
+            sectorElements.Add(sid1);
+            sectorElements.Add(sid2);
+            sectorElements.Add(sid3);
 
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

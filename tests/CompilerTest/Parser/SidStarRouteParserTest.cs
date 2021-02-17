@@ -35,19 +35,19 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Empty(this.sectorElementCollection.StarRoutes);
-            Assert.Empty(this.sectorElementCollection.SidRoutes);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Empty(sectorElementCollection.StarRoutes);
+            Assert.Empty(sectorElementCollection.SidRoutes);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsSingleRowElements()
         {
-            this.RunParserOnLines(new List<string>(new[] { "Test                       abc abc def def ;comment" }));
+            RunParserOnLines(new List<string>(new[] { "Test                       abc abc def def ;comment" }));
             
-            SidStarRoute result = this.sectorElementCollection.SidRoutes[0];
+            SidStarRoute result = sectorElementCollection.SidRoutes[0];
             Assert.Equal("Test", result.Identifier);
             Assert.Equal(
                 new RouteSegment(
@@ -62,14 +62,14 @@ namespace CompilerTest.Parser
             );
             Assert.Empty(result.Segments);
             
-            this.AssertExpectedMetadata(result);
-            this.AssertExpectedMetadata(result.InitialSegment);
+            AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result.InitialSegment);
         }
 
         [Fact]
         public void TestItAddsMultiRowElements()
         {
-            this.RunParserOnLines(new List<string>(
+            RunParserOnLines(new List<string>(
                 new[] {
                     "Test                       abc abc def def ;comment",
                     "                           def def ghi ghi ;comment"
@@ -89,7 +89,7 @@ namespace CompilerTest.Parser
                 ),
             };
 
-            SidStarRoute result = this.sectorElementCollection.SidRoutes[0];
+            SidStarRoute result = sectorElementCollection.SidRoutes[0];
             Assert.Equal("Test", result.Identifier);
             Assert.Equal(
                 new RouteSegment(
@@ -104,15 +104,15 @@ namespace CompilerTest.Parser
             );
             Assert.Equal(expectedAdditionalSegments, result.Segments);
             
-            this.AssertExpectedMetadata(result);
-            this.AssertExpectedMetadata(result.InitialSegment);
-            this.AssertExpectedMetadata(result.Segments[0], 2);
+            AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result.InitialSegment);
+            AssertExpectedMetadata(result.Segments[0], 2);
         }
 
         [Fact]
         public void TestItAddsMultipleElements()
         {
-            this.RunParserOnLines(new List<string>(
+            RunParserOnLines(new List<string>(
                 new List<string>(
                     new[] {
                         "Test                       abc abc def def;comment",
@@ -134,7 +134,7 @@ namespace CompilerTest.Parser
                 )
             };
 
-            SidStarRoute result = this.sectorElementCollection.SidRoutes[0];
+            SidStarRoute result = sectorElementCollection.SidRoutes[0];
             Assert.Equal("Test", result.Identifier);
             Assert.Equal(
                 new RouteSegment(
@@ -148,11 +148,11 @@ namespace CompilerTest.Parser
                 result.InitialSegment
             );
             Assert.Equal(expectedAdditionalSegments1, result.Segments);
-            this.AssertExpectedMetadata(result);
-            this.AssertExpectedMetadata(result.InitialSegment);
-            this.AssertExpectedMetadata(result.Segments[0], 2);
+            AssertExpectedMetadata(result);
+            AssertExpectedMetadata(result.InitialSegment);
+            AssertExpectedMetadata(result.Segments[0], 2);
 
-            SidStarRoute result2 = this.sectorElementCollection.SidRoutes[1];
+            SidStarRoute result2 = sectorElementCollection.SidRoutes[1];
             Assert.Equal("Test 2", result2.Identifier);
             Assert.Equal(
                 new RouteSegment(
@@ -166,14 +166,14 @@ namespace CompilerTest.Parser
                 result2.InitialSegment
             );
             Assert.Empty(result2.Segments);
-            this.AssertExpectedMetadata(result2, 3);
-            this.AssertExpectedMetadata(result2.InitialSegment, 3);
+            AssertExpectedMetadata(result2, 3);
+            AssertExpectedMetadata(result2.InitialSegment, 3);
         }
 
         [Fact]
         public void TestItAddsMultipleElementsWithColour()
         {
-            this.RunParserOnLines(new List<string>(
+            RunParserOnLines(new List<string>(
                 new[] {
                     "Test                       abc abc def def Red",
                     "                           def def ghi ghi Yellow ;comment",
@@ -195,7 +195,7 @@ namespace CompilerTest.Parser
             };
             
 
-            SidStarRoute result = this.sectorElementCollection.SidRoutes[0];
+            SidStarRoute result = sectorElementCollection.SidRoutes[0];
             Assert.Equal("Test", result.Identifier);
             Assert.Equal(
                 new RouteSegment(
@@ -210,11 +210,11 @@ namespace CompilerTest.Parser
                 result.InitialSegment
             );
             Assert.Equal(expectedAdditionalSegments1, result.Segments);
-            this.AssertExpectedMetadata(result, commentString: "");
-            this.AssertExpectedMetadata(result.InitialSegment, commentString: "");
-            this.AssertExpectedMetadata(result.Segments[0], 2);
+            AssertExpectedMetadata(result, commentString: "");
+            AssertExpectedMetadata(result.InitialSegment, commentString: "");
+            AssertExpectedMetadata(result.Segments[0], 2);
 
-            SidStarRoute result2 = this.sectorElementCollection.SidRoutes[1];
+            SidStarRoute result2 = sectorElementCollection.SidRoutes[1];
             Assert.Equal("Test 2", result2.Identifier);
             Assert.Equal(
                 new RouteSegment(
@@ -229,8 +229,8 @@ namespace CompilerTest.Parser
                 result2.InitialSegment
             );
             Assert.Empty(result2.Segments);
-            this.AssertExpectedMetadata(result2, 3);
-            this.AssertExpectedMetadata(result2.InitialSegment, 3);
+            AssertExpectedMetadata(result2, 3);
+            AssertExpectedMetadata(result2.InitialSegment, 3);
         }
 
         protected override InputDataType GetInputDataType()

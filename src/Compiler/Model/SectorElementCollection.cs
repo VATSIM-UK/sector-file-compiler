@@ -49,6 +49,8 @@ namespace Compiler.Model
         public List<RunwayCentreline> RunwayCentrelines { get; } = new();
         
         public List<RunwayCentreline> FixedColourRunwayCentrelines { get; } = new();
+        
+        public List<GroundNetwork> GroundNetworks { get; } = new();
 
         public void Add(Airport airport)
         {
@@ -196,6 +198,11 @@ namespace Compiler.Model
         public void Add(FixedColourRunwayCentreline centreline)
         {
             FixedColourRunwayCentrelines.Add(centreline);
+        }
+
+        public void Add(GroundNetwork network)
+        {
+            GroundNetworks.Add(network);
         }
     }
 }

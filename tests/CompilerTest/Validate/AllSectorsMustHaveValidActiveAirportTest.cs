@@ -10,9 +10,9 @@ namespace CompilerTest.Validate
     {
         public AllSectorsMustHaveValidActiveAirportTest()
         {
-            this.sectorElements.Add(AirportFactory.Make("EGKK"));
-            this.sectorElements.Add(AirportFactory.Make("EGLL"));
-            this.sectorElements.Add(AirportFactory.Make("EGCC"));
+            sectorElements.Add(AirportFactory.Make("EGKK"));
+            sectorElements.Add(AirportFactory.Make("EGLL"));
+            sectorElements.Add(AirportFactory.Make("EGCC"));
         }
 
         [Theory]
@@ -22,18 +22,18 @@ namespace CompilerTest.Validate
         [InlineData("000A", "000A", "000A")]
         public void TestItPassesOnAllValid(string first, string second, string third)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    active: new List<SectorActive>()
+                    active: new List<SectorActive>
                     {
                         SectorActiveFactory.Make(first),
                         SectorActiveFactory.Make(third)
                     }
                 )
             );
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    active: new List<SectorActive>()
+                    active: new List<SectorActive>
                     {
                         SectorActiveFactory.Make(second),
                         SectorActiveFactory.Make(third)
@@ -41,7 +41,7 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Theory]
@@ -52,18 +52,18 @@ namespace CompilerTest.Validate
         [InlineData("000B", "000A", "000C", 2)]
         public void TestItFailsOnInvalid(string first, string second, string third, int timesCalled)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    active: new List<SectorActive>()
+                    active: new List<SectorActive>
                     {
                         SectorActiveFactory.Make(first),
                         SectorActiveFactory.Make(third)
                     }
                 )
             );
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    active: new List<SectorActive>()
+                    active: new List<SectorActive>
                     {
                         SectorActiveFactory.Make(second),
                         SectorActiveFactory.Make(third)
@@ -71,7 +71,7 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertValidationErrors(timesCalled);
+            AssertValidationErrors(timesCalled);
         }
 
         protected override IValidationRule GetValidationRule()

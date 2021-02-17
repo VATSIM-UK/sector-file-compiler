@@ -10,8 +10,8 @@ namespace Compiler.Validate
     {
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            this.TestAirwayCategory(sectorElements.LowAirways, sectorElements, events);
-            this.TestAirwayCategory(sectorElements.HighAirways, sectorElements, events);
+            TestAirwayCategory(sectorElements.LowAirways, sectorElements, events);
+            TestAirwayCategory(sectorElements.HighAirways, sectorElements, events);
         }
 
         private void TestAirwayCategory(
@@ -23,7 +23,7 @@ namespace Compiler.Validate
             {
                 if (airway.StartPoint.Type() == Point.TypeIdentifier)
                 {
-                    if (this.InvalidPoint(airway.StartPoint.Identifier, sectorElements))
+                    if (InvalidPoint(airway.StartPoint.Identifier, sectorElements))
                     {
                         string message =
                             $"Invalid end point {airway.StartPoint.Identifier} on Airway segment for {airway.Identifier}";
@@ -35,7 +35,7 @@ namespace Compiler.Validate
 
                 if (airway.EndPoint.Type() == Point.TypeIdentifier)
                 {
-                    if (this.InvalidPoint(airway.EndPoint.Identifier, sectorElements))
+                    if (InvalidPoint(airway.EndPoint.Identifier, sectorElements))
                     {
                         string message =
                             $"Invalid start point {airway.EndPoint.Identifier} on Airway segment for {airway.Identifier}";
@@ -49,10 +49,10 @@ namespace Compiler.Validate
 
         private bool InvalidPoint(string identifier, SectorElementCollection sectorElements)
         {
-            return !this.FindFixByIdentifier(identifier, sectorElements) &&
-            !this.FindVorByIdentifier(identifier, sectorElements) &&
-            !this.FindNdbByIdentifier(identifier, sectorElements) &&
-            !this.FindAirportByIdentifier(identifier, sectorElements);
+            return !FindFixByIdentifier(identifier, sectorElements) &&
+            !FindVorByIdentifier(identifier, sectorElements) &&
+            !FindNdbByIdentifier(identifier, sectorElements) &&
+            !FindAirportByIdentifier(identifier, sectorElements);
         }
 
         private bool FindVorByIdentifier(string identifier, SectorElementCollection sectorElements)

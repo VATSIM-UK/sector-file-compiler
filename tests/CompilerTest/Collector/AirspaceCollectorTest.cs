@@ -13,8 +13,8 @@ namespace CompilerTest.Collector
         {
             OutputGroup group1 = new("1");
             OutputGroup group2 = new("2");
-            this.outputGroups.AddGroupWithFiles(group1, new List<string>{"foo.txt"});
-            this.outputGroups.AddGroupWithFiles(group2, new List<string>{"goo.txt"});
+            outputGroups.AddGroupWithFiles(group1, new List<string>{"foo.txt"});
+            outputGroups.AddGroupWithFiles(group2, new List<string>{"goo.txt"});
 
             Sectorline line1 = SectorlineFactory.Make(definition: DefinitionFactory.Make("foo.txt"));
             Sectorline line2 = SectorlineFactory.Make(definition: DefinitionFactory.Make("goo.txt"));
@@ -27,14 +27,14 @@ namespace CompilerTest.Collector
             CoordinationPoint point2 = CoordinationPointFactory.Make(true, definition: DefinitionFactory.Make("foo.txt"));
             CoordinationPoint point3 = CoordinationPointFactory.Make(false, definition: DefinitionFactory.Make("goo.txt"));
 
-            this.sectorElements.Add(line1);
-            this.sectorElements.Add(line2);
-            this.sectorElements.Add(line3);
-            this.sectorElements.Add(sector1);
-            this.sectorElements.Add(sector2);
-            this.sectorElements.Add(point1);
-            this.sectorElements.Add(point2);
-            this.sectorElements.Add(point3);
+            sectorElements.Add(line1);
+            sectorElements.Add(line2);
+            sectorElements.Add(line3);
+            sectorElements.Add(sector1);
+            sectorElements.Add(sector2);
+            sectorElements.Add(point1);
+            sectorElements.Add(point2);
+            sectorElements.Add(point3);
 
             IEnumerable<ICompilableElementProvider> expected = new List<ICompilableElementProvider>()
             {
@@ -47,7 +47,7 @@ namespace CompilerTest.Collector
                 point3,
                 point2
             };
-            this.AssertCollectedItems(expected);
+            AssertCollectedItems(expected);
         }
 
         protected override OutputSectionKeys GetOutputSection()

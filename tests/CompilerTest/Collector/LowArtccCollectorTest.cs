@@ -15,9 +15,9 @@ namespace CompilerTest.Collector
             ArtccSegment second = ArtccSegmentFactory.Make(ArtccType.LOW, "EGPX");
             ArtccSegment third = ArtccSegmentFactory.Make(ArtccType.LOW, "EISN");
 
-            this.sectorElements.Add(first);
-            this.sectorElements.Add(second);
-            this.sectorElements.Add(third);
+            sectorElements.Add(first);
+            sectorElements.Add(second);
+            sectorElements.Add(third);
 
             IEnumerable<ICompilableElementProvider> expected = new List<ICompilableElementProvider>()
             {
@@ -25,7 +25,7 @@ namespace CompilerTest.Collector
                 first,
                 third
             };
-            this.AssertCollectedItems(expected);
+            AssertCollectedItems(expected);
         }
 
         protected override OutputSectionKeys GetOutputSection()

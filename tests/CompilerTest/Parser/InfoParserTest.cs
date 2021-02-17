@@ -12,7 +12,7 @@ namespace CompilerTest.Parser
         [Fact]
         public void TestItAddsInfoData()
         {
-            this.RunParserOnLines(new List<string>(new[] {
+            RunParserOnLines(new List<string>(new[] {
                 "UK (EGTT and EGPX) {VERSION}",
                 "LON_CTR",
                 "EGLL",
@@ -24,7 +24,7 @@ namespace CompilerTest.Parser
                 "10",
             }));
 
-            Info result = this.sectorElementCollection.Info;
+            Info result = sectorElementCollection.Info;
             Assert.Equal("UK (EGTT and EGPX) {VERSION}", result.Name.Name);
             Assert.Equal("LON_CTR", result.Callsign.Callsign);
             Assert.Equal("EGLL", result.Airport.AirportIcao);
@@ -120,10 +120,10 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
+            RunParserOnLines(lines);
 
-            Assert.Null(this.sectorElementCollection.Info);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            Assert.Null(sectorElementCollection.Info);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         protected override InputDataType GetInputDataType()

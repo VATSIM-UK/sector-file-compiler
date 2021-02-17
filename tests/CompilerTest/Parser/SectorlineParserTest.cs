@@ -81,16 +81,16 @@ namespace CompilerTest.Parser
         [MemberData(nameof(BadData))]
         public void ItRaisesSyntaxErrorsOnBadData(List<string> lines)
         {
-            this.RunParserOnLines(lines);
-            Assert.Empty(this.sectorElementCollection.SectorLines);
-            Assert.Empty(this.sectorElementCollection.CircleSectorLines);
-            this.logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
+            RunParserOnLines(lines);
+            Assert.Empty(sectorElementCollection.SectorLines);
+            Assert.Empty(sectorElementCollection.CircleSectorLines);
+            logger.Verify(foo => foo.AddEvent(It.IsAny<SyntaxError>()), Times.Once);
         }
 
         [Fact]
         public void TestItAddsCircleSectorlines()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[] {
                     "CIRCLE_SECTORLINE:BBTWR:EGBB:2.5 ;comment",
                     "DISPLAY:BBAPP:BBAPP:BBTWR ;comment1",
@@ -101,41 +101,41 @@ namespace CompilerTest.Parser
             );
 
             // First
-            CircleSectorline result1 = this.sectorElementCollection.CircleSectorLines[0];
+            CircleSectorline result1 = sectorElementCollection.CircleSectorLines[0];
             Assert.Equal("BBTWR", result1.Name);
             Assert.Equal("EGBB", result1.CentrePoint);
             Assert.Equal(2.5, result1.Radius);
-            this.AssertExpectedMetadata(result1);
+            AssertExpectedMetadata(result1);
 
             Assert.Equal(2, result1.DisplayRules.Count);
             Assert.Equal("BBAPP", result1.DisplayRules[0].ControlledSector);
             Assert.Equal("BBAPP", result1.DisplayRules[0].CompareSectorFirst);
             Assert.Equal("BBTWR", result1.DisplayRules[0].CompareSectorSecond);
-            this.AssertExpectedMetadata(result1.DisplayRules[0], 2, "comment1");
+            AssertExpectedMetadata(result1.DisplayRules[0], 2, "comment1");
             
             Assert.Equal("BBTWR", result1.DisplayRules[1].ControlledSector);
             Assert.Equal("BBAPP", result1.DisplayRules[1].CompareSectorFirst);
             Assert.Equal("BBTWR", result1.DisplayRules[1].CompareSectorSecond);
-            this.AssertExpectedMetadata(result1.DisplayRules[1], 3, "comment2");
+            AssertExpectedMetadata(result1.DisplayRules[1], 3, "comment2");
 
             // Second
-            CircleSectorline result2 = this.sectorElementCollection.CircleSectorLines[1];
+            CircleSectorline result2 = sectorElementCollection.CircleSectorLines[1];
             Assert.Equal("AEAPP", result2.Name);
             Assert.Equal(new Coordinate("N054.39.27.000", "W006.12.57.000"), result2.CentreCoordinate);
             Assert.Equal(30, result2.Radius);
-            this.AssertExpectedMetadata(result2, 4, "comment3");
+            AssertExpectedMetadata(result2, 4, "comment3");
 
             Assert.Single(result2.DisplayRules);
             Assert.Equal("AEAPP", result2.DisplayRules[0].ControlledSector);
             Assert.Equal("AEAPP", result2.DisplayRules[0].CompareSectorFirst);
             Assert.Equal("Rathlin West", result2.DisplayRules[0].CompareSectorSecond);
-            this.AssertExpectedMetadata(result2.DisplayRules[0], 5, "comment4");
+            AssertExpectedMetadata(result2.DisplayRules[0], 5, "comment4");
         }
 
         [Fact]
         public void TestItAddsSectorlines()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[] {
                     "SECTORLINE:JJCTR - S6 ;comment1",
                     "DISPLAY:London S6:JJCTR:London S6 ;comment2",
@@ -151,58 +151,58 @@ namespace CompilerTest.Parser
             );
 
             // First
-            Sectorline result1 = this.sectorElementCollection.SectorLines[0];
+            Sectorline result1 = sectorElementCollection.SectorLines[0];
             Assert.Equal("JJCTR - S6", result1.Name);
-            this.AssertExpectedMetadata(result1, 1, "comment1");
+            AssertExpectedMetadata(result1, 1, "comment1");
             
             Assert.Equal(2, result1.DisplayRules.Count);
             Assert.Equal("London S6", result1.DisplayRules[0].ControlledSector);
             Assert.Equal("JJCTR", result1.DisplayRules[0].CompareSectorFirst);
             Assert.Equal("London S6", result1.DisplayRules[0].CompareSectorSecond);
-            this.AssertExpectedMetadata(result1.DisplayRules[0], 2, "comment2");
+            AssertExpectedMetadata(result1.DisplayRules[0], 2, "comment2");
             
             Assert.Equal("JJCTR", result1.DisplayRules[1].ControlledSector);
             Assert.Equal("JJCTR", result1.DisplayRules[1].CompareSectorFirst);
             Assert.Equal("London S6", result1.DisplayRules[1].CompareSectorSecond);
-            this.AssertExpectedMetadata(result1.DisplayRules[1], 3, "comment3");
+            AssertExpectedMetadata(result1.DisplayRules[1], 3, "comment3");
 
             Assert.Equal(2, result1.Coordinates.Count);
             Assert.Equal(new Coordinate("N050.00.00.000", "W002.40.34.000"), result1.Coordinates[0].Coordinate);
-            this.AssertExpectedMetadata(result1.Coordinates[0], 4, "comment4");
+            AssertExpectedMetadata(result1.Coordinates[0], 4, "comment4");
             
             Assert.Equal(new Coordinate("N049.59.59.000", "W002.29.35.000"), result1.Coordinates[1].Coordinate);
-            this.AssertExpectedMetadata(result1.Coordinates[1], 5, "comment5");
+            AssertExpectedMetadata(result1.Coordinates[1], 5, "comment5");
 
             // Second
-            Sectorline result2 = this.sectorElementCollection.SectorLines[1];
+            Sectorline result2 = sectorElementCollection.SectorLines[1];
             Assert.Equal("JJCTR - LS", result2.Name);
-            this.AssertExpectedMetadata(result2, 6, "comment6");
+            AssertExpectedMetadata(result2, 6, "comment6");
 
             
             Assert.Equal(2, result2.DisplayRules.Count);
             Assert.Equal("London AC Worthing", result2.DisplayRules[0].ControlledSector);
             Assert.Equal("JJCTR", result2.DisplayRules[0].CompareSectorFirst);
             Assert.Equal("London AC Worthing", result2.DisplayRules[0].CompareSectorSecond);
-            this.AssertExpectedMetadata(result2.DisplayRules[0], 7, "comment7");
+            AssertExpectedMetadata(result2.DisplayRules[0], 7, "comment7");
             
             Assert.Equal("JJCTR", result2.DisplayRules[1].ControlledSector);
             Assert.Equal("JJCTR", result2.DisplayRules[1].CompareSectorFirst);
             Assert.Equal("London AC Worthing", result2.DisplayRules[1].CompareSectorSecond);
-            this.AssertExpectedMetadata(result2.DisplayRules[1], 8, "comment8");
+            AssertExpectedMetadata(result2.DisplayRules[1], 8, "comment8");
 
             
             Assert.Equal(2, result2.Coordinates.Count);
             Assert.Equal(new Coordinate("N049.59.59.000", "W002.29.35.000"), result2.Coordinates[0].Coordinate);
-            this.AssertExpectedMetadata(result2.Coordinates[0], 9, "comment9");
+            AssertExpectedMetadata(result2.Coordinates[0], 9, "comment9");
             
             Assert.Equal(new Coordinate("N050.00.00.000", "W001.47.00.000"), result2.Coordinates[1].Coordinate);
-            this.AssertExpectedMetadata(result2.Coordinates[1], 10, "comment10");
+            AssertExpectedMetadata(result2.Coordinates[1], 10, "comment10");
         }
 
         [Fact]
         public void TestItAddsMixedData()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[] {
                     "SECTORLINE:JJCTR - LS ;comment6",
                     "DISPLAY:London AC Worthing:JJCTR:JJCTR ;comment7",
@@ -217,54 +217,54 @@ namespace CompilerTest.Parser
             );
 
             // First
-            CircleSectorline result1 = this.sectorElementCollection.CircleSectorLines[0];
+            CircleSectorline result1 = sectorElementCollection.CircleSectorLines[0];
             Assert.Equal("BBTWR", result1.Name);
             Assert.Equal("EGBB", result1.CentrePoint);
             Assert.Equal(2.5, result1.Radius);
-            this.AssertExpectedMetadata(result1, 7);
+            AssertExpectedMetadata(result1, 7);
 
             Assert.Equal(2, result1.DisplayRules.Count);
             Assert.Equal("BBAPP", result1.DisplayRules[0].ControlledSector);
             Assert.Equal("BBAPP", result1.DisplayRules[0].CompareSectorFirst);
             Assert.Equal("BBTWR", result1.DisplayRules[0].CompareSectorSecond);
-            this.AssertExpectedMetadata(result1.DisplayRules[0], 8, "comment1");
+            AssertExpectedMetadata(result1.DisplayRules[0], 8, "comment1");
             
             Assert.Equal("BBTWR", result1.DisplayRules[1].ControlledSector);
             Assert.Equal("BBAPP", result1.DisplayRules[1].CompareSectorFirst);
             Assert.Equal("BBTWR", result1.DisplayRules[1].CompareSectorSecond);
-            this.AssertExpectedMetadata(result1.DisplayRules[1], 9, "comment2");
+            AssertExpectedMetadata(result1.DisplayRules[1], 9, "comment2");
 
 
             // Second
-            Sectorline result2 = this.sectorElementCollection.SectorLines[0];
+            Sectorline result2 = sectorElementCollection.SectorLines[0];
             Assert.Equal("JJCTR - LS", result2.Name);
-            this.AssertExpectedMetadata(result2, 1, "comment6");
+            AssertExpectedMetadata(result2, 1, "comment6");
 
             
             Assert.Equal(2, result2.DisplayRules.Count);
             Assert.Equal("London AC Worthing", result2.DisplayRules[0].ControlledSector);
             Assert.Equal("JJCTR", result2.DisplayRules[0].CompareSectorFirst);
             Assert.Equal("JJCTR", result2.DisplayRules[0].CompareSectorSecond);
-            this.AssertExpectedMetadata(result2.DisplayRules[0], 2, "comment7");
+            AssertExpectedMetadata(result2.DisplayRules[0], 2, "comment7");
             
             Assert.Equal("JJCTR", result2.DisplayRules[1].ControlledSector);
             Assert.Equal("JJCTR", result2.DisplayRules[1].CompareSectorFirst);
             Assert.Equal("London AC Worthing", result2.DisplayRules[1].CompareSectorSecond);
-            this.AssertExpectedMetadata(result2.DisplayRules[1], 3, "comment8");
+            AssertExpectedMetadata(result2.DisplayRules[1], 3, "comment8");
 
             
             Assert.Equal(2, result2.Coordinates.Count);
             Assert.Equal(new Coordinate("N049.59.59.000", "W002.29.35.000"), result2.Coordinates[0].Coordinate);
-            this.AssertExpectedMetadata(result2.Coordinates[0], 4, "comment9");
+            AssertExpectedMetadata(result2.Coordinates[0], 4, "comment9");
             
             Assert.Equal(new Coordinate("N050.00.00.000", "W001.47.00.000"), result2.Coordinates[1].Coordinate);
-            this.AssertExpectedMetadata(result2.Coordinates[1], 5, "comment10");
+            AssertExpectedMetadata(result2.Coordinates[1], 5, "comment10");
         }
 
         [Fact]
         public void TestItAddsMixedDataNoDisplayRules()
         {
-            this.RunParserOnLines(
+            RunParserOnLines(
                 new List<string>(new[] {
                     "SECTORLINE:JJCTR - LS ;comment6",
                     "COORD:N049.59.59.000:W002.29.35.000 ;comment9",
@@ -275,7 +275,7 @@ namespace CompilerTest.Parser
             );
 
             // First
-            CircleSectorline result1 = this.sectorElementCollection.CircleSectorLines[0];
+            CircleSectorline result1 = sectorElementCollection.CircleSectorLines[0];
             Assert.Equal("BBTWR", result1.Name);
             Assert.Equal("EGBB", result1.CentrePoint);
             Assert.Equal(2.5, result1.Radius);
@@ -283,7 +283,7 @@ namespace CompilerTest.Parser
 
 
             // Second
-            Sectorline result2 = this.sectorElementCollection.SectorLines[0];
+            Sectorline result2 = sectorElementCollection.SectorLines[0];
             Assert.Equal("JJCTR - LS", result2.Name);
             Assert.Empty(result2.DisplayRules);
         }

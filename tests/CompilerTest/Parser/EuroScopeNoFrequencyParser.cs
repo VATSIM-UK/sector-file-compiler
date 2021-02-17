@@ -9,7 +9,7 @@ namespace CompilerTest.Parser
 
         public EuroScopeNoFrequencyParserTest()
         {
-            this.parser = new EuroscopeNoFrequencyParser();
+            parser = new EuroscopeNoFrequencyParser();
         }
 
         [Fact]

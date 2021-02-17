@@ -8,12 +8,12 @@ namespace Compiler.Validate
 
         public static bool RunwayValid(string runway)
         {
-            return Regex.IsMatch(runway, RunwayValidator.RunwayRegex);
+            return Regex.IsMatch(runway, RunwayRegex);
         }
 
         public static bool RunwayValidIncludingAdjacent(string runway)
         {
-            return runway == "00" || Regex.IsMatch(runway, RunwayValidator.RunwayRegex);
+            return runway == "00" || Regex.IsMatch(runway, RunwayRegex);
         }
     }
 }

@@ -8,22 +8,22 @@ namespace CompilerTest.Validate
     {
         public InfoMustHaveValidAirportTest()
         {
-            this.sectorElements.Add(AirportFactory.Make("EGLL"));
-            this.sectorElements.Add(AirportFactory.Make("EGKK"));
+            sectorElements.Add(AirportFactory.Make("EGLL"));
+            sectorElements.Add(AirportFactory.Make("EGKK"));
         }
 
         [Fact]
         public void TestItPassesOnValidAirport()
         {
-            this.sectorElements.Add(InfoFactory.Make("EGLL"));
-            this.AssertNoValidationErrors();
+            sectorElements.Add(InfoFactory.Make("EGLL"));
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidAirport()
         {
-            this.sectorElements.Add(InfoFactory.Make("EGXX"));
-            this.AssertValidationErrors();
+            sectorElements.Add(InfoFactory.Make("EGXX"));
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

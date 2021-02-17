@@ -115,6 +115,11 @@
                 "[AIRSPACE]"
             ),
             new(
+                OutputSectionKeys.ESE_GROUND_NETWORK,
+                true,
+                "[GROUND]"
+            ),
+            new(
                 OutputSectionKeys.RWY_ACTIVE_RUNWAYS,
                 false,
                 null

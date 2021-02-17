@@ -10,13 +10,13 @@ namespace CompilerTest.Validate
     {
         public AllGeoMustHaveValidColoursTest()
         {
-            this.sectorElements.Add(ColourFactory.Make("colour1"));
+            sectorElements.Add(ColourFactory.Make("colour1"));
         }
 
         [Fact]
         public void TestItPassesOnValidColoursIntegers()
         {
-            this.sectorElements.Add(GeoFactory.Make(
+            sectorElements.Add(GeoFactory.Make(
                 "55",
                 new List<GeoSegment>
                 {
@@ -24,13 +24,13 @@ namespace CompilerTest.Validate
                 }
             ));
 
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItPassesOnValidDefinedColours()
         {
-            this.sectorElements.Add(GeoFactory.Make(
+            sectorElements.Add(GeoFactory.Make(
                 "colour1",
                 new List<GeoSegment>
                 {
@@ -38,13 +38,13 @@ namespace CompilerTest.Validate
                 }
             ));
 
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnInvalidDefinedColours()
         {
-            this.sectorElements.Add(GeoFactory.Make(
+            sectorElements.Add(GeoFactory.Make(
                 "notcolour1",
                 new List<GeoSegment>
                 {
@@ -52,13 +52,13 @@ namespace CompilerTest.Validate
                 }
             ));
 
-            this.AssertValidationErrors(2);
+            AssertValidationErrors(2);
         }
 
         [Fact]
         public void TestItFailsOnInvalidDefinedColoursAfterLooping()
         {
-            this.sectorElements.Add(GeoFactory.Make(
+            sectorElements.Add(GeoFactory.Make(
                 "colour1",
                 new List<GeoSegment>
                 {
@@ -66,7 +66,7 @@ namespace CompilerTest.Validate
                 }
             ));
             
-            this.sectorElements.Add(GeoFactory.Make(
+            sectorElements.Add(GeoFactory.Make(
                 "notcolour1",
                 new List<GeoSegment>
                 {
@@ -74,13 +74,13 @@ namespace CompilerTest.Validate
                 }
             ));
 
-            this.AssertValidationErrors(2);
+            AssertValidationErrors(2);
         }
 
         [Fact]
         public void TestItFailsOnInvalidColourIntegers()
         {
-            this.sectorElements.Add(GeoFactory.Make(
+            sectorElements.Add(GeoFactory.Make(
                 "123456789",
                 new List<GeoSegment>
                 {
@@ -88,7 +88,7 @@ namespace CompilerTest.Validate
                 }
             ));
             
-            this.AssertValidationErrors(2);
+            AssertValidationErrors(2);
         }
 
         protected override IValidationRule GetValidationRule()

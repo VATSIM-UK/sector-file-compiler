@@ -10,10 +10,10 @@ namespace CompilerTest.Validate
     {
         public AllSectorsMustHaveValidGuestControllerTest()
         {
-            this.sectorElements.Add(ControllerPositionFactory.Make("BBR"));
-            this.sectorElements.Add(ControllerPositionFactory.Make("BBF"));
-            this.sectorElements.Add(ControllerPositionFactory.Make("LS"));
-            this.sectorElements.Add(ControllerPositionFactory.Make("LC"));
+            sectorElements.Add(ControllerPositionFactory.Make("BBR"));
+            sectorElements.Add(ControllerPositionFactory.Make("BBF"));
+            sectorElements.Add(ControllerPositionFactory.Make("LS"));
+            sectorElements.Add(ControllerPositionFactory.Make("LC"));
         }
 
         [Theory]
@@ -22,18 +22,18 @@ namespace CompilerTest.Validate
         [InlineData("BBR", "BBR", "BBR")]
         public void TestItPassesOnValidControllers(string first, string second, string third)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    guests: new List<SectorGuest>()
+                    guests: new List<SectorGuest>
                     {
                         SectorGuestFactory.Make(first),
                         SectorGuestFactory.Make(third),
                     }
                 )
             );
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    guests: new List<SectorGuest>()
+                    guests: new List<SectorGuest>
                     {
                         SectorGuestFactory.Make(second),
                         SectorGuestFactory.Make(third),
@@ -41,7 +41,7 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Theory]
@@ -52,18 +52,18 @@ namespace CompilerTest.Validate
         [InlineData("NOPE", "NOPE", "LS", 2)]
         public void TestItFailsOnInvalidControllers(string first, string second, string third, int numErrors)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    guests: new List<SectorGuest>()
+                    guests: new List<SectorGuest>
                     {
                         SectorGuestFactory.Make(first),
                         SectorGuestFactory.Make(third),
                     }
                 )
             );
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    guests: new List<SectorGuest>()
+                    guests: new List<SectorGuest>
                     {
                         SectorGuestFactory.Make(second),
                         SectorGuestFactory.Make(third),
@@ -71,7 +71,7 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertValidationErrors(numErrors);
+            AssertValidationErrors(numErrors);
         }
 
         protected override IValidationRule GetValidationRule()

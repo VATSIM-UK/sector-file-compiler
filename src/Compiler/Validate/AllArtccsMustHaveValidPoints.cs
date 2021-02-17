@@ -10,9 +10,9 @@ namespace Compiler.Validate
     {
         public void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
-            this.TestArtccCategory(sectorElements.Artccs, sectorElements, events);
-            this.TestArtccCategory(sectorElements.LowArtccs, sectorElements, events);
-            this.TestArtccCategory(sectorElements.HighArtccs, sectorElements, events);
+            TestArtccCategory(sectorElements.Artccs, sectorElements, events);
+            TestArtccCategory(sectorElements.LowArtccs, sectorElements, events);
+            TestArtccCategory(sectorElements.HighArtccs, sectorElements, events);
         }
 
         private void TestArtccCategory(
@@ -24,7 +24,7 @@ namespace Compiler.Validate
             {
                 if (artcc.StartPoint.Type() == Point.TypeIdentifier)
                 {
-                    if (this.InvalidPoint(artcc.StartPoint.Identifier, sectorElements))
+                    if (InvalidPoint(artcc.StartPoint.Identifier, sectorElements))
                     {
                         string message =
                             $"Invalid end point {artcc.StartPoint.Identifier} on ARTCC segment for {artcc.Identifier}";
@@ -36,7 +36,7 @@ namespace Compiler.Validate
 
                 if (artcc.EndPoint.Type() == Point.TypeIdentifier)
                 {
-                    if (this.InvalidPoint(artcc.EndPoint.Identifier, sectorElements))
+                    if (InvalidPoint(artcc.EndPoint.Identifier, sectorElements))
                     {
                         string message =
                             $"Invalid start point {artcc.EndPoint.Identifier} on ARTCC segment for {artcc.Identifier}";
@@ -50,10 +50,10 @@ namespace Compiler.Validate
 
         private bool InvalidPoint(string identifier, SectorElementCollection sectorElements)
         {
-            return !this.FindFixByIdentifier(identifier, sectorElements) &&
-            !this.FindVorByIdentifier(identifier, sectorElements) &&
-            !this.FindNdbByIdentifier(identifier, sectorElements) &&
-            !this.FindAirportByIdentifier(identifier, sectorElements);
+            return !FindFixByIdentifier(identifier, sectorElements) &&
+            !FindVorByIdentifier(identifier, sectorElements) &&
+            !FindNdbByIdentifier(identifier, sectorElements) &&
+            !FindAirportByIdentifier(identifier, sectorElements);
         }
 
         private bool FindVorByIdentifier(string identifier, SectorElementCollection sectorElements)

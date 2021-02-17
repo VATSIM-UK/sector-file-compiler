@@ -15,9 +15,8 @@ namespace Compiler.Validate
             {
                 foreach (SectorActive active in sector.Active)
                 {
-                    if (!this.RunwayValid(sectorElements, active.Runway, active.Airfield))
+                    if (!RunwayValid(sectorElements, active.Runway, active.Airfield))
                     {
-                        this.RunwayValid(sectorElements, active.Runway, active.Airfield);
                         string message =
                             $"Invalid ACTIVE runway {active.Airfield}/{active.Runway} on sector {sector.Name}";
                         events.AddEvent(new ValidationRuleFailure(message, active));

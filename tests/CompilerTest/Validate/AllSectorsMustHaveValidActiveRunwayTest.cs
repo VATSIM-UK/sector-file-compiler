@@ -10,13 +10,13 @@ namespace CompilerTest.Validate
     {
         public AllSectorsMustHaveValidActiveRunwayTest()
         {
-            this.sectorElements.Add(AirportFactory.Make("EGKK"));
-            this.sectorElements.Add(AirportFactory.Make("EGLL"));
-            this.sectorElements.Add(AirportFactory.Make("EGCC"));
-            this.sectorElements.Add(RunwayFactory.Make("EGKK", "26L", "09"));
-            this.sectorElements.Add(RunwayFactory.Make("EGLL", "27L", "09"));
-            this.sectorElements.Add(RunwayFactory.Make("EGLL", "27R", "09"));
-            this.sectorElements.Add(RunwayFactory.Make("EGCC", "23L", "09"));
+            sectorElements.Add(AirportFactory.Make("EGKK"));
+            sectorElements.Add(AirportFactory.Make("EGLL"));
+            sectorElements.Add(AirportFactory.Make("EGCC"));
+            sectorElements.Add(RunwayFactory.Make("EGKK", "26L", "09"));
+            sectorElements.Add(RunwayFactory.Make("EGLL", "27L", "09"));
+            sectorElements.Add(RunwayFactory.Make("EGLL", "27R", "09"));
+            sectorElements.Add(RunwayFactory.Make("EGCC", "23L", "09"));
         }
 
         [Theory]
@@ -27,9 +27,9 @@ namespace CompilerTest.Validate
         [InlineData("000A", "00", "000A", "01")]
         public void TestItPassesOnAllValid(string firstAirport, string firstRunway, string secondAirport, string secondRunway)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    active: new List<SectorActive>()
+                    active: new List<SectorActive>
                     {
                         SectorActiveFactory.Make(firstAirport, firstRunway),
                         SectorActiveFactory.Make(secondAirport, secondRunway),
@@ -37,9 +37,9 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    active: new List<SectorActive>()
+                    active: new List<SectorActive>
                     {
                         SectorActiveFactory.Make(firstAirport, firstRunway),
                         SectorActiveFactory.Make(secondAirport, secondRunway),
@@ -47,7 +47,7 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Theory]
@@ -58,9 +58,9 @@ namespace CompilerTest.Validate
         [InlineData("000B", "01", "000A", "04", 2)]
         public void TestItFailsOnInvalid (string firstAirport, string firstRunway, string secondAirport, string secondRunway, int failTimes)
         {
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    active: new List<SectorActive>()
+                    active: new List<SectorActive>
                     {
                         SectorActiveFactory.Make(firstAirport, firstRunway),
                         SectorActiveFactory.Make(secondAirport, secondRunway),
@@ -68,9 +68,9 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.sectorElements.Add(
+            sectorElements.Add(
                 SectorFactory.Make(
-                    active: new List<SectorActive>()
+                    active: new List<SectorActive>
                     {
                         SectorActiveFactory.Make(firstAirport, firstRunway),
                         SectorActiveFactory.Make(secondAirport, secondRunway),
@@ -78,7 +78,7 @@ namespace CompilerTest.Validate
                 )
             );
             
-            this.AssertValidationErrors(failTimes);
+            AssertValidationErrors(failTimes);
         }
 
         protected override IValidationRule GetValidationRule()

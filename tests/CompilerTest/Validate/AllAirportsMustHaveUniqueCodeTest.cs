@@ -13,28 +13,28 @@ namespace CompilerTest.Validate
 
         public AllAirportsMustHaveUniqueCodeTest()
         {
-            this.airfield1 = AirportFactory.Make("EGKK");
-            this.airfield2 = AirportFactory.Make("EGLL");
-            this.airfield3 = AirportFactory.Make("EGKK");
+            airfield1 = AirportFactory.Make("EGKK");
+            airfield2 = AirportFactory.Make("EGLL");
+            airfield3 = AirportFactory.Make("EGKK");
         }
 
         [Fact]
         public void TestItPassesOnNoDuplicates()
         {
-            this.sectorElements.Add(airfield1);
-            this.sectorElements.Add(airfield2);
+            sectorElements.Add(airfield1);
+            sectorElements.Add(airfield2);
 
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsOnDuplicates()
         {
-            this.sectorElements.Add(airfield1);
-            this.sectorElements.Add(airfield2);
-            this.sectorElements.Add(airfield3);
+            sectorElements.Add(airfield1);
+            sectorElements.Add(airfield2);
+            sectorElements.Add(airfield3);
 
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

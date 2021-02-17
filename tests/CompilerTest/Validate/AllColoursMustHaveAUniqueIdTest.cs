@@ -13,26 +13,26 @@ namespace CompilerTest.Validate
 
         public AllColoursMustHaveAUniqueIdTest()
         {
-            this.first = ColourFactory.Make("colour1");
-            this.second = ColourFactory.Make("colour2");
-            this.third = ColourFactory.Make("colour1");
+            first = ColourFactory.Make("colour1");
+            second = ColourFactory.Make("colour2");
+            third = ColourFactory.Make("colour1");
         }
 
         [Fact]
         public void TestItPassesIfNoDuplicates()
         {
-            this.sectorElements.Add(this.first);
-            this.sectorElements.Add(this.second);
-            this.AssertNoValidationErrors();
+            sectorElements.Add(first);
+            sectorElements.Add(second);
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsIfThereAreDuplicates()
         {
-            this.sectorElements.Add(this.first);
-            this.sectorElements.Add(this.second);
-            this.sectorElements.Add(this.third);
-            this.AssertValidationErrors();
+            sectorElements.Add(first);
+            sectorElements.Add(second);
+            sectorElements.Add(third);
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

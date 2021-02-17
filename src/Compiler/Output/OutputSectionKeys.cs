@@ -29,6 +29,7 @@
         ESE_FREETEXT,
         ESE_SIDSSTARS,
         ESE_AIRSPACE,
+        ESE_GROUND_NETWORK,
 
         // RWY
         RWY_ACTIVE_RUNWAYS

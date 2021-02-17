@@ -14,7 +14,7 @@ namespace Compiler.Validate
             List<string> keys = new List<string>();
             foreach (SidStar sidStar in sectorElements.SidStars)
             {
-                string sidStarKey = this.GetKey(sidStar);
+                string sidStarKey = GetKey(sidStar);
                 if (keys.Contains(sidStarKey))
                 {
                     events.AddEvent(new ValidationRuleFailure("Duplicate SID/STAR " + sidStarKey, sidStar));

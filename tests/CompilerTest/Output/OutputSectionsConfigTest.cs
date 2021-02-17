@@ -8,7 +8,7 @@ namespace CompilerTest.Output
         [Fact]
         public void TestItHasCorrectNumberOfSections()
         {
-            Assert.Equal(23, OutputSectionsConfig.Sections.Length);
+            Assert.Equal(24, OutputSectionsConfig.Sections.Length);
         }
 
         [Theory]
@@ -34,7 +34,8 @@ namespace CompilerTest.Output
         [InlineData(19, OutputSectionKeys.ESE_FREETEXT, false, "[FREETEXT]")]
         [InlineData(20, OutputSectionKeys.ESE_SIDSSTARS, true, "[SIDSSTARS]")]
         [InlineData(21, OutputSectionKeys.ESE_AIRSPACE, true, "[AIRSPACE]")]
-        [InlineData(22, OutputSectionKeys.RWY_ACTIVE_RUNWAYS, false, null)]
+        [InlineData(22, OutputSectionKeys.ESE_GROUND_NETWORK, true, "[GROUND]")]
+        [InlineData(23, OutputSectionKeys.RWY_ACTIVE_RUNWAYS, false, null)]
         public void TestConfig(int index, OutputSectionKeys expectedKey, bool expectedPrintGroupings, string expectedHeader)
         {
             Assert.Equal(

@@ -9,10 +9,10 @@ namespace CompilerTest.Validate
     {
         public AllCircleSectorlinesMustHaveValidCentreTest()
         {
-            this.sectorElements.Add(FixFactory.Make("testfix"));
-            this.sectorElements.Add(VorFactory.Make("testvor"));
-            this.sectorElements.Add(NdbFactory.Make("testndb"));
-            this.sectorElements.Add(AirportFactory.Make("testairport"));
+            sectorElements.Add(FixFactory.Make("testfix"));
+            sectorElements.Add(VorFactory.Make("testvor"));
+            sectorElements.Add(NdbFactory.Make("testndb"));
+            sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
         [Theory]
@@ -22,11 +22,11 @@ namespace CompilerTest.Validate
         [InlineData("testairport")]
         public void TestItPassesOnValidFix(string fix)
         {
-            this.sectorElements.Add(CircleSectorlineFactory.Make(centre: fix));
-            this.sectorElements.Add(CircleSectorlineFactory.Make(centre: fix));
+            sectorElements.Add(CircleSectorlineFactory.Make(centre: fix));
+            sectorElements.Add(CircleSectorlineFactory.Make(centre: fix));
 
             // This one is ignored by the rule
-            this.sectorElements.Add(
+            sectorElements.Add(
                 new CircleSectorline(
                     "ONE",
                     new Coordinate("abc", "def"),
@@ -38,7 +38,7 @@ namespace CompilerTest.Validate
                 )
             );
 
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Theory]
@@ -48,11 +48,11 @@ namespace CompilerTest.Validate
         [InlineData("testairport", "nottestairport")]
         public void TestItFailsOnInvalidFix(string firstFix, string secondFix)
         {
-            this.sectorElements.Add(CircleSectorlineFactory.Make(centre: firstFix));
-            this.sectorElements.Add(CircleSectorlineFactory.Make(centre: secondFix));
+            sectorElements.Add(CircleSectorlineFactory.Make(centre: firstFix));
+            sectorElements.Add(CircleSectorlineFactory.Make(centre: secondFix));
 
             // This one is ignored by the rule
-            this.sectorElements.Add(
+            sectorElements.Add(
                 new CircleSectorline(
                     "ONE",
                     new Coordinate("abc", "def"),
@@ -64,7 +64,7 @@ namespace CompilerTest.Validate
                 )
             );
 
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

@@ -10,6 +10,7 @@ namespace Compiler.Input
             {
                 InputDataType.ESE_AGREEMENTS => new EseSectorDataReader(),
                 InputDataType.ESE_FREETEXT => new EseSectorDataReader(),
+                InputDataType.ESE_GROUND_NETWORK => new EseSectorDataReader(),
                 InputDataType.ESE_POSITIONS_MENTOR => new EseSectorDataReader(),
                 InputDataType.ESE_OWNERSHIP => new EseSectorDataReader(),
                 InputDataType.ESE_POSITIONS => new EseSectorDataReader(),

@@ -13,8 +13,8 @@ namespace CompilerTest.Collector
         {
             OutputGroup group1 = new("1");
             OutputGroup group2 = new("2");
-            this.outputGroups.AddGroupWithFiles(group1, new List<string>{"foo.txt"});
-            this.outputGroups.AddGroupWithFiles(group2, new List<string>{"goo.txt"});
+            outputGroups.AddGroupWithFiles(group1, new List<string>{"foo.txt"});
+            outputGroups.AddGroupWithFiles(group2, new List<string>{"goo.txt"});
             
             ControllerPosition first = ControllerPositionFactory.Make(
                 order: PositionOrder.MENTOR_POSITION, 
@@ -41,12 +41,12 @@ namespace CompilerTest.Collector
                 definition: DefinitionFactory.Make("foo.txt")
             );
 
-            this.sectorElements.Add(first);
-            this.sectorElements.Add(second);
-            this.sectorElements.Add(third);
-            this.sectorElements.Add(fourth);
-            this.sectorElements.Add(fifth);
-            this.sectorElements.Add(sixth);
+            sectorElements.Add(first);
+            sectorElements.Add(second);
+            sectorElements.Add(third);
+            sectorElements.Add(fourth);
+            sectorElements.Add(fifth);
+            sectorElements.Add(sixth);
 
             IEnumerable<ICompilableElementProvider> expected = new List<ICompilableElementProvider>()
             {
@@ -57,7 +57,7 @@ namespace CompilerTest.Collector
                 second,
                 first
             };
-            this.AssertCollectedItems(expected);
+            AssertCollectedItems(expected);
         }
 
         protected override OutputSectionKeys GetOutputSection()

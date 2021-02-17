@@ -8,10 +8,10 @@ namespace CompilerTest.Validate
     {
         public AllCoordinationPointsMustHaveValidNextTest()
         {
-            this.sectorElements.Add(FixFactory.Make("testfix"));
-            this.sectorElements.Add(VorFactory.Make("testvor"));
-            this.sectorElements.Add(NdbFactory.Make("testndb"));
-            this.sectorElements.Add(AirportFactory.Make("testairport"));
+            sectorElements.Add(FixFactory.Make("testfix"));
+            sectorElements.Add(VorFactory.Make("testvor"));
+            sectorElements.Add(NdbFactory.Make("testndb"));
+            sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
         [Theory]
@@ -22,10 +22,10 @@ namespace CompilerTest.Validate
         [InlineData("EGGD")]
         public void TestItPassesOnValidNext(string fix)
         {
-            this.sectorElements.Add(CoordinationPointFactory.Make(nextPoint: fix));
-            this.sectorElements.Add(CoordinationPointFactory.Make(nextPoint: fix));
+            sectorElements.Add(CoordinationPointFactory.Make(nextPoint: fix));
+            sectorElements.Add(CoordinationPointFactory.Make(nextPoint: fix));
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Theory]
@@ -35,10 +35,10 @@ namespace CompilerTest.Validate
         [InlineData("EGGD", "EGG1")]
         public void TestItFailsOnInvalidNext(string firstFix, string secondFix)
         {
-            this.sectorElements.Add(CoordinationPointFactory.Make(nextPoint: firstFix));
-            this.sectorElements.Add(CoordinationPointFactory.Make(nextPoint: secondFix));
+            sectorElements.Add(CoordinationPointFactory.Make(nextPoint: firstFix));
+            sectorElements.Add(CoordinationPointFactory.Make(nextPoint: secondFix));
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

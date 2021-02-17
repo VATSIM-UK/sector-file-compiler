@@ -14,37 +14,37 @@ namespace CompilerTest.Validate
 
         public AllFixesMustBeUniqueTest()
         {
-            this.first = FixFactory.Make("DIKAS", new Coordinate("abc", "def"));
-            this.second = FixFactory.Make("DIKAS", new Coordinate("abd", "cef"));
-            this.third = FixFactory.Make("DIKAP", new Coordinate("abc", "def"));
-            this.fourth = FixFactory.Make("DIKAS", new Coordinate("abc", "def"));
+            first = FixFactory.Make("DIKAS", new Coordinate("abc", "def"));
+            second = FixFactory.Make("DIKAS", new Coordinate("abd", "cef"));
+            third = FixFactory.Make("DIKAP", new Coordinate("abc", "def"));
+            fourth = FixFactory.Make("DIKAS", new Coordinate("abc", "def"));
         }
 
         [Fact]
         public void TestItPassesIfCoordinatesDifferent()
         {
-            this.sectorElements.Add(this.first);
-            this.sectorElements.Add(this.second);
+            sectorElements.Add(first);
+            sectorElements.Add(second);
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItPassesIfIdentifiersDifferent()
         {
-            this.sectorElements.Add(this.first);
-            this.sectorElements.Add(this.third);
+            sectorElements.Add(first);
+            sectorElements.Add(third);
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Fact]
         public void TestItFailsIfThereAreDuplicates()
         {
-            this.sectorElements.Add(this.first);
-            this.sectorElements.Add(this.fourth);
+            sectorElements.Add(first);
+            sectorElements.Add(fourth);
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()

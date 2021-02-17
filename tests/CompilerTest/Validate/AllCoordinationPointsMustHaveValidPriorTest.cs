@@ -8,10 +8,10 @@ namespace CompilerTest.Validate
     {
         public AllCoordinationPointsMustHaveValidPriorTest()
         {
-            this.sectorElements.Add(FixFactory.Make("testfix"));
-            this.sectorElements.Add(VorFactory.Make("testvor"));
-            this.sectorElements.Add(NdbFactory.Make("testndb"));
-            this.sectorElements.Add(AirportFactory.Make("testairport"));
+            sectorElements.Add(FixFactory.Make("testfix"));
+            sectorElements.Add(VorFactory.Make("testvor"));
+            sectorElements.Add(NdbFactory.Make("testndb"));
+            sectorElements.Add(AirportFactory.Make("testairport"));
         }
 
         [Theory]
@@ -22,10 +22,10 @@ namespace CompilerTest.Validate
         [InlineData("EGGD")]
         public void TestItPassesOnValidPrior(string fix)
         {
-            this.sectorElements.Add(CoordinationPointFactory.Make(priorPoint: fix));
-            this.sectorElements.Add(CoordinationPointFactory.Make(priorPoint: fix));
+            sectorElements.Add(CoordinationPointFactory.Make(priorPoint: fix));
+            sectorElements.Add(CoordinationPointFactory.Make(priorPoint: fix));
             
-            this.AssertNoValidationErrors();
+            AssertNoValidationErrors();
         }
 
         [Theory]
@@ -35,10 +35,10 @@ namespace CompilerTest.Validate
         [InlineData("EGGD", "EGG1")]
         public void TestItFailsOnInvalidPrior(string firstFix, string secondFix)
         {
-            this.sectorElements.Add(CoordinationPointFactory.Make(priorPoint: firstFix));
-            this.sectorElements.Add(CoordinationPointFactory.Make(priorPoint: secondFix));
+            sectorElements.Add(CoordinationPointFactory.Make(priorPoint: firstFix));
+            sectorElements.Add(CoordinationPointFactory.Make(priorPoint: secondFix));
             
-            this.AssertValidationErrors();
+            AssertValidationErrors();
         }
 
         protected override IValidationRule GetValidationRule()
