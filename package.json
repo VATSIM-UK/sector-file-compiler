@@ -10,28 +10,28 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AnyTWF/sector-file-compiler.git"
+    "url": "git+https://github.com/VATSIM-UK/sector-file-compiler.git"
   },
   "keywords": [
     "vatsim",
-    "AndyTWF",
+    "VATSIM-UK",
     "sector",
     "sectorfile",
     "euroscope"
   ],
-  "author": "AndyTWF",
+  "author": "VATSIM-UK",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/AndyTWF/sector-file-compiler/issues"
+    "url": "https://github.com/VATSIM-UK/sector-file-compiler/issues"
   },
-  "homepage": "https://github.com/AndyTWF/sector-file-compiler#sector-file-compiler",
+  "homepage": "https://github.com/VATSIM-UK/sector-file-compiler#sector-file-compiler",
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
   "release": {
-    "repositoryUrl": "https://github.com/AndyTWF/sector-file-compiler",
+    "repositoryUrl": "https://github.com/VATSIM-UK/sector-file-compiler",
     "branches": [
       "main"
     ],
