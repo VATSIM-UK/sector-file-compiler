@@ -126,6 +126,14 @@ namespace Compiler.Parser
                     continue;
                 }
 
+                if (line.dataSegments.Count != 2)
+                {
+                    this.eventLogger.AddEvent(
+                        new SyntaxError("Invalid number of points in REGION" + data.CurrentLine, line)
+                    );
+                    return;
+                }
+
                 Point parsedPoint = PointParser.Parse(line.dataSegments[0], line.dataSegments[1]);
                 if (Equals(parsedPoint, PointParser.InvalidPoint))
                 {
