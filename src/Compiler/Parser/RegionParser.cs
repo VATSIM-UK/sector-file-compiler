@@ -53,6 +53,7 @@ namespace Compiler.Parser
 
                 // Expecting a colour definition for the region
                 if (expectingColourDefinition) {
+                    // On lines where we're expecting a colour, we want to see a colour followed by point/latlong
                     if (line.dataSegments.Count != 3)
                     {
                         this.eventLogger.AddEvent(
@@ -125,7 +126,8 @@ namespace Compiler.Parser
                     expectingColourDefinition = true;
                     continue;
                 }
-
+                
+                // On lines without colours, we expect to see a point/latlong only
                 if (line.dataSegments.Count != 2)
                 {
                     this.eventLogger.AddEvent(
