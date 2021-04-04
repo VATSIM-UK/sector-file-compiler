@@ -54,7 +54,8 @@ namespace Compiler.Validate
             new AllActiveRunwaysMustReferenceARunway(),
             new AllActiveRunwaysMustBeUnique(),
             new AllRunwayExitsMustHaveAValidRunway(),
-            new OwnersMayOnlyAppearOnceInSectorOwnership()
+            new OwnersMayOnlyAppearOnceInSectorOwnership(),
+            new AltOwnersMayOnlyAppearOnceInEachAltOwnershipLine()
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
