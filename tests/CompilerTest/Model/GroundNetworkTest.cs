@@ -63,10 +63,23 @@ namespace CompilerTest.Model
             var expected = new List<ICompilableElement>
             {
                 taxiway1,
+                taxiway1.Coordinates[0],
+                taxiway1.Coordinates[1],
+                taxiway1.Coordinates[2],
                 taxiway2,
+                taxiway2.Coordinates[0],
+                taxiway2.Coordinates[1],
+                taxiway2.Coordinates[2],
                 exit1,
-                exit2
+                exit1.Coordinates[0],
+                exit1.Coordinates[1],
+                exit1.Coordinates[2],
+                exit2,
+                exit2.Coordinates[0],
+                exit2.Coordinates[1],
+                exit2.Coordinates[2],
             };
+            
             Assert.Equal(expected, network.GetCompilableElements());
         }
     }
