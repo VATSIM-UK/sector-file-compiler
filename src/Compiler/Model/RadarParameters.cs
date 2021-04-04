@@ -1,4 +1,6 @@
-﻿namespace Compiler.Model
+﻿using System;
+
+namespace Compiler.Model
 {
     public class RadarParameters
     {
@@ -28,10 +30,17 @@
 
         public override bool Equals(object? obj)
         {
-            return obj is RadarParameters &&
-                   (obj as RadarParameters).Altitude == Altitude &&
-                   (obj as RadarParameters).Range == Range &&
-                   (obj as RadarParameters).ConeSlope == ConeSlope;
+            return obj is RadarParameters parameters && Equals(parameters);
+        }
+
+        private bool Equals(RadarParameters other)
+        {
+            return Range == other.Range && Altitude == other.Altitude && ConeSlope == other.ConeSlope;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Range, Altitude, ConeSlope);
         }
     }
 }
