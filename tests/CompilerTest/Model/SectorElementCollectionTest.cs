@@ -262,5 +262,23 @@ namespace CompilerTest.Model
             Assert.Single(collection.GroundNetworks);
             Assert.Equal(network, collection.GroundNetworks[0]);
         }
+        
+        [Fact]
+        public void TestItAddsRadars()
+        {
+            Radar radar = RadarFactory.Make();
+            collection.Add(radar);
+            Assert.Single(collection.Radars);
+            Assert.Equal(radar, collection.Radars[0]);
+        }
+        
+        [Fact]
+        public void TestItAddsRadarHoles()
+        {
+            RadarHole hole = RadarHoleFactory.Make();
+            collection.Add(hole);
+            Assert.Single(collection.RadarHoles);
+            Assert.Equal(hole, collection.RadarHoles[0]);
+        }
     }
 }

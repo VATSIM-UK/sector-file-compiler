@@ -52,6 +52,10 @@ namespace Compiler.Model
         
         public List<GroundNetwork> GroundNetworks { get; } = new();
 
+        public List<Radar> Radars { get; } = new();
+        
+        public List<RadarHole> RadarHoles { get; } = new();
+
         public void Add(Airport airport)
         {
             this.Airports.Add(airport);
@@ -203,6 +207,16 @@ namespace Compiler.Model
         public void Add(GroundNetwork network)
         {
             GroundNetworks.Add(network);
+        }
+
+        public void Add(Radar radar)
+        {
+            Radars.Add(radar);
+        }
+        
+        public void Add(RadarHole hole)
+        {
+            RadarHoles.Add(hole);
         }
     }
 }
