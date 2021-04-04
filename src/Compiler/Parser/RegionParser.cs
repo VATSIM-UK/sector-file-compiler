@@ -53,6 +53,7 @@ namespace Compiler.Parser
 
                 // Expecting a colour definition for the region
                 if (expectingColourDefinition) {
+                    // On lines where we're expecting a colour, we want to see a colour followed by point/latlong
                     if (line.dataSegments.Count != 3)
                     {
                         this.eventLogger.AddEvent(
@@ -124,6 +125,15 @@ namespace Compiler.Parser
                     // Immediately after REGIONNAME, we should expect a colour definition
                     expectingColourDefinition = true;
                     continue;
+                }
+                
+                // On lines without colours, we expect to see a point/latlong only
+                if (line.dataSegments.Count != 2)
+                {
+                    this.eventLogger.AddEvent(
+                        new SyntaxError("Invalid number of points in REGION" + data.CurrentLine, line)
+                    );
+                    return;
                 }
 
                 Point parsedPoint = PointParser.Parse(line.dataSegments[0], line.dataSegments[1]);

@@ -156,6 +156,24 @@ namespace CompilerTest.Parser
                     "White JSY JSY"
                 }
             }, // Incomplete mid-file
+            new object[]
+            {
+                new List<string>
+                {
+                    "REGIONNAME TestRegion",
+                    "Red BCN BCN ;comment",
+                    "A"
+                }
+            },  // Not enough points data
+            new object[]
+            {
+                new List<string>
+                {
+                    "REGIONNAME TestRegion",
+                    "Red BCN BCN ;comment",
+                    "A B C"
+                }
+            }  // Too much points data
         };
 
         [Theory]
