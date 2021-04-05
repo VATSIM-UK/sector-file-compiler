@@ -55,7 +55,7 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItCompiles()
         {
-            Assert.Equal("RADAR2:abc:def:1:2:3:4:5:6:7:8:9", model.GetCompileData(new SectorElementCollection()));
+            Assert.Equal("RADAR2:TESTRADAR:abc:def:1:2:3:4:5:6:7:8:9", model.GetCompileData(new SectorElementCollection()));
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Compiler.Model
             return $"{Range}:{Altitude}:{ConeSlope}";
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(Object obj)
         {
             return obj != null && obj is RadarParameters parameters && Equals(parameters);
         }

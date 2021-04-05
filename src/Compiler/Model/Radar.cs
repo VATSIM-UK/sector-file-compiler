@@ -29,7 +29,7 @@
         public override string GetCompileData(SectorElementCollection elements)
         {
             return
-                $"RADAR2:{Coordinate.latitude}:{Coordinate.longitude}:{PrimaryRadarParameters}:{SModeRadarParameters}:{CModeRadarParameters}";
+                $"RADAR2:{Name}:{Coordinate.latitude}:{Coordinate.longitude}:{PrimaryRadarParameters}:{SModeRadarParameters}:{CModeRadarParameters}";
         }
     }
 }
