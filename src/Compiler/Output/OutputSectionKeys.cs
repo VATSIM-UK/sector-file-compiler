@@ -30,6 +30,7 @@
         ESE_SIDSSTARS,
         ESE_AIRSPACE,
         ESE_GROUND_NETWORK,
+        ESE_RADAR,
 
         // RWY
         RWY_ACTIVE_RUNWAYS

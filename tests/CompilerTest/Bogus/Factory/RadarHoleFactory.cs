@@ -1,4 +1,5 @@
-﻿using Bogus;
+﻿using System.Collections.Generic;
+using Bogus;
 using Compiler.Model;
 
 namespace CompilerTest.Bogus.Factory
@@ -13,6 +14,12 @@ namespace CompilerTest.Bogus.Factory
                         f.Random.Int(0, 3000),
                         f.Random.Int(0, 3000),
                         f.Random.Int(0, 3000),
+                        new List<RadarHoleCoordinate>
+                        {
+                            RadarHoleCoordinateFactory.Make(),
+                            RadarHoleCoordinateFactory.Make(),
+                            RadarHoleCoordinateFactory.Make()
+                        },
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()

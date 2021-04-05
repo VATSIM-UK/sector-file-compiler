@@ -30,7 +30,7 @@ namespace Compiler.Model
 
         public override bool Equals(object? obj)
         {
-            return obj is RadarParameters parameters && Equals(parameters);
+            return obj != null && obj is RadarParameters parameters && Equals(parameters);
         }
 
         private bool Equals(RadarParameters other)

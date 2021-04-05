@@ -18,6 +18,8 @@ namespace CompilerTest.Input
         [InlineData(InputDataType.ESE_SIDS, typeof(EseSectorDataReader))]
         [InlineData(InputDataType.ESE_STARS, typeof(EseSectorDataReader))]
         [InlineData(InputDataType.ESE_VRPS, typeof(EseSectorDataReader))]
+        [InlineData(InputDataType.ESE_RADAR2, typeof(EseSectorDataReader))]
+        [InlineData(InputDataType.ESE_RADAR_HOLE, typeof(EseSectorDataReader))]
         [InlineData(InputDataType.RWY_ACTIVE_RUNWAY, typeof(EseSectorDataReader))]
         [InlineData(InputDataType.SCT_AIRPORT_BASIC, typeof(SctSectorDataReader))]
         [InlineData(InputDataType.SCT_ARTCC, typeof(SctSectorDataReader))]

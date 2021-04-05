@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Xunit;
 using Compiler.Model;
 using CompilerTest.Bogus.Factory;
 
@@ -8,21 +10,32 @@ namespace CompilerTest.Model
     {
         private readonly RadarHole modelNotNull;
         private readonly RadarHole modelNull;
+        private readonly List<RadarHoleCoordinate> coordinates;
 
         public RadarHoleTest()
         {
+            coordinates = new()
+            {
+                RadarHoleCoordinateFactory.Make(),
+                RadarHoleCoordinateFactory.Make(),
+                RadarHoleCoordinateFactory.Make()
+            };
+            
             modelNotNull = new RadarHole(
                 1,
                 2,
                 3,
+                coordinates,
                 DefinitionFactory.Make(),
                 DocblockFactory.Make(),
                 CommentFactory.Make()
             );
+            
             modelNull = new RadarHole(
                 null,
                 null,
                 null,
+                coordinates,
                 DefinitionFactory.Make(),
                 DocblockFactory.Make(),
                 CommentFactory.Make()
@@ -64,6 +77,18 @@ namespace CompilerTest.Model
         {
             Assert.Null(modelNull.CModeTop);
         }
+        
+        [Fact]
+        public void TestItSetsCoordinatesNotNull()
+        {
+            Assert.Equal(coordinates, modelNotNull.Coordinates);
+        }
+        
+        [Fact]
+        public void TestItSetsCoordinatesNull()
+        {
+            Assert.Equal(coordinates, modelNull.Coordinates);
+        }
 
         [Fact]
         public void TestItCompilesNotNull()
@@ -72,9 +97,27 @@ namespace CompilerTest.Model
         }
         
         [Fact]
+        public void TestItHasCompilableElementsNotNull()
+        {
+            Assert.Equal(
+                new List<ICompilableElement>{modelNotNull}.Concat(coordinates),
+                modelNotNull.GetCompilableElements()
+            );
+        }
+        
+        [Fact]
         public void TestItCompilesNull()
         {
             Assert.Equal("HOLE:::", modelNull.GetCompileData(new SectorElementCollection()));
+        }
+        
+        [Fact]
+        public void TestItHasCompilableElementsNull()
+        {
+            Assert.Equal(
+                new List<ICompilableElement>{modelNull}.Concat(coordinates),
+                modelNull.GetCompilableElements()
+            );
         }
     }
 }

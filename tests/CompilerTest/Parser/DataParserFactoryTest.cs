@@ -50,6 +50,8 @@ namespace CompilerTest.Parser
         [InlineData(InputDataType.FILE_HEADERS, typeof(HeaderParser))]
         [InlineData(InputDataType.ESE_PRE_POSITIONS, typeof(EsePositionParser))]
         [InlineData(InputDataType.ESE_VRPS, typeof(VrpParser))]
+        [InlineData(InputDataType.ESE_RADAR2, typeof(RadarParser))]
+        [InlineData(InputDataType.ESE_RADAR_HOLE, typeof(RadarHoleParser))]
         public void TestItReturnsCorrectParser(InputDataType dataType, Type expectedParserType)
         {
             Assert.Equal(

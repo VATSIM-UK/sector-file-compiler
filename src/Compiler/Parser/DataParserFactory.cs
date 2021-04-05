@@ -70,6 +70,8 @@ namespace Compiler.Parser
                 ),
                 InputDataType.ESE_VRPS => new VrpParser(sectorElements, logger),
                 InputDataType.ESE_GROUND_NETWORK => new GroundNetworkParser(sectorElements, logger),
+                InputDataType.ESE_RADAR2 => new RadarParser(sectorElements, logger),
+                InputDataType.ESE_RADAR_HOLE => new RadarHoleParser(sectorElements, logger),
                 _ => throw new NotImplementedException(
                     $"Parser not not implemented for input data type {file.DataType.ToString()}")
             };
