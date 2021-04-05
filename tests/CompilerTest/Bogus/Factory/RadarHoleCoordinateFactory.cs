@@ -9,7 +9,7 @@ namespace CompilerTest.Bogus.Factory
         {
             return new Faker<RadarHoleCoordinate>()
                 .CustomInstantiator(
-                    f => new RadarHoleCoordinate(
+                    _ => new RadarHoleCoordinate(
                         CoordinateFactory.Make(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),

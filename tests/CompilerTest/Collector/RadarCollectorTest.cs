@@ -11,7 +11,7 @@ namespace CompilerTest.Collector
         [Fact]
         public void TestItReturnsElementsInOrder()
         {
-            RadarHole beforeFirst = RadarHoleFactory.Make();;
+            RadarHole beforeFirst = RadarHoleFactory.Make();
             Radar first = RadarFactory.Make();
             Radar second = RadarFactory.Make();
             Radar third = RadarFactory.Make();

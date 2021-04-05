@@ -1,6 +1,6 @@
 ﻿namespace Compiler.Model
 {
-    public class Radar: AbstractCompilableElement
+    public class Radar : AbstractCompilableElement
     {
         public string Name { get; }
         public Coordinate Coordinate { get; }

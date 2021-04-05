@@ -121,7 +121,7 @@
             ),
             new(
                 OutputSectionKeys.ESE_RADAR,
-                true,
+                false,
                 "[RADAR]"
             ),
             new(
