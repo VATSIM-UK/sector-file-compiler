@@ -26,6 +26,8 @@ namespace Compiler.Config
             new ConfigFileSection("geo", InputDataType.SCT_GEO, "Geo"),
             new ConfigFileSection("regions", InputDataType.SCT_REGIONS, "Regions"),
             new ConfigFileSection("active_runways", InputDataType.RWY_ACTIVE_RUNWAY, "Active Runways"),
+            new ConfigFileSection("radars", InputDataType.ESE_RADAR2, "Radars"),
+            new ConfigFileSection("radar_holes", InputDataType.ESE_RADAR_HOLE, "Radar Holes"),
         };
     }
 }

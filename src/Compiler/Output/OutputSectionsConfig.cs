@@ -120,6 +120,11 @@
                 "[GROUND]"
             ),
             new(
+                OutputSectionKeys.ESE_RADAR,
+                false,
+                "[RADAR]"
+            ),
+            new(
                 OutputSectionKeys.RWY_ACTIVE_RUNWAYS,
                 false,
                 null

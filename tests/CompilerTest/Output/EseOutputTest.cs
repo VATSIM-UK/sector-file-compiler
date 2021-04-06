@@ -22,7 +22,8 @@ namespace CompilerTest.Output
                 OutputSectionKeys.ESE_FREETEXT,
                 OutputSectionKeys.ESE_SIDSSTARS,
                 OutputSectionKeys.ESE_AIRSPACE,
-                OutputSectionKeys.ESE_GROUND_NETWORK
+                OutputSectionKeys.ESE_GROUND_NETWORK,
+                OutputSectionKeys.ESE_RADAR
             };
             
             Assert.Equal(expected, output.GetOutputSections());

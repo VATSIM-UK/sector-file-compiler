@@ -38,6 +38,8 @@
         ESE_STARS,
         ESE_VRPS,
         ESE_GROUND_NETWORK,
+        ESE_RADAR2,
+        ESE_RADAR_HOLE,
 
         // EuroScope RWY file
         RWY_ACTIVE_RUNWAY,

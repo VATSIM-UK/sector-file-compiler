@@ -48,6 +48,7 @@ namespace Compiler.Collector
                 OutputSectionKeys.ESE_AIRSPACE => new AirspaceCollector(sectorElements, outputGroups),
                 OutputSectionKeys.ESE_GROUND_NETWORK => new GroundNetworkCollector(sectorElements),
                 OutputSectionKeys.RWY_ACTIVE_RUNWAYS => new ActiveRunwaysCollector(sectorElements),
+                OutputSectionKeys.ESE_RADAR => new RadarCollector(sectorElements),
                 _ => throw new ArgumentException("No element collector for section " + section)
             };
         }

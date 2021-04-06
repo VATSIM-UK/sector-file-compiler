@@ -19,6 +19,8 @@ namespace Compiler.Input
                 InputDataType.ESE_SIDS => new EseSectorDataReader(),
                 InputDataType.ESE_STARS => new EseSectorDataReader(),
                 InputDataType.ESE_VRPS => new EseSectorDataReader(),
+                InputDataType.ESE_RADAR2 => new EseSectorDataReader(),
+                InputDataType.ESE_RADAR_HOLE => new EseSectorDataReader(),
                 InputDataType.RWY_ACTIVE_RUNWAY => new EseSectorDataReader(),
                 InputDataType.SCT_AIRPORT_BASIC => new SctSectorDataReader(),
                 InputDataType.SCT_ARTCC => new SctSectorDataReader(),
