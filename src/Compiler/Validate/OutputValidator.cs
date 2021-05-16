@@ -16,7 +16,6 @@ namespace Compiler.Validate
             new AllColoursMustHaveAUniqueId(),
             new AllFixesMustBeUnique(),
             new AllSidsMustBeUnique(),
-            new AllSidsMustHaveAValidAirport(),
             new AllSidsMustHaveAValidRoute(),
             new AllSctSidsMustHaveAValidRoute(),
             new AllSctStarsMustHaveAValidRoute(),
@@ -55,7 +54,8 @@ namespace Compiler.Validate
             new AllActiveRunwaysMustBeUnique(),
             new AllRunwayExitsMustHaveAValidRunway(),
             new OwnersMayOnlyAppearOnceInSectorOwnership(),
-            new AltOwnersMayOnlyAppearOnceInEachAltOwnershipLine()
+            new AltOwnersMayOnlyAppearOnceInEachAltOwnershipLine(),
+            new AllSidsMustHaveAValidRunway()
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
