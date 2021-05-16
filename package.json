@@ -1,6 +1,6 @@
 {
   "name": "sector-file-compiler",
-  "description": "Sector File Compiler",
+  "description": "Sector File Compiler for the VATSIM UK Sector File",
   "directories": {
     "test": "tests"
   },
