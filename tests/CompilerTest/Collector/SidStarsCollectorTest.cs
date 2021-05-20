@@ -28,11 +28,11 @@ namespace CompilerTest.Collector
             IEnumerable<ICompilableElementProvider> expected = new List<ICompilableElementProvider>()
             {
                 fourth,
-                third,
-                second,
                 first,
-                sixth,
-                fifth
+                second,
+                third,
+                fifth,
+                sixth
             };
             AssertCollectedItems(expected);
         }
