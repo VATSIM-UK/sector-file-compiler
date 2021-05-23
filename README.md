@@ -114,6 +114,7 @@ Valid keys in each airports object are as follows:
   "positions": {},
   "positions_mentor": {},
   "sid_airspace": {},
+  "star_airspace": {},
   "runways": {},
   "sectors": {},
   "sids": {},
