@@ -18,6 +18,7 @@ namespace Compiler.Config
             new ConfigFileSection("positions", InputDataType.ESE_POSITIONS, "Positions"),
             new ConfigFileSection("positions_mentor", InputDataType.ESE_POSITIONS_MENTOR, "Mentoring Positions"),
             new ConfigFileSection("sid_airspace", InputDataType.SCT_SIDS, "SID Airspace"),
+            new ConfigFileSection("star_airspace", InputDataType.SCT_STARS, "STAR Airspace"),
             new ConfigFileSection("runways", InputDataType.SCT_RUNWAYS, "Runways`"),
             new ConfigFileSection("sectors", InputDataType.ESE_SECTORLINES, "Sectors"),
             new ConfigFileSection("sids", InputDataType.ESE_SIDS, "SIDs"),
