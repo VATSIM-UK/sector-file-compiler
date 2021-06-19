@@ -11,14 +11,9 @@ namespace CompilerTest.Collector
         [Fact]
         public void TestItReturnsElementsInOrder()
         {
-            OutputGroup group1 = new("1");
-            OutputGroup group2 = new("2");
-            outputGroups.AddGroupWithFiles(group1, new List<string>{"foo.txt"});
-            outputGroups.AddGroupWithFiles(group2, new List<string>{"goo.txt"});
-
-            Region first = RegionFactory.Make(definition: DefinitionFactory.Make("foo.txt"));
-            Region second = RegionFactory.Make(definition: DefinitionFactory.Make("goo.txt"));
-            Region third = RegionFactory.Make(definition: DefinitionFactory.Make("foo.txt"));
+            Region first = RegionFactory.Make(name: "Manchester");
+            Region second = RegionFactory.Make(name: "Bristol");
+            Region third = RegionFactory.Make(name: "London City");
 
             sectorElements.Add(first);
             sectorElements.Add(second);
@@ -26,9 +21,9 @@ namespace CompilerTest.Collector
 
             IEnumerable<ICompilableElementProvider> expected = new List<ICompilableElementProvider>()
             {
-                first,
+                second,
                 third,
-                second
+                first
             };
             AssertCollectedItems(expected);
         }

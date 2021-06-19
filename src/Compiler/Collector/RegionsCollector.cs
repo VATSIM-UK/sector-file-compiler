@@ -18,7 +18,7 @@ namespace Compiler.Collector
 
         public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-            return this.sectorElements.Regions.OrderBy(region => this.repository.GetForDefinitionFile(region.GetDefinition()));
+            return this.sectorElements.Regions.OrderBy(region => region.Name);
         }
     }
 }
