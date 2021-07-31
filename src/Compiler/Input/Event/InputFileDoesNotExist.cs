@@ -16,7 +16,7 @@ namespace Compiler.Input.Event
 
         public string GetMessage()
         {
-            return $"Input file {filename} does not exist, inclusion rule description: {ruleDescriptor}";
+            return $"Input file {filename} does not exist for inclusion rule: {ruleDescriptor.GetDescriptor()}";
         }
 
         public bool IsFatal()

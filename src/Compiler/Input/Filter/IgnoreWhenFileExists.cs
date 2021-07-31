@@ -8,12 +8,12 @@ namespace Compiler.Input.Filter
 
         public IgnoreWhenFileExists(string fileToCheckAgainst)
         {
-            this.FileToCheckAgainst = fileToCheckAgainst;
+            FileToCheckAgainst = fileToCheckAgainst;
         }
 
         public bool Filter(string path)
         {
-            return !File.Exists(path);
+            return !File.Exists(FileToCheckAgainst);
         }
     }
 }

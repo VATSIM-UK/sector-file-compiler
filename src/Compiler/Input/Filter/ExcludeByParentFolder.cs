@@ -15,7 +15,9 @@ namespace Compiler.Input.Filter
 
         public bool Filter(string path)
         {
-            return !parentFolders.Contains(Path.GetDirectoryName(path));
+            return !parentFolders.Contains(
+                new FileInfo(Path.GetDirectoryName(path)).Name
+            );
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Compiler.Input.Event
 
         public string GetMessage()
         {
-            return $"Fileset is empty, details: {ruleDescriptor}";
+            return $"Fileset is empty for include rule: {ruleDescriptor.GetDescriptor()}";
         }
 
         public bool IsFatal()

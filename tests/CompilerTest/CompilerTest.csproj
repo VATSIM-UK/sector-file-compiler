@@ -40,6 +40,9 @@
     <Content Include="_TestData\ConfigIncludeLoader\ValidConfig\Ownership\Alternate\Foo.txt" />
     <Content Include="_TestData\ConfigIncludeLoader\ValidConfig\Ownership\Foo\Foo.txt" />
     <Content Include="_TestData\ConfigIncludeLoader\ValidConfig\Ownership\Non-UK\EUR Islands.txt" />
+    <Content Include="_TestData\ExcludeByParentFolder\Foo.txt" />
+    <Content Include="_TestData\FileExistsFilter\Foo.txt" />
+    <Content Include="_TestData\IgnoreWhenFileExists\Foo.txt" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

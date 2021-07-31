@@ -2,9 +2,16 @@
 {
     public class RuleDescriptor: IRuleDescriptor
     {
+        private readonly string details;
+
+        public RuleDescriptor(string details)
+        {
+            this.details = details;
+        }
+
         public string GetDescriptor()
         {
-            throw new System.NotImplementedException();
+            return details;
         }
     }
 }
