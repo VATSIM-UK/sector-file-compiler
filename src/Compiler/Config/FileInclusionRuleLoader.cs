@@ -7,6 +7,7 @@ using Compiler.Input.Rule;
 using Compiler.Input.Validator;
 using Compiler.Output;
 using Newtonsoft.Json.Linq;
+using FileExists = Compiler.Input.Validator.FileExists;
 
 namespace Compiler.Config
 {
@@ -29,19 +30,20 @@ namespace Compiler.Config
 
         public IInclusionRule CreateRule(JObject config)
         {
-            return 
-                ApplyIgnoreMissingValidator(
+            return ApplyIgnoreMissingFilter(
+                config,
+                ApplyExceptWhereExistsFilter(
                     config,
-                    ApplyExceptWhereExistsFilter(
+                    ApplyGenerator(
                         config,
-                        ApplyGenerator(
-                            config,
-                            FileInclusionRuleBuilder.Begin()
-                        )
+                        FileInclusionRuleBuilder.Begin()
                     )
-            ).SetOutputGroup(outputGroup)
-                    .SetDataType(path.Section.DataType)
-                    .Build();
+                )
+            )
+                .AddValidator(new FileExists())
+                .SetOutputGroup(outputGroup)
+                .SetDataType(path.Section.DataType)
+                .Build();
         }
 
         private IFileInclusionRuleBuilder ApplyGenerator(JObject config, IFileInclusionRuleBuilder builder)
@@ -66,14 +68,14 @@ namespace Compiler.Config
             );
         }
         
-        private IFileInclusionRuleBuilder ApplyIgnoreMissingValidator(
+        private IFileInclusionRuleBuilder ApplyIgnoreMissingFilter(
             JObject config,
             IFileInclusionRuleBuilder builder
         )
         {
             if (!config.TryGetValue("ignore_missing", out var ignoreMissingToken))
             {
-                return builder.AddValidator(new FileExists());
+                return builder;
             }
             
             if (ignoreMissingToken.Type != JTokenType.Boolean)
@@ -81,12 +83,7 @@ namespace Compiler.Config
                 ThrowInvalidIgnoreMissingException();
             }
 
-            if (!(bool)ignoreMissingToken)
-            {
-                builder.AddValidator(new FileExists());
-            }
-
-            return builder;
+            return (bool) ignoreMissingToken ? builder.AddFilter(new Input.Filter.FileExists()) : builder;
         }
         
         private IFileInclusionRuleBuilder ApplyExceptWhereExistsFilter(JObject config, IFileInclusionRuleBuilder builder)

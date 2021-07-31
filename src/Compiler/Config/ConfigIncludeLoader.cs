@@ -122,7 +122,7 @@ namespace Compiler.Config
                 {
                     continue;
                 }
-
+                
                 LoadConfigSection(
                     configObjectSection,
                     configSection,
