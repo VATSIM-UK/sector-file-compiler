@@ -40,7 +40,7 @@ namespace Compiler.Collector
                 OutputSectionKeys.SCT_SID => new SidsCollector(sectorElements, outputGroups),
                 OutputSectionKeys.SCT_STAR => new StarsCollector(sectorElements, outputGroups),
                 OutputSectionKeys.SCT_LABELS => new LabelsCollector(sectorElements, outputGroups),
-                OutputSectionKeys.SCT_REGIONS => new RegionsCollector(sectorElements, outputGroups),
+                OutputSectionKeys.SCT_REGIONS => new RegionsCollector(sectorElements),
                 // ESE sections.
                 OutputSectionKeys.ESE_POSITIONS => new PositionsCollector(sectorElements, outputGroups),
                 OutputSectionKeys.ESE_FREETEXT => new FreetextCollector(sectorElements, outputGroups),

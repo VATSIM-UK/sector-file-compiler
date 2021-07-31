@@ -64,12 +64,19 @@ namespace Compiler
                 fileList = InputFileListFactory.CreateFromInclusionRules(
                     new SectorDataFileFactory(new InputFileStreamFactory()),
                     config,
-                    outputGroups
+                    outputGroups,
+                    events
                 );
             }
             catch (System.Exception exception)
             {
                 events.AddEvent(new CompilationMessage(exception.Message));
+                events.AddEvent(new CompilationFinishedEvent(false));
+                return 1;
+            }
+            
+            if (events.HasFatalError())
+            {
                 events.AddEvent(new CompilationFinishedEvent(false));
                 return 1;
             }

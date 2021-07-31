@@ -33,6 +33,15 @@
     <TestDataFiles Include="$(ProjectDir)_TestData\\**\*.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="_TestData\ConfigFileLoader\ValidConfig\Ownership\Alternate\Foo.txt" />
+    <Content Include="_TestData\ConfigFileLoader\ValidConfig\Ownership\Foo\Foo.txt" />
+    <Content Include="_TestData\ConfigFileLoader\ValidConfig\Ownership\Non-UK\EUR Islands.txt" />
+    <Content Include="_TestData\ConfigIncludeLoader\ValidConfig\Ownership\Alternate\Foo.txt" />
+    <Content Include="_TestData\ConfigIncludeLoader\ValidConfig\Ownership\Foo\Foo.txt" />
+    <Content Include="_TestData\ConfigIncludeLoader\ValidConfig\Ownership\Non-UK\EUR Islands.txt" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="@(TestDataFiles)" DestinationFiles="@(TestDataFiles->'$(TargetDir)_TestData\\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
