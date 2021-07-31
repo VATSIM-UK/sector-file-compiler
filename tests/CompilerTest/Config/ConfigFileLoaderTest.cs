@@ -12,6 +12,7 @@ using Compiler.Input.Generator;
 using Compiler.Input.Rule;
 using Compiler.Input.Validator;
 using Compiler.Output;
+using FileExists = Compiler.Input.Validator.FileExists;
 
 namespace CompilerTest.Config
 {
@@ -81,7 +82,7 @@ namespace CompilerTest.Config
                 },
                 airportGeoRule.ListGenerator.GetPaths().ToList()
             );
-            Assert.DoesNotContain(airportGeoRule.Validators, validator => validator.GetType() == typeof(FileExists));
+            Assert.Contains(airportGeoRule.Validators, validator => validator.GetType() == typeof(FileExists));
             Assert.Contains(airportGeoRule.Filters, validator => validator.GetType() == typeof(IgnoreWhenFileExists));
             Assert.Equal(
                 GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Airports/EGLL/SMR/Foo.txt"),
@@ -146,7 +147,7 @@ namespace CompilerTest.Config
                 },
                 miscRegions.ListGenerator.GetPaths().ToList()
             );
-            Assert.Contains(airportBasicRule.Validators, validator => validator.GetType() == typeof(FileExists));
+            Assert.Contains(airportGeoRule.Validators, validator => validator.GetType() == typeof(FileExists));
             Assert.DoesNotContain(airportBasicRule.Filters, validator => validator.GetType() == typeof(IgnoreWhenFileExists));
             Assert.Equal(InputDataType.SCT_AIRPORT_BASIC, airportBasicRule.DataType);
             Assert.Equal(new OutputGroup("airport.SCT_AIRPORT_BASIC.EGLL", "Start EGLL Basic"), airportBasicRule.GetOutputGroup());

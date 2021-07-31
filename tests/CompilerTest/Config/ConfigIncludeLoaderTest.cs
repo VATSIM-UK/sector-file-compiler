@@ -12,6 +12,7 @@ using Compiler.Input.Rule;
 using Compiler.Input.Validator;
 using Compiler.Output;
 using Newtonsoft.Json.Linq;
+using FileExists = Compiler.Input.Validator.FileExists;
 
 namespace CompilerTest.Config
 {
@@ -112,7 +113,7 @@ namespace CompilerTest.Config
                 },
                 airportGeoRule.ListGenerator.GetPaths().ToList()
             );
-            Assert.DoesNotContain(airportGeoRule.Validators, validator => validator.GetType() == typeof(FileExists));
+            Assert.Contains(airportGeoRule.Validators, validator => validator.GetType() == typeof(FileExists));
             Assert.Contains(airportGeoRule.Filters, validator => validator.GetType() == typeof(IgnoreWhenFileExists));
             Assert.Equal(
                 GetFullFilePath("_TestData/ConfigIncludeLoader/ValidConfig/Airports/EGLL/SMR/Foo.txt"),
