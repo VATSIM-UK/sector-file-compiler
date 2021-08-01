@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Compiler.Config;
+using Compiler.Event;
+using Compiler.Input.Rule;
 using Compiler.Output;
 
 namespace Compiler.Input
@@ -9,7 +11,8 @@ namespace Compiler.Input
         public static InputFileList CreateFromInclusionRules(
             SectorDataFileFactory dataFileFactory,
             ConfigInclusionRules config,
-            OutputGroupRepository outputGroups
+            OutputGroupRepository outputGroups,
+            IEventLogger eventLogger
         ) {
             InputFileList fileList = new InputFileList();
 
@@ -17,7 +20,7 @@ namespace Compiler.Input
             {
                 OutputGroup group = rule.GetOutputGroup();
                 List<string> filePaths = new();
-                foreach (AbstractSectorDataFile file in rule.GetFilesToInclude(dataFileFactory))
+                foreach (AbstractSectorDataFile file in rule.GetFilesToInclude(dataFileFactory, eventLogger))
                 {
                     fileList.Add(file);
                     filePaths.Add(file.FullPath);

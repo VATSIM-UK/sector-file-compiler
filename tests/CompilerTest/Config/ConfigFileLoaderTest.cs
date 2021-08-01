@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Compiler.Argument;
@@ -6,7 +7,11 @@ using Compiler.Config;
 using Xunit;
 using Compiler.Exception;
 using Compiler.Input;
+using Compiler.Input.Filter;
+using Compiler.Input.Generator;
+using Compiler.Input.Rule;
 using Compiler.Output;
+using FileExists = Compiler.Input.Validator.FileExists;
 
 namespace CompilerTest.Config
 {
@@ -17,8 +22,8 @@ namespace CompilerTest.Config
 
         public ConfigFileLoaderTest()
         {
-            fileLoader = ConfigFileLoaderFactory.Make();
             arguments = new CompilerArguments();
+            fileLoader = ConfigFileLoaderFactory.Make(arguments);
         }
         
         [Theory]
@@ -47,68 +52,91 @@ namespace CompilerTest.Config
 
             List<IInclusionRule> ruleList = rules.ToList();
             Assert.Equal(6, ruleList.Count);
-            
 
             // Airport - Basic
-            FileListInclusionRule airportBasicRule = (FileListInclusionRule) ruleList[0];
-            Assert.Equal(2, airportBasicRule.FileList.Count());
+            InclusionRule airportBasicRule = (InclusionRule) ruleList[0];
+            Assert.IsType<FileListGenerator>(airportBasicRule.ListGenerator);
+            Assert.Equal(2, airportBasicRule.ListGenerator.GetPaths().Count());
             Assert.Equal(
                 new List<string>
                 {
                     GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Airports/EGLL/Basic.txt"),
                     GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Airports/EGLL/Basic2.txt"),
                 },
-                airportBasicRule.FileList.ToList()
+                airportBasicRule.ListGenerator.GetPaths().ToList()
             );
-            Assert.False(airportBasicRule.IgnoreMissing);
-            Assert.Equal("", airportBasicRule.ExceptWhereExists);
-            Assert.Equal(InputDataType.SCT_AIRPORT_BASIC, airportBasicRule.InputDataType);
+            Assert.Contains(airportBasicRule.Validators, validator => validator.GetType() == typeof(FileExists));
+            Assert.DoesNotContain(airportBasicRule.Filters, validator => validator.GetType() == typeof(IgnoreWhenFileExists));
+            Assert.Equal(InputDataType.SCT_AIRPORT_BASIC, airportBasicRule.DataType);
             Assert.Equal(new OutputGroup("airport.SCT_AIRPORT_BASIC.EGLL", "Start EGLL Basic"), airportBasicRule.GetOutputGroup());
             
             // Airport - Geo
-            FileListInclusionRule airportGeoRule = (FileListInclusionRule) ruleList[1];
-            Assert.Single(airportGeoRule.FileList);
+            InclusionRule airportGeoRule = (InclusionRule) ruleList[1];
+            Assert.IsType<FileListGenerator>(airportGeoRule.ListGenerator);
+            Assert.Single(airportGeoRule.ListGenerator.GetPaths());
             Assert.Equal(
                 new List<string>
                 {
                     GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Airports/EGLL/SMR/Geo.txt"),
                 },
-                airportGeoRule.FileList.ToList()
+                airportGeoRule.ListGenerator.GetPaths().ToList()
             );
-            Assert.True(airportGeoRule.IgnoreMissing);
-            Assert.Equal(GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Airports/EGLL/SMR/Foo.txt"), airportGeoRule.ExceptWhereExists);
-            Assert.Equal(InputDataType.SCT_GEO, airportGeoRule.InputDataType);
+            Assert.Contains(airportGeoRule.Validators, validator => validator.GetType() == typeof(FileExists));
+            Assert.Contains(airportGeoRule.Filters, validator => validator.GetType() == typeof(IgnoreWhenFileExists));
+            Assert.Equal(
+                GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Airports/EGLL/SMR/Foo.txt"),
+                (airportGeoRule.Filters.Where(validator => validator.GetType() == typeof(IgnoreWhenFileExists)).FirstOrDefault() as IgnoreWhenFileExists)?.FileToCheckAgainst
+            );
+            Assert.Equal(InputDataType.SCT_GEO, airportGeoRule.DataType);
             Assert.Equal(new OutputGroup("airport.SCT_GEO.EGLL", "Start EGLL Geo"), airportGeoRule.GetOutputGroup());
             
             // Enroute ownership folder 1
-            FolderInclusionRule ownershipRule1 = (FolderInclusionRule) ruleList[2];
-            Assert.Equal(GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Ownership/Alternate"), ownershipRule1.Folder);
-            Assert.True(ownershipRule1.Recursive);
-            Assert.True(ownershipRule1.ExcludeList);
-            Assert.Empty(ownershipRule1.IncludeExcludeFiles);
+            InclusionRule ownershipRule1 = (InclusionRule) ruleList[2];
+            Assert.Equal(
+                new List<string>{GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Ownership/Alternate/Foo.txt")},
+                ownershipRule1.ListGenerator.GetPaths().ToList()
+            );
+            Assert.IsType<RecursiveFolderFileListGenerator>(ownershipRule1.ListGenerator);
+            Assert.Empty(ownershipRule1.Filters);
+            Assert.Empty(ownershipRule1.Validators);
             Assert.Equal(new OutputGroup("enroute.ESE_OWNERSHIP", "Start enroute Ownership"), ownershipRule1.GetOutputGroup());
             
             // Enroute ownership folder 2
-            FolderInclusionRule ownershipRule2 = (FolderInclusionRule) ruleList[3];
-            Assert.Equal(GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Ownership/Foo"), ownershipRule2.Folder);
-            Assert.False(ownershipRule2.Recursive);
-            Assert.False(ownershipRule2.ExcludeList);
-            Assert.Single(ownershipRule2.IncludeExcludeFiles);
-            Assert.Equal("Foo.txt", ownershipRule2.IncludeExcludeFiles[0]);
+            InclusionRule ownershipRule2 = (InclusionRule) ruleList[3];
+            Assert.Equal(
+                new List<string>{GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Ownership/Foo/Foo.txt")},
+                ownershipRule2.ListGenerator.GetPaths().ToList()
+            );
+            Assert.IsType<FolderFileListGenerator>(ownershipRule2.ListGenerator);
+            Assert.Contains(ownershipRule2.Filters, fileFilter => fileFilter.GetType() == typeof(IncludeFileFilter));
+            var filter = ownershipRule2.Filters.First(
+                fileFilter => fileFilter.GetType() == typeof(IncludeFileFilter)
+            ) as IncludeFileFilter ?? throw new InvalidOperationException();
+            Assert.Single(filter.FileNames);
+            Assert.Equal("Foo.txt", filter.FileNames.First());
             Assert.Equal(new OutputGroup("enroute.ESE_OWNERSHIP", "Start enroute Ownership"), ownershipRule2.GetOutputGroup());
             
             // Enroute ownership folder 3
-            FolderInclusionRule ownershipRule3 = (FolderInclusionRule) ruleList[4];
-            Assert.Equal(GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Ownership/Non-UK"), ownershipRule3.Folder);
-            Assert.False(ownershipRule3.Recursive);
-            Assert.True(ownershipRule3.ExcludeList);
-            Assert.Single(ownershipRule3.IncludeExcludeFiles);
-            Assert.Equal("EUR Islands.txt", ownershipRule3.IncludeExcludeFiles[0]);
+            InclusionRule ownershipRule3 = (InclusionRule) ruleList[4];
+            Assert.Equal(
+                new List<string>{GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Ownership/Non-UK/EUR Islands.txt")},
+                ownershipRule3.ListGenerator.GetPaths().ToList()
+            );
+            Assert.IsType<FolderFileListGenerator>(ownershipRule3.ListGenerator);
+            Assert.Contains(ownershipRule3.Filters, fileFilter => fileFilter.GetType() == typeof(ExcludeFileFilter));
+            var excludeFileFilter = ownershipRule3.Filters.First(
+                fileFilter => fileFilter.GetType() == typeof(ExcludeFileFilter)
+            ) as ExcludeFileFilter ?? throw new InvalidOperationException();
+            Assert.Single(excludeFileFilter.FileNames);
+            Assert.Equal("EUR Islands.txt", excludeFileFilter.FileNames.First());
+            
+            Assert.DoesNotContain(ownershipRule3.Filters, fileFilter => fileFilter.GetType() == typeof(FilePatternFilter));
             Assert.Equal(new OutputGroup("enroute.ESE_OWNERSHIP", "Start enroute Ownership"), ownershipRule3.GetOutputGroup());
             
             // Misc regions
-            FileListInclusionRule miscRegions = (FileListInclusionRule) ruleList[5];
-            Assert.Equal(3, miscRegions.FileList.Count());
+            InclusionRule miscRegions = (InclusionRule) ruleList[5];
+            Assert.IsType<FileListGenerator>(miscRegions.ListGenerator);
+            Assert.Equal(3, miscRegions.ListGenerator.GetPaths().Count());
             Assert.Equal(
                 new List<string>
                 {
@@ -116,12 +144,12 @@ namespace CompilerTest.Config
                     GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Misc/Regions_Severn Buffers.txt"),
                     GetFullFilePath("_TestData/ConfigFileLoader/ValidConfig/Misc/Regions_Uncontrolled airspace.txt"),
                 },
-                miscRegions.FileList.ToList()
+                miscRegions.ListGenerator.GetPaths().ToList()
             );
-            Assert.False(miscRegions.IgnoreMissing);
-            Assert.Equal("", miscRegions.ExceptWhereExists);
-            Assert.Equal(InputDataType.SCT_REGIONS, miscRegions.InputDataType);
-            Assert.Equal(new OutputGroup("misc.SCT_REGIONS", "Start misc Regions"), miscRegions.GetOutputGroup());
+            Assert.Contains(airportGeoRule.Validators, validator => validator.GetType() == typeof(FileExists));
+            Assert.DoesNotContain(airportBasicRule.Filters, validator => validator.GetType() == typeof(IgnoreWhenFileExists));
+            Assert.Equal(InputDataType.SCT_AIRPORT_BASIC, airportBasicRule.DataType);
+            Assert.Equal(new OutputGroup("airport.SCT_AIRPORT_BASIC.EGLL", "Start EGLL Basic"), airportBasicRule.GetOutputGroup());
         }
     }
 }

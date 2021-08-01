@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Compiler.Model;
 using System.Linq;
+using System.Threading.Tasks;
 using Compiler.Collector;
 
 namespace Compiler.Output
@@ -21,7 +22,12 @@ namespace Compiler.Output
             this.collectorFactory = collectorFactory;
         }
 
-        public void GenerateOutput(AbstractOutputFile outputFile)
+        public Task GenerateOutput(AbstractOutputFile outputFile)
+        {
+            return Task.Factory.StartNew(() => CreateOutput(outputFile));
+        }
+        
+        public void CreateOutput(AbstractOutputFile outputFile)
         {
             IOutputWriter outputStream = outputFile.GetOutputStream();
 

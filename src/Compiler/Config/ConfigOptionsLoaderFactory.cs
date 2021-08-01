@@ -8,7 +8,8 @@
                 new IConfigOptionLoader[]
                 {
                     new ConfigOutputFilesOptionLoader(),
-                    new ConfigTokenReplaceOptionLoader()
+                    new ConfigTokenReplaceOptionLoader(),
+                    new EmptyFileOptionLoader()
                 }
             );
         }

@@ -2,10 +2,15 @@
 using System.IO;
 using System.Linq;
 using Compiler.Config;
+using Compiler.Event;
 using Compiler.Input;
+using Compiler.Input.Builder;
+using Compiler.Input.Generator;
+using Compiler.Input.Sorter;
 using Compiler.Output;
 using CompilerTest.Bogus.Factory;
 using Xunit;
+using Moq;
 
 namespace CompilerTest.Input
 {
@@ -13,22 +18,27 @@ namespace CompilerTest.Input
     {
         private readonly OutputGroupRepository outputGroups;
         private readonly OutputGroup outputGroup;
-        private readonly SectorDataFileFactory sectorDataFileFactory;
-        private readonly ConfigInclusionRules inclusionRules;
-        
+        private readonly InputFileList fileList;
+
         public InputFileListFactoryTest()
         {
-            this.outputGroup = new OutputGroup("test");
-            this.outputGroups = new OutputGroupRepository();
-            this.sectorDataFileFactory = SectorDataFileFactoryFactory.Make(new List<string>());
-            this.inclusionRules = new ConfigInclusionRules();
+            outputGroup = new OutputGroup("test");
+            outputGroups = new OutputGroupRepository();
+            SectorDataFileFactory sectorDataFileFactory = SectorDataFileFactoryFactory.Make(new List<string>());
+            ConfigInclusionRules inclusionRules = new();
             inclusionRules.AddMiscInclusionRule(
-                new FolderInclusionRule(
-                    ConvertPath("_TestData/InputFileListFactory"),
-                    false,
-                    InputDataType.ESE_AGREEMENTS,
-                    this.outputGroup
-                )    
+                FileInclusionRuleBuilder.Begin()
+                    .SetGenerator(new FolderFileListGenerator(ConvertPath("_TestData/InputFileListFactory")))
+                    .AddSorter(new AlphabeticalPathSorter())
+                    .SetDataType(InputDataType.ESE_AGREEMENTS)
+                    .SetOutputGroup(outputGroup)
+                    .Build()
+            );
+            fileList = InputFileListFactory.CreateFromInclusionRules(
+                sectorDataFileFactory,
+                inclusionRules,
+                outputGroups,
+                new Mock<IEventLogger>().Object
             );
         }
 
@@ -40,12 +50,6 @@ namespace CompilerTest.Input
         [Fact]
         public void TestItCreatesFileList()
         {
-            InputFileList fileList = InputFileListFactory.CreateFromInclusionRules(
-                sectorDataFileFactory,
-                inclusionRules,
-                outputGroups
-            );
-            
             List<AbstractSectorDataFile> files = fileList.ToList();
             Assert.Equal(3, files.Count);
             Assert.Equal(ConvertPath("_TestData/InputFileListFactory/File1.txt"), files[0].FullPath);
@@ -56,38 +60,26 @@ namespace CompilerTest.Input
         [Fact]
         public void TestItAddsInputFilesToOutputGroup()
         {
-            InputFileListFactory.CreateFromInclusionRules(
-                sectorDataFileFactory,
-                inclusionRules,
-                outputGroups
-            );
-            
             Assert.Equal(
-                this.outputGroup,
-                this.outputGroups.GetForDefinitionFile(DefinitionFactory.Make(ConvertPath("_TestData/InputFileListFactory/File1.txt")))
+                outputGroup,
+                outputGroups.GetForDefinitionFile(DefinitionFactory.Make(ConvertPath("_TestData/InputFileListFactory/File1.txt")))
             );
             Assert.Equal(
-                this.outputGroup,
-                this.outputGroups.GetForDefinitionFile(DefinitionFactory.Make(ConvertPath("_TestData/InputFileListFactory/File2.txt")))
+                outputGroup,
+                outputGroups.GetForDefinitionFile(DefinitionFactory.Make(ConvertPath("_TestData/InputFileListFactory/File2.txt")))
             );
             Assert.Equal(
-                this.outputGroup,
-                this.outputGroups.GetForDefinitionFile(DefinitionFactory.Make(ConvertPath("_TestData/InputFileListFactory/File3.txt")))
+                outputGroup,
+                outputGroups.GetForDefinitionFile(DefinitionFactory.Make(ConvertPath("_TestData/InputFileListFactory/File3.txt")))
             );
         }
         
         [Fact]
-        public void TestItAddsInpuOutputGroupToRepository()
+        public void TestItAddsOutputGroupToRepository()
         {
-            InputFileListFactory.CreateFromInclusionRules(
-                sectorDataFileFactory,
-                inclusionRules,
-                outputGroups
-            );
-
             Assert.Equal(
-                this.outputGroup,
-                this.outputGroups.GetForDefinitionFile(DefinitionFactory.Make(ConvertPath("_TestData/InputFileListFactory/File1.txt")))
+                outputGroup,
+                outputGroups.GetForDefinitionFile(DefinitionFactory.Make(ConvertPath("_TestData/InputFileListFactory/File1.txt")))
             );
         }
     }

@@ -23,17 +23,14 @@ namespace Compiler.Collector
          */
         public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-
-            return this.sectorElements.SectorLines.Cast<AbstractCompilableElement>()
-                .Concat(this.sectorElements.CircleSectorLines)
+            return sectorElements.SectorLines.Cast<AbstractCompilableElement>()
+                .Concat(sectorElements.CircleSectorLines)
                 .OrderBy(
-                    sectorline => this.outputGroups.GetForDefinitionFile(sectorline.GetDefinition())
+                    sectorline => outputGroups.GetForDefinitionFile(sectorline.GetDefinition())
                 )
+                .Concat(sectorElements.Sectors)
                 .Concat(
-                    this.sectorElements.Sectors.OrderBy(sector => this.outputGroups.GetForDefinitionFile(sector.GetDefinition()))
-                )
-                .Concat(
-                    this.sectorElements.CoordinationPoints.OrderBy(coordinationPoint => coordinationPoint.IsFirCopx)
+                    sectorElements.CoordinationPoints.OrderBy(coordinationPoint => coordinationPoint.IsFirCopx)
                 );
         }
     }

@@ -1,11 +1,13 @@
-﻿namespace Compiler.Config
+﻿using Compiler.Argument;
+
+namespace Compiler.Config
 {
     public class ConfigFileLoaderFactory
     {
-        public static ConfigFileLoader Make()
+        public static ConfigFileLoader Make(CompilerArguments arguments)
         {
-            return new ConfigFileLoader(
-                new ConfigIncludeLoader(),
+            return new(
+                ConfigIncludeLoaderFactory.Make(arguments), 
                 ConfigOptionsLoaderFactory.Make()
             );
         }

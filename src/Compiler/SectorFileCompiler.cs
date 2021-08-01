@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Compiler.Argument;
 using Compiler.Collector;
 using Compiler.Input;
@@ -46,7 +48,7 @@ namespace Compiler
             try
             {
                 events.AddEvent(new CompilationMessage("Loading config files"));
-                config = ConfigFileLoaderFactory.Make().LoadConfigFiles(arguments.ConfigFiles, arguments);
+                config = ConfigFileLoaderFactory.Make(arguments).LoadConfigFiles(arguments.ConfigFiles, arguments);
             } catch (ConfigFileInvalidException e)
             {
                 events.AddEvent(new CompilationMessage(e.Message));
@@ -64,12 +66,19 @@ namespace Compiler
                 fileList = InputFileListFactory.CreateFromInclusionRules(
                     new SectorDataFileFactory(new InputFileStreamFactory()),
                     config,
-                    outputGroups
+                    outputGroups,
+                    events
                 );
             }
             catch (System.Exception exception)
             {
                 events.AddEvent(new CompilationMessage(exception.Message));
+                events.AddEvent(new CompilationFinishedEvent(false));
+                return 1;
+            }
+            
+            if (events.HasFatalError())
+            {
                 events.AddEvent(new CompilationFinishedEvent(false));
                 return 1;
             }
@@ -110,18 +119,20 @@ namespace Compiler
                 events.AddEvent(new CompilationMessage("Skipping output validation"));
             }
 
-            // Generate the output
+            // Generate the output - all at once
             OutputGenerator generator = new OutputGenerator(
                 sectorElements,
                 outputGroups,
                 new CompilableElementCollectorFactory(sectorElements, outputGroups)
             );
-            
+
+            var outputTasks = new List<Task>();
             foreach(AbstractOutputFile output in arguments.OutputFiles)
             {
                 events.AddEvent(new CompilationMessage($"Generating {output.GetFileDescriptor()} output"));
-                generator.GenerateOutput(output);
+                outputTasks.Add(generator.GenerateOutput(output));
             }
+            Task.WaitAll(outputTasks.ToArray());
 
             events.AddEvent(new CompilationFinishedEvent(true));
             return 0;

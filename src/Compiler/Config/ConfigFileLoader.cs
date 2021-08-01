@@ -47,8 +47,8 @@ namespace Compiler.Config
                     throw new ConfigFileInvalidException("Config file not found");
                 }
 
-                includeLoader.LoadConfig(config, jsonConfig, fullPath);
                 optionsLoader.LoadOptions(arguments, jsonConfig, fullPath);
+                includeLoader.LoadConfig(config, jsonConfig, fullPath);
             }
             
             return config;
