@@ -6,6 +6,7 @@ using Compiler.Event;
 using Compiler.Input;
 using Compiler.Input.Builder;
 using Compiler.Input.Generator;
+using Compiler.Input.Sorter;
 using Compiler.Output;
 using CompilerTest.Bogus.Factory;
 using Xunit;
@@ -28,6 +29,7 @@ namespace CompilerTest.Input
             inclusionRules.AddMiscInclusionRule(
                 FileInclusionRuleBuilder.Begin()
                     .SetGenerator(new FolderFileListGenerator(ConvertPath("_TestData/InputFileListFactory")))
+                    .AddSorter(new AlphabeticalPathSorter())
                     .SetDataType(InputDataType.ESE_AGREEMENTS)
                     .SetOutputGroup(outputGroup)
                     .Build()
