@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Compiler.Argument;
 using Compiler.Collector;
 using Compiler.Input;
@@ -117,18 +119,20 @@ namespace Compiler
                 events.AddEvent(new CompilationMessage("Skipping output validation"));
             }
 
-            // Generate the output
+            // Generate the output - all at once
             OutputGenerator generator = new OutputGenerator(
                 sectorElements,
                 outputGroups,
                 new CompilableElementCollectorFactory(sectorElements, outputGroups)
             );
-            
+
+            var outputTasks = new List<Task>();
             foreach(AbstractOutputFile output in arguments.OutputFiles)
             {
                 events.AddEvent(new CompilationMessage($"Generating {output.GetFileDescriptor()} output"));
-                generator.GenerateOutput(output);
+                outputTasks.Add(generator.GenerateOutput(output));
             }
+            Task.WaitAll(outputTasks.ToArray());
 
             events.AddEvent(new CompilationFinishedEvent(true));
             return 0;
