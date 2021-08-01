@@ -1,4 +1,5 @@
-﻿namespace Compiler.Input.Rule
+﻿#nullable enable
+namespace Compiler.Input.Rule
 {
     public class RuleDescriptor: IRuleDescriptor
     {
