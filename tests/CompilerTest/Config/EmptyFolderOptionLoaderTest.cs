@@ -34,7 +34,7 @@ namespace CompilerTest.Config
         {
             string filename = "_TestData/EmptyFolderOptionLoader/NoToken/config.json";
             loader.LoadConfig(arguments, JObject.Parse(File.ReadAllText(filename)), filename);
-            Assert.Equal(CompilerArguments.emptyFolderIgnore, arguments.EmptyFolderAction);
+            Assert.Equal(CompilerArguments.EmptyFolderIgnore, arguments.EmptyFolderAction);
         }
         
         [Fact]
@@ -42,7 +42,7 @@ namespace CompilerTest.Config
         {
             string filename = "_TestData/EmptyFolderOptionLoader/Ignore/config.json";
             loader.LoadConfig(arguments, JObject.Parse(File.ReadAllText(filename)), filename);
-            Assert.Equal(CompilerArguments.emptyFolderIgnore, arguments.EmptyFolderAction);
+            Assert.Equal(CompilerArguments.EmptyFolderIgnore, arguments.EmptyFolderAction);
         }
         
         [Fact]
@@ -50,7 +50,7 @@ namespace CompilerTest.Config
         {
             string filename = "_TestData/EmptyFolderOptionLoader/Warning/config.json";
             loader.LoadConfig(arguments, JObject.Parse(File.ReadAllText(filename)), filename);
-            Assert.Equal(CompilerArguments.emptyFolderWarning, arguments.EmptyFolderAction);
+            Assert.Equal(CompilerArguments.EmptyFolderWarning, arguments.EmptyFolderAction);
         }
         
         [Fact]
@@ -58,7 +58,7 @@ namespace CompilerTest.Config
         {
             string filename = "_TestData/EmptyFolderOptionLoader/Error/config.json";
             loader.LoadConfig(arguments, JObject.Parse(File.ReadAllText(filename)), filename);
-            Assert.Equal(CompilerArguments.emptyFolderError, arguments.EmptyFolderAction);
+            Assert.Equal(CompilerArguments.EmptyFolderError, arguments.EmptyFolderAction);
         }
     }
 }

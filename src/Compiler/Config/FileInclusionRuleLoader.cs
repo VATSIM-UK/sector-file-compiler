@@ -4,7 +4,6 @@ using Compiler.Input.Builder;
 using Compiler.Input.Filter;
 using Compiler.Input.Generator;
 using Compiler.Input.Rule;
-using Compiler.Input.Validator;
 using Compiler.Output;
 using Newtonsoft.Json.Linq;
 using FileExists = Compiler.Input.Validator.FileExists;

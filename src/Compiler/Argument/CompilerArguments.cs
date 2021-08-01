@@ -7,9 +7,9 @@ namespace Compiler.Argument
 {
     public class CompilerArguments
     {
-        public const int emptyFolderIgnore = 0;
-        public const int emptyFolderWarning = 1;
-        public const int emptyFolderError = 2;
+        public const int EmptyFolderIgnore = 0;
+        public const int EmptyFolderWarning = 1;
+        public const int EmptyFolderError = 2;
         
         public const string DefaultBuildVersion = "BUILD_VERSION";
 
@@ -70,6 +70,6 @@ namespace Compiler.Argument
         public string BuildVersion { get; set; } = DefaultBuildVersion;
 
         // What to do about empty folders
-        public int EmptyFolderAction { get; set; } = emptyFolderIgnore;
+        public int EmptyFolderAction { get; set; } = EmptyFolderIgnore;
     }
 }

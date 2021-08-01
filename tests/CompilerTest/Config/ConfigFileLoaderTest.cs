@@ -10,7 +10,6 @@ using Compiler.Input;
 using Compiler.Input.Filter;
 using Compiler.Input.Generator;
 using Compiler.Input.Rule;
-using Compiler.Input.Validator;
 using Compiler.Output;
 using FileExists = Compiler.Input.Validator.FileExists;
 

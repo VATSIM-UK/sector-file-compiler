@@ -25,10 +25,10 @@ namespace Compiler.Config
             switch ((string) emptyFolderToken)
             {
                 case "warn":
-                    arguments.EmptyFolderAction = CompilerArguments.emptyFolderWarning;
+                    arguments.EmptyFolderAction = CompilerArguments.EmptyFolderWarning;
                     break;
                 case "error":
-                    arguments.EmptyFolderAction = CompilerArguments.emptyFolderError;
+                    arguments.EmptyFolderAction = CompilerArguments.EmptyFolderError;
                     break;
                 case "ignore":
                     break;

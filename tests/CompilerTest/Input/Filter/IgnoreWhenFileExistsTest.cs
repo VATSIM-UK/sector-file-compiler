@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Compiler.Input.Filter;
+﻿using Compiler.Input.Filter;
 using Xunit;
 
 namespace CompilerTest.Input.Filter

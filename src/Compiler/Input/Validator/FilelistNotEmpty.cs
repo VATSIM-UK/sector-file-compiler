@@ -18,7 +18,7 @@ namespace Compiler.Input.Validator
         
         public void Validate(IEnumerable<string> fileset, IRuleDescriptor ruleDescriptor, IEventLogger eventLogger)
         {
-            if (action == CompilerArguments.emptyFolderIgnore)
+            if (action == CompilerArguments.EmptyFolderIgnore)
             {
                 return;
             }
@@ -26,7 +26,7 @@ namespace Compiler.Input.Validator
             if (!fileset.Any())
             {
                 eventLogger.AddEvent(
-                    action == CompilerArguments.emptyFolderError 
+                    action == CompilerArguments.EmptyFolderError 
                         ? new FilesetEmptyError(ruleDescriptor) 
                         : new FilesetEmptyWarning(ruleDescriptor)
                 );

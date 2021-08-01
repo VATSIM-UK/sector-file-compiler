@@ -16,7 +16,7 @@ namespace CompilerTest.Input.Validator
         [Fact]
         public void ItValidatesIfFileListNotEmpty()
         {
-            new FilelistNotEmpty(CompilerArguments.emptyFolderWarning)
+            new FilelistNotEmpty(CompilerArguments.EmptyFolderWarning)
                 .Validate(new List<string>{"Foo.txt"}, new RuleDescriptor("Foo"), log.Object);
             log.Verify(foo => foo.AddEvent(It.IsAny<ICompilerEvent>()), Times.Never);
         }
@@ -24,7 +24,7 @@ namespace CompilerTest.Input.Validator
         [Fact]
         public void ItValidatesIfFileListEmptyButIgnoreIsSpecified()
         {
-            new FilelistNotEmpty(CompilerArguments.emptyFolderIgnore)
+            new FilelistNotEmpty(CompilerArguments.EmptyFolderIgnore)
                 .Validate(new List<string>(), new RuleDescriptor("Foo"), log.Object);
             log.Verify(foo => foo.AddEvent(It.IsAny<ICompilerEvent>()), Times.Never);
         }
@@ -32,7 +32,7 @@ namespace CompilerTest.Input.Validator
         [Fact]
         public void ItValidatesIfFileListEmpty()
         {
-            new FilelistNotEmpty(CompilerArguments.emptyFolderWarning)
+            new FilelistNotEmpty(CompilerArguments.EmptyFolderWarning)
                 .Validate(new List<string>(), new RuleDescriptor("Foo"), log.Object);
             log.Verify(foo => foo.AddEvent(It.IsAny<FilesetEmptyWarning>()), Times.Once);
         }
@@ -40,7 +40,7 @@ namespace CompilerTest.Input.Validator
         [Fact]
         public void ItValidatesWithAnErrorLevelIfConfigured()
         {
-            new FilelistNotEmpty(CompilerArguments.emptyFolderError)
+            new FilelistNotEmpty(CompilerArguments.EmptyFolderError)
                 .Validate(new List<string>(), new RuleDescriptor("Foo"), log.Object);
             log.Verify(foo => foo.AddEvent(It.IsAny<FilesetEmptyError>()), Times.Once);
         }

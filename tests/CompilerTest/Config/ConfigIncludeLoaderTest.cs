@@ -20,12 +20,10 @@ namespace CompilerTest.Config
     {
         private readonly ConfigIncludeLoader fileLoader;
         private readonly ConfigInclusionRules includes;
-        private readonly CompilerArguments arguments;
 
         public ConfigIncludeLoaderTest()
         {
-            arguments = new();
-            fileLoader = ConfigIncludeLoaderFactory.Make(arguments);
+            fileLoader = ConfigIncludeLoaderFactory.Make(new CompilerArguments());
             includes = new ConfigInclusionRules();
         }
         
