@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Compiler.Argument;
 using Compiler.Event;
 using Compiler.Input.Event;
 using Compiler.Input.Rule;
@@ -15,21 +16,32 @@ namespace CompilerTest.Input.Validator
         [Fact]
         public void ItValidatesIfFileListNotEmpty()
         {
-            new FilelistNotEmpty(false).Validate(new List<string>{"Foo.txt"}, new RuleDescriptor("Foo"), log.Object);
+            new FilelistNotEmpty(CompilerArguments.emptyFolderWarning)
+                .Validate(new List<string>{"Foo.txt"}, new RuleDescriptor("Foo"), log.Object);
+            log.Verify(foo => foo.AddEvent(It.IsAny<ICompilerEvent>()), Times.Never);
+        }
+        
+        [Fact]
+        public void ItValidatesIfFileListEmptyButIgnoreIsSpecified()
+        {
+            new FilelistNotEmpty(CompilerArguments.emptyFolderIgnore)
+                .Validate(new List<string>(), new RuleDescriptor("Foo"), log.Object);
             log.Verify(foo => foo.AddEvent(It.IsAny<ICompilerEvent>()), Times.Never);
         }
         
         [Fact]
         public void ItValidatesIfFileListEmpty()
         {
-            new FilelistNotEmpty(false).Validate(new List<string>(), new RuleDescriptor("Foo"), log.Object);
+            new FilelistNotEmpty(CompilerArguments.emptyFolderWarning)
+                .Validate(new List<string>(), new RuleDescriptor("Foo"), log.Object);
             log.Verify(foo => foo.AddEvent(It.IsAny<FilesetEmptyWarning>()), Times.Once);
         }
         
         [Fact]
         public void ItValidatesWithAnErrorLevelIfConfigured()
         {
-            new FilelistNotEmpty(true).Validate(new List<string>(), new RuleDescriptor("Foo"), log.Object);
+            new FilelistNotEmpty(CompilerArguments.emptyFolderError)
+                .Validate(new List<string>(), new RuleDescriptor("Foo"), log.Object);
             log.Verify(foo => foo.AddEvent(It.IsAny<FilesetEmptyError>()), Times.Once);
         }
     }

@@ -23,7 +23,6 @@ namespace Compiler.Collector
          */
         public IEnumerable<ICompilableElementProvider> GetCompilableElements()
         {
-
             return sectorElements.SectorLines.Cast<AbstractCompilableElement>()
                 .Concat(sectorElements.CircleSectorLines)
                 .OrderBy(

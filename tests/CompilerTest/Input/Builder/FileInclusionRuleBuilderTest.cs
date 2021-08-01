@@ -32,7 +32,7 @@ namespace CompilerTest.Input.Builder
                 .AddFilter(new FileExists())
                 .AddValidator(new Compiler.Input.Validator.FileExists())
                 .AddSorter(new AlphabeticalPathSorter())
-                .AddFilesetValidator(new FilelistNotEmpty(false))
+                .AddFilesetValidator(new FilelistNotEmpty(1))
                 .Build() as InclusionRule ?? throw new InvalidOperationException();
             
             Assert.Equal(InputDataType.SCT_GEO, rule.DataType);
@@ -58,7 +58,7 @@ namespace CompilerTest.Input.Builder
                     .AddFilter(new FileExists())
                     .AddValidator(new Compiler.Input.Validator.FileExists())
                     .AddSorter(new AlphabeticalPathSorter())
-                    .AddFilesetValidator(new FilelistNotEmpty(false))
+                    .AddFilesetValidator(new FilelistNotEmpty(1))
                     .Build()
             );
         }
@@ -73,7 +73,7 @@ namespace CompilerTest.Input.Builder
                     .AddFilter(new FileExists())
                     .AddValidator(new Compiler.Input.Validator.FileExists())
                     .AddSorter(new AlphabeticalPathSorter())
-                    .AddFilesetValidator(new FilelistNotEmpty(false))
+                    .AddFilesetValidator(new FilelistNotEmpty(1))
                     .Build()
             );
         }
@@ -88,7 +88,7 @@ namespace CompilerTest.Input.Builder
                     .AddFilter(new FileExists())
                     .AddValidator(new Compiler.Input.Validator.FileExists())
                     .AddSorter(new AlphabeticalPathSorter())
-                    .AddFilesetValidator(new FilelistNotEmpty(false))
+                    .AddFilesetValidator(new FilelistNotEmpty(1))
                     .Build()
             );
         }

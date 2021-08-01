@@ -7,5 +7,10 @@ namespace Compiler.Input.Event
         public FilesetEmptyWarning(IRuleDescriptor ruleDescriptor) : base(ruleDescriptor)
         {
         }
+
+        public override string GetMessage()
+        {
+            return $"WARN: {base.GetMessage()}";
+        }
     }
 }

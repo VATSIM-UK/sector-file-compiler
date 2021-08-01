@@ -10,6 +10,17 @@ namespace Compiler.Config
 {
     public class ConfigIncludeLoader
     {
+        private readonly FolderInclusionRuleLoaderFactory folderFactory;
+        private readonly FileInclusionRuleLoaderFactory fileFactory;
+
+        public ConfigIncludeLoader(
+            FolderInclusionRuleLoaderFactory folderFactory,
+            FileInclusionRuleLoaderFactory fileFactory
+        ) {
+            this.folderFactory = folderFactory;
+            this.fileFactory = fileFactory;
+        }
+        
         public void LoadConfig(
             ConfigInclusionRules inclusionRules,
             JObject jsonConfig,
@@ -199,7 +210,7 @@ namespace Compiler.Config
             if ((string)typeToken == "files")
             {
                 addInclusionRule(
-                    FileInclusionRuleLoaderFactory.Create(
+                    fileFactory.Create(
                         new ConfigPath(sectionRootString, configFileSection),
                         outputGroup,
                         rootPath
@@ -208,7 +219,7 @@ namespace Compiler.Config
             } else
             {
                 addInclusionRule(
-                    FolderInclusionRuleLoaderFactory.Create(
+                    folderFactory.Create(
                         new ConfigPath(sectionRootString, configFileSection),
                         outputGroup,
                         rootPath

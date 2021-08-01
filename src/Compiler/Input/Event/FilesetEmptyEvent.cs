@@ -12,12 +12,12 @@ namespace Compiler.Input.Event
             this.ruleDescriptor = ruleDescriptor;
         }
 
-        public string GetMessage()
+        public virtual string GetMessage()
         {
             return $"Fileset is empty for include rule: {ruleDescriptor.GetDescriptor()}";
         }
 
-        public bool IsFatal()
+        public virtual bool IsFatal()
         {
             return false;
         }

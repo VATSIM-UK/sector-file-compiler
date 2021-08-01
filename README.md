@@ -90,6 +90,15 @@ can be specified on the commandline, as follows:
 }
 ```
 
+#### Empty Folders
+
+The `empty_folder` option takes a single string. It determines what the compiler should do in the event that
+it comes across a Folder inclusion rule with no files found. Valid values are:
+
+- `ignore` - Default, do nothing.
+- `warn` - Raise a warning message in the output, but continue compilation.
+- `error` - Raise a fatal error that halts compilation.
+
 ### Include Files
 
 The input files that the compiler should parse are specified in the `include` key of the compiler

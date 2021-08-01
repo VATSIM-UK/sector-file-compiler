@@ -23,8 +23,8 @@ namespace CompilerTest.Config
 
         public ConfigFileLoaderTest()
         {
-            fileLoader = ConfigFileLoaderFactory.Make();
             arguments = new CompilerArguments();
+            fileLoader = ConfigFileLoaderFactory.Make(arguments);
         }
         
         [Theory]

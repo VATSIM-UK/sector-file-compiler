@@ -7,6 +7,10 @@ namespace Compiler.Argument
 {
     public class CompilerArguments
     {
+        public const int emptyFolderIgnore = 0;
+        public const int emptyFolderWarning = 1;
+        public const int emptyFolderError = 2;
+        
         public const string DefaultBuildVersion = "BUILD_VERSION";
 
         public List<string> ConfigFiles { get; } = new();
@@ -64,5 +68,8 @@ namespace Compiler.Argument
         
         // The version being built
         public string BuildVersion { get; set; } = DefaultBuildVersion;
+
+        // What to do about empty folders
+        public int EmptyFolderAction { get; set; } = emptyFolderIgnore;
     }
 }

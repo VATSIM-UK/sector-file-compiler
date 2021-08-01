@@ -40,6 +40,7 @@ namespace Compiler.Config
                     )
                 )
             )
+                .SetDescriptor(new RuleDescriptor($"File inclusion rule in {path}"))
                 .AddValidator(new FileExists())
                 .SetOutputGroup(outputGroup)
                 .SetDataType(path.Section.DataType)

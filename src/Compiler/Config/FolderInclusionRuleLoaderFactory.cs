@@ -1,16 +1,30 @@
 ﻿
+using Compiler.Argument;
+using Compiler.Input.Validator;
 using Compiler.Output;
 
 namespace Compiler.Config
 {
-    public static class FolderInclusionRuleLoaderFactory
+    public class FolderInclusionRuleLoaderFactory
     {
-        public static FolderInclusionRuleLoader Create(
+        private readonly CompilerArguments arguments;
+
+        public FolderInclusionRuleLoaderFactory(CompilerArguments arguments)
+        {
+            this.arguments = arguments;
+        }
+
+        public FolderInclusionRuleLoader Create(
             ConfigPath path,
             OutputGroup outputGroup,
             string configFilePath
         ) {
-            return new(path, outputGroup, new (configFilePath));
+            return new(
+                path,
+                outputGroup,
+                new (configFilePath),
+                new FilelistNotEmpty(arguments.EmptyFolderAction)
+            );
         }
     }
 }

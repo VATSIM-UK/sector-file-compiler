@@ -28,7 +28,7 @@ namespace Compiler.Input.Rule
 
         public override int GetHashCode()
         {
-            return (details != null ? details.GetHashCode() : 0);
+            return details.GetHashCode();
         }
     }
 }

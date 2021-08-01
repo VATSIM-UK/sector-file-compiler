@@ -3,9 +3,9 @@ using Compiler.Output;
 
 namespace Compiler.Config
 {
-    public static class FileInclusionRuleLoaderFactory
+    public class FileInclusionRuleLoaderFactory
     {
-        public static FileInclusionRuleLoader Create(
+        public FileInclusionRuleLoader Create(
             ConfigPath path,
             OutputGroup outputGroup,
             string configFilePath

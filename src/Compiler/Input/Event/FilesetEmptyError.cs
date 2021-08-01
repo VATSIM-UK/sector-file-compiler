@@ -8,7 +8,12 @@ namespace Compiler.Input.Event
         {
         }
 
-        public new bool IsFatal()
+        public override string GetMessage()
+        {
+            return $"ERROR: {base.GetMessage()}";
+        }
+        
+        public override bool IsFatal()
         {
             return true;
         }

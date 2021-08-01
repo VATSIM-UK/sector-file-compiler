@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Compiler.Argument;
 using Compiler.Exception;
 using Compiler.Input.Builder;
 using Compiler.Input.Filter;
 using Compiler.Input.Generator;
 using Compiler.Input.Rule;
 using Compiler.Input.Sorter;
+using Compiler.Input.Validator;
 using Compiler.Output;
 using Newtonsoft.Json.Linq;
 
@@ -16,21 +18,24 @@ namespace Compiler.Config
         private readonly ConfigPath path;
         private readonly OutputGroup outputGroup;
         private readonly InputFilePathNormaliser pathNormaliser;
+        private readonly FilelistNotEmpty filelistNotEmptyValidator;
 
         public FolderInclusionRuleLoader(
             ConfigPath path,
             OutputGroup outputGroup,
-            InputFilePathNormaliser pathNormaliser
-        )
-        {
+            InputFilePathNormaliser pathNormaliser, 
+            FilelistNotEmpty filelistNotEmptyValidator
+        ) {
             this.path = path;
             this.outputGroup = outputGroup;
             this.pathNormaliser = pathNormaliser;
+            this.filelistNotEmptyValidator = filelistNotEmptyValidator;
         }
 
         public IInclusionRule CreateRule(JObject config)
         {
-            return ApplySorter(
+            return ApplyFilesetValidator( 
+                ApplySorter(
                     ApplyIncludeExcludeFilter(
                         config,
                         ApplyPatternFilter(
@@ -42,9 +47,16 @@ namespace Compiler.Config
                         )
                     )
                 )
+            )
+                .SetDescriptor(new RuleDescriptor($"Folder inclusion rule in {path}"))
                 .SetOutputGroup(outputGroup)
                 .SetDataType(path.Section.DataType)
                 .Build();
+        }
+
+        private IFileInclusionRuleBuilder ApplyFilesetValidator(IFileInclusionRuleBuilder builder)
+        {
+            return builder.AddFilesetValidator(filelistNotEmptyValidator);
         }
 
         private IFileInclusionRuleBuilder ApplySorter(IFileInclusionRuleBuilder builder)

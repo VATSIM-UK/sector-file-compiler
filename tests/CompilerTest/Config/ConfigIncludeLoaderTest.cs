@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Compiler.Argument;
 using Compiler.Config;
 using Xunit;
 using Compiler.Exception;
@@ -9,7 +10,6 @@ using Compiler.Input;
 using Compiler.Input.Filter;
 using Compiler.Input.Generator;
 using Compiler.Input.Rule;
-using Compiler.Input.Validator;
 using Compiler.Output;
 using Newtonsoft.Json.Linq;
 using FileExists = Compiler.Input.Validator.FileExists;
@@ -20,10 +20,12 @@ namespace CompilerTest.Config
     {
         private readonly ConfigIncludeLoader fileLoader;
         private readonly ConfigInclusionRules includes;
+        private readonly CompilerArguments arguments;
 
         public ConfigIncludeLoaderTest()
         {
-            fileLoader = new ConfigIncludeLoader();
+            arguments = new();
+            fileLoader = ConfigIncludeLoaderFactory.Make(arguments);
             includes = new ConfigInclusionRules();
         }
         

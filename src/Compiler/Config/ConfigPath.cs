@@ -7,8 +7,8 @@
 
         public ConfigPath(string sectionRoot, ConfigFileSection section)
         {
-            this.SectionRoot = sectionRoot;
-            this.Section = section;
+            SectionRoot = sectionRoot;
+            Section = section;
         }
 
         public override string ToString()

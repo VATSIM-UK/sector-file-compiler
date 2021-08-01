@@ -48,7 +48,7 @@ namespace Compiler
             try
             {
                 events.AddEvent(new CompilationMessage("Loading config files"));
-                config = ConfigFileLoaderFactory.Make().LoadConfigFiles(arguments.ConfigFiles, arguments);
+                config = ConfigFileLoaderFactory.Make(arguments).LoadConfigFiles(arguments.ConfigFiles, arguments);
             } catch (ConfigFileInvalidException e)
             {
                 events.AddEvent(new CompilationMessage(e.Message));

@@ -22,7 +22,7 @@ namespace CompilerTest.Input.Event
         [Fact]
         public void ItHasAMessage()
         {
-            Assert.Equal("Fileset is empty for include rule: foo", compilerEvent.GetMessage());
+            Assert.Equal("ERROR: Fileset is empty for include rule: foo", compilerEvent.GetMessage());
         }
     }
 }
