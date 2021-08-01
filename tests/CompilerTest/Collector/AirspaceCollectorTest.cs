@@ -41,8 +41,8 @@ namespace CompilerTest.Collector
                 line1,
                 line3,
                 line2,
-                sector2,
                 sector1,
+                sector2,
                 point1,
                 point3,
                 point2
