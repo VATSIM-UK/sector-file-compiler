@@ -11,7 +11,7 @@ namespace CompilerTest.Input
 
         public SectorDataFileTest()
         {
-            this.file = new SectorDataFile(
+            file = new SectorDataFile(
                 "_TestData/SectorDataFile/StreamTest.txt",
                 new InputFileStreamFactory(),
                 InputDataType.ESE_AGREEMENTS,
@@ -24,7 +24,7 @@ namespace CompilerTest.Input
         {
             Assert.Equal(
                 "_TestData/SectorDataFile/StreamTest.txt",
-                this.file.FullPath
+                file.FullPath
             );
         }
 
@@ -33,7 +33,7 @@ namespace CompilerTest.Input
         {
             Assert.Equal(
                 "SectorDataFile",
-                this.file.GetParentDirectoryName()
+                file.GetParentDirectoryName()
             );
         }
 
@@ -42,33 +42,33 @@ namespace CompilerTest.Input
         {
             Assert.Equal(
                 "StreamTest",
-                this.file.GetFileName()
+                file.GetFileName()
             );
         }
 
         [Fact]
         public void CurrentLineNumberStartsAtZero()
         {
-            Assert.Equal(0, this.file.CurrentLineNumber);
+            Assert.Equal(0, file.CurrentLineNumber);
         }
 
         [Fact]
         public void CurrentLineStartsAtEmpty()
         {
-            Assert.Equal("", this.file.CurrentLine);
+            Assert.Equal("", file.CurrentLine);
         }
 
         [Fact]
         public void ItHasADataType()
         {
-            Assert.Equal(InputDataType.ESE_AGREEMENTS, this.file.DataType);
+            Assert.Equal(InputDataType.ESE_AGREEMENTS, file.DataType);
         }
 
         [Fact]
         public void TestItIteratesTheInputFile()
         {
             int expectedLine = 3;
-            foreach (SectorData dataLine in this.file)
+            foreach (SectorData dataLine in file)
             {
                 Assert.Equal(new List<string> { "Line", expectedLine.ToString() }, dataLine.dataSegments);
 
@@ -77,13 +77,43 @@ namespace CompilerTest.Input
                 expectedDocblock.AddLine(new Comment("Docblock " + (expectedLine - 1)));
                 Assert.Equal(expectedDocblock, dataLine.docblock);
                 Assert.Equal(new Comment("Inline " + expectedLine), dataLine.inlineComment);
-                Assert.Equal(expectedLine, this.file.CurrentLineNumber);
+                Assert.Equal(expectedLine, file.CurrentLineNumber);
                 Assert.Equal(new Definition("_TestData/SectorDataFile/StreamTest.txt", expectedLine), dataLine.definition);
 
                 expectedLine += 4;
             }
 
-            Assert.Equal(33, this.file.CurrentLineNumber);
+            Assert.Equal(33, file.CurrentLineNumber);
+        }
+        
+        [Fact]
+        public void ItsEqualIfPathTheSame()
+        {
+            var file2 = new SectorDataFile(
+                "_TestData/SectorDataFile/StreamTest.txt",
+                new InputFileStreamFactory(),
+                InputDataType.ESE_VRPS,
+                new EseSectorDataReader()
+            );
+            Assert.True(file.Equals(file2));
+        }
+        
+        [Fact]
+        public void ItsNotEqualIfPathDifferent()
+        {
+            var file2 = new SectorDataFile(
+                "_TestData/SectorDataFile/StreamTest2.txt",
+                new InputFileStreamFactory(),
+                InputDataType.ESE_AGREEMENTS,
+                new EseSectorDataReader()
+            );
+            Assert.False(file.Equals(file2));
+        }
+        
+        [Fact]
+        public void ItsNotEqualIfNotSameType()
+        {
+            Assert.False(file.Equals(new object()));
         }
     }
 }

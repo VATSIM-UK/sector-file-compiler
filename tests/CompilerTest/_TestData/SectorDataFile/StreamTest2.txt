@@ -1,0 +1,33 @@
+; Docblock 1
+; Docblock 2
+Line:3 ; Inline 3
+
+; Docblock 5
+; Docblock 6
+Line:7 ; Inline 7
+
+; Docblock 9
+; Docblock 10
+Line:11 ; Inline 11
+
+; Docblock 13
+; Docblock 14
+Line:15 ; Inline 15
+
+; Docblock 17
+; Docblock 18
+Line:19 ; Inline 19
+
+; Docblock 21
+; Docblock 22
+Line:23 ; Inline 23
+
+; Docblock 25
+; Docblock 26
+Line:27 ; Inline 27
+
+; Docblock 29
+; Docblock 30
+Line:31 ; Inline 31
+
+; Extra comment to be ignored

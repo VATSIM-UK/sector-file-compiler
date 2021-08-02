@@ -99,11 +99,11 @@ namespace CompilerTest.Config
                 airportBasicRule.ListGenerator.GetPaths().ToList()
             );
             Assert.Contains(airportBasicRule.Validators, validator => validator.GetType() == typeof(FileExists));
-            Assert.DoesNotContain(airportBasicRule.Filters, filter => filter.GetType() == typeof(IgnoreWhenFileExists));
-            Assert.Contains(airportBasicRule.Filters, filter => filter.GetType() == typeof(ExcludeByParentFolder));
+            Assert.DoesNotContain(airportBasicRule.Filters, fileFilter => fileFilter.GetType() == typeof(IgnoreWhenFileExists));
+            Assert.Contains(airportBasicRule.Filters, fileFilter => fileFilter.GetType() == typeof(ExcludeByParentFolder));
             Assert.Contains(
                 "EGLL",
-                (airportBasicRule.Filters.First(validator => validator.GetType() == typeof(ExcludeByParentFolder)) as ExcludeByParentFolder)?.ParentFolders
+                (airportBasicRule.Filters.First(fileFilter => fileFilter.GetType() == typeof(ExcludeByParentFolder)) as ExcludeByParentFolder)?.ParentFolders
                     ?? throw new InvalidOperationException()
             );
             Assert.Equal(InputDataType.SCT_AIRPORT_BASIC, airportBasicRule.DataType);
