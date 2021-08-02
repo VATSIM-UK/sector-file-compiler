@@ -1,0 +1,13 @@
+{
+  "includes": {
+    "misc": {
+      "regions": {
+        "type": "files",
+        "files": [
+          "Misc/Regions_LTMA Airfield CAS.txt"
+        ],
+        "exclude_directory": "foo"
+      }
+    }
+  }
+}

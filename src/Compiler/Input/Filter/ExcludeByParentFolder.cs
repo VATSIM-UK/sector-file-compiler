@@ -6,16 +6,16 @@ namespace Compiler.Input.Filter
 {
     public class ExcludeByParentFolder: IFileFilter
     {
-        private readonly IEnumerable<string> parentFolders;
+        public IEnumerable<string> ParentFolders { get; }
 
         public ExcludeByParentFolder(IEnumerable<string> parentFolders)
         {
-            this.parentFolders = parentFolders;
+            ParentFolders = parentFolders;
         }
 
         public bool Filter(string path)
         {
-            return !parentFolders.Contains(
+            return !ParentFolders.Contains(
                 new FileInfo(Path.GetDirectoryName(path)).Name
             );
         }
