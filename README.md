@@ -196,7 +196,8 @@ This rule includes files as listed in the configuration file.
         "Basic.txt"
     ],
     "ignore_missing": true,
-    "except_where_exists": "Basic2.txt"
+    "except_where_exists": "Basic2.txt",
+    "exclude_directory": "EGAC"
 }
 ```
 There are two optional flags available for the file list rule:
@@ -205,6 +206,8 @@ There are two optional flags available for the file list rule:
 if it cannot be found (would usually cause an error). This is useful for airports where not all airports have all files.
 - `except_where_exists`instructs the compiler to skip the files, if another file is present.
 This is particularly useful for SMRs and Ground Maps.
+- `exclude_directory` useful for processing airport ownership data. Excludes a particular directory from
+the rule.
   
 #### Folders
 

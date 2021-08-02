@@ -29,16 +29,19 @@ namespace Compiler.Config
 
         public IInclusionRule CreateRule(JObject config)
         {
-            return ApplyIgnoreMissingFilter(
-                config,
-                ApplyExceptWhereExistsFilter(
+            return ApplyExcludeDirectory(
                     config,
-                    ApplyGenerator(
+                    ApplyIgnoreMissingFilter(
                         config,
-                        FileInclusionRuleBuilder.Begin()
+                        ApplyExceptWhereExistsFilter(
+                            config,
+                            ApplyGenerator(
+                                config,
+                                FileInclusionRuleBuilder.Begin()
+                            )
+                        )
                     )
                 )
-            )
                 .SetDescriptor(new RuleDescriptor($"File inclusion rule in {path}"))
                 .AddValidator(new FileExists())
                 .SetOutputGroup(outputGroup)
@@ -53,10 +56,11 @@ namespace Compiler.Config
             if (
                 !config.TryGetValue("files", out filesList) ||
                 filesList.Type != JTokenType.Array
-            ) {
+            )
+            {
                 ThrowInvalidFilesListException();
             }
-            
+
             // Get the file paths and normalise them
             if (filesList!.Any(file => file.Type != JTokenType.String))
             {
@@ -67,7 +71,27 @@ namespace Compiler.Config
                 new FileListGenerator(filesList.Select(file => pathNormaliser.NormaliseFilePath((string) file)))
             );
         }
-        
+
+        private IFileInclusionRuleBuilder ApplyExcludeDirectory(JObject config, IFileInclusionRuleBuilder builder)
+        {
+            if (!config.TryGetValue("exclude_directory", out JToken excludeDirectory))
+            {
+                return builder;
+            }
+
+            if (
+                excludeDirectory.Type != JTokenType.Array ||
+                excludeDirectory.Any(directory => directory.Type != JTokenType.String)
+            )
+            {
+                ThrowInvalidExcludeDirectoryException();
+            }
+
+            return builder.AddFilter(
+                new ExcludeByParentFolder(excludeDirectory.Select(directory => (string) directory))
+            );
+        }
+
         private IFileInclusionRuleBuilder ApplyIgnoreMissingFilter(
             JObject config,
             IFileInclusionRuleBuilder builder
@@ -77,7 +101,7 @@ namespace Compiler.Config
             {
                 return builder;
             }
-            
+
             if (ignoreMissingToken.Type != JTokenType.Boolean)
             {
                 ThrowInvalidIgnoreMissingException();
@@ -85,8 +109,9 @@ namespace Compiler.Config
 
             return (bool) ignoreMissingToken ? builder.AddFilter(new Input.Filter.FileExists()) : builder;
         }
-        
-        private IFileInclusionRuleBuilder ApplyExceptWhereExistsFilter(JObject config, IFileInclusionRuleBuilder builder)
+
+        private IFileInclusionRuleBuilder ApplyExceptWhereExistsFilter(JObject config,
+            IFileInclusionRuleBuilder builder)
         {
             if (!config.TryGetValue("except_where_exists", out var exceptWhereExistsToken))
             {
@@ -102,11 +127,18 @@ namespace Compiler.Config
                 new IgnoreWhenFileExists(pathNormaliser.NormaliseFilePath((string) exceptWhereExistsToken))
             );
         }
-        
+
         private void ThrowInvalidFilesListException()
         {
             ThrowConfigFileException(
-                $"Files list invalid in section {path} - must be array under key \"files\""    
+                $"Files list invalid in section {path} - must be array under key \"files\""
+            );
+        }
+
+        private void ThrowInvalidExcludeDirectoryException()
+        {
+            ThrowConfigFileException(
+                $"Invalid exclude_directory invalid in section {path} - must be an array of strings"
             );
         }
 

@@ -48,7 +48,8 @@ namespace CompilerTest.Config
         [InlineData("_TestData/ConfigIncludeLoader/ParentSectionNotArrayOrObject/config.json", "Invalid config section for enroute - must be an object or array of objects") ]
         [InlineData("_TestData/ConfigIncludeLoader/ParentSectionNotArrayOfObjects/config.json", "Invalid config section for enroute - must be an object or array of objects")]
         [InlineData("_TestData/ConfigIncludeLoader/PatternNotAString/config.json", "Pattern invalid in section enroute.ownership - must be a regular expression string")]
-        [InlineData("_TestData/ConfigIncludeLoader/PatternInvalid/config.json", "Pattern invalid in section enroute.ownership - must be a regular expression string")]
+        [InlineData("_TestData/ConfigIncludeLoader/ExcludeDirectoryNotAnArray/config.json", "Invalid exclude_directory invalid in section misc.regions - must be an array of strings")]
+        [InlineData("_TestData/ConfigIncludeLoader/ExcludeDirectoryContainsNonString/config.json", "Invalid exclude_directory invalid in section misc.regions - must be an array of strings")]
         public void TestItThrowsExceptionOnBadData(string fileToLoad, string expectedMessage)
         {
             ConfigFileInvalidException exception = Assert.Throws<ConfigFileInvalidException>(
@@ -98,7 +99,13 @@ namespace CompilerTest.Config
                 airportBasicRule.ListGenerator.GetPaths().ToList()
             );
             Assert.Contains(airportBasicRule.Validators, validator => validator.GetType() == typeof(FileExists));
-            Assert.DoesNotContain(airportBasicRule.Filters, validator => validator.GetType() == typeof(IgnoreWhenFileExists));
+            Assert.DoesNotContain(airportBasicRule.Filters, filter => filter.GetType() == typeof(IgnoreWhenFileExists));
+            Assert.Contains(airportBasicRule.Filters, filter => filter.GetType() == typeof(ExcludeByParentFolder));
+            Assert.Contains(
+                "EGLL",
+                (airportBasicRule.Filters.First(validator => validator.GetType() == typeof(ExcludeByParentFolder)) as ExcludeByParentFolder)?.ParentFolders
+                    ?? throw new InvalidOperationException()
+            );
             Assert.Equal(InputDataType.SCT_AIRPORT_BASIC, airportBasicRule.DataType);
             Assert.Equal(new OutputGroup("airport.SCT_AIRPORT_BASIC.EGLL", "Start EGLL Basic"), airportBasicRule.GetOutputGroup());
             
