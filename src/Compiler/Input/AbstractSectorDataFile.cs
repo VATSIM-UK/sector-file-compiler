@@ -13,7 +13,7 @@ namespace Compiler.Input
         public string CurrentLine { get; protected set; } = "";
 
         // The full path to the file
-        public string FullPath { get; protected set; }
+        public string FullPath { get; }
 
         // The type of data this file contains
         public InputDataType DataType { get; }
@@ -24,7 +24,7 @@ namespace Compiler.Input
             DataType = dataType;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return obj is AbstractSectorDataFile file && Equals(file);
         }
@@ -36,17 +36,17 @@ namespace Compiler.Input
 
         public bool Equals(AbstractSectorDataFile compare)
         {
-            return this.FullPath == compare.FullPath;
+            return FullPath == compare.FullPath;
         }
 
         public string GetParentDirectoryName()
         {
-            return Path.GetFileName(Path.GetDirectoryName(this.FullPath));
+            return Path.GetFileName(Path.GetDirectoryName(FullPath));
         }
 
         public string GetFileName()
         {
-            return Path.GetFileNameWithoutExtension(this.FullPath);
+            return Path.GetFileNameWithoutExtension(FullPath);
         }
 
         public abstract IEnumerator<SectorData> GetEnumerator();
