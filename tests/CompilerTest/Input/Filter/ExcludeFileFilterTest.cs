@@ -28,5 +28,13 @@ namespace CompilerTest.Input.Filter
                 filter.Filter("_TestData/abc/NotFoo.txt")
             );
         }
+        
+        [Fact]
+        public void ItOverridesBaseFilter()
+        {
+            Assert.False(
+                ((IFileFilter) filter).Filter("_TestData/abc/Foo.txt")
+            );
+        }
     }
 }
