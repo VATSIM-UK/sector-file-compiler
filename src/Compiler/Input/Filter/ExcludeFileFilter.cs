@@ -8,7 +8,7 @@ namespace Compiler.Input.Filter
         {
         }
         
-        public new bool Filter(string path)
+        public override bool Filter(string path)
         {
             return !base.Filter(path);
         }

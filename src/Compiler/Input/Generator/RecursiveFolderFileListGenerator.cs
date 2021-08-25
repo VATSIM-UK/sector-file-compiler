@@ -14,6 +14,11 @@ namespace Compiler.Input.Generator
         
         public IEnumerable<string> GetPaths()
         {
+            if (directory.Contains("Agreements\\External"))
+            {
+                bool test = true;
+            }
+            
             return Directory.GetFiles(
                 directory,
                 "*.*",

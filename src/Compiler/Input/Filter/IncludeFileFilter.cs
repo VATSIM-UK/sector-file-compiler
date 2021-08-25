@@ -13,7 +13,7 @@ namespace Compiler.Input.Filter
             FileNames = fileNames;
         }
 
-        public bool Filter(string path)
+        public virtual bool Filter(string path)
         {
             return FileNames.Contains(Path.GetFileName(path));
         }
