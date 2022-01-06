@@ -18,6 +18,11 @@ namespace Compiler.Parser
 
         public ISectorDataParser GetParserForFile(AbstractSectorDataFile file)
         {
+            if (file.DataType == InputDataType.ESE_OWNERSHIP)
+            {
+                string filename = file.FullPath;
+                bool test = true;
+            }
             return file.DataType switch
             {
                 InputDataType.SCT_COLOUR_DEFINITIONS => new ColourParser(sectorElements, logger),

@@ -16,16 +16,18 @@ namespace Compiler.Config
         public ConfigIncludeLoader(
             FolderInclusionRuleLoaderFactory folderFactory,
             FileInclusionRuleLoaderFactory fileFactory
-        ) {
+        )
+        {
             this.folderFactory = folderFactory;
             this.fileFactory = fileFactory;
         }
-        
+
         public void LoadConfig(
             ConfigInclusionRules inclusionRules,
             JObject jsonConfig,
             string fileName
-        ) {
+        )
+        {
             // Load airport data
             JToken airportData = jsonConfig.SelectToken("includes.airports");
             if (airportData != null)
@@ -61,7 +63,7 @@ namespace Compiler.Config
                 );
             }
         }
-        
+
         private string GetMissingTypeMessage(string section)
         {
             return $"Invalid type field for section {section} - must be \"files\" or \"folders\"";
@@ -101,19 +103,54 @@ namespace Compiler.Config
 
                 // Get the airport folders
                 string configFileFolder = GetFolderForConfigFile(configFilePath);
-                string[] directories = Directory.GetDirectories(configFileFolder + Path.DirectorySeparatorChar + configItem.Key);
+                string[] directories =
+                    Directory.GetDirectories(configFileFolder + Path.DirectorySeparatorChar + configItem.Key);
 
-                // For each airport, iterate the config file sections
-                foreach (string directory in directories)
+                /*
+                 * Airports are a bit special as there are lots of them.
+                 * Rather than cycling each airport and applying all the rules, cycle the rules and then apply the
+                 * airports, that way we maintain any desired ordering.
+                 */
+                foreach (ConfigFileSection configSection in AirfieldConfigFileSections.ConfigFileSections)
                 {
-                    IterateConfigFileSections(
-                        configItem.Value,
-                        AirfieldConfigFileSections.ConfigFileSections,
-                        x => OutputGroupFactory.CreateAirport(x, Path.GetFileName(directory)),
-                        config.AddAirportInclusionRule,
-                        directory,
-                        "airport"
-                    );
+                    JToken configObjectSection = configItem.Value.SelectToken(configSection.JsonPath);
+                    if (configObjectSection == null)
+                    {
+                        continue;
+                    }
+
+
+                    if (configObjectSection.Type == JTokenType.Array)
+                    {
+                        foreach (JToken token in (JArray)configObjectSection)
+                        {
+                            foreach (var directory in directories)
+                            {
+                                ProcessConfigSectionObject(
+                                    token,
+                                    configSection,
+                                    OutputGroupFactory.CreateAirport(configSection, Path.GetFileName(directory)),
+                                    config.AddAirportInclusionRule,
+                                    directory,
+                                    "airport"
+                                );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var directory in directories)
+                        {
+                            ProcessConfigSectionObject(
+                                configObjectSection,
+                                configSection,
+                                OutputGroupFactory.CreateAirport(configSection, Path.GetFileName(directory)),
+                                config.AddAirportInclusionRule,
+                                directory,
+                                "airport"
+                            );
+                        }
+                    }
                 }
             }
         }
@@ -125,7 +162,8 @@ namespace Compiler.Config
             Action<IInclusionRule> addInclusionRule,
             string configFilePath,
             string sectionRootString
-        ) {
+        )
+        {
             foreach (ConfigFileSection configSection in configFileSections)
             {
                 JToken configObjectSection = jsonConfig.SelectToken(configSection.JsonPath);
@@ -133,7 +171,7 @@ namespace Compiler.Config
                 {
                     continue;
                 }
-                
+
                 LoadConfigSection(
                     configObjectSection,
                     configSection,
@@ -155,10 +193,11 @@ namespace Compiler.Config
             Action<IInclusionRule> addInclusionRule,
             string configFilePath,
             string sectionRootString
-        ) {
+        )
+        {
             if (jsonConfig.Type == JTokenType.Array)
             {
-                foreach (JToken token in (JArray) jsonConfig)
+                foreach (JToken token in (JArray)jsonConfig)
                 {
                     ProcessConfigSectionObject(
                         token,
@@ -169,7 +208,9 @@ namespace Compiler.Config
                         sectionRootString
                     );
                 }
-            } else {
+            }
+            else
+            {
                 ProcessConfigSectionObject(
                     jsonConfig,
                     configFileSection,
@@ -188,7 +229,8 @@ namespace Compiler.Config
             Action<IInclusionRule> addInclusionRule,
             string rootPath,
             string sectionRootString
-        ) {
+        )
+        {
             if (jsonConfig.Type != JTokenType.Object)
             {
                 throw new ConfigFileInvalidException(GetInvalidConfigParentSectionFormatMessage(sectionRootString));
@@ -200,8 +242,9 @@ namespace Compiler.Config
             if (
                 !configObject.TryGetValue("type", out var typeToken) ||
                 typeToken.Type != JTokenType.String ||
-                ((string) typeToken != "files" && (string) typeToken != "folder")
-            ) {
+                ((string)typeToken != "files" && (string)typeToken != "folder")
+            )
+            {
                 throw new ConfigFileInvalidException(
                     GetMissingTypeMessage($"{sectionRootString}.{configFileSection.JsonPath}")
                 );
@@ -216,7 +259,8 @@ namespace Compiler.Config
                         rootPath
                     ).CreateRule(configObject)
                 );
-            } else
+            }
+            else
             {
                 addInclusionRule(
                     folderFactory.Create(

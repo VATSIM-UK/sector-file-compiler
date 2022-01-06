@@ -1,0 +1,29 @@
+{
+  "includes": {
+    "airports": {
+      "Airports": {
+        "basic": [
+          {
+            "type": "files",
+            "files": [
+              "Basic.txt",
+              "Basic2.txt"
+            ],
+            "exclude_directory": [
+              "EGKK"
+            ]
+          },
+          {
+            "type": "files",
+            "files": [
+              "Basic.txt",
+              "Basic2.txt"
+            ]
+          }
+        ]
+      }
+    },
+    "enroute": {},
+    "misc": {}
+  }
+}
