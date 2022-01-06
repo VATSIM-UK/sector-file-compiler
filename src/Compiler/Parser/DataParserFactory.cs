@@ -18,11 +18,6 @@ namespace Compiler.Parser
 
         public ISectorDataParser GetParserForFile(AbstractSectorDataFile file)
         {
-            if (file.DataType == InputDataType.ESE_OWNERSHIP)
-            {
-                string filename = file.FullPath;
-                bool test = true;
-            }
             return file.DataType switch
             {
                 InputDataType.SCT_COLOUR_DEFINITIONS => new ColourParser(sectorElements, logger),
@@ -32,7 +27,7 @@ namespace Compiler.Parser
                     new FrequencyParser(108, 117, 50),
                     sectorElements,
                     logger
-                    ),
+                ),
                 InputDataType.SCT_NDBS => new NdbParser(new FrequencyParser(108, 950, 500), sectorElements, logger),
                 InputDataType.SCT_ARTCC => new ArtccParser(ArtccType.REGULAR, sectorElements, logger),
                 InputDataType.SCT_ARTCC_LOW => new ArtccParser(ArtccType.LOW, sectorElements, logger),
