@@ -7,23 +7,22 @@ namespace CompilerTest.Bogus.Factory
 {
     static class SectorlineCoordinateFactory
     {
-        public static SectorlineCoordinate Make()
+        public static SectorlineCoordinate Make(Coordinate? coordinate = null)
         {
-            return GetGenerator().Generate();
+            return GetGenerator(coordinate).Generate();
         }
 
-        public static Faker<SectorlineCoordinate> GetGenerator()
+        public static Faker<SectorlineCoordinate> GetGenerator(Coordinate? coordinate = null)
         {
             return new Faker<SectorlineCoordinate>()
                 .CustomInstantiator(
                     _ => new SectorlineCoordinate(
-                        CoordinateFactory.Make(),
+                        coordinate ?? CoordinateFactory.Make(),
                         DefinitionFactory.Make(),
                         DocblockFactory.Make(),
                         CommentFactory.Make()
                     )
                 );
-
         }
 
         public static List<SectorlineCoordinate> MakeList(int count = 1)

@@ -37,5 +37,15 @@ namespace Compiler.Model
         {
             return $"SECTORLINE:{this.Name}";
         }
+
+        public Coordinate Start()
+        {
+            return Coordinates.First().Coordinate;
+        }
+        
+        public Coordinate End()
+        {
+            return Coordinates.Last().Coordinate;
+        }
     }
 }

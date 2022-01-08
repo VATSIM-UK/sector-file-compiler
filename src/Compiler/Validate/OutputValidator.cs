@@ -40,6 +40,8 @@ namespace Compiler.Validate
             new AllSectorsMustHaveValidOwner(),
             new AllSectorsMustHaveValidAltOwner(),
             new AllSectorsMustHaveValidBorder(),
+            new AllSectorsBordersMustBeSingleIfCircle(),
+            new AllSectorBordersMustBeContiguous(),
             new AllSectorsMustHaveValidActiveAirport(),
             new AllSectorsMustHaveValidActiveRunway(),
             new AllSectorsMustHaveValidGuestAirports(),
