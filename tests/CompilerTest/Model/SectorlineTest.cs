@@ -14,12 +14,12 @@ namespace CompilerTest.Model
 
         public SectorlineTest()
         {
-            this.displayRules = SectorLineDisplayRuleFactory.MakeList();
-            this.coordinates = SectorlineCoordinateFactory.MakeList();
-            this.model = new Sectorline(
+            displayRules = SectorLineDisplayRuleFactory.MakeList();
+            coordinates = SectorlineCoordinateFactory.MakeList(3);
+            model = new Sectorline(
                 "Test Sectorline",
-                this.displayRules,
-                this.coordinates,
+                displayRules,
+                coordinates,
                 DefinitionFactory.Make(),
                 DocblockFactory.Make(),
                 CommentFactory.Make()
@@ -29,32 +29,44 @@ namespace CompilerTest.Model
         [Fact]
         public void TestItSetsName()
         {
-            Assert.Equal("Test Sectorline", this.model.Name);
+            Assert.Equal("Test Sectorline", model.Name);
         }
 
         [Fact]
         public void TestItSetsDisplayRules()
         {
-            Assert.Equal(this.displayRules, this.model.DisplayRules);
+            Assert.Equal(displayRules, model.DisplayRules);
         }
 
         [Fact]
         public void TestItSetsCoordinates()
         {
-            Assert.Equal(this.coordinates, this.model.Coordinates);
+            Assert.Equal(coordinates, model.Coordinates);
+        }
+
+        [Fact]
+        public void TestItReturnsStartOfLine()
+        {
+            Assert.Equal(coordinates.First().Coordinate, model.Start());
+        }
+
+        [Fact]
+        public void TestItReturnsEndOfLine()
+        {
+            Assert.Equal(coordinates.Last().Coordinate, model.End());
         }
 
         [Fact]
         public void TestItReturnsCompilableElements()
         {
             IEnumerable<ICompilableElement> expected = new List<ICompilableElement>
-            {
-                this.model
-            }
-                .Concat(this.displayRules)
-                .Concat(this.coordinates);
-            
-            Assert.Equal(expected, this.model.GetCompilableElements());
+                {
+                    model
+                }
+                .Concat(displayRules)
+                .Concat(coordinates);
+
+            Assert.Equal(expected, model.GetCompilableElements());
         }
 
         [Fact]
@@ -62,7 +74,7 @@ namespace CompilerTest.Model
         {
             Assert.Equal(
                 "SECTORLINE:Test Sectorline",
-                this.model.GetCompileData(new SectorElementCollection())
+                model.GetCompileData(new SectorElementCollection())
             );
         }
     }
