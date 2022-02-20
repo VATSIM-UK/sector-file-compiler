@@ -9,7 +9,7 @@ namespace CompilerTest.Output
         [Fact]
         public void TestItReturnsStreamWriter()
         {
-            Assert.IsType<StreamWriter>(new OutputFileStreamFactory().Make("test"));
+            Assert.IsType<StreamWriter>(new OutputFileStreamFactory().Make("foo/test"));
         }
     }
 }
