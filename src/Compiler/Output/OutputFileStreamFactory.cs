@@ -6,6 +6,7 @@ namespace Compiler.Output
     {
         public TextWriter Make(string file)
         {
+            Directory.CreateDirectory(Path.GetDirectoryName(file)!);
             return new StreamWriter(file);
         }
     }
