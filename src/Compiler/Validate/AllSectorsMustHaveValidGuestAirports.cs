@@ -16,7 +16,8 @@ namespace Compiler.Validate
             {
                 foreach (SectorGuest guest in sector.Guests)
                 {
-                    if (guest.DepartureAirport != "*" && !airports.Contains(guest.DepartureAirport))
+                    if (guest.DepartureAirport != "*" && IsHomeAirport(guest.DepartureAirport) &&
+                        !airports.Contains(guest.DepartureAirport))
                     {
                         string message =
                             $"Invalid departure GUEST airport {guest.DepartureAirport} on sector {sector.Name}";
@@ -24,7 +25,8 @@ namespace Compiler.Validate
                         break;
                     }
 
-                    if (guest.ArrivalAirport != "*" && !airports.Contains(guest.ArrivalAirport))
+                    if (guest.ArrivalAirport != "*" && IsHomeAirport(guest.ArrivalAirport) &&
+                        !airports.Contains(guest.ArrivalAirport))
                     {
                         string message =
                             $"Invalid arrival GUEST airport {guest.ArrivalAirport} on sector {sector.Name}";
@@ -33,6 +35,11 @@ namespace Compiler.Validate
                     }
                 }
             }
+        }
+
+        private bool IsHomeAirport(string airport)
+        {
+            return airport.StartsWith("EG");
         }
     }
 }

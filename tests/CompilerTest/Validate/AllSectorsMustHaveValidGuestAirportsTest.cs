@@ -6,7 +6,7 @@ using CompilerTest.Bogus.Factory;
 
 namespace CompilerTest.Validate
 {
-    public class AllSectorsMustHaveValidGuestAirportsTest: AbstractValidatorTestCase
+    public class AllSectorsMustHaveValidGuestAirportsTest : AbstractValidatorTestCase
     {
         public AllSectorsMustHaveValidGuestAirportsTest()
         {
@@ -20,6 +20,7 @@ namespace CompilerTest.Validate
         [InlineData("EGCC", "EGCC", "EGKK")]
         [InlineData("EGKK", "EGLL", "EGKK")]
         [InlineData("EGKK", "EGLL", "EGCC")]
+        [InlineData("EHAM", "EDDM", "EIDW")]
         public void TestItPassesOnAllValid(string first, string second, string third)
         {
             sectorElements.Add(
@@ -40,16 +41,16 @@ namespace CompilerTest.Validate
                     }
                 )
             );
-            
+
             AssertNoValidationErrors();
         }
 
         [Theory]
-        [InlineData("EGLL", "EGCC", "WHAT", 2)]
-        [InlineData("EGCC", "WHAT", "EGKK", 1)]
-        [InlineData("EGKK", "WHAT", "WHAT", 2)]
-        [InlineData("WHAT", "EGCC", "EGLL", 2)]
-        [InlineData("WHAT", "WHAT", "WHAT", 2)]
+        [InlineData("EGLL", "EGCC", "EGNO", 2)]
+        [InlineData("EGCC", "EGNO", "EGKK", 1)]
+        [InlineData("EGKK", "EGNO", "EGNO", 2)]
+        [InlineData("EGNO", "EGCC", "EGLL", 2)]
+        [InlineData("EGNO", "EGNO", "EGNO", 2)]
         public void TestItFailsOnInvalid(string first, string second, string third, int timesCalled)
         {
             sectorElements.Add(
@@ -70,7 +71,7 @@ namespace CompilerTest.Validate
                     }
                 )
             );
-            
+
             AssertValidationErrors(timesCalled);
         }
 
