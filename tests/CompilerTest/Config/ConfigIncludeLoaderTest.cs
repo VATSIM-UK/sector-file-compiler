@@ -12,6 +12,7 @@ using Compiler.Input.Generator;
 using Compiler.Input.Rule;
 using Compiler.Output;
 using Newtonsoft.Json.Linq;
+using Xunit.Abstractions;
 using FileExists = Compiler.Input.Validator.FileExists;
 
 namespace CompilerTest.Config
@@ -20,11 +21,13 @@ namespace CompilerTest.Config
     {
         private readonly ConfigIncludeLoader fileLoader;
         private readonly ConfigInclusionRules includes;
+        private readonly ITestOutputHelper output;
 
-        public ConfigIncludeLoaderTest()
+        public ConfigIncludeLoaderTest(ITestOutputHelper output)
         {
             fileLoader = ConfigIncludeLoaderFactory.Make(new CompilerArguments());
             includes = new ConfigInclusionRules();
+            this.output = output;
         }
 
         [Theory]
@@ -240,6 +243,14 @@ namespace CompilerTest.Config
 
             List<IInclusionRule> ruleList = includes.ToList();
             Assert.Equal(4, ruleList.Count);
+
+            foreach (var rule in ruleList)
+            {
+                foreach (var file in ((InclusionRule)rule).ListGenerator.GetPaths().ToList())
+                {
+                    output.WriteLine(file);
+                }
+            }
 
             // Airport - Basic, first rule for EGKK
             InclusionRule gatwickFirstRule = (InclusionRule)ruleList[0];
