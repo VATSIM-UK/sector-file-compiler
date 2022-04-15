@@ -244,14 +244,6 @@ namespace CompilerTest.Config
             List<IInclusionRule> ruleList = includes.ToList();
             Assert.Equal(4, ruleList.Count);
 
-            foreach (var rule in ruleList)
-            {
-                foreach (var file in ((InclusionRule)rule).ListGenerator.GetPaths().ToList())
-                {
-                    output.WriteLine(file);
-                }
-            }
-
             // Airport - Basic, first rule for EGKK
             InclusionRule gatwickFirstRule = (InclusionRule)ruleList[0];
             Assert.Equal(
