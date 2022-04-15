@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Compiler.Exception;
 using Compiler.Input.Rule;
+using Compiler.Input.Sorter;
 using Compiler.Output;
 using Newtonsoft.Json.Linq;
 
@@ -103,8 +105,9 @@ namespace Compiler.Config
 
                 // Get the airport folders
                 string configFileFolder = GetFolderForConfigFile(configFilePath);
-                string[] directories =
-                    Directory.GetDirectories(configFileFolder + Path.DirectorySeparatorChar + configItem.Key);
+                var directories = Directory
+                    .GetDirectories(configFileFolder + Path.DirectorySeparatorChar + configItem.Key)
+                    .OrderBy(directory => directory, new AlphabeticalPathSorter()).ToList();
 
                 /*
                  * Airports are a bit special as there are lots of them.

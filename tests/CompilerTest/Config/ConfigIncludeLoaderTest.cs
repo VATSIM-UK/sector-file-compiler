@@ -12,6 +12,7 @@ using Compiler.Input.Generator;
 using Compiler.Input.Rule;
 using Compiler.Output;
 using Newtonsoft.Json.Linq;
+using Xunit.Abstractions;
 using FileExists = Compiler.Input.Validator.FileExists;
 
 namespace CompilerTest.Config
@@ -20,11 +21,13 @@ namespace CompilerTest.Config
     {
         private readonly ConfigIncludeLoader fileLoader;
         private readonly ConfigInclusionRules includes;
+        private readonly ITestOutputHelper output;
 
-        public ConfigIncludeLoaderTest()
+        public ConfigIncludeLoaderTest(ITestOutputHelper output)
         {
             fileLoader = ConfigIncludeLoaderFactory.Make(new CompilerArguments());
             includes = new ConfigInclusionRules();
+            this.output = output;
         }
 
         [Theory]
