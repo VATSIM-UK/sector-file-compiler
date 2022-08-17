@@ -15,7 +15,10 @@ namespace CompilerCli.Argument
                     new SkipValidationCompilerArgument(),
                     new StripCommentsCompilerArgument(),
                     new ConfigFileCompilerArgument(),
-                    new BuildVersionCompilerArgument()
+                    new BuildVersionCompilerArgument(),
+                    new CheckConfigCompilerArgument(),
+                    new LintCompilerArgument(),
+                    new ValidateCompilerArgument(),
                 },
                 new SortedSet<AbstractCliArgument>
                 {

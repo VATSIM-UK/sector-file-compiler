@@ -32,6 +32,12 @@ times, then the compiler will attempt to merge the configs together.
 
 ### Optional
 
+`--check-config` - If set, only runs the configuration checking step to ensure that the compiler config is correct.
+
+`--lint` - If set, only runs the configuration check and linting steps.
+
+`--validate` - If set, only runs the configuration check, linting and post-validation steps. Does not output files.
+
 `--skip-validation` - If set, the compiler will skip the post-parse validation phase of compilation,
 
 `--strip-comments` - If set, any comments in the input will be removed. If an empty line is leftover, it will be discarded.

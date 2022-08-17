@@ -1,18 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Compiler.Argument;
 
 namespace CompilerCli.Compiler
 {
-    public class CheckConfigCompilerArgument: AbstractCompilerArgument
+    public class CheckConfigCompilerArgument : AbstractCompilerArgument
     {
         public override void Parse(List<string> values, CompilerArguments compilerSettings)
         {
-            throw new System.NotImplementedException();
+            if (values.Count != 0)
+            {
+                throw new ArgumentException("Check config argument does not take any options");
+            }
+
+            compilerSettings.Mode = RunMode.CHECK_CONFIG;
         }
 
         public override string GetSpecifier()
         {
-            throw new System.NotImplementedException();
+            return "--check-config";
         }
     }
 }

@@ -1,18 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Compiler.Argument;
 
 namespace CompilerCli.Compiler
 {
-    public class LintCompilerArgument: AbstractCompilerArgument
+    public class LintCompilerArgument : AbstractCompilerArgument
     {
         public override void Parse(List<string> values, CompilerArguments compilerSettings)
         {
-            throw new System.NotImplementedException();
+            if (values.Count != 0)
+            {
+                throw new ArgumentException("Lint argument does not take any options");
+            }
+
+            compilerSettings.Mode = RunMode.LINT;
         }
 
         public override string GetSpecifier()
         {
-            throw new System.NotImplementedException();
+            return "--lint";
         }
     }
 }
