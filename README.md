@@ -38,7 +38,8 @@ times, then the compiler will attempt to merge the configs together.
 
 `--validate` - If set, only runs the configuration check, linting and post-validation steps. Does not output files.
 
-`--skip-validation` - If set, the compiler will skip the post-parse validation phase of compilation,
+`--skip-validation` - If set, the compiler will skip the post-parse validation phase of compilation.
+If running in full compilation mode, will still produce output.
 
 `--strip-comments` - If set, any comments in the input will be removed. If an empty line is leftover, it will be discarded.
 
