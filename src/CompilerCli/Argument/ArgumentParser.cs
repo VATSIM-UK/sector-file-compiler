@@ -53,12 +53,12 @@ namespace CompilerCli.Argument
 
         public bool HasCompilerArgument(Type type)
         {
-            return availableCompilerArguments.Select(arg => arg.GetType() == type).Count() != 0;
+            return availableCompilerArguments.Any(arg => arg.GetType() == type);
         }
         
         public bool HasCliArgument(Type type)
         {
-            return availableCompilerArguments.Select(arg => arg.GetType() == type).Count() != 0;
+            return availableCliArguments.Any(arg => arg.GetType() == type);
         }
 
         private int ProcessArguments(string[] args, int startIndex, Action<List<string>> process)

@@ -19,6 +19,8 @@ namespace Compiler
     {
         private readonly CompilerArguments arguments;
         private readonly EventTracker events;
+        private const int SUCESS_RETURN = 0;
+        private const int FAILURE_RETURN = 1;
 
         public SectorFileCompiler(CompilerArguments arguments, EventTracker events)
         {
@@ -38,7 +40,7 @@ namespace Compiler
             if (events.HasFatalError())
             {
                 events.AddEvent(new CompilationFinishedEvent(false));
-                return 1;
+                return FAILURE_RETURN;
             }
 
             // Parse all the config files
@@ -49,11 +51,18 @@ namespace Compiler
             {
                 events.AddEvent(new CompilationMessage("Loading config files"));
                 config = ConfigFileLoaderFactory.Make(arguments).LoadConfigFiles(arguments.ConfigFiles, arguments);
-            } catch (ConfigFileInvalidException e)
+            }
+            catch (ConfigFileInvalidException e)
             {
                 events.AddEvent(new CompilationMessage(e.Message));
                 events.AddEvent(new CompilationFinishedEvent(false));
-                return 1;
+                return FAILURE_RETURN;
+            }
+            
+            events.AddEvent(new CompilationMessage("Config files loaded successfully"));
+            if (arguments.Mode == RunMode.CHECK_CONFIG)
+            {
+                return SUCESS_RETURN;
             }
 
             // Parse all the input files and create elements
@@ -74,18 +83,18 @@ namespace Compiler
             {
                 events.AddEvent(new CompilationMessage(exception.Message));
                 events.AddEvent(new CompilationFinishedEvent(false));
-                return 1;
+                return FAILURE_RETURN;
             }
-            
+
             if (events.HasFatalError())
             {
                 events.AddEvent(new CompilationFinishedEvent(false));
-                return 1;
+                return FAILURE_RETURN;
             }
-            
+
             events.AddEvent(new CompilationMessage("Injecting pre-parse static data"));
             RunwayCentrelineInjector.InjectRunwayCentrelineData(sectorElements);
-            
+
             events.AddEvent(new CompilationMessage("Parsing input files"));
             foreach (AbstractSectorDataFile dataFile in fileList)
             {
@@ -95,13 +104,18 @@ namespace Compiler
             if (events.HasFatalError())
             {
                 events.AddEvent(new CompilationFinishedEvent(false));
-                return 1;
+                return FAILURE_RETURN;
             }
-            
+
             // There's some static data we need to inject to the collection for adjacent airports...
             events.AddEvent(new CompilationMessage("Injecting post-parse static data"));
             AdjacentAirportsInjector.InjectAdjacentAirportsData(sectorElements);
-            
+
+            // We aren't going beyond linting, so stop.
+            if (arguments.Mode == RunMode.LINT)
+            {
+                return SUCESS_RETURN;
+            }
 
             // Now all the data is loaded, validate that there are no broken references etc.
             if (arguments.ValidateOutput)
@@ -111,12 +125,18 @@ namespace Compiler
                 if (events.HasFatalError())
                 {
                     events.AddEvent(new CompilationFinishedEvent(false));
-                    return 1;
+                    return FAILURE_RETURN;
                 }
-            } 
+            }
             else
             {
                 events.AddEvent(new CompilationMessage("Skipping output validation"));
+            }
+
+            // We aren't going beyond post-validating, so don't compile.
+            if (arguments.Mode == RunMode.VALIDATE)
+            {
+                return SUCESS_RETURN;
             }
 
             // Generate the output - all at once
@@ -127,15 +147,16 @@ namespace Compiler
             );
 
             var outputTasks = new List<Task>();
-            foreach(AbstractOutputFile output in arguments.OutputFiles)
+            foreach (AbstractOutputFile output in arguments.OutputFiles)
             {
                 events.AddEvent(new CompilationMessage($"Generating {output.GetFileDescriptor()} output"));
                 outputTasks.Add(generator.GenerateOutput(output));
             }
+
             Task.WaitAll(outputTasks.ToArray());
 
             events.AddEvent(new CompilationFinishedEvent(true));
-            return 0;
+            return SUCESS_RETURN;
         }
     }
 }

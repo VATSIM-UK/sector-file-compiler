@@ -14,6 +14,9 @@ namespace CompilerCliTest.Argument
         [InlineData(typeof(StripCommentsCompilerArgument))]
         [InlineData(typeof(ConfigFileCompilerArgument))]
         [InlineData(typeof(BuildVersionCompilerArgument))]
+        [InlineData(typeof(CheckConfigCompilerArgument))]
+        [InlineData(typeof(LintCompilerArgument))]
+        [InlineData(typeof(ValidateCompilerArgument))]
         public void TestItAddsCompilerArguments(Type type)
         {
             Assert.True(ArgumentParserFactory.Make().HasCompilerArgument(type));
