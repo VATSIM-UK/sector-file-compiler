@@ -74,5 +74,8 @@ namespace Compiler.Argument
 
         // What mode should we run in.
         public RunMode Mode { get; set; } = RunMode.COMPILE;
+
+        // Should we pretty print the output
+        public Pretty Pretty { get; set; } = Pretty.NONE;
     }
 }

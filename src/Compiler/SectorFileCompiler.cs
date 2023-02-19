@@ -143,7 +143,8 @@ namespace Compiler
             OutputGenerator generator = new OutputGenerator(
                 sectorElements,
                 outputGroups,
-                new CompilableElementCollectorFactory(sectorElements, outputGroups)
+                new CompilableElementCollectorFactory(sectorElements, outputGroups),
+                arguments
             );
 
             var outputTasks = new List<Task>();

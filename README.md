@@ -41,6 +41,8 @@ times, then the compiler will attempt to merge the configs together.
 `--skip-validation` - If set, the compiler will skip the post-parse validation phase of compilation.
 If running in full compilation mode, will still produce output.
 
+`--pretty` - If set, "large" elements such as `SECTOR` will have an extra newline inserted between them, in order to provide improved readability.
+
 `--strip-comments` - If set, any comments in the input will be removed. If an empty line is leftover, it will be discarded.
 
 `--build-version` - Takes a single argument. Specifies the version of the build to replace the `{VERSION}` token in the input.

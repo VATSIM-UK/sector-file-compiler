@@ -19,6 +19,7 @@ namespace CompilerCli.Argument
                     new CheckConfigCompilerArgument(),
                     new LintCompilerArgument(),
                     new ValidateCompilerArgument(),
+                    new PrettyCompilerArgument()
                 },
                 new SortedSet<AbstractCliArgument>
                 {
