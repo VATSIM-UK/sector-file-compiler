@@ -35,6 +35,11 @@ namespace CompilerCli
                 return 1;
             }
 
+            if (cliArguments.HelpExit) {
+                output.Write(HelpArgument.GetHelpMessage());
+                return 0;
+            }
+
             int returnCode = SectorFileCompilerFactory.Create(
                 compilerArguments,
                 new List<IEventObserver>() { new ConsoleOutput(output) }
