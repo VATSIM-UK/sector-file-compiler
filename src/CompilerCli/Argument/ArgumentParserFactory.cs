@@ -24,7 +24,8 @@ namespace CompilerCli.Argument
                 new SortedSet<AbstractCliArgument>
                 {
                     new DefaultCliArgument(),
-                    new NoWaitCliArgument()
+                    new NoWaitCliArgument(),
+                    new HelpArgument()
                 }
             );
         }
