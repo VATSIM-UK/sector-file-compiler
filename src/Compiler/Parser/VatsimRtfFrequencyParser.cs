@@ -5,7 +5,7 @@
         // This has to be much lower because some are defined on the VORs
         const int FirstMinValue = 108;
         const int FirstMaxValue = 136;
-        const int SecondDividend = 25;
+        const int SecondDividend = 5;
 
         private const string PrePositionsFrequency = "199.998";
         private const string NotValidFrequency = "199.900";
@@ -34,7 +34,7 @@
                 return null;
             }
 
-            if ((second % SecondDividend) != 0 && ((second + 5) % SecondDividend) != 0)
+            if ((second % SecondDividend) != 0)
             {
                 return null;
             }
