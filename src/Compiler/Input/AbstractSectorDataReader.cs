@@ -16,11 +16,22 @@ namespace Compiler.Input
         }
 
         /*
+         * Returns whether or not the line is an arc gen line
+         */
+        public bool IsArcGenLine(string line) {
+            try {
+                return line.TrimStart().StartsWith(this.GetCommentDelimiter()) && line.Substring(1, 3) == "Arc";
+            } catch (ArgumentOutOfRangeException) {
+                return false;
+            }
+        }
+
+        /*
          * Returns whether or not the line is a comment line
          */
         public bool IsCommentLine(string line)
         {
-            return line.TrimStart().StartsWith(this.GetCommentDelimiter());
+            return !IsArcGenLine(line) && line.TrimStart().StartsWith(this.GetCommentDelimiter());
         }
 
         /*

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Compiler.Model;
 
@@ -38,6 +39,59 @@ namespace Compiler.Input
                 if (reader.IsCommentLine(line))
                 {
                     docblock.AddLine(reader.GetCommentSegment(line));
+                }
+                else if (reader.IsArcGenLine(line)) {
+                    // Return new SectorData for each new region
+
+                    const int DELTA_THETA = 5;
+
+                    System.Console.WriteLine(line);
+
+                    string[] blocks = line.Split(' ');
+
+                    if (blocks[1] != "centre" || blocks[4] != "radius") {
+                        throw new System.Exception("Invalid ArcGen Line: " + line);  // todo: FIX!
+                    }
+
+                    double lat = Coordinate.DegreeMinSecToDecimalDegree(blocks[2]);
+                    double lon = Coordinate.DegreeMinSecToDecimalDegree(blocks[3]);
+
+                    float radius = float.Parse(blocks[5]);
+
+                    string prevLat = "";
+                    string prevLon = "";
+
+                    for (int theta = 0; theta <= 360; theta += DELTA_THETA) {
+                        double deltaLat = (radius * Math.Cos(theta * Math.PI / 180)) / 60.0d;
+                        double deltaLon = (radius * Math.Sin(theta * Math.PI / 180)) / 60.0d;
+                        deltaLon /= Math.Cos((lat) * Math.PI / 180); // account for length of nautical mile changing with latitude
+
+                        string newLat = Coordinate.DecimalDegreeToDegreeMinSec(lat + deltaLat, true);
+                        string newLon = Coordinate.DecimalDegreeToDegreeMinSec(lon + deltaLon, false);
+
+                        if (theta == 0) {
+                            prevLat = newLat;
+                            prevLon = newLon;
+                            continue;
+                        }
+
+                        string outLine = $"EGR156 {prevLat} {prevLon} {newLat} {newLon}";
+
+                        prevLat = newLat;
+                        prevLon = newLon;
+                        //System.Console.WriteLine(newLat + "," + newLon);
+
+                        // For each new coordinate, yield return it.
+
+                        yield return new SectorData(
+                            docblock,
+                            reader.GetCommentSegment(outLine),
+                            reader.GetDataSegments(outLine),
+                            reader.GetRawData(outLine),
+                            new Definition(this.FullPath, this.CurrentLineNumber)  // sus
+                        );
+                        docblock = new Docblock();
+                    }
                 }
                 else
                 {
