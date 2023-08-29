@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using Compiler.Model;
 
 namespace Compiler.Input
@@ -47,16 +48,16 @@ namespace Compiler.Input
 
                     System.Console.WriteLine(line);
 
-                    string[] blocks = line.Split(' ');
+                    Regex rx = new Regex(@";Arc region (.*) centre ([NS]\d{3}\.\d{2}\.\d{2}\.\d{3}) ([EW]\d{3}\.\d{2}\.\d{2}\.\d{3}) radius (\d*(?:\.\d*){0,1})(?: from ([NS]\d{3}\.\d{2}\.\d{2}\.\d{3}) ([EW]\d{3}\.\d{2}\.\d{2}\.\d{3}) to ([NS]\d{3}\.\d{2}\.\d{2}\.\d{3}) ([EW]\d{3}\.\d{2}\.\d{2}\.\d{3})){0,1}", RegexOptions.None);
+                    GroupCollection groups = rx.Match(line).Groups;  // error catching!
 
-                    if (blocks[1] != "centre" || blocks[4] != "radius") {
-                        throw new System.Exception("Invalid ArcGen Line: " + line);  // todo: FIX!
-                    }
+                    string regionName = groups[1].Value;
+                    System.Console.WriteLine(groups[1].Value);
 
-                    double lat = Coordinate.DegreeMinSecToDecimalDegree(blocks[2]);
-                    double lon = Coordinate.DegreeMinSecToDecimalDegree(blocks[3]);
+                    double lat = Coordinate.DegreeMinSecToDecimalDegree(groups[2].Value);
+                    double lon = Coordinate.DegreeMinSecToDecimalDegree(groups[3].Value);
 
-                    float radius = float.Parse(blocks[5]);
+                    float radius = float.Parse(groups[4].Value);
 
                     string prevLat = "";
                     string prevLon = "";
@@ -75,7 +76,7 @@ namespace Compiler.Input
                             continue;
                         }
 
-                        string outLine = $"EGR156 {prevLat} {prevLon} {newLat} {newLon}";
+                        string outLine = $"{regionName} {prevLat} {prevLon} {newLat} {newLon}";
 
                         prevLat = newLat;
                         prevLon = newLon;
