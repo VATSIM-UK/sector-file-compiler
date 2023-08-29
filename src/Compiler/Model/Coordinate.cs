@@ -1,4 +1,6 @@
-﻿namespace Compiler.Model
+﻿using System;
+
+namespace Compiler.Model
 {
     public struct Coordinate
     {
@@ -36,15 +38,15 @@
             }
 
             output += ((int)decimalDegree).ToString().PadLeft(3, '0') + ".";
-            decimalDegree = decimalDegree - (int)decimalDegree;
+            decimalDegree -= (int)decimalDegree;
             decimalDegree *= 60;
             output += ((int)decimalDegree).ToString().PadLeft(2, '0') + ".";
-            decimalDegree = decimalDegree - (int)decimalDegree;
+            decimalDegree -= (int)decimalDegree;
             decimalDegree *= 60;
             output += ((int)decimalDegree).ToString().PadLeft(2, '0') + ".";
-            decimalDegree = decimalDegree - (int)decimalDegree;
+            decimalDegree -= (int)decimalDegree;
             decimalDegree *= 1000;
-            output += ((int)decimalDegree).ToString().PadLeft(3, '0');
+            output += Math.Round(decimalDegree).ToString().PadLeft(3, '0');
 
             return output;
         }
