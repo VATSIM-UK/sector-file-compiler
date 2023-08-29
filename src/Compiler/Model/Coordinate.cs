@@ -16,6 +16,7 @@ namespace Compiler.Model
         public static double DegreeMinSecToDecimalDegree(string latOrLong) {
             double output = 0;
             string[] sections = latOrLong.Split('.');
+            Console.WriteLine(latOrLong);
             output += int.Parse(sections[0].Substring(1));
             output += int.Parse(sections[1]) / 60.0d;
             output += int.Parse(sections[2]) / 3600.0d;
@@ -46,7 +47,8 @@ namespace Compiler.Model
             output += ((int)decimalDegree).ToString().PadLeft(2, '0') + ".";
             decimalDegree -= (int)decimalDegree;
             decimalDegree *= 1000;
-            output += Math.Round(decimalDegree).ToString().PadLeft(3, '0');
+            if (Math.Round(decimalDegree) > 999) output += "999";
+            else output += Math.Round(decimalDegree).ToString().PadLeft(3, '0');
 
             return output;
         }

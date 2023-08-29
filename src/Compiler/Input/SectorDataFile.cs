@@ -47,13 +47,10 @@ namespace Compiler.Input
                     const int DELTA_THETA = 5;
                     const double R = 6372.795477598;
 
-                    System.Console.WriteLine(line);
-
                     Regex rx = new Regex(@";Arc region (.*) centre ([NS]\d{3}\.\d{2}\.\d{2}\.\d{3}) ([EW]\d{3}\.\d{2}\.\d{2}\.\d{3}) radius (\d*(?:\.\d*){0,1})(?: from ([NS]\d{3}\.\d{2}\.\d{2}\.\d{3}) ([EW]\d{3}\.\d{2}\.\d{2}\.\d{3}) to ([NS]\d{3}\.\d{2}\.\d{2}\.\d{3}) ([EW]\d{3}\.\d{2}\.\d{2}\.\d{3})){0,1}", RegexOptions.None);
                     GroupCollection groups = rx.Match(line).Groups;  // error catching!
 
                     string regionName = groups[1].Value;
-                    System.Console.WriteLine(groups[1].Value);
 
                     double lat = Coordinate.DegreeMinSecToDecimalDegree(groups[2].Value);
                     double lon = Coordinate.DegreeMinSecToDecimalDegree(groups[3].Value);
@@ -68,54 +65,52 @@ namespace Compiler.Input
 
                     bool includesFromTo = false;
 
-                    if (groups.Count > 5) {  // includes a from / to as well
-                        includesFromTo = true;
-                        prevLat = groups[5].Value;
-                        prevLon = groups[6].Value;
+                    if (groups.Count > 5) {  // includes a from / to as 
+                        if (groups[5].Value.Length > 0) {
+                            includesFromTo = true;
+                            prevLat = groups[5].Value;
+                            prevLon = groups[6].Value;
 
-                        double fromLat = Coordinate.DegreeMinSecToDecimalDegree(groups[5].Value);
-                        double fromLon = Coordinate.DegreeMinSecToDecimalDegree(groups[6].Value);
+                            double fromLat = Coordinate.DegreeMinSecToDecimalDegree(groups[5].Value);
+                            double fromLon = Coordinate.DegreeMinSecToDecimalDegree(groups[6].Value);
 
-                        double toLat = Coordinate.DegreeMinSecToDecimalDegree(groups[7].Value);
-                        double toLon = Coordinate.DegreeMinSecToDecimalDegree(groups[8].Value);
+                            double toLat = Coordinate.DegreeMinSecToDecimalDegree(groups[7].Value);
+                            double toLon = Coordinate.DegreeMinSecToDecimalDegree(groups[8].Value);
 
-                        // Calculate angle to from / to coordinate
+                            // Calculate angle to from / to coordinate
 
-                        double fromTheta = Math.Atan2(Math.Cos(fromLat * Math.PI / 180) * Math.Sin((fromLon - lon) * Math.PI / 180), 
-                            Math.Cos(lat * Math.PI / 180) * Math.Sin(fromLat * Math.PI / 180) - Math.Sin(lat * Math.PI / 180) * Math.Cos(fromLat * Math.PI / 180) * Math.Cos((fromLon - lon) * Math.PI / 180)
-                        );
-                        fromTheta = (180 * fromTheta / Math.PI + 360) % 360;
+                            double fromTheta = Math.Atan2(Math.Cos(fromLat * Math.PI / 180) * Math.Sin((fromLon - lon) * Math.PI / 180),
+                                Math.Cos(lat * Math.PI / 180) * Math.Sin(fromLat * Math.PI / 180) - Math.Sin(lat * Math.PI / 180) * Math.Cos(fromLat * Math.PI / 180) * Math.Cos((fromLon - lon) * Math.PI / 180)
+                            );
+                            fromTheta = (180 * fromTheta / Math.PI + 360) % 360;
 
-                        double toTheta = Math.Atan2(Math.Cos(toLat * Math.PI / 180) * Math.Sin((toLon - lon) * Math.PI / 180),
-                            Math.Cos(lat * Math.PI / 180) * Math.Sin(toLat * Math.PI / 180) - Math.Sin(lat * Math.PI / 180) * Math.Cos(toLat * Math.PI / 180) * Math.Cos((toLon - lon) * Math.PI / 180)
-                        );
-                        toTheta = (180 * toTheta / Math.PI + 360) % 360;
+                            double toTheta = Math.Atan2(Math.Cos(toLat * Math.PI / 180) * Math.Sin((toLon - lon) * Math.PI / 180),
+                                Math.Cos(lat * Math.PI / 180) * Math.Sin(toLat * Math.PI / 180) - Math.Sin(lat * Math.PI / 180) * Math.Cos(toLat * Math.PI / 180) * Math.Cos((toLon - lon) * Math.PI / 180)
+                            );
+                            toTheta = (180 * toTheta / Math.PI + 360) % 360;
 
-                        initialTheta = (int)Math.Min(fromTheta, toTheta);
-                        finalTheta = (int)Math.Max(fromTheta, toTheta);
+                            initialTheta = (int)Math.Min(fromTheta, toTheta);
+                            finalTheta = (int)Math.Max(fromTheta, toTheta);
 
-                        // calculate actual radius
+                            initialTheta += 1; // padding
+                            finalTheta -= DELTA_THETA;
 
-                        double fromDist = R * Math.Acos(Math.Sin(lat * Math.PI / 180) * Math.Sin(fromLat * Math.PI / 180) + Math.Cos(lat * Math.PI / 180) * Math.Cos(fromLat * Math.PI / 180) * Math.Cos((lon - fromLon) * Math.PI / 180));
-                        fromDist = fromDist / 1.852;
-                        double toDist = R * Math.Acos(Math.Sin(lat * Math.PI / 180) * Math.Sin(toLat * Math.PI / 180) + Math.Cos(lat * Math.PI / 180) * Math.Cos(toLat * Math.PI / 180) * Math.Cos((lon - toLon) * Math.PI / 180));
-                        toDist = toDist / 1.852;
+                            // calculate actual radius
 
-                        float meanRadius = (float)Math.Round((fromDist + toDist) / 2, 2);
+                            double fromDist = R * Math.Acos(Math.Sin(lat * Math.PI / 180) * Math.Sin(fromLat * Math.PI / 180) + Math.Cos(lat * Math.PI / 180) * Math.Cos(fromLat * Math.PI / 180) * Math.Cos((lon - fromLon) * Math.PI / 180));
+                            fromDist = fromDist / 1.852;
+                            double toDist = R * Math.Acos(Math.Sin(lat * Math.PI / 180) * Math.Sin(toLat * Math.PI / 180) + Math.Cos(lat * Math.PI / 180) * Math.Cos(toLat * Math.PI / 180) * Math.Cos((lon - toLon) * Math.PI / 180));
+                            toDist = toDist / 1.852;
 
-                        if (meanRadius != radius) {
-                            System.Console.WriteLine("RADIUS ERROR REPLACE ME BEFORE RELEASE");
-                            radius = meanRadius;
+                            float meanRadius = (float)Math.Round((fromDist + toDist) / 2, 2);
+
+                            if (meanRadius != radius) {
+                                radius = meanRadius; // AIP radius was wrong
+                            }
                         }
-
-                        
-
-                        //System.Console.WriteLine(fromTheta);
-                        //System.Console.WriteLine(toTheta);
-                        //throw new System.Exception();
                     }
 
-                    for (int theta = initialTheta + 1; theta < finalTheta; theta += DELTA_THETA) {
+                    for (int theta = initialTheta; theta <= finalTheta; theta += DELTA_THETA) {
                         double deltaLat = (radius * Math.Cos(theta * Math.PI / 180)) / 60.0d;
                         double deltaLon = (radius * Math.Sin(theta * Math.PI / 180)) / 60.0d;
                         deltaLon /= Math.Cos((lat) * Math.PI / 180); // account for length of nautical mile changing with latitude
@@ -123,7 +118,7 @@ namespace Compiler.Input
                         string newLat = Coordinate.DecimalDegreeToDegreeMinSec(lat + deltaLat, true);
                         string newLon = Coordinate.DecimalDegreeToDegreeMinSec(lon + deltaLon, false);
 
-                        if (theta == initialTheta + 1 && !includesFromTo) {
+                        if (theta == initialTheta && !includesFromTo) {
                             prevLat = newLat;
                             prevLon = newLon;
                             continue;

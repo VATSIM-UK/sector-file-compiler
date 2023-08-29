@@ -35,6 +35,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="_testdata\sectordatafile\ArcGenTest.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TestDataFiles Remove="_testdata\sectordatafile\ArcGenTest.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="_TestData\ConfigFileLoader\ValidConfig\Ownership\Alternate\Foo.txt" />
     <Content Include="_TestData\ConfigFileLoader\ValidConfig\Ownership\Foo\Foo.txt" />
     <Content Include="_TestData\ConfigFileLoader\ValidConfig\Ownership\Non-UK\EUR Islands.txt" />
@@ -47,6 +55,7 @@
     <Content Include="_TestData\FolderFileListGenerator\Foo.txt" />
     <Content Include="_TestData\FolderFileListGenerator\Nested\Bar.txt" />
     <Content Include="_TestData\IgnoreWhenFileExists\Foo.txt" />
+    <Content Include="_testdata\sectordatafile\ArcGenTest.txt" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
