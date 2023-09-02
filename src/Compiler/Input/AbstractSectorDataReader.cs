@@ -20,7 +20,7 @@ namespace Compiler.Input
          */
         public bool IsArcGenLine(string line) {
             try {
-                return line.TrimStart().StartsWith(this.GetCommentDelimiter()) && line.Substring(1, 3) == "Arc";
+                return line.TrimStart().StartsWith("@ARC");
             } catch (ArgumentOutOfRangeException) {
                 return false;
             }
@@ -31,7 +31,7 @@ namespace Compiler.Input
          */
         public bool IsCommentLine(string line)
         {
-            return !IsArcGenLine(line) && line.TrimStart().StartsWith(this.GetCommentDelimiter());
+            return line.TrimStart().StartsWith(this.GetCommentDelimiter());
         }
 
         /*

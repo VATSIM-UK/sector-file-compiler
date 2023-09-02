@@ -47,7 +47,7 @@ namespace Compiler.Input
                     const int DELTA_THETA = 5;
                     const double R = 6372.795477598;
 
-                    Regex rx = new Regex(@";Arc region (.*) centre ([NS]\d{3}\.\d{2}\.\d{2}\.\d{3}) ([EW]\d{3}\.\d{2}\.\d{2}\.\d{3}) radius (\d*(?:\.\d*){0,1})(?: from ([NS]\d{3}\.\d{2}\.\d{2}\.\d{3}) ([EW]\d{3}\.\d{2}\.\d{2}\.\d{3}) to ([NS]\d{3}\.\d{2}\.\d{2}\.\d{3}) ([EW]\d{3}\.\d{2}\.\d{2}\.\d{3})){0,1}", RegexOptions.None);
+                    Regex rx = new Regex(@"@ARC\(region (.*) centre ([NS]\d{3}\.\d{2}\.\d{2}\.\d{3}) ([EW]\d{3}\.\d{2}\.\d{2}\.\d{3}) radius (\d*(?:\.\d*){0,1})(?: from ([NS]\d{3}\.\d{2}\.\d{2}\.\d{3}) ([EW]\d{3}\.\d{2}\.\d{2}\.\d{3}) to ([NS]\d{3}\.\d{2}\.\d{2}\.\d{3}) ([EW]\d{3}\.\d{2}\.\d{2}\.\d{3})){0,1}\)", RegexOptions.None);
                     GroupCollection groups = rx.Match(line).Groups;  // error catching!
 
                     string regionName = groups[1].Value;

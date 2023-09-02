@@ -43,24 +43,19 @@ namespace CompilerTest.Input
         [InlineData("", false)]
         [InlineData("// comment", false)]
         [InlineData("/* comment */", false)]
-        public void ItDetectsACommentLine(string line, bool expected)
-        {
+        [InlineData("@ARC", false)]
+        public void ItDetectsACommentLine(string line, bool expected) {
             Assert.Equal(expected, this.reader.IsCommentLine(line));
         }
 
         [Fact]
-        public void ItIgnoresArcGenLineAsComment() {
-            Assert.False(this.reader.IsCommentLine(";Arc xxx"));
-        }
-
-        [Fact]
         public void ItIgnoresShortComments() {
-            Assert.False(this.reader.IsArcGenLine(";Ar"));
+            Assert.False(this.reader.IsArcGenLine("@AR"));
         }
 
         [Fact]
         public void ItRecognisesArcGenLines() {
-            Assert.True(this.reader.IsArcGenLine(";Arc xxx"));
+            Assert.True(this.reader.IsArcGenLine("@ARC(xxx)"));
         }
 
         [Theory]

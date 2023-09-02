@@ -1,4 +1,4 @@
 ;Simple
-;Arc region Test Region centre N051.30.00.000 W000.07.30.000 radius 1.25
+@ARC(region Test Region centre N051.30.00.000 W000.07.30.000 radius 1.25)
 ;Complex
-;Arc region Test Region centre N051.29.15.000 W000.07.26.000 radius 0.55 from N051.29.17.000 W000.06.34.000 to N051.28.52.000 W000.06.49.000
+@ARC(region Test Region centre N051.29.15.000 W000.07.26.000 radius 0.55 from N051.29.17.000 W000.06.34.000 to N051.28.52.000 W000.06.49.000)
