@@ -47,6 +47,7 @@
     <Content Include="_TestData\FolderFileListGenerator\Foo.txt" />
     <Content Include="_TestData\FolderFileListGenerator\Nested\Bar.txt" />
     <Content Include="_TestData\IgnoreWhenFileExists\Foo.txt" />
+    <Content Include="_TestData\SectorDataFile\ArcGenTest.txt" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

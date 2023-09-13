@@ -16,6 +16,17 @@ namespace Compiler.Input
         }
 
         /*
+         * Returns whether or not the line is an arc gen line
+         */
+        public bool IsArcGenLine(string line) {
+            try {
+                return line.TrimStart().StartsWith("@ARC");
+            } catch (ArgumentOutOfRangeException) {
+                return false;
+            }
+        }
+
+        /*
          * Returns whether or not the line is a comment line
          */
         public bool IsCommentLine(string line)
