@@ -27,7 +27,7 @@ namespace Compiler.Error
 
         public string GetMessage()
         {
-            return $"Syntax Error: {this.problem} in {this.definition.Filename} at line {this.definition.LineNumber}";
+            return $"Syntax Error: {this.problem} at {this.definition.Filename}:{this.definition.LineNumber}";
         }
 
         public bool IsFatal()
