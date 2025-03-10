@@ -16,7 +16,8 @@ namespace Compiler.Error
 
         public string GetMessage()
         {
-            return $"Validation rule not met: {error}, defined in {definable.GetDefinition()}";
+            Definition definition = definable.GetDefinition();
+            return $"Validation rule not met: {error}, defined at {definition.Filename}:{definition.LineNumber}";
         }
 
         public bool IsFatal()
