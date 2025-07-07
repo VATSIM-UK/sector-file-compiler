@@ -55,21 +55,21 @@ jobs:
                 
       - name: Upload Windows Assets
         if: matrix.platform == 'windows-latest'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: "cli-windows-x64"
           path: "publish/windows/CompilerCli.exe"
           
       - name: Upload Linux Assets
         if: matrix.platform == 'windows-latest'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: "cli-linux-x64"
           path: "publish/linux/CompilerCli"
           
       - name: Upload OSX Assets
         if: matrix.platform == 'windows-latest'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: "cli-osx-x64"
           path: "publish/osx/CompilerCli"
