@@ -26,7 +26,7 @@ namespace CompilerTest.Error
         public void TestItHasAMessage()
         {
             Assert.Equal(
-                $"Syntax Error: Fooproblem in {this.data.definition.Filename} at line {this.data.definition.LineNumber}",
+                $"Syntax Error: Fooproblem at {this.data.definition.Filename}:{this.data.definition.LineNumber}",
                 this.error.GetMessage()
             );
         }
