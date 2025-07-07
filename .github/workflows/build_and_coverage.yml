@@ -10,12 +10,29 @@ jobs:
   Build_Test_Coverage:
     strategy:
       matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
+        platform: [ubuntu-22.04, windows-latest]
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            7.0.x
+            6.0.x
       
+      - name: Install dependencies for dotCover
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libssl1.1 || echo "Trying alternative method"
+          if ! ldconfig -p | grep libssl.so.1.1; then
+            echo "libssl1.1 not found, attempting manual installation"
+            wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.1/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+            sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+          fi
+
       - name: Restore Nuget Packages
         run: dotnet restore SectorFileCompiler.sln --packages packages
 
@@ -55,21 +72,21 @@ jobs:
                 
       - name: Upload Windows Assets
         if: matrix.platform == 'windows-latest'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: "cli-windows-x64"
           path: "publish/windows/CompilerCli.exe"
           
       - name: Upload Linux Assets
         if: matrix.platform == 'windows-latest'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: "cli-linux-x64"
           path: "publish/linux/CompilerCli"
           
       - name: Upload OSX Assets
         if: matrix.platform == 'windows-latest'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: "cli-osx-x64"
           path: "publish/osx/CompilerCli"
