@@ -26,7 +26,7 @@ namespace CompilerTest.Error
         [Fact]
         public void TestItReturnsAMessage()
         {
-            Assert.Equal($"Validation rule not met: just because, defined in {definition}", rule.GetMessage());
+            Assert.Equal($"Validation rule not met: just because, defined at {definition.Filename}:{definition.LineNumber}", rule.GetMessage());
         }
     }
 }
