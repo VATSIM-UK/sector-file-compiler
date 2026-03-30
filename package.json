@@ -4,7 +4,6 @@
   "directories": {
     "test": "tests"
   },
-  "dependencies": {},
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0"
   },
