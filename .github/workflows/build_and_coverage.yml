@@ -3,7 +3,7 @@ name: Build Test and Coverage
 on:
   push:
     branches:
-      - "main"
+      - 'main'
   pull_request:
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
         with:
           dotnet-version: |
             8.0.x
-
+      
       - name: Install dependencies for dotCover
         if: matrix.platform == 'ubuntu-22.04'
         run: |
@@ -37,7 +37,7 @@ jobs:
 
       - name: Run Build
         run: dotnet build /p:Configuration=Release SectorFileCompiler.sln --nologo --no-restore /warnaserror;
-
+      
       - name: Run Compiler Tests With Coverage
         if: matrix.platform == 'ubuntu-22.04'
         run: |
@@ -61,28 +61,28 @@ jobs:
         run: |
           cd tests/CompilerCliTest
           dotnet test
-
+          
       - name: Publish Assets
         if: matrix.platform == 'windows-latest'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: .\.github\workflows\publish.ps1
         shell: powershell
-
+                
       - name: Upload Windows Assets
         if: matrix.platform == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: "cli-windows-x64"
           path: "publish/windows/CompilerCli.exe"
-
+          
       - name: Upload Linux Assets
         if: matrix.platform == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: "cli-linux-x64"
           path: "publish/linux/CompilerCli"
-
+          
       - name: Upload OSX Assets
         if: matrix.platform == 'windows-latest'
         uses: actions/upload-artifact@v4
@@ -99,6 +99,6 @@ jobs:
       # If we're building on main, lets do a release
       - name: Create Release
         if: github.ref == 'refs/heads/main' && matrix.platform == 'windows-latest'
-        env:
+        env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release@17
