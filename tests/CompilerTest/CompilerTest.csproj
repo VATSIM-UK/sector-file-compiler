@@ -22,9 +22,6 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <DotNetCliToolReference Include="JetBrains.dotCover.DotNetCliTool" Version="2020.3.2" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Compiler\Compiler.csproj" />

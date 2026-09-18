@@ -21,11 +21,9 @@ jobs:
           dotnet-version: |
             10.0.x
       
-      - name: Install dependencies for dotCover
+      - name: Install dotCover
         if: matrix.platform == 'ubuntu-latest'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libssl3t64 || sudo apt-get install -y libssl3
+        run: dotnet tool install --global JetBrains.dotCover.CommandLineTools --version 2026.2.2
 
       - name: Restore Nuget Packages
         run: dotnet restore SectorFileCompiler.sln --packages packages
@@ -37,7 +35,7 @@ jobs:
         if: matrix.platform == 'ubuntu-latest'
         run: |
           cd tests/CompilerTest
-          dotnet dotcover test --dcReportType=DetailedXml --dcOutput=../../coverage/Compiler.xml
+          dotCover cover --xml-report-output ../../coverage/Compiler.xml -- test
 
       - name: Run Compiler Tests
         if: matrix.platform != 'ubuntu-latest'
@@ -49,7 +47,7 @@ jobs:
         if: matrix.platform == 'ubuntu-latest'
         run: |
           cd tests/CompilerCliTest
-          dotnet dotcover test --dcReportType=DetailedXml --dcOutput=../../coverage/CompilerCli.xml
+          dotCover cover --xml-report-output ../../coverage/CompilerCli.xml -- test
 
       - name: Run Compiler CLI Tests
         if: matrix.platform != 'ubuntu-latest'
