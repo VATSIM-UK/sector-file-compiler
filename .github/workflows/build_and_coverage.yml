@@ -21,40 +21,22 @@ jobs:
           dotnet-version: |
             10.0.x
       
-      - name: Install dotCover
-        if: matrix.platform == 'ubuntu-latest'
-        run: dotnet tool install --global JetBrains.dotCover.CommandLineTools --version 2026.2.2
-
       - name: Restore Nuget Packages
         run: dotnet restore SectorFileCompiler.sln --packages packages
 
       - name: Run Build
         run: dotnet build /p:Configuration=Release SectorFileCompiler.sln --nologo --no-restore /warnaserror;
       
-      - name: Run Compiler Tests With Coverage
-        if: matrix.platform == 'ubuntu-latest'
-        run: |
-          cd tests/CompilerTest
-          dotCover cover --xml-report-output ../../coverage/Compiler.xml -- test
-
       - name: Run Compiler Tests
-        if: matrix.platform != 'ubuntu-latest'
         run: |
           cd tests/CompilerTest
-          dotnet test
-
-      - name: Run Compiler CLI Tests With Coverage
-        if: matrix.platform == 'ubuntu-latest'
-        run: |
-          cd tests/CompilerCliTest
-          dotCover cover --xml-report-output ../../coverage/CompilerCli.xml -- test
+          dotnet test --collect:"XPlat Code Coverage" --results-directory ../../coverage
 
       - name: Run Compiler CLI Tests
-        if: matrix.platform != 'ubuntu-latest'
         run: |
           cd tests/CompilerCliTest
-          dotnet test
-          
+          dotnet test --collect:"XPlat Code Coverage" --results-directory ../../coverage
+
       - name: Publish Assets
         if: matrix.platform == 'windows-latest'
         env:
