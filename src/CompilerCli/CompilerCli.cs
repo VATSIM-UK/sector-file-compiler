@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using CompilerCli.Argument;
 using CompilerCli.Cli;
+using CompilerCli.Version;
 
 namespace CompilerCli
 {
@@ -44,6 +45,16 @@ namespace CompilerCli
                 compilerArguments,
                 new List<IEventObserver>() { new ConsoleOutput(output) }
             ).Compile();
+
+            string latestReleaseTag = new GitHubLatestReleaseProvider().GetLatestReleaseTag();
+            string versionCheckMessage = VersionCheckMessageFactory.BuildMessage(
+                typeof(CompilerCli).Assembly.GetName().Version,
+                latestReleaseTag
+            );
+            if (versionCheckMessage != null)
+            {
+                output.WriteLine(versionCheckMessage);
+            }
 
             if (cliArguments.PauseOnFinish)
             {
