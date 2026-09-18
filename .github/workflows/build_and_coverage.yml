@@ -25,12 +25,7 @@ jobs:
         if: matrix.platform == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libssl1.1 || echo "Trying alternative method"
-          if ! ldconfig -p | grep libssl.so.1.1; then
-            echo "libssl1.1 not found, attempting manual installation"
-            wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.1/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
-            sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
-          fi
+          sudo apt-get install -y libssl3t64 || sudo apt-get install -y libssl3
 
       - name: Restore Nuget Packages
         run: dotnet restore SectorFileCompiler.sln --packages packages
