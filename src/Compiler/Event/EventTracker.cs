@@ -15,21 +15,30 @@ namespace Compiler.Event
 
         public void AddEvent(ICompilerEvent compilerEvent)
         {
-            this.events.Add(compilerEvent);
-            foreach (IEventObserver observer in this.observers)
+            lock (this.events)
             {
-                observer.NewEvent(compilerEvent);
+                this.events.Add(compilerEvent);
+                foreach (IEventObserver observer in this.observers)
+                {
+                    observer.NewEvent(compilerEvent);
+                }
             }
         }
 
         public ICompilerEvent GetLastEvent()
         {
-            return this.events[^1];
+            lock (this.events)
+            {
+                return this.events[^1];
+            }
         }
 
         public int CountEvents()
         {
-            return this.events.Count;
+            lock (this.events)
+            {
+                return this.events.Count;
+            }
         }
 
         public bool HasFatalError()

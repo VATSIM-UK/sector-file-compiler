@@ -16,6 +16,7 @@ namespace Compiler.Validate
             new AllColoursMustBeValid(),
             new AllColoursMustHaveAUniqueId(),
             new AllFixesMustBeUnique(),
+            new AllPositionsMustHaveUniqueIdentifier(),
             new AllSidsMustBeUnique(),
             new AllSidsMustHaveAValidRoute(),
             new AllSctSidsMustHaveAValidRoute(),
