@@ -60,12 +60,13 @@ namespace CompilerTest.Bogus.Factory
         public static ControllerPosition Make(
             string identifier = null,
             PositionOrder? order = null,
-            Definition definition = null
+            Definition definition = null,
+            string callsign = null
         )
         {
             return new Faker<ControllerPosition>().CustomInstantiator(
                 f => new ControllerPosition(
-                    f.Random.ArrayElement(Callsigns),
+                    callsign ?? f.Random.ArrayElement(Callsigns),
                     "London Control",
                     "123.456",
                     identifier ?? f.Random.ArrayElement(Identifiers),
